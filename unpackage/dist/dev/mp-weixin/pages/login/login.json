@@ -1,0 +1,10 @@
+{
+  "navigationBarTitleText": "登录",
+  "usingComponents": {
+    "u-text": "../../uni_modules/uview-plus/components/u-text/u-text",
+    "u-input": "../../uni_modules/uview-plus/components/u-input/u-input",
+    "u-button": "../../uni_modules/uview-plus/components/u-button/u-button",
+    "u-link": "../../uni_modules/uview-plus/components/u-link/u-link",
+    "u-view": "../../uni_modules/uview-plus/components/u-view/u-view"
+  }
+}

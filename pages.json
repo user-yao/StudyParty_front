@@ -1,0 +1,82 @@
+{
+	"pages": [ 
+		{
+			"path": "pages/login/login",
+			"style": {
+				"navigationBarTitleText": "登录"
+			}
+		},
+		{
+			"path": "pages/register/register",
+			"style": {
+				"navigationBarTitleText": "注册"
+			}
+		},
+		{
+			"path": "pages/index/index",
+			"style": {
+				"navigationBarTitleText": "首页"
+			}
+		},
+		{
+			"path": "pages/forum/forum",
+			"style": {
+				"navigationBarTitleText": "论坛"
+			}
+		},
+		{
+			"path": "pages/group/group",
+			"style": {
+				"navigationBarTitleText": "小组"
+			}
+		},
+		{
+			"path": "pages/profile/profile",
+			"style": {
+				"navigationBarTitleText": "个人中心"
+			}
+		}
+	],
+	"globalStyle": {
+		"navigationBarTextStyle": "black",
+		"navigationStyle": "custom",
+		"navigationBarBackgroundColor": "#F8F8F8",
+		"backgroundColor": "#F8F8F8",
+		"app-plus": {
+			"bounce": "none"
+			
+		}
+	},
+  "tabBar": {
+    "color": "#666",
+    "selectedColor": "#2979ff",
+    "backgroundColor": "#fff",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页",
+        "iconPath": "static/BlackTableBar/shouye.png",
+        "selectedIconPath": "static/BlueTableBar/shouye.png"
+      },
+      {
+        "pagePath": "pages/forum/forum",
+        "text": "论坛",
+        "iconPath": "static/BlackTableBar/luntan.png",
+        "selectedIconPath": "static/BlueTableBar/luntan.png"
+      },
+      {
+        "pagePath": "pages/group/group",
+        "text": "小组",
+        "iconPath": "static/BlackTableBar/kehuqunzu.png",
+        "selectedIconPath": "static/BlueTableBar/kehuqunzu.png"
+      },
+      {
+        "pagePath": "pages/profile/profile",
+        "text": "个人中心",
+        "iconPath": "static/BlackTableBar/gerenzhongxin.png",
+        "selectedIconPath": "static/BlueTableBar/gerenzhongxin.png"
+      }
+    ]
+  }
+}

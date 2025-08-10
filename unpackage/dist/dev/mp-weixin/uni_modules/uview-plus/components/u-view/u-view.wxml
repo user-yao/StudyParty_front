@@ -1,0 +1,1 @@
+<view class="{{['u-view', 'data-v-02d480a7', a]}}" style="{{'background-color:' + b + ';' + ('color:' + c) + ';' + ('flex-direction:' + d) + ';' + ('justify-content:' + e) + ';' + ('align-items:' + f) + ';' + ('flex1:' + g) + ';' + ('width:' + h) + ';' + ('height:' + i) + ';' + ('padding:' + j) + ';' + ('margin:' + k) + ';' + ('border-color:' + l)}}"></view>
