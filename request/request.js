@@ -19,8 +19,12 @@ export const request = (options) => {
       header: (() => {
         const excludePaths = ['/user/login', '/user/register'];
         if (!excludePaths.includes(options.url)) {
-          const token = uni.getStorageSync('token');
-          return { ...options.header, 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' };
+		  const token = uni.getStorageSync('token');
+		    if (!token) {
+		      reject(new Error('未登录，请先登录'));
+		      return;
+		    }
+          return { ...options.header, 'Authorization': `${token}`, 'Content-Type': 'application/json' };
         }
         return options.header || { 'Content-Type': 'application/json' };
       })(),

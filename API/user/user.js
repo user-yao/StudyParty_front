@@ -1,12 +1,5 @@
 import { request } from '../../request/request.js';
 
-/**
- * 用户登录请求
- * @param {Object} data - 登录数据
- * @param {string} data.username - 用户名
- * @param {string} data.password - 密码
- * @returns {Promise<Object>} 登录响应
- */
 export const login = (data) => {
   return request({
     url: '/user/login',
@@ -18,14 +11,6 @@ export const login = (data) => {
   });
 };
 
-/**
- * 用户注册请求
- * @param {Object} data - 注册数据
- * @param {string} data.username - 用户名
- * @param {string} data.password - 密码
- * @param {string} data.email - 邮箱
- * @returns {Promise<Object>} 注册响应
- */
 export const register = (data) => {
   return request({
     url: '/user/register',

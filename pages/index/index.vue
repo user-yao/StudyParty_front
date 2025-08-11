@@ -108,46 +108,20 @@
             <h3>待完成任务</h3>
             <a href="#">查看全部 <i class="fas fa-chevron-right"></i></a>
         </div>
-        <div class="task-list">
-            <div class="task-item">
+        <div class="task-list" >
+            <div class="task-item" v-for="item in userPlan">
                 <div class="task-icon">
                     <i class="fas fa-book"></i>
                 </div>
                 <div class="task-details">
-                    <div class="task-title">完成Vue.js组件开发课程</div>
+                    <div class="task-title">{{item.planContext}}</div>
                     <div class="task-meta">
                         <div class="task-time">
-                            <i class="far fa-clock"></i> 今天18:00
+                            <i class="far fa-clock"></i> {{formatTimestamp(item.startTime)}}
                         </div>
-                        <div class="task-status">进行中</div>
-                    </div>
-                </div>
-            </div>
-            <div class="task-item">
-                <div class="task-icon">
-                    <i class="fas fa-code"></i>
-                </div>
-                <div class="task-details">
-                    <div class="task-title">算法挑战：二叉树遍历</div>
-                    <div class="task-meta">
-                        <div class="task-time">
-                            <i class="far fa-clock"></i> 明天10:00
-                        </div>
-                        <div class="task-status">未开始</div>
-                    </div>
-                </div>
-            </div>
-            <div class="task-item">
-                <div class="task-icon">
-                    <i class="fas fa-users"></i>
-                </div>
-                <div class="task-details">
-                    <div class="task-title">小组项目：电商网站开发</div>
-                    <div class="task-meta">
-                        <div class="task-time">
-                            <i class="far fa-clock"></i> 3天后
-                        </div>
-                        <div class="task-status">未开始</div>
+                        <div class="task-status" v-if="item.isStart == 0">未开始</div>
+						<div class="task-status" v-if="item.isStart == 1 && item.isEnd == 0">进行中</div>
+						<div class="task-status" v-if="item.isEnd == 1">已结束</div>
                     </div>
                 </div>
             </div>
@@ -220,6 +194,7 @@
   export default {
     data() {
       return {
+		userPlan:[],
         announcements: [
           { title: '论坛新规则上线', time: '2024-06-15' },
           { title: '夏季活动预告', time: '2024-06-14' },
@@ -240,8 +215,23 @@
             userInfo: state => state.user.userInfo
         })
     },
+	methods:{
+		...mapActions({
+			getUserPlans: "userPlan/getUserPlans",
+		}),
+		formatTimestamp(timestamp) {
+		  const date = new Date(timestamp);
+		  return `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}:${date.getSeconds().toString().padStart(2, '0')}`;
+		}
+	},
+	onLoad() {
+		
+	},
 	onShow() {
-		console.log(this.userInfo)
+		this.getUserPlans().then(res=>{
+			this.userPlan = res[0];
+			console.log(this.userPlan)
+		})
 	}
 
 }
