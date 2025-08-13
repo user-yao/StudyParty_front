@@ -1,6 +1,5 @@
-
 <template>
-  <div>
+  <div class="body">
   <!-- 头部导航 -->
     <header>
         <div class="header-top">
@@ -189,12 +188,13 @@
 		mapState,
 		mapMutations,
 		mapActions
-	} from "vuex";
+	} from "vuex"; 
 	import {imageUrl} from "@/config/config.js"
   export default {
     data() {
       return {
 		userPlan:[],
+		userInfo:{},
         announcements: [
           { title: '论坛新规则上线', time: '2024-06-15' },
           { title: '夏季活动预告', time: '2024-06-14' },
@@ -212,7 +212,7 @@
 		      return imageUrl
 		},
         ...mapState({
-            userInfo: state => state.user.userInfo
+            // userInfo: state => state.user.userInfo
         })
     },
 	methods:{
@@ -225,7 +225,7 @@
 		}
 	},
 	onLoad() {
-		
+		this.userInfo = uni.getStorageSync('user');
 	},
 	onShow() {
 		this.getUserPlans().then(res=>{
@@ -259,20 +259,23 @@
             --section-bg: #f5f7fb;
         }
         
-        body {
-            background-color: #f0f2f5;
+        .body {
+            background-color: #f5f7fb;
             color: var(--dark);
-            padding-bottom: 70px;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
         
-        /* 头部导航 */
+        /* 顶部导航 */
         header {
-            position: sticky;
-            top: 0;
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
             padding: 15px 20px;
+            padding-top: 5vh;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
             z-index: 100;
         }
         

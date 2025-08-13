@@ -46,6 +46,8 @@ export default {
 	  state.userInfo.finishTask = info.user.finishTask;
       state.userInfo.token = info.token;
 	  uni.setStorageSync('id',info.user.id);
+	  uni.setStorageSync('user',info.user);
+	  console.log(uni.getStorageSync('user'));
       uni.setStorageSync('token', info.token);
     },
     CLEAR_USER_INFO(state) {

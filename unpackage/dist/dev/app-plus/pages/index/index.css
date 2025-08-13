@@ -18,21 +18,24 @@
             --card-bg: #ffffff;
             --section-bg: #f5f7fb;
 }
-body[data-v-1cf27b2a] {
-            background-color: #f0f2f5;
+.body[data-v-1cf27b2a] {
+            background-color: #f5f7fb;
             color: var(--dark);
-            padding-bottom: 70px;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
 }
         
-        /* 头部导航 */
+        /* 顶部导航 */
 header[data-v-1cf27b2a] {
-            position: -webkit-sticky;
-            position: sticky;
-            top: 0;
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
             padding: 15px 20px;
+            padding-top: 5vh;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: -webkit-sticky;
+            position: sticky;
+            top: 0;
             z-index: 100;
 }
 .header-top[data-v-1cf27b2a] {

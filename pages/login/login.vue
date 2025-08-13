@@ -1,75 +1,77 @@
 <template>
-	 <div class="bg-shapes">
-	        <div class="shape shape-1"></div>
-	        <div class="shape shape-2"></div>
-	        <div class="shape shape-3"></div>
-	    </div>
-	    
-	    <div class="login-wrapper">
-	        <div class="logo">
-	            <div class="logo-icon">
-	                <i class="fas fa-brain"></i>
-	            </div>
-	            <h1>智学未来</h1>
-	            <p>开启你的个性化学习之旅</p>
-	        </div>
-	        
-	        <div class="form-container">
-	            <form>
-	                <div class="input-group">
-	                    <i class="fas fa-user"></i>
-						<u-input
-							id="username"
-						  v-model="form.phone"
-						  placeholder="请输入手机号"
-						  type="number"
-						  border="bottom"
-						  class="input-field"
-						></u-input>
-	                </div>
-	                
-	                <div class="input-group">
-	                    <i class="fas fa-lock"></i>
-						<u-input
-						  v-model="form.password"
-						  placeholder="请输入密码"
-						  type="password"
-						  border="bottom"
-						  class="input-field"
-						></u-input>
-	                </div>
-	                
-	                <div class="remember-forgot">
-	                    <label class="remember">
-	                        <input type="checkbox"> 记住我
-	                    </label>
-	                    <a href="#" class="forgot-password">忘记密码?</a>
-	                </div>
-	                
-	                <button type="submit" class="btn-login" @click="handleLogin">登 录</button>
-	                
-	                <div class="divider">
-	                    <span>或使用以下方式登录</span>
-	                </div>
-	                
-	                <div class="social-login">
-	                    <a href="#" class="social-btn wechat">
-	                        <i class="fab fa-weixin"></i>
-	                    </a>
-	                    <a href="#" class="social-btn qq">
-	                        <i class="fab fa-qq"></i>
-	                    </a>
-	                    <a href="#" class="social-btn">
-	                        <i class="fab fa-weibo"></i>
-	                    </a>
-	                </div>
-	                
-	                <div class="register-link">
-	                    还没有账号? <a href="#">立即注册</a>
-	                </div>
-	            </form>
-	        </div>
-	    </div>
+	 <div class="body">
+		 <div class="bg-shapes">
+		        <div class="shape shape-1"></div>
+		        <div class="shape shape-2"></div>
+		        <div class="shape shape-3"></div>
+		    </div>
+		    
+		    <div class="login-wrapper">
+		        <div class="logo">
+		            <div class="logo-icon">
+		                <i class="fas fa-brain"></i>
+		            </div>
+		            <h1>智学未来</h1>
+		            <p>开启你的个性化学习之旅</p>
+		        </div>
+		        
+		        <div class="form-container">
+		            <form>
+		                <div class="input-group">
+		                    <i class="fas fa-user"></i>
+		 						<u-input
+		 							id="username"
+		 						  v-model="form.phone"
+		 						  placeholder="请输入手机号"
+		 						  type="number"
+		 						  border="bottom"
+		 						  class="input-field"
+		 						></u-input>
+		                </div>
+		                
+		                <div class="input-group">
+		                    <i class="fas fa-lock"></i>
+		 						<u-input
+		 						  v-model="form.password"
+		 						  placeholder="请输入密码"
+		 						  type="password"
+		 						  border="bottom"
+		 						  class="input-field"
+		 						></u-input>
+		                </div>
+		                
+		                <div class="remember-forgot">
+		                    <label class="remember">
+		                        <input type="checkbox"> 记住我
+		                    </label>
+		                    <a href="#" class="forgot-password">忘记密码?</a>
+		                </div>
+		                
+		                <button type="submit" class="btn-login" @click="handleLogin">登 录</button>
+		                
+		                <div class="divider">
+		                    <span>或使用以下方式登录</span>
+		                </div>
+		                
+		                <div class="social-login">
+		                    <a href="#" class="social-btn wechat">
+		                        <i class="fab fa-weixin"></i>
+		                    </a>
+		                    <a href="#" class="social-btn qq">
+		                        <i class="fab fa-qq"></i>
+		                    </a>
+		                    <a href="#" class="social-btn">
+		                        <i class="fab fa-weibo"></i>
+		                    </a>
+		                </div>
+		                
+		                <div class="register-link">
+		                    还没有账号? <a href="#">立即注册</a>
+		                </div>
+		            </form>
+		        </div>
+		    </div>
+	 </div>
 </template>
 
 <script>
@@ -110,25 +112,26 @@ import webSocketService from '@/utils/websocket.js';
                padding: 0;
                box-sizing: border-box;
                font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+			   max-height: 100vh;
            }
            
-           body {
+           .body {
                background: linear-gradient(-45deg, #f5f9ff, #f0f7ff, #f5f9ff, #e6f2ff);
                background-size: 400% 400%;
                animation: gradientBG 18s ease infinite;
-               min-height: 100vh;
                display: flex;
+			   min-height: 100vh;
                justify-content: center;
                align-items: center;
-               padding: 20px;
+               padding: 40rpx;
                color: #333;
                overflow: hidden;
            }
            
            .login-wrapper {
                width: 100%;
-               max-width: 400px;
-               padding: 40px 30px;
+			   margin-top: 10vh;
+               padding: 80rpx 60rpx;
                position: relative;
                z-index: 10;
            }

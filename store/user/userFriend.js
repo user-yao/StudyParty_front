@@ -1,4 +1,4 @@
-import { request,accept,deleteFriend,friendList,friendRequestList } from '@/API/user/userFriend.js';
+import { requestFriend, accept, deleteFriend, friendList, friendRequestList } from '@/API/user/userFriend.js';
 export default {
   namespaced: true,
   state: () => ({ 
@@ -14,14 +14,14 @@ export default {
     }
   },
   actions: {
-    request({ commit }, credentials) {
-      return request(credentials).then(res =>{
+    requestFriend({ commit }, credentials) {
+      return requestFriend(credentials).then(res =>{
 		  if (res.code === 200) {
 		    commit('SET_USER_INFO', res.data);
 		  }
 		  return res;
 	  })
-    }
+    },
 	accept({ commit }, credentials) {
 	  return accept(credentials).then(res =>{
 		  if (res.code === 200) {
@@ -29,7 +29,7 @@ export default {
 		  }
 		  return res;
 	  })
-	}
+	},
 	deleteFriend({ commit }, credentials) {
 	  return deleteFriend(credentials).then(res =>{
 		  if (res.code === 200) {
@@ -37,7 +37,7 @@ export default {
 		  }
 		  return res;
 	  })
-	}
+	},
 	friendList({ commit }, credentials) {
 	  return friendList(credentials).then(res =>{
 		  if (res.code === 200) {
@@ -45,7 +45,7 @@ export default {
 		  }
 		  return res;
 	  })
-	}
+	},
 	friendRequestList({ commit }, credentials) {
 	  return friendRequestList(credentials).then(res =>{
 		  if (res.code === 200) {

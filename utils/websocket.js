@@ -105,7 +105,6 @@ class WebSocketService {
   // 发送心跳
   startHeartbeat() {
     this.stopHeartbeat();
-    
     this.heartbeatTimer = setInterval(() => {
       if (this.isConnected()) {
         this.sendMessage({ content: 'ping' });

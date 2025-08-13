@@ -5540,7 +5540,7 @@ if (uni.restoreGlobal) {
       this.heartbeatTimer = setInterval(() => {
         if (this.isConnected()) {
           this.sendMessage({ content: "ping" });
-          formatAppLog("log", "at utils/websocket.js:112", "发送心跳消息");
+          formatAppLog("log", "at utils/websocket.js:111", "发送心跳消息");
         }
       }, this.HEARTBEAT_INTERVAL);
     }
@@ -5562,15 +5562,15 @@ if (uni.restoreGlobal) {
       if (this.reconnectTimer)
         clearTimeout(this.reconnectTimer);
       if (this.reconnectAttempts >= this.MAX_RECONNECT_ATTEMPTS) {
-        formatAppLog("warn", "at utils/websocket.js:140", `已达到最大重连次数(${this.MAX_RECONNECT_ATTEMPTS})，停止重连`);
+        formatAppLog("warn", "at utils/websocket.js:139", `已达到最大重连次数(${this.MAX_RECONNECT_ATTEMPTS})，停止重连`);
         uni.$emit("websocket-disconnected");
         return;
       }
       const delay = this.RECONNECT_DELAY_BASE * Math.pow(2, this.reconnectAttempts);
       this.reconnectAttempts++;
-      formatAppLog("log", "at utils/websocket.js:149", `将在 ${delay}ms 后尝试重连 (#${this.reconnectAttempts})`);
+      formatAppLog("log", "at utils/websocket.js:148", `将在 ${delay}ms 后尝试重连 (#${this.reconnectAttempts})`);
       this.reconnectTimer = setTimeout(() => {
-        formatAppLog("log", "at utils/websocket.js:152", `尝试重连 (#${this.reconnectAttempts})`);
+        formatAppLog("log", "at utils/websocket.js:151", `尝试重连 (#${this.reconnectAttempts})`);
         this.connect();
       }, delay);
     }
@@ -5582,17 +5582,17 @@ if (uni.restoreGlobal) {
           this.socketTask.send({
             data: payload,
             success: () => {
-              formatAppLog("log", "at utils/websocket.js:165", "消息发送成功:", message.type || message);
+              formatAppLog("log", "at utils/websocket.js:164", "消息发送成功:", message.type || message);
             },
             fail: (err) => {
-              formatAppLog("error", "at utils/websocket.js:168", "消息发送失败:", err);
+              formatAppLog("error", "at utils/websocket.js:167", "消息发送失败:", err);
             }
           });
         } catch (e) {
-          formatAppLog("error", "at utils/websocket.js:172", "消息序列化错误:", e);
+          formatAppLog("error", "at utils/websocket.js:171", "消息序列化错误:", e);
         }
       } else {
-        formatAppLog("warn", "at utils/websocket.js:175", "尝试发送消息但连接未就绪");
+        formatAppLog("warn", "at utils/websocket.js:174", "尝试发送消息但连接未就绪");
       }
     }
     // 关闭连接
@@ -5613,18 +5613,18 @@ if (uni.restoreGlobal) {
             this.socketTask.close(code2, reason);
           }
         } catch (e) {
-          formatAppLog("error", "at utils/websocket.js:202", "关闭连接时出错:", e);
+          formatAppLog("error", "at utils/websocket.js:201", "关闭连接时出错:", e);
         } finally {
           this.socketTask = null;
         }
       }
-      formatAppLog("log", "at utils/websocket.js:208", "WebSocket连接已关闭");
+      formatAppLog("log", "at utils/websocket.js:207", "WebSocket连接已关闭");
     }
   }
   const webSocketService = new WebSocketService();
   uni.$on("network-connected", () => {
     if (!webSocketService.isConnected()) {
-      formatAppLog("log", "at utils/websocket.js:218", "网络恢复，尝试重连WebSocket");
+      formatAppLog("log", "at utils/websocket.js:217", "网络恢复，尝试重连WebSocket");
       webSocketService.connect();
     }
   });
@@ -5642,7 +5642,7 @@ if (uni.restoreGlobal) {
       handleLogin() {
         this.login(this.form).then((res) => {
           if (res.code === 200) {
-            formatAppLog("log", "at pages/login/login.vue:93", uni.getStorageSync("token"));
+            formatAppLog("log", "at pages/login/login.vue:95", uni.getStorageSync("token"));
             uni.showToast({ title: "登录成功", icon: "success" });
             webSocketService.connect();
             uni.switchTab({ url: "/pages/index/index" });
@@ -5655,97 +5655,91 @@ if (uni.restoreGlobal) {
   };
   function _sfc_render$24(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_u_input = resolveEasycom(vue.resolveDynamicComponent("u-input"), uvInput);
-    return vue.openBlock(), vue.createElementBlock(
-      vue.Fragment,
-      null,
-      [
-        vue.createElementVNode("div", { class: "bg-shapes" }, [
-          vue.createElementVNode("div", { class: "shape shape-1" }),
-          vue.createElementVNode("div", { class: "shape shape-2" }),
-          vue.createElementVNode("div", { class: "shape shape-3" })
-        ]),
-        vue.createElementVNode("div", { class: "login-wrapper" }, [
-          vue.createElementVNode("div", { class: "logo" }, [
-            vue.createElementVNode("div", { class: "logo-icon" }, [
-              vue.createElementVNode("i", { class: "fas fa-brain" })
-            ]),
-            vue.createElementVNode("h1", null, "智学未来"),
-            vue.createElementVNode("p", null, "开启你的个性化学习之旅")
+    return vue.openBlock(), vue.createElementBlock("div", { class: "body" }, [
+      vue.createElementVNode("div", { class: "bg-shapes" }, [
+        vue.createElementVNode("div", { class: "shape shape-1" }),
+        vue.createElementVNode("div", { class: "shape shape-2" }),
+        vue.createElementVNode("div", { class: "shape shape-3" })
+      ]),
+      vue.createElementVNode("div", { class: "login-wrapper" }, [
+        vue.createElementVNode("div", { class: "logo" }, [
+          vue.createElementVNode("div", { class: "logo-icon" }, [
+            vue.createElementVNode("i", { class: "fas fa-brain" })
           ]),
-          vue.createElementVNode("div", { class: "form-container" }, [
-            vue.createElementVNode("form", null, [
-              vue.createElementVNode("div", { class: "input-group" }, [
-                vue.createElementVNode("i", { class: "fas fa-user" }),
-                vue.createVNode(_component_u_input, {
-                  id: "username",
-                  modelValue: $data.form.phone,
-                  "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => $data.form.phone = $event),
-                  placeholder: "请输入手机号",
-                  type: "number",
-                  border: "bottom",
-                  class: "input-field"
-                }, null, 8, ["modelValue"])
+          vue.createElementVNode("h1", null, "智学未来"),
+          vue.createElementVNode("p", null, "开启你的个性化学习之旅")
+        ]),
+        vue.createElementVNode("div", { class: "form-container" }, [
+          vue.createElementVNode("form", null, [
+            vue.createElementVNode("div", { class: "input-group" }, [
+              vue.createElementVNode("i", { class: "fas fa-user" }),
+              vue.createVNode(_component_u_input, {
+                id: "username",
+                modelValue: $data.form.phone,
+                "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => $data.form.phone = $event),
+                placeholder: "请输入手机号",
+                type: "number",
+                border: "bottom",
+                class: "input-field"
+              }, null, 8, ["modelValue"])
+            ]),
+            vue.createElementVNode("div", { class: "input-group" }, [
+              vue.createElementVNode("i", { class: "fas fa-lock" }),
+              vue.createVNode(_component_u_input, {
+                modelValue: $data.form.password,
+                "onUpdate:modelValue": _cache[1] || (_cache[1] = ($event) => $data.form.password = $event),
+                placeholder: "请输入密码",
+                type: "password",
+                border: "bottom",
+                class: "input-field"
+              }, null, 8, ["modelValue"])
+            ]),
+            vue.createElementVNode("div", { class: "remember-forgot" }, [
+              vue.createElementVNode("label", { class: "remember" }, [
+                vue.createElementVNode("input", { type: "checkbox" }),
+                vue.createTextVNode(" 记住我 ")
               ]),
-              vue.createElementVNode("div", { class: "input-group" }, [
-                vue.createElementVNode("i", { class: "fas fa-lock" }),
-                vue.createVNode(_component_u_input, {
-                  modelValue: $data.form.password,
-                  "onUpdate:modelValue": _cache[1] || (_cache[1] = ($event) => $data.form.password = $event),
-                  placeholder: "请输入密码",
-                  type: "password",
-                  border: "bottom",
-                  class: "input-field"
-                }, null, 8, ["modelValue"])
+              vue.createElementVNode("a", {
+                href: "#",
+                class: "forgot-password"
+              }, "忘记密码?")
+            ]),
+            vue.createElementVNode("button", {
+              type: "submit",
+              class: "btn-login",
+              onClick: _cache[2] || (_cache[2] = (...args) => $options.handleLogin && $options.handleLogin(...args))
+            }, "登 录"),
+            vue.createElementVNode("div", { class: "divider" }, [
+              vue.createElementVNode("span", null, "或使用以下方式登录")
+            ]),
+            vue.createElementVNode("div", { class: "social-login" }, [
+              vue.createElementVNode("a", {
+                href: "#",
+                class: "social-btn wechat"
+              }, [
+                vue.createElementVNode("i", { class: "fab fa-weixin" })
               ]),
-              vue.createElementVNode("div", { class: "remember-forgot" }, [
-                vue.createElementVNode("label", { class: "remember" }, [
-                  vue.createElementVNode("input", { type: "checkbox" }),
-                  vue.createTextVNode(" 记住我 ")
-                ]),
-                vue.createElementVNode("a", {
-                  href: "#",
-                  class: "forgot-password"
-                }, "忘记密码?")
+              vue.createElementVNode("a", {
+                href: "#",
+                class: "social-btn qq"
+              }, [
+                vue.createElementVNode("i", { class: "fab fa-qq" })
               ]),
-              vue.createElementVNode("button", {
-                type: "submit",
-                class: "btn-login",
-                onClick: _cache[2] || (_cache[2] = (...args) => $options.handleLogin && $options.handleLogin(...args))
-              }, "登 录"),
-              vue.createElementVNode("div", { class: "divider" }, [
-                vue.createElementVNode("span", null, "或使用以下方式登录")
-              ]),
-              vue.createElementVNode("div", { class: "social-login" }, [
-                vue.createElementVNode("a", {
-                  href: "#",
-                  class: "social-btn wechat"
-                }, [
-                  vue.createElementVNode("i", { class: "fab fa-weixin" })
-                ]),
-                vue.createElementVNode("a", {
-                  href: "#",
-                  class: "social-btn qq"
-                }, [
-                  vue.createElementVNode("i", { class: "fab fa-qq" })
-                ]),
-                vue.createElementVNode("a", {
-                  href: "#",
-                  class: "social-btn"
-                }, [
-                  vue.createElementVNode("i", { class: "fab fa-weibo" })
-                ])
-              ]),
-              vue.createElementVNode("div", { class: "register-link" }, [
-                vue.createTextVNode(" 还没有账号? "),
-                vue.createElementVNode("a", { href: "#" }, "立即注册")
+              vue.createElementVNode("a", {
+                href: "#",
+                class: "social-btn"
+              }, [
+                vue.createElementVNode("i", { class: "fab fa-weibo" })
               ])
+            ]),
+            vue.createElementVNode("div", { class: "register-link" }, [
+              vue.createTextVNode(" 还没有账号? "),
+              vue.createElementVNode("a", { href: "#" }, "立即注册")
             ])
           ])
         ])
-      ],
-      64
-      /* STABLE_FRAGMENT */
-    );
+      ])
+    ]);
   }
   const PagesLoginLogin = /* @__PURE__ */ _export_sfc(_sfc_main$25, [["render", _sfc_render$24], ["__scopeId", "data-v-e4e4508d"], ["__file", "D:/uniapp2023/studyParty/pages/login/login.vue"]]);
   const props$1t = defineMixin({
@@ -8228,6 +8222,11 @@ if (uni.restoreGlobal) {
         success: (res) => {
           if (res.statusCode >= 200 && res.statusCode < 300) {
             resolve(res.data);
+          } else if (res.statusCode == 401) {
+            uni.showToast({ title: "身份失效，请重新登录", icon: "error" });
+            uni.reLaunch({
+              url: "/pages/login/login"
+            });
           } else {
             reject(new Error(`请求失败，状态码：${res.statusCode}`));
           }
@@ -8406,6 +8405,7 @@ if (uni.restoreGlobal) {
     data() {
       return {
         userPlan: [],
+        userInfo: {},
         announcements: [
           { title: "论坛新规则上线", time: "2024-06-15" },
           { title: "夏季活动预告", time: "2024-06-14" },
@@ -8423,7 +8423,7 @@ if (uni.restoreGlobal) {
         return imageUrl;
       },
       ...mapState({
-        userInfo: (state2) => state2.user.userInfo
+        // userInfo: state => state.user.userInfo
       })
     },
     methods: {
@@ -8436,6 +8436,7 @@ if (uni.restoreGlobal) {
       }
     },
     onLoad() {
+      this.userInfo = uni.getStorageSync("user");
     },
     onShow() {
       this.getUserPlans().then((res) => {
@@ -8445,7 +8446,7 @@ if (uni.restoreGlobal) {
     }
   };
   function _sfc_render$1X(_ctx, _cache, $props, $setup, $data, $options) {
-    return vue.openBlock(), vue.createElementBlock("div", null, [
+    return vue.openBlock(), vue.createElementBlock("div", { class: "body" }, [
       vue.createCommentVNode(" 头部导航 "),
       vue.createElementVNode("header", null, [
         vue.createElementVNode("div", { class: "header-top" }, [
@@ -8471,20 +8472,20 @@ if (uni.restoreGlobal) {
         vue.createElementVNode("div", { class: "user-info" }, [
           vue.createElementVNode("image", {
             class: "avatar",
-            src: $options.imageUrl + _ctx.userInfo.head
+            src: $options.imageUrl + $data.userInfo.head
           }, null, 8, ["src"]),
           vue.createElementVNode("div", { class: "user-details" }, [
             vue.createElementVNode(
               "h2",
               null,
-              vue.toDisplayString(_ctx.userInfo.name.substring(0, 1)) + "同学",
+              vue.toDisplayString($data.userInfo.name.substring(0, 1)) + "同学",
               1
               /* TEXT */
             ),
             vue.createElementVNode(
               "p",
               null,
-              vue.toDisplayString(_ctx.userInfo.school),
+              vue.toDisplayString($data.userInfo.school),
               1
               /* TEXT */
             )
@@ -8495,7 +8496,7 @@ if (uni.restoreGlobal) {
             vue.createElementVNode(
               "div",
               { class: "stat-value" },
-              vue.toDisplayString(_ctx.userInfo.finishTask),
+              vue.toDisplayString($data.userInfo.finishTask),
               1
               /* TEXT */
             ),
@@ -8505,7 +8506,7 @@ if (uni.restoreGlobal) {
             vue.createElementVNode(
               "div",
               { class: "stat-value" },
-              vue.toDisplayString(_ctx.userInfo.clockIn) + "天",
+              vue.toDisplayString($data.userInfo.clockIn) + "天",
               1
               /* TEXT */
             ),
@@ -8515,7 +8516,7 @@ if (uni.restoreGlobal) {
             vue.createElementVNode(
               "div",
               { class: "stat-value" },
-              vue.toDisplayString(_ctx.userInfo.starPrestige),
+              vue.toDisplayString($data.userInfo.starPrestige),
               1
               /* TEXT */
             ),
@@ -9013,11 +9014,179 @@ if (uni.restoreGlobal) {
   const PagesForumForum = /* @__PURE__ */ _export_sfc(_sfc_main$1X, [["render", _sfc_render$1W], ["__scopeId", "data-v-aeadbf01"], ["__file", "D:/uniapp2023/studyParty/pages/forum/forum.vue"]]);
   const _sfc_main$1W = {
     data() {
-      return {};
+      return {
+        activeTab: "messages",
+        activeNav: "messages",
+        searchQuery: "",
+        chats: [
+          {
+            id: 1,
+            type: "study-group",
+            icon: "fas fa-code",
+            name: "前端开发精英组",
+            lastMessageTime: "10:24",
+            lastMessage: "电商项目首页设计已完成，请大家审核",
+            lastSender: "李明轩",
+            unreadCount: 3,
+            online: true,
+            isGroup: true
+          },
+          {
+            id: 2,
+            type: "study-group",
+            icon: "fas fa-server",
+            name: "后端架构研究组",
+            lastMessageTime: "昨天",
+            lastMessage: "下次小组会议时间调整为周六下午",
+            lastSender: "王老师",
+            unreadCount: 0,
+            online: true,
+            isGroup: true
+          },
+          {
+            id: 3,
+            type: "study-group",
+            icon: "fas fa-database",
+            name: "数据库优化小组",
+            lastMessageTime: "昨天",
+            lastMessage: "分享了一个关于索引优化的文档",
+            lastSender: "张同学",
+            unreadCount: 12,
+            online: true,
+            isGroup: true
+          },
+          {
+            id: 4,
+            type: "group-chat",
+            icon: "fas fa-users",
+            name: "React学习交流群",
+            lastMessageTime: "08:45",
+            lastMessage: "有人能帮忙看看这个Hooks问题吗？",
+            lastSender: "陈同学",
+            unreadCount: 5,
+            online: true,
+            isGroup: true
+          },
+          {
+            id: 5,
+            type: "group-chat",
+            icon: "fas fa-laptop-code",
+            name: "全栈开发交流群",
+            lastMessageTime: "昨天",
+            lastMessage: "本周技术分享主题征集",
+            lastSender: "管理员",
+            unreadCount: 0,
+            online: true,
+            isGroup: true
+          },
+          {
+            id: 6,
+            type: "mentor-chat",
+            name: "李教授 (前端导师)",
+            lastMessageTime: "昨天",
+            lastMessage: "你的项目代码已审核，架构设计很合理",
+            unreadCount: 0,
+            online: true
+          },
+          {
+            id: 7,
+            type: "mentor-chat",
+            name: "王老师 (全栈导师)",
+            lastMessageTime: "周三",
+            lastMessage: "关于你问的Node.js性能优化，我整理了一份文档",
+            unreadCount: 1,
+            online: false
+          },
+          {
+            id: 8,
+            type: "personal-chat",
+            name: "张同学",
+            lastMessageTime: "09:30",
+            lastMessage: "算法题解已发送，请查收",
+            unreadCount: 2,
+            online: true
+          },
+          {
+            id: 9,
+            type: "personal-chat",
+            name: "王明轩",
+            lastMessageTime: "昨天",
+            lastMessage: "下周的自习室安排好了吗？",
+            unreadCount: 0,
+            online: true
+          },
+          {
+            id: 10,
+            type: "personal-chat",
+            name: "李同学",
+            lastMessageTime: "昨天",
+            lastMessage: "项目文档已更新，请查看最新版本",
+            unreadCount: 0,
+            online: false
+          },
+          {
+            id: 11,
+            type: "system-notify",
+            icon: "fas fa-bell",
+            name: "系统通知",
+            lastMessageTime: "今天",
+            lastMessage: '你参与的任务"React组件开发"已通过审核，积分+120',
+            unreadCount: 1,
+            online: true
+          },
+          {
+            id: 12,
+            type: "system-notify",
+            icon: "fas fa-trophy",
+            name: "成就通知",
+            lastMessageTime: "昨天",
+            lastMessage: '恭喜获得"七日坚持"成就，积分+50',
+            unreadCount: 0,
+            online: true
+          }
+        ]
+      };
+    },
+    computed: {
+      filteredChats() {
+        if (!this.searchQuery)
+          return this.chats;
+        const query = this.searchQuery.toLowerCase();
+        return this.chats.filter((chat) => chat.name.toLowerCase().includes(query) || chat.lastMessage && chat.lastMessage.toLowerCase().includes(query));
+      },
+      filteredContacts() {
+        const contacts = this.chats.filter((chat) => ["mentor-chat", "personal-chat"].includes(chat.type));
+        if (!this.searchQuery)
+          return contacts;
+        const query = this.searchQuery.toLowerCase();
+        return contacts.filter((contact) => contact.name.toLowerCase().includes(query) || contact.lastMessage && contact.lastMessage.toLowerCase().includes(query));
+      },
+      filteredGroups() {
+        const groups = this.chats.filter((chat) => ["study-group", "group-chat", "system-notify"].includes(chat.type));
+        if (!this.searchQuery)
+          return groups;
+        const query = this.searchQuery.toLowerCase();
+        return groups.filter((group2) => group2.name.toLowerCase().includes(query) || group2.lastMessage && group2.lastMessage.toLowerCase().includes(query));
+      }
+    },
+    methods: {
+      ...mapActions({
+        friendList: "userFriend/friendList"
+      }),
+      setActiveTab(tab) {
+        this.activeTab = tab;
+      },
+      openChat(chat) {
+        alert(`打开聊天: ${chat.name}`);
+        chat.unreadCount = 0;
+        this.chats = [...this.chats];
+      }
+    },
+    onLaunch() {
     }
   };
   function _sfc_render$1V(_ctx, _cache, $props, $setup, $data, $options) {
-    return vue.openBlock(), vue.createElementBlock("div", null, [
+    return vue.openBlock(), vue.createElementBlock("div", { class: "body" }, [
       vue.createCommentVNode(" 顶部导航 "),
       vue.createElementVNode("header", null, [
         vue.createElementVNode("div", { class: "header-top" }, [
@@ -9026,250 +9195,391 @@ if (uni.restoreGlobal) {
             vue.createElementVNode("span", null, "消息中心")
           ]),
           vue.createElementVNode("div", { class: "header-actions" }, [
-            vue.createElementVNode("i", { class: "fas fa-user-plus" }),
+            vue.createElementVNode("i", {
+              class: "fas fa-user-plus",
+              onClick: _cache[0] || (_cache[0] = ($event) => _ctx.showAddContact = true)
+            }),
             vue.createElementVNode("i", { class: "fas fa-ellipsis-v" })
           ])
         ]),
         vue.createElementVNode("div", { class: "tabs-container" }, [
-          vue.createElementVNode("div", { class: "tab active" }, "全部"),
-          vue.createElementVNode("div", { class: "tab" }, "未读"),
-          vue.createElementVNode("div", { class: "tab" }, "群聊"),
-          vue.createElementVNode("div", { class: "tab" }, "学习小组"),
-          vue.createElementVNode("div", { class: "tab" }, "导师"),
-          vue.createElementVNode("div", { class: "tab" }, "系统")
+          vue.createElementVNode(
+            "div",
+            {
+              class: vue.normalizeClass(["tab", { active: $data.activeTab === "messages" }]),
+              onClick: _cache[1] || (_cache[1] = ($event) => $options.setActiveTab("messages"))
+            },
+            "消息",
+            2
+            /* CLASS */
+          ),
+          vue.createElementVNode(
+            "div",
+            {
+              class: vue.normalizeClass(["tab", { active: $data.activeTab === "contacts" }]),
+              onClick: _cache[2] || (_cache[2] = ($event) => $options.setActiveTab("contacts"))
+            },
+            "联系人",
+            2
+            /* CLASS */
+          ),
+          vue.createElementVNode(
+            "div",
+            {
+              class: vue.normalizeClass(["tab", { active: $data.activeTab === "groups" }]),
+              onClick: _cache[3] || (_cache[3] = ($event) => $options.setActiveTab("groups"))
+            },
+            "群组",
+            2
+            /* CLASS */
+          )
         ])
       ]),
       vue.createCommentVNode(" 搜索区域 "),
       vue.createElementVNode("div", { class: "search-container" }, [
         vue.createElementVNode("div", { class: "search-bar" }, [
           vue.createElementVNode("i", { class: "fas fa-search" }),
-          vue.createElementVNode("input", {
-            type: "text",
-            placeholder: "搜索联系人、群组或消息"
-          })
+          vue.withDirectives(vue.createElementVNode(
+            "input",
+            {
+              type: "text",
+              "onUpdate:modelValue": _cache[4] || (_cache[4] = ($event) => $data.searchQuery = $event),
+              placeholder: "搜索联系人、群组或消息"
+            },
+            null,
+            512
+            /* NEED_PATCH */
+          ), [
+            [vue.vModelText, $data.searchQuery]
+          ])
         ])
       ]),
       vue.createCommentVNode(" 聊天列表 "),
       vue.createElementVNode("div", { class: "chat-list" }, [
-        vue.createCommentVNode(" 学习小组 "),
-        vue.createElementVNode("div", { class: "chat-section" }, [
-          vue.createElementVNode("div", { class: "section-header" }, "学习小组"),
-          vue.createElementVNode("div", { class: "chat-item study-group" }, [
-            vue.createElementVNode("div", { class: "chat-avatar" }, [
-              vue.createElementVNode("i", { class: "fas fa-code" }),
-              vue.createElementVNode("div", { class: "avatar-indicator online" })
-            ]),
-            vue.createElementVNode("div", { class: "chat-info" }, [
-              vue.createElementVNode("div", { class: "chat-header" }, [
-                vue.createElementVNode("div", { class: "chat-name" }, "前端开发精英组"),
-                vue.createElementVNode("div", { class: "chat-time" }, "10:24")
-              ]),
-              vue.createElementVNode("div", { class: "chat-preview" }, [
-                vue.createElementVNode("div", { class: "chat-message" }, [
-                  vue.createElementVNode("i", { class: "fas fa-user status-icon" }),
-                  vue.createTextVNode(" 李明轩：电商项目首页设计已完成，请大家审核 ")
-                ]),
-                vue.createElementVNode("div", { class: "unread-count" }, "3")
-              ])
-            ])
-          ]),
-          vue.createElementVNode("div", { class: "chat-item study-group" }, [
-            vue.createElementVNode("div", { class: "chat-avatar" }, [
-              vue.createElementVNode("i", { class: "fas fa-server" }),
-              vue.createElementVNode("div", { class: "avatar-indicator online" })
-            ]),
-            vue.createElementVNode("div", { class: "chat-info" }, [
-              vue.createElementVNode("div", { class: "chat-header" }, [
-                vue.createElementVNode("div", { class: "chat-name" }, "后端架构研究组"),
-                vue.createElementVNode("div", { class: "chat-time" }, "昨天")
-              ]),
-              vue.createElementVNode("div", { class: "chat-preview" }, [
-                vue.createElementVNode("div", { class: "chat-message" }, [
-                  vue.createElementVNode("i", { class: "fas fa-user status-icon" }),
-                  vue.createTextVNode(" 王老师：下次小组会议时间调整为周六下午 ")
-                ])
-              ])
-            ])
-          ]),
-          vue.createElementVNode("div", { class: "chat-item study-group unread" }, [
-            vue.createElementVNode("div", { class: "chat-avatar" }, [
-              vue.createElementVNode("i", { class: "fas fa-database" }),
-              vue.createElementVNode("div", { class: "avatar-indicator online" })
-            ]),
-            vue.createElementVNode("div", { class: "chat-info" }, [
-              vue.createElementVNode("div", { class: "chat-header" }, [
-                vue.createElementVNode("div", { class: "chat-name" }, "数据库优化小组"),
-                vue.createElementVNode("div", { class: "chat-time" }, "昨天")
-              ]),
-              vue.createElementVNode("div", { class: "chat-preview" }, [
-                vue.createElementVNode("div", { class: "chat-message" }, [
-                  vue.createElementVNode("i", { class: "fas fa-user status-icon" }),
-                  vue.createTextVNode(" 张同学：分享了一个关于索引优化的文档 ")
-                ]),
-                vue.createElementVNode("div", { class: "unread-count" }, "12")
-              ])
-            ])
-          ])
-        ]),
-        vue.createCommentVNode(" 群聊 "),
-        vue.createElementVNode("div", { class: "chat-section" }, [
-          vue.createElementVNode("div", { class: "section-header" }, "群聊"),
-          vue.createElementVNode("div", { class: "chat-item group-chat unread" }, [
-            vue.createElementVNode("div", { class: "chat-avatar" }, [
+        vue.createCommentVNode(" 消息视图 "),
+        $data.activeTab === "messages" ? (vue.openBlock(), vue.createElementBlock(
+          vue.Fragment,
+          { key: 0 },
+          [
+            $options.filteredChats.length === 0 ? (vue.openBlock(), vue.createElementBlock("div", {
+              key: 0,
+              class: "empty-state"
+            }, [
+              vue.createElementVNode("i", { class: "fas fa-comment-slash" }),
+              vue.createElementVNode("p", null, "暂无聊天记录")
+            ])) : vue.createCommentVNode("v-if", true),
+            (vue.openBlock(true), vue.createElementBlock(
+              vue.Fragment,
+              null,
+              vue.renderList($options.filteredChats, (chat) => {
+                return vue.openBlock(), vue.createElementBlock("div", {
+                  key: chat.id,
+                  class: vue.normalizeClass(["chat-item", [chat.type, { unread: chat.unreadCount > 0 }]]),
+                  onClick: ($event) => $options.openChat(chat)
+                }, [
+                  vue.createElementVNode("div", { class: "chat-avatar" }, [
+                    chat.icon ? (vue.openBlock(), vue.createElementBlock(
+                      "i",
+                      {
+                        key: 0,
+                        class: vue.normalizeClass(chat.icon)
+                      },
+                      null,
+                      2
+                      /* CLASS */
+                    )) : (vue.openBlock(), vue.createElementBlock(
+                      vue.Fragment,
+                      { key: 1 },
+                      [
+                        vue.createTextVNode(
+                          vue.toDisplayString(chat.name.substring(0, 1)),
+                          1
+                          /* TEXT */
+                        )
+                      ],
+                      64
+                      /* STABLE_FRAGMENT */
+                    )),
+                    vue.createElementVNode(
+                      "div",
+                      {
+                        class: vue.normalizeClass(["avatar-indicator", { online: chat.online, offline: !chat.online }])
+                      },
+                      null,
+                      2
+                      /* CLASS */
+                    )
+                  ]),
+                  vue.createElementVNode("div", { class: "chat-info" }, [
+                    vue.createElementVNode("div", { class: "chat-header" }, [
+                      vue.createElementVNode(
+                        "div",
+                        { class: "chat-name" },
+                        vue.toDisplayString(chat.name),
+                        1
+                        /* TEXT */
+                      ),
+                      vue.createElementVNode(
+                        "div",
+                        { class: "chat-time" },
+                        vue.toDisplayString(chat.lastMessageTime),
+                        1
+                        /* TEXT */
+                      )
+                    ]),
+                    vue.createElementVNode("div", { class: "chat-preview" }, [
+                      vue.createElementVNode("div", { class: "chat-message" }, [
+                        chat.lastSender ? (vue.openBlock(), vue.createElementBlock(
+                          vue.Fragment,
+                          { key: 0 },
+                          [
+                            vue.createElementVNode("i", { class: "fas fa-user status-icon" }),
+                            vue.createTextVNode(
+                              " " + vue.toDisplayString(chat.lastSender) + "：" + vue.toDisplayString(chat.lastMessage),
+                              1
+                              /* TEXT */
+                            )
+                          ],
+                          64
+                          /* STABLE_FRAGMENT */
+                        )) : (vue.openBlock(), vue.createElementBlock(
+                          vue.Fragment,
+                          { key: 1 },
+                          [
+                            vue.createTextVNode(
+                              vue.toDisplayString(chat.lastMessage),
+                              1
+                              /* TEXT */
+                            )
+                          ],
+                          64
+                          /* STABLE_FRAGMENT */
+                        ))
+                      ]),
+                      chat.unreadCount > 0 ? (vue.openBlock(), vue.createElementBlock(
+                        "div",
+                        {
+                          key: 0,
+                          class: "unread-count"
+                        },
+                        vue.toDisplayString(chat.unreadCount),
+                        1
+                        /* TEXT */
+                      )) : vue.createCommentVNode("v-if", true)
+                    ])
+                  ])
+                ], 10, ["onClick"]);
+              }),
+              128
+              /* KEYED_FRAGMENT */
+            ))
+          ],
+          64
+          /* STABLE_FRAGMENT */
+        )) : vue.createCommentVNode("v-if", true),
+        vue.createCommentVNode(" 联系人视图 "),
+        $data.activeTab === "contacts" ? (vue.openBlock(), vue.createElementBlock(
+          vue.Fragment,
+          { key: 1 },
+          [
+            $options.filteredContacts.length === 0 ? (vue.openBlock(), vue.createElementBlock("div", {
+              key: 0,
+              class: "empty-state"
+            }, [
+              vue.createElementVNode("i", { class: "fas fa-user-friends" }),
+              vue.createElementVNode("p", null, "暂无联系人")
+            ])) : vue.createCommentVNode("v-if", true),
+            (vue.openBlock(true), vue.createElementBlock(
+              vue.Fragment,
+              null,
+              vue.renderList($options.filteredContacts, (contact) => {
+                return vue.openBlock(), vue.createElementBlock("div", {
+                  key: contact.id,
+                  class: vue.normalizeClass(["chat-item personal-chat", { unread: contact.unreadCount > 0 }]),
+                  onClick: ($event) => $options.openChat(contact)
+                }, [
+                  vue.createElementVNode("div", { class: "chat-avatar" }, [
+                    vue.createTextVNode(
+                      vue.toDisplayString(contact.name.substring(0, 1)) + " ",
+                      1
+                      /* TEXT */
+                    ),
+                    vue.createElementVNode(
+                      "div",
+                      {
+                        class: vue.normalizeClass(["avatar-indicator", { online: contact.online, offline: !contact.online }])
+                      },
+                      null,
+                      2
+                      /* CLASS */
+                    )
+                  ]),
+                  vue.createElementVNode("div", { class: "chat-info" }, [
+                    vue.createElementVNode("div", { class: "chat-header" }, [
+                      vue.createElementVNode(
+                        "div",
+                        { class: "chat-name" },
+                        vue.toDisplayString(contact.name),
+                        1
+                        /* TEXT */
+                      ),
+                      contact.lastMessageTime ? (vue.openBlock(), vue.createElementBlock(
+                        "div",
+                        {
+                          key: 0,
+                          class: "chat-time"
+                        },
+                        vue.toDisplayString(contact.lastMessageTime),
+                        1
+                        /* TEXT */
+                      )) : vue.createCommentVNode("v-if", true)
+                    ]),
+                    vue.createElementVNode("div", { class: "chat-preview" }, [
+                      contact.lastMessage ? (vue.openBlock(), vue.createElementBlock(
+                        "div",
+                        {
+                          key: 0,
+                          class: "chat-message"
+                        },
+                        vue.toDisplayString(contact.lastMessage),
+                        1
+                        /* TEXT */
+                      )) : vue.createCommentVNode("v-if", true),
+                      contact.unreadCount > 0 ? (vue.openBlock(), vue.createElementBlock(
+                        "div",
+                        {
+                          key: 1,
+                          class: "unread-count"
+                        },
+                        vue.toDisplayString(contact.unreadCount),
+                        1
+                        /* TEXT */
+                      )) : vue.createCommentVNode("v-if", true)
+                    ])
+                  ])
+                ], 10, ["onClick"]);
+              }),
+              128
+              /* KEYED_FRAGMENT */
+            ))
+          ],
+          64
+          /* STABLE_FRAGMENT */
+        )) : vue.createCommentVNode("v-if", true),
+        vue.createCommentVNode(" 群组视图 "),
+        $data.activeTab === "groups" ? (vue.openBlock(), vue.createElementBlock(
+          vue.Fragment,
+          { key: 2 },
+          [
+            $options.filteredGroups.length === 0 ? (vue.openBlock(), vue.createElementBlock("div", {
+              key: 0,
+              class: "empty-state"
+            }, [
               vue.createElementVNode("i", { class: "fas fa-users" }),
-              vue.createElementVNode("div", { class: "avatar-indicator online" })
-            ]),
-            vue.createElementVNode("div", { class: "chat-info" }, [
-              vue.createElementVNode("div", { class: "chat-header" }, [
-                vue.createElementVNode("div", { class: "chat-name" }, "React学习交流群"),
-                vue.createElementVNode("div", { class: "chat-time" }, "08:45")
-              ]),
-              vue.createElementVNode("div", { class: "chat-preview" }, [
-                vue.createElementVNode("div", { class: "chat-message" }, [
-                  vue.createElementVNode("i", { class: "fas fa-user status-icon" }),
-                  vue.createTextVNode(" 陈同学：有人能帮忙看看这个Hooks问题吗？ ")
-                ]),
-                vue.createElementVNode("div", { class: "unread-count" }, "5")
-              ])
-            ])
-          ]),
-          vue.createElementVNode("div", { class: "chat-item group-chat" }, [
-            vue.createElementVNode("div", { class: "chat-avatar" }, [
-              vue.createElementVNode("i", { class: "fas fa-laptop-code" }),
-              vue.createElementVNode("div", { class: "avatar-indicator online" })
-            ]),
-            vue.createElementVNode("div", { class: "chat-info" }, [
-              vue.createElementVNode("div", { class: "chat-header" }, [
-                vue.createElementVNode("div", { class: "chat-name" }, "全栈开发交流群"),
-                vue.createElementVNode("div", { class: "chat-time" }, "昨天")
-              ]),
-              vue.createElementVNode("div", { class: "chat-preview" }, [
-                vue.createElementVNode("div", { class: "chat-message" }, [
-                  vue.createElementVNode("i", { class: "fas fa-user status-icon" }),
-                  vue.createTextVNode(" 管理员：本周技术分享主题征集 ")
-                ])
-              ])
-            ])
-          ])
-        ]),
-        vue.createCommentVNode(" 导师 "),
-        vue.createElementVNode("div", { class: "chat-section" }, [
-          vue.createElementVNode("div", { class: "section-header" }, "导师"),
-          vue.createElementVNode("div", { class: "chat-item mentor-chat" }, [
-            vue.createElementVNode("div", { class: "chat-avatar" }, [
-              vue.createTextVNode(" 李 "),
-              vue.createElementVNode("div", { class: "avatar-indicator online" })
-            ]),
-            vue.createElementVNode("div", { class: "chat-info" }, [
-              vue.createElementVNode("div", { class: "chat-header" }, [
-                vue.createElementVNode("div", { class: "chat-name" }, "李教授 (前端导师)"),
-                vue.createElementVNode("div", { class: "chat-time" }, "昨天")
-              ]),
-              vue.createElementVNode("div", { class: "chat-preview" }, [
-                vue.createElementVNode("div", { class: "chat-message" }, " 你的项目代码已审核，架构设计很合理 ")
-              ])
-            ])
-          ]),
-          vue.createElementVNode("div", { class: "chat-item mentor-chat unread" }, [
-            vue.createElementVNode("div", { class: "chat-avatar" }, [
-              vue.createTextVNode(" 王 "),
-              vue.createElementVNode("div", { class: "avatar-indicator offline" })
-            ]),
-            vue.createElementVNode("div", { class: "chat-info" }, [
-              vue.createElementVNode("div", { class: "chat-header" }, [
-                vue.createElementVNode("div", { class: "chat-name" }, "王老师 (全栈导师)"),
-                vue.createElementVNode("div", { class: "chat-time" }, "周三")
-              ]),
-              vue.createElementVNode("div", { class: "chat-preview" }, [
-                vue.createElementVNode("div", { class: "chat-message" }, " 关于你问的Node.js性能优化，我整理了一份文档 "),
-                vue.createElementVNode("div", { class: "unread-count" }, "1")
-              ])
-            ])
-          ])
-        ]),
-        vue.createCommentVNode(" 个人聊天 "),
-        vue.createElementVNode("div", { class: "chat-section" }, [
-          vue.createElementVNode("div", { class: "section-header" }, "个人聊天"),
-          vue.createElementVNode("div", { class: "chat-item personal-chat unread" }, [
-            vue.createElementVNode("div", { class: "chat-avatar" }, [
-              vue.createTextVNode(" 张 "),
-              vue.createElementVNode("div", { class: "avatar-indicator online" })
-            ]),
-            vue.createElementVNode("div", { class: "chat-info" }, [
-              vue.createElementVNode("div", { class: "chat-header" }, [
-                vue.createElementVNode("div", { class: "chat-name" }, "张同学"),
-                vue.createElementVNode("div", { class: "chat-time" }, "09:30")
-              ]),
-              vue.createElementVNode("div", { class: "chat-preview" }, [
-                vue.createElementVNode("div", { class: "chat-message" }, " 算法题解已发送，请查收 "),
-                vue.createElementVNode("div", { class: "unread-count" }, "2")
-              ])
-            ])
-          ]),
-          vue.createElementVNode("div", { class: "chat-item personal-chat" }, [
-            vue.createElementVNode("div", { class: "chat-avatar" }, [
-              vue.createTextVNode(" 王 "),
-              vue.createElementVNode("div", { class: "avatar-indicator online" })
-            ]),
-            vue.createElementVNode("div", { class: "chat-info" }, [
-              vue.createElementVNode("div", { class: "chat-header" }, [
-                vue.createElementVNode("div", { class: "chat-name" }, "王明轩"),
-                vue.createElementVNode("div", { class: "chat-time" }, "昨天")
-              ]),
-              vue.createElementVNode("div", { class: "chat-preview" }, [
-                vue.createElementVNode("div", { class: "chat-message" }, " 下周的自习室安排好了吗？ ")
-              ])
-            ])
-          ]),
-          vue.createElementVNode("div", { class: "chat-item personal-chat" }, [
-            vue.createElementVNode("div", { class: "chat-avatar" }, [
-              vue.createTextVNode(" 李 "),
-              vue.createElementVNode("div", { class: "avatar-indicator offline" })
-            ]),
-            vue.createElementVNode("div", { class: "chat-info" }, [
-              vue.createElementVNode("div", { class: "chat-header" }, [
-                vue.createElementVNode("div", { class: "chat-name" }, "李同学"),
-                vue.createElementVNode("div", { class: "chat-time" }, "昨天")
-              ]),
-              vue.createElementVNode("div", { class: "chat-preview" }, [
-                vue.createElementVNode("div", { class: "chat-message" }, " 项目文档已更新，请查看最新版本 ")
-              ])
-            ])
-          ])
-        ]),
-        vue.createCommentVNode(" 系统通知 "),
-        vue.createElementVNode("div", { class: "chat-section" }, [
-          vue.createElementVNode("div", { class: "section-header" }, "系统通知"),
-          vue.createElementVNode("div", { class: "chat-item system-notify unread" }, [
-            vue.createElementVNode("div", { class: "chat-avatar" }, [
-              vue.createElementVNode("i", { class: "fas fa-bell" })
-            ]),
-            vue.createElementVNode("div", { class: "chat-info" }, [
-              vue.createElementVNode("div", { class: "chat-header" }, [
-                vue.createElementVNode("div", { class: "chat-name" }, "系统通知"),
-                vue.createElementVNode("div", { class: "chat-time" }, "今天")
-              ]),
-              vue.createElementVNode("div", { class: "chat-preview" }, [
-                vue.createElementVNode("div", { class: "chat-message" }, ' 你参与的任务"React组件开发"已通过审核，积分+120 '),
-                vue.createElementVNode("div", { class: "unread-count" })
-              ])
-            ])
-          ]),
-          vue.createElementVNode("div", { class: "chat-item system-notify" }, [
-            vue.createElementVNode("div", { class: "chat-avatar" }, [
-              vue.createElementVNode("i", { class: "fas fa-trophy" })
-            ]),
-            vue.createElementVNode("div", { class: "chat-info" }, [
-              vue.createElementVNode("div", { class: "chat-header" }, [
-                vue.createElementVNode("div", { class: "chat-name" }, "成就通知"),
-                vue.createElementVNode("div", { class: "chat-time" }, "昨天")
-              ]),
-              vue.createElementVNode("div", { class: "chat-preview" }, [
-                vue.createElementVNode("div", { class: "chat-message" }, ' 恭喜获得"七日坚持"成就，积分+50 ')
-              ])
-            ])
-          ])
-        ])
+              vue.createElementVNode("p", null, "暂无群组")
+            ])) : vue.createCommentVNode("v-if", true),
+            (vue.openBlock(true), vue.createElementBlock(
+              vue.Fragment,
+              null,
+              vue.renderList($options.filteredGroups, (group2) => {
+                return vue.openBlock(), vue.createElementBlock("div", {
+                  key: group2.id,
+                  class: vue.normalizeClass(["chat-item", [group2.type, { unread: group2.unreadCount > 0 }]]),
+                  onClick: ($event) => $options.openChat(group2)
+                }, [
+                  vue.createElementVNode("div", { class: "chat-avatar" }, [
+                    vue.createElementVNode(
+                      "i",
+                      {
+                        class: vue.normalizeClass(group2.icon)
+                      },
+                      null,
+                      2
+                      /* CLASS */
+                    ),
+                    vue.createElementVNode(
+                      "div",
+                      {
+                        class: vue.normalizeClass(["avatar-indicator", { online: group2.online, offline: !group2.online }])
+                      },
+                      null,
+                      2
+                      /* CLASS */
+                    )
+                  ]),
+                  vue.createElementVNode("div", { class: "chat-info" }, [
+                    vue.createElementVNode("div", { class: "chat-header" }, [
+                      vue.createElementVNode(
+                        "div",
+                        { class: "chat-name" },
+                        vue.toDisplayString(group2.name),
+                        1
+                        /* TEXT */
+                      ),
+                      group2.lastMessageTime ? (vue.openBlock(), vue.createElementBlock(
+                        "div",
+                        {
+                          key: 0,
+                          class: "chat-time"
+                        },
+                        vue.toDisplayString(group2.lastMessageTime),
+                        1
+                        /* TEXT */
+                      )) : vue.createCommentVNode("v-if", true)
+                    ]),
+                    vue.createElementVNode("div", { class: "chat-preview" }, [
+                      group2.lastMessage ? (vue.openBlock(), vue.createElementBlock("div", {
+                        key: 0,
+                        class: "chat-message"
+                      }, [
+                        group2.lastSender ? (vue.openBlock(), vue.createElementBlock(
+                          vue.Fragment,
+                          { key: 0 },
+                          [
+                            vue.createElementVNode("i", { class: "fas fa-user status-icon" }),
+                            vue.createTextVNode(
+                              " " + vue.toDisplayString(group2.lastSender) + "：" + vue.toDisplayString(group2.lastMessage),
+                              1
+                              /* TEXT */
+                            )
+                          ],
+                          64
+                          /* STABLE_FRAGMENT */
+                        )) : (vue.openBlock(), vue.createElementBlock(
+                          vue.Fragment,
+                          { key: 1 },
+                          [
+                            vue.createTextVNode(
+                              vue.toDisplayString(group2.lastMessage),
+                              1
+                              /* TEXT */
+                            )
+                          ],
+                          64
+                          /* STABLE_FRAGMENT */
+                        ))
+                      ])) : vue.createCommentVNode("v-if", true),
+                      group2.unreadCount > 0 ? (vue.openBlock(), vue.createElementBlock(
+                        "div",
+                        {
+                          key: 1,
+                          class: "unread-count"
+                        },
+                        vue.toDisplayString(group2.unreadCount),
+                        1
+                        /* TEXT */
+                      )) : vue.createCommentVNode("v-if", true)
+                    ])
+                  ])
+                ], 10, ["onClick"]);
+              }),
+              128
+              /* KEYED_FRAGMENT */
+            ))
+          ],
+          64
+          /* STABLE_FRAGMENT */
+        )) : vue.createCommentVNode("v-if", true)
       ])
     ]);
   }
@@ -10439,6 +10749,8 @@ if (uni.restoreGlobal) {
         state2.userInfo.finishTask = info.user.finishTask;
         state2.userInfo.token = info.token;
         uni.setStorageSync("id", info.user.id);
+        uni.setStorageSync("user", info.user);
+        formatAppLog("log", "at store/user/user.js:50", uni.getStorageSync("user"));
         uni.setStorageSync("token", info.token);
       },
       CLEAR_USER_INFO(state2) {
@@ -10585,11 +10897,106 @@ if (uni.restoreGlobal) {
       }
     }
   };
+  const requestFriend = (data) => {
+    return request({
+      url: "/user/friend/request",
+      method: "POST",
+      data
+    });
+  };
+  const accept = (data) => {
+    return request({
+      url: "/user/friend/accept",
+      method: "POST",
+      data
+    });
+  };
+  const deleteFriend = (data) => {
+    return request({
+      url: "/user/friend/delete",
+      method: "POST",
+      data: {
+        friendId: data.friendId
+      }
+    });
+  };
+  const friendList = (data) => {
+    return request({
+      url: "/user/friend/friendList",
+      method: "POST",
+      data
+    });
+  };
+  const friendRequestList = (data) => {
+    return request({
+      url: "/user/friend/friendRequestList",
+      method: "POST",
+      data
+    });
+  };
+  const userFriend = {
+    namespaced: true,
+    state: () => ({
+      friendList: {}
+    }),
+    mutations: {
+      SET_USER_FRIENDS(state2, info) {
+        formatAppLog("log", "at store/user/userFriend.js:9", info);
+      },
+      SET_USER_INFO(state2) {
+        state2.userInfo = null;
+        state2.isLoggedIn = false;
+      }
+    },
+    actions: {
+      requestFriend({ commit }, credentials) {
+        return requestFriend(credentials).then((res) => {
+          if (res.code === 200) {
+            commit("SET_USER_INFO", res.data);
+          }
+          return res;
+        });
+      },
+      accept({ commit }, credentials) {
+        return accept(credentials).then((res) => {
+          if (res.code === 200) {
+            commit("SET_USER_INFO", res.data);
+          }
+          return res;
+        });
+      },
+      deleteFriend({ commit }, credentials) {
+        return deleteFriend(credentials).then((res) => {
+          if (res.code === 200) {
+            commit("SET_USER_INFO", res.data);
+          }
+          return res;
+        });
+      },
+      friendList({ commit }, credentials) {
+        return friendList(credentials).then((res) => {
+          if (res.code === 200) {
+            commit("SET_USER_FRIENDS", res.data);
+          }
+          return res;
+        });
+      },
+      friendRequestList({ commit }, credentials) {
+        return friendRequestList(credentials).then((res) => {
+          if (res.code === 200) {
+            commit("SET_USER_INFO", res.data);
+          }
+          return res;
+        });
+      }
+    }
+  };
   const store = createStore({
     modules: {
       user,
       userPlan,
       userTask,
+      userFriend,
       group,
       article,
       articleComment,
@@ -10601,51 +11008,85 @@ if (uni.restoreGlobal) {
       groupUser
     }
   });
+  const dbName = "studyParty";
+  const dbpath = "_doc/studyParty.db";
+  const db = {
+    createDatabases() {
+      let isOpen = plus.sqlite.isOpenDatabase({
+        name: dbName,
+        path: dbpath
+      });
+      if (isOpen) {
+        return Promise.resolve();
+      }
+      return new Promise((resolve, reject) => {
+        plus.sqlite.openDatabase({
+          name: dbName,
+          path: dbpath,
+          success: resolve,
+          fail: reject
+        });
+      });
+    },
+    selectDatabases(sql) {
+      formatAppLog("log", "at utils/SQLite.js:22", "查询" + sql);
+      return new Promise((resolve, reject) => {
+        plus.sqlite.selectSql({
+          name: dbName,
+          sql,
+          success: resolve,
+          fail: reject
+        });
+      });
+    },
+    createTable(sql) {
+      formatAppLog("log", "at utils/SQLite.js:33", "创建表");
+      return new Promise((resolve, reject) => {
+        plus.sqlite.executeSql({
+          name: dbName,
+          sql,
+          success: resolve,
+          fail: reject
+        });
+      });
+    },
+    selectTable(sql) {
+      formatAppLog("log", "at utils/SQLite.js:44", "查询表");
+      return new Promise((resolve, reject) => {
+        plus.sqlite.selectSql({
+          name: dbName,
+          sql,
+          success: resolve,
+          fail: reject
+        });
+      });
+    }
+  };
   const _sfc_main$1U = {
     onLaunch: function() {
-      formatAppLog("log", "at App.vue:7", "App Launch");
-      const initApp = () => {
-        this.initDatabase();
-        const token = uni.getStorageSync("token");
-        if (token) {
-          webSocketService.connect();
-        }
-      };
-      if (window.plus && window.plus.isReady) {
-        initApp();
-      } else {
-        document.addEventListener("plusready", initApp, false);
+      formatAppLog("log", "at App.vue:8", "App Launch");
+      this.testDatabase();
+      const token = uni.getStorageSync("token");
+      if (token) {
+        webSocketService.connect();
+      }
+      if (uni.getStorageSync("token") != null) {
+        uni.switchTab({ url: "/pages/index/index" });
       }
     },
     onShow: function() {
-      formatAppLog("log", "at App.vue:27", "App Show");
+      formatAppLog("log", "at App.vue:21", "App Show");
     },
     onHide: function() {
-      formatAppLog("log", "at App.vue:30", "App Hide");
+      formatAppLog("log", "at App.vue:24", "App Hide");
       webSocketService.close();
     },
     methods: {
-      initDatabase() {
-        formatAppLog("log", "at App.vue:35", "初始化数据库");
-        if (!window.plus || !window.plus.sqlite) {
-          formatAppLog("error", "at App.vue:39", "SQLite 模块未就绪");
-          return;
-        }
-        try {
-          const db = plus.sqlite.openDatabase({
-            name: "chat.db",
-            path: "_doc/chat.db"
-            // 使用相对路径即可
-          });
-          formatAppLog("log", "at App.vue:50", "数据库连接成功");
-          this.createTables(db);
-        } catch (e) {
-          formatAppLog("error", "at App.vue:53", "数据库初始化失败:", e);
-        }
-      },
-      createTables(db) {
-        formatAppLog("log", "at App.vue:58", "创建数据库表");
-        const createTableSql = `
+      async testDatabase() {
+        await db.createDatabases();
+        let [result] = await db.selectDatabases("select * from android_metadata");
+        formatAppLog("log", "at App.vue:31", result);
+        const createTableSql2 = `
 				CREATE TABLE IF NOT EXISTS offlineMessages (
 					id INTEGER PRIMARY KEY AUTOINCREMENT,
 					user TEXT NOT NULL,
@@ -10654,7 +11095,7 @@ if (uni.restoreGlobal) {
 					timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
 				)
 			`;
-        const createTableSqlTwo = `
+        const createTableSqlTwo2 = `
 				CREATE TABLE IF NOT EXISTS onlineMessages (
 					id INTEGER PRIMARY KEY AUTOINCREMENT,
 					user TEXT NOT NULL,
@@ -10663,25 +11104,52 @@ if (uni.restoreGlobal) {
 					timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
 				)
 			`;
-        db.transaction(
+        let cTable1 = await db.createTable(createTableSql2);
+        formatAppLog("log", "at App.vue:52", cTable1);
+        let cTable2 = await db.createTable(createTableSqlTwo2);
+        formatAppLog("log", "at App.vue:54", cTable2);
+        let ans = await db.selectTable(`SELECT name FROM sqlite_master WHERE type='table';`);
+        formatAppLog("log", "at App.vue:56", ans);
+      },
+      initDatabase() {
+        formatAppLog("log", "at App.vue:59", "初始化数据库");
+        if (!window.plus || !window.plus.sqlite) {
+          formatAppLog("error", "at App.vue:63", "SQLite 模块未就绪");
+          return;
+        }
+        try {
+          const db2 = plus.sqlite.openDatabase({
+            name: "chat.db",
+            path: "_doc/chat.db"
+            // 使用相对路径即可
+          });
+          formatAppLog("log", "at App.vue:73", "数据库连接成功");
+          this.createTables(db2);
+        } catch (e) {
+          formatAppLog("error", "at App.vue:76", "数据库初始化失败:", e);
+        }
+      },
+      createTables(db2) {
+        formatAppLog("log", "at App.vue:81", "创建数据库表");
+        db2.transaction(
           (tx) => {
             tx.executeSql(
               createTableSql,
               [],
-              () => formatAppLog("log", "at App.vue:83", "offlineMessages表创建成功"),
-              (err) => formatAppLog("error", "at App.vue:84", "创建offlineMessages表失败:", err)
+              () => formatAppLog("log", "at App.vue:88", "offlineMessages表创建成功"),
+              (err) => formatAppLog("error", "at App.vue:89", "创建offlineMessages表失败:", err)
             );
           },
-          (err) => formatAppLog("error", "at App.vue:87", "事务1失败:", err),
+          (err) => formatAppLog("error", "at App.vue:92", "事务1失败:", err),
           () => {
-            db.transaction((tx) => {
+            db2.transaction((tx) => {
               tx.executeSql(
                 createTableSqlTwo,
                 [],
-                () => formatAppLog("log", "at App.vue:91", "onlineMessages表创建成功"),
-                (err) => formatAppLog("error", "at App.vue:92", "创建onlineMessages表失败:", err)
+                () => formatAppLog("log", "at App.vue:96", "onlineMessages表创建成功"),
+                (err) => formatAppLog("error", "at App.vue:97", "创建onlineMessages表失败:", err)
               );
-            }, (err) => formatAppLog("error", "at App.vue:94", "事务2失败:", err));
+            }, (err) => formatAppLog("error", "at App.vue:99", "事务2失败:", err));
           }
         );
       }
@@ -37855,7 +38323,7 @@ if (uni.restoreGlobal) {
     ];
   }
   function chooseFile({
-    accept,
+    accept: accept2,
     multiple,
     capture,
     compressed,
@@ -37871,7 +38339,7 @@ if (uni.restoreGlobal) {
       capture = [];
     }
     return new Promise((resolve, reject) => {
-      switch (accept) {
+      switch (accept2) {
         case "image":
           uni.chooseImage({
             count: multiple ? Math.min(maxCount, 9) : 1,

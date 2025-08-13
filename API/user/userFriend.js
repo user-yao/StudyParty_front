@@ -1,5 +1,5 @@
 import { request } from '../../request/request.js';
-export const request = (data) => {
+export const requestFriend = (data) => {
   return request({
     url: '/user/friend/request',
     method: 'POST',

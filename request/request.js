@@ -32,7 +32,13 @@ export const request = (options) => {
       success: (res) => {
         if (res.statusCode >= 200 && res.statusCode < 300) {
           resolve(res.data);
-        } else {
+        } else if(res.statusCode == 401){
+			uni.showToast({ title: '身份失效，请重新登录', icon: 'error' });
+			uni.reLaunch({
+				url:"/pages/login/login",
+			})
+		}
+		else {
           reject(new Error(`请求失败，状态码：${res.statusCode}`));
         }
       },

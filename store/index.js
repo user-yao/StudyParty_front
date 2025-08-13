@@ -10,13 +10,15 @@ import groupTaskAnswer from './group/groupTaskAnswer';
 import groupUser from './group/groupUser';
 import user from './user/user';
 import userPlan from "./user/userPlan";
-import userTask from "./user/userTask.js"
+import userTask from "./user/userTask.js";
+import userFriend from "./user/userFriend";
 
 const store = createStore({
   modules: {
     user,
 	userPlan,
 	userTask,
+	userFriend,
     group,
     article,
     articleComment,
