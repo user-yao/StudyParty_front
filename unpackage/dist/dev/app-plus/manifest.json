@@ -129,7 +129,7 @@
           "selectedIconPath": "/static/BlueTableBar/luntan.png"
         },
         {
-          "pagePath": "pages/group/group",
+          "pagePath": "pages/chatList/chatList",
           "text": "小组",
           "iconPath": "/static/BlackTableBar/kehuqunzu.png",
           "selectedIconPath": "/static/BlueTableBar/kehuqunzu.png"

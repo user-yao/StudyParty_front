@@ -50,7 +50,79 @@ export default{
 				fail:reject
 			})
 		})
-	}
+	},
+	insertOtherMessage(friend,context,status,sender,type,isread){ //status 1:私聊   2：群聊
+		console.log("添加未读消息")
+		let user = uni.getStorageSync('user').id;
+		return new Promise((resolve,reject) =>{
+			plus.sqlite.executeSql({
+				name:dbName,
+				sql: `
+					INSERT INTO Messages (user, friend, context,sender, type,status,isread)
+					VALUES (?, ?, ?, ?, ?, ?);
+				`,
+				args: [user, friend, context, sender, type, status, isread], // 通过 args 传入参数
+				success:resolve,
+				fail:reject
+			})
+		})
+	},
+	selectMessage(friend,status,offset,limit){ 
+		console.log("查询消息记录");
+		let user = uni.getStorageSync('user').id;
+		return new Promise((resolve,reject) =>{
+			plus.sqlite.executeSql({
+				name:dbName,
+				sql:`
+					SELECT *
+					FROM Messages
+					WHERE friend = ?
+					  AND user = ?
+					  AND status = ?
+					ORDER BY timestamp DESC
+					LIMIT ?
+					OFFSET ?;
+				`,
+				args: [friend, user, status,limit, offset],
+				success:resolve,
+				fail:reject
+			})
+		})
+	},
+	updateMessageIsread(friend){
+		console.log("已读消息")
+		let user = uni.getStorageSync('user').id;
+		return new Promise((resolve,reject) =>{
+			plus.sqlite.executeSql({
+				name:dbName,
+				sql:`UPDATE Messages
+					SET isread = 1
+					WHERE friend = ?
+					AND user = ?;
+				  `,
+				args:[friend,user],
+				success:resolve,
+				fail:reject
+			})
+		})
+	},
+	insertMyMessage(friend,context,status,type){
+		console.log("添加我发送的消息")
+		let user = uni.getStorageSync('user').id;
+		let sender = user;
+		return new Promise((resolve,reject) =>{
+			plus.sqlite.executeSql({
+				name:dbName,
+				sql: `
+					INSERT INTO Messages (user, friend, context,sender, type,status,isread)
+					VALUES (?, ?, ?, ?, ?, ?);
+				`,
+				args: [user, friend, context, sender, type, status, 1], // 通过 args 传入参数
+				success:resolve,
+				fail:reject
+			})
+		})
+	},
 }
 
 

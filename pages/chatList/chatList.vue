@@ -14,11 +14,13 @@
 			  </div>
 			  <div class="tabs-container">
 				  <div class="tab" :class="{ active: activeTab === 'messages' }" @click="setActiveTab('messages')">消息</div>
-				  <div class="tab" :class="{ active: activeTab === 'contacts' }" @click="setActiveTab('contacts')">联系人</div>
-				  <div class="tab" :class="{ active: activeTab === 'groups' }" @click="setActiveTab('groups')">群组</div>
+				  <div class="tab" :class="{ active: activeTab === 'contacts' }" @click="setActiveTab('contacts')">联系人列表</div>
+				  <div class="tab" :class="{ active: activeTab === 'groups' }" @click="setActiveTab('groups')">群组列表</div>
+				  <div class="tab" :class="{ active: activeTab === 'addUser' }" @click="setActiveTab('addUser')">添加好友</div>
+				  <div class="tab" :class="{ active: activeTab === 'addGroup' }" @click="setActiveTab('addGroup')">加入群组</div>
+				  <div class="tab" :class="{ active: activeTab === 'createGroup' }" @click="setActiveTab('createGroup')">创建群组</div>
 			  </div>
 		  </header>
-		  
 		  <!-- 搜索区域 -->
 		  <div class="search-container">
 			  <div class="search-bar">
@@ -134,10 +136,23 @@
 		mapMutations,
 		mapActions
 	} from "vuex"; 
+	import{ref,onMounted} from 'vue';
 	import {imageUrl} from "@/config/config.js"
  export default {
    data() {
      return {
+		cateList: [{
+			id: '1',
+			name: '分类1'
+		},
+		{
+			id: '2',
+			name: '分类2'
+		},
+		{
+			id: '3',
+			name: '分类4'
+    }],
 		activeTab: 'messages',
 		activeNav: 'messages',
 		searchQuery: '',

@@ -1,4 +1,5 @@
 import { webSocketUrl } from '../config/config.js';
+import db from '@/utils/SQLite.js'
 
 class WebSocketService {
   constructor() {
@@ -22,18 +23,15 @@ class WebSocketService {
   // 初始化连接
   connect() {
     console.log("WebSocket准备连接...");
-    
     // 清除现有连接
     if (this.socketTask) {
       this.close();
     }
-    
     const token = uni.getStorageSync('token');
     if (!token) {
       console.error('无法连接WebSocket: token缺失');
       return;
     }
-    
     const url = `${webSocketUrl}?Authorization=${token}`;
     console.log('连接URL:', url);
     
@@ -55,7 +53,6 @@ class WebSocketService {
       this.reconnect();
     }
   }
-  
   // 处理连接打开
   handleOpen(res) {
     console.log('WebSocket连接成功');
@@ -65,20 +62,28 @@ class WebSocketService {
     // 通知应用连接已建立
     uni.$emit('websocket-connected');
   }
-  
   // 处理收到消息
   handleMessage(res) {
     try {
       const data = typeof res.data === 'string' ? JSON.parse(res.data) : res.data;
-      
       if (data.type === 'pong') {
         console.log('收到心跳响应');
         return;
       }
-      
+	  if(data.type === 'text_private' || data.type === 'offline_text_private'){
+		db.insertOtherMessage(data.senderId,data.content,1,data.senderId,'text',0);
+	  }
+	  if(data.type === 'text_group' || data.type === 'offline_text_group'){
+		db.insertOtherMessage(data.groupId, data.content,2, data.senderId,'text',0);
+	  }
+	  if(data.groupId != null){
+		db.insertOtherMessage(data.groupId, data.content,2, data.senderId,data.fileType,0);
+	  }
+	  if(data.receiverId != null){
+		  db.insertOtherMessage(data.senderId,data.content,1,data.senderId,data.fileType,0);
+	  }
       // 触发全局消息事件
       uni.$emit('websocket-message', data);
-      
     } catch (e) {
       console.error('消息解析错误:', e, '原始数据:', res.data);
     }
@@ -157,10 +162,12 @@ class WebSocketService {
   sendMessage(message) {
     if (this.isConnected()) {
       try {
-        const payload = JSON.stringify(message);
+        const payload = JSON.stringify(message);//message.senderId 聊天对象id,message.content 内容,message.senderType 群聊还是私聊,
+												//message.senderId发送方id,类型,1已读
         this.socketTask.send({
           data: payload,
           success: () => {
+			db.insertOtherMessage(message.id,message.content,message.senderType,message.senderId,"text",1);
             console.log('消息发送成功:', message.type || message);
           },
           fail: (err) => {

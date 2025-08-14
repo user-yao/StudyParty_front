@@ -25,7 +25,7 @@
 			}
 		},
 		{
-			"path": "pages/group/group",
+			"path": "pages/chatList/chatList",
 			"style": {
 				"navigationBarTitleText": "小组"
 			}
@@ -34,6 +34,13 @@
 			"path": "pages/profile/profile",
 			"style": {
 				"navigationBarTitleText": "个人中心"
+			}
+		},
+		{
+			"path" : "pages/chatList/friendList",
+			"style" : 
+			{
+				"navigationBarTitleText" : "好友列表"
 			}
 		}
 	],
@@ -66,7 +73,7 @@
         "selectedIconPath": "static/BlueTableBar/luntan.png"
       },
       {
-        "pagePath": "pages/group/group",
+        "pagePath": "pages/chatList/chatList",
         "text": "小组",
         "iconPath": "static/BlackTableBar/kehuqunzu.png",
         "selectedIconPath": "static/BlueTableBar/kehuqunzu.png"

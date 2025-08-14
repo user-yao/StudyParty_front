@@ -87,10 +87,14 @@ import webSocketService from '@/utils/websocket.js';
         }
       }
     },
+	onLoad() {
+		
+	},
     methods: {
       ...mapActions('user', ['login']),
       handleLogin() {
         this.login(this.form).then(res =>{
+			uni.setStorageSync('password',this.form.password);
           if (res.code === 200) {
             console.log(uni.getStorageSync('token'))
             uni.showToast({ title: '登录成功', icon: 'success' });
