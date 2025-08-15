@@ -5477,7 +5477,7 @@ if (uni.restoreGlobal) {
       });
     },
     selectDatabases(sql) {
-      formatAppLog("log", "at utils/SQLite.js:22", "查询" + sql);
+      formatAppLog("log", "at utils/SQLite.js:24", "查询" + sql);
       return new Promise((resolve, reject) => {
         plus.sqlite.selectSql({
           name: dbName,
@@ -5488,7 +5488,7 @@ if (uni.restoreGlobal) {
       });
     },
     createTable(sql) {
-      formatAppLog("log", "at utils/SQLite.js:33", "创建表");
+      formatAppLog("log", "at utils/SQLite.js:35", "创建表");
       return new Promise((resolve, reject) => {
         plus.sqlite.executeSql({
           name: dbName,
@@ -5499,7 +5499,7 @@ if (uni.restoreGlobal) {
       });
     },
     selectTable(sql) {
-      formatAppLog("log", "at utils/SQLite.js:44", "查询表");
+      formatAppLog("log", "at utils/SQLite.js:46", "查询表");
       return new Promise((resolve, reject) => {
         plus.sqlite.selectSql({
           name: dbName,
@@ -5509,26 +5509,34 @@ if (uni.restoreGlobal) {
         });
       });
     },
-    insertOtherMessage(friend, context, status, sender, type2, isread) {
-      formatAppLog("log", "at utils/SQLite.js:55", "添加未读消息");
-      let user2 = uni.getStorageSync("user").id;
+    insertOtherMessage(friend, content, statu, sender, type2, isread) {
+      formatAppLog("log", "at utils/SQLite.js:57", "添加未读消息");
+      let userid = uni.getStorageSync("user").id;
+      userid = String(userid);
+      friend = String(friend);
+      content = String(content);
+      statu = String(statu);
+      sender = String(sender);
+      type2 = String(type2);
+      isread = String(isread);
       return new Promise((resolve, reject) => {
         plus.sqlite.executeSql({
           name: dbName,
           sql: `
-					INSERT INTO Messages (user, friend, context,sender, type,status,isread)
-					VALUES (?, ?, ?, ?, ?, ?);
+					INSERT INTO Messages (userid, friend, content, sender, type, statu, isread)
+					VALUES ('${userid}', '${friend}', '${content}', '${sender}', '${type2}', '${statu}', '${isread}');
 				`,
-          args: [user2, friend, context, sender, type2, status, isread],
-          // 通过 args 传入参数
           success: resolve,
-          fail: reject
+          fail(e) {
+            formatAppLog("log", "at utils/SQLite.js:75", e);
+            formatAppLog("log", "at utils/SQLite.js:76", "参数值:", { userid, friend, content, sender, type: type2, statu, isread });
+          }
         });
       });
     },
-    selectMessage(friend, status, offset, limit) {
-      formatAppLog("log", "at utils/SQLite.js:71", "查询消息记录");
-      let user2 = uni.getStorageSync("user").id;
+    selectMessage(friend, statu, offset, limit) {
+      formatAppLog("log", "at utils/SQLite.js:82", "查询消息记录");
+      let userid = uni.getStorageSync("user").id;
       return new Promise((resolve, reject) => {
         plus.sqlite.executeSql({
           name: dbName,
@@ -5536,50 +5544,84 @@ if (uni.restoreGlobal) {
 					SELECT *
 					FROM Messages
 					WHERE friend = ?
-					  AND user = ?
-					  AND status = ?
+					  AND userid = ?
+					  AND statu = ?
 					ORDER BY timestamp DESC
 					LIMIT ?
 					OFFSET ?;
 				`,
-          args: [friend, user2, status, limit, offset],
+          args: [friend, userid, statu, limit, offset],
           success: resolve,
           fail: reject
         });
       });
     },
     updateMessageIsread(friend) {
-      formatAppLog("log", "at utils/SQLite.js:93", "已读消息");
-      let user2 = uni.getStorageSync("user").id;
+      formatAppLog("log", "at utils/SQLite.js:104", "已读消息");
+      let userid = uni.getStorageSync("user").id;
       return new Promise((resolve, reject) => {
         plus.sqlite.executeSql({
           name: dbName,
           sql: `UPDATE Messages
 					SET isread = 1
 					WHERE friend = ?
-					AND user = ?;
+					AND userid = ?;
 				  `,
-          args: [friend, user2],
+          args: [friend, userid],
           success: resolve,
           fail: reject
         });
       });
     },
-    insertMyMessage(friend, context, status, type2) {
-      formatAppLog("log", "at utils/SQLite.js:110", "添加我发送的消息");
-      let user2 = uni.getStorageSync("user").id;
-      let sender = user2;
+    insertMyMessage(friend, content, statu, type2) {
+      formatAppLog("log", "at utils/SQLite.js:121", "添加我发送的消息");
+      let userid = uni.getStorageSync("user").id;
+      let sender = userid;
       return new Promise((resolve, reject) => {
         plus.sqlite.executeSql({
           name: dbName,
           sql: `
-					INSERT INTO Messages (user, friend, context,sender, type,status,isread)
+					INSERT INTO Messages (userid, friend, content,sender, type,statu,isread)
 					VALUES (?, ?, ?, ?, ?, ?);
 				`,
-          args: [user2, friend, context, sender, type2, status, 1],
+          args: [userid, friend, content, sender, type2, statu, 1],
           // 通过 args 传入参数
           success: resolve,
           fail: reject
+        });
+      });
+    },
+    selectChatList() {
+      formatAppLog("log", "at utils/SQLite.js:138", "查询消息列表");
+      let userid = uni.getStorageSync("user").id;
+      return new Promise((resolve, reject) => {
+        plus.sqlite.selectSql({
+          name: dbName,
+          sql: `
+					SELECT 
+					m1.friend,
+					m1.content,
+					m1.timestamp,
+					m1.sender,
+					m1.statu,
+					m1.type,
+					m1.isread,
+					COUNT(*) AS message_count
+				FROM Messages m1
+				INNER JOIN (
+					SELECT friend, MAX(timestamp) AS max_timestamp
+					FROM Messages
+					WHERE userid = '${userid}'
+					GROUP BY friend
+				) m2 ON m1.friend = m2.friend AND m1.timestamp = m2.max_timestamp
+				WHERE m1.userid = '${userid}'
+				GROUP BY m1.friend, m1.content, m1.timestamp, m1.sender, m1.statu, m1.type, m1.isread
+				ORDER BY m1.timestamp DESC
+				`,
+          success: resolve,
+          fail(e) {
+            formatAppLog("log", "at utils/SQLite.js:166", e);
+          }
         });
       });
     }
@@ -5640,29 +5682,41 @@ if (uni.restoreGlobal) {
       try {
         const data = typeof res.data === "string" ? JSON.parse(res.data) : res.data;
         if (data.type === "pong") {
-          formatAppLog("log", "at utils/websocket.js:70", "收到心跳响应");
           return;
         }
         if (data.type === "text_private" || data.type === "offline_text_private") {
-          db.insertOtherMessage(data.senderId, data.content, 1, data.senderId, "text", 0);
+          db.insertOtherMessage(data.senderId, data.content, "person", data.senderId, "text", 0);
+          uni.$emit("websocket-message", data);
+          return;
         }
         if (data.type === "text_group" || data.type === "offline_text_group") {
-          db.insertOtherMessage(data.groupId, data.content, 2, data.senderId, "text", 0);
+          db.insertOtherMessage(data.groupId, data.content, "group", data.senderId, "text", 0);
+          uni.$emit("websocket-message", data);
+          return;
+        }
+        if (data.type === "text_public" || data.type === "offline_text_public") {
+          db.insertOtherMessage(data.groupId, data.content, "system", data.senderId, "text", 0);
+          uni.$emit("websocket-message", data);
+          return;
         }
         if (data.groupId != null) {
-          db.insertOtherMessage(data.groupId, data.content, 2, data.senderId, data.fileType, 0);
+          db.insertOtherMessage(data.groupId, data.content, "group", data.senderId, data.fileType, 0);
+          uni.$emit("websocket-message", data);
+          return;
         }
         if (data.receiverId != null) {
-          db.insertOtherMessage(data.senderId, data.content, 1, data.senderId, data.fileType, 0);
+          db.insertOtherMessage(data.senderId, data.content, "person", data.senderId, data.fileType, 0);
+          uni.$emit("websocket-message", data);
+          return;
         }
         uni.$emit("websocket-message", data);
       } catch (e) {
-        formatAppLog("error", "at utils/websocket.js:88", "消息解析错误:", e, "原始数据:", res.data);
+        formatAppLog("error", "at utils/websocket.js:101", "消息解析错误:", e, "原始数据:", res.data);
       }
     }
     // 处理连接关闭
     handleClose(res) {
-      formatAppLog("log", "at utils/websocket.js:94", `WebSocket关闭，代码：${res.code}，原因：${res.reason || "未知原因"}`);
+      formatAppLog("log", "at utils/websocket.js:107", `WebSocket关闭，代码：${res.code}，原因：${res.reason || "未知原因"}`);
       this.stopHeartbeat();
       if (res.code !== 1e3) {
         this.reconnect();
@@ -5670,7 +5724,7 @@ if (uni.restoreGlobal) {
     }
     // 处理连接错误
     handleError(err) {
-      formatAppLog("error", "at utils/websocket.js:105", "WebSocket错误:", err.errMsg || err.message);
+      formatAppLog("error", "at utils/websocket.js:118", "WebSocket错误:", err.errMsg || err.message);
       this.stopHeartbeat();
       this.reconnect();
     }
@@ -5680,7 +5734,6 @@ if (uni.restoreGlobal) {
       this.heartbeatTimer = setInterval(() => {
         if (this.isConnected()) {
           this.sendMessage({ content: "ping" });
-          formatAppLog("log", "at utils/websocket.js:116", "发送心跳消息");
         }
       }, this.HEARTBEAT_INTERVAL);
     }
@@ -5702,15 +5755,15 @@ if (uni.restoreGlobal) {
       if (this.reconnectTimer)
         clearTimeout(this.reconnectTimer);
       if (this.reconnectAttempts >= this.MAX_RECONNECT_ATTEMPTS) {
-        formatAppLog("warn", "at utils/websocket.js:144", `已达到最大重连次数(${this.MAX_RECONNECT_ATTEMPTS})，停止重连`);
+        formatAppLog("warn", "at utils/websocket.js:157", `已达到最大重连次数(${this.MAX_RECONNECT_ATTEMPTS})，停止重连`);
         uni.$emit("websocket-disconnected");
         return;
       }
       const delay = this.RECONNECT_DELAY_BASE * Math.pow(2, this.reconnectAttempts);
       this.reconnectAttempts++;
-      formatAppLog("log", "at utils/websocket.js:153", `将在 ${delay}ms 后尝试重连 (#${this.reconnectAttempts})`);
+      formatAppLog("log", "at utils/websocket.js:166", `将在 ${delay}ms 后尝试重连 (#${this.reconnectAttempts})`);
       this.reconnectTimer = setTimeout(() => {
-        formatAppLog("log", "at utils/websocket.js:156", `尝试重连 (#${this.reconnectAttempts})`);
+        formatAppLog("log", "at utils/websocket.js:169", `尝试重连 (#${this.reconnectAttempts})`);
         this.connect();
       }, delay);
     }
@@ -5722,18 +5775,16 @@ if (uni.restoreGlobal) {
           this.socketTask.send({
             data: payload,
             success: () => {
-              db.insertOtherMessage(message.id, message.content, message.senderType, message.senderId, "text", 1);
-              formatAppLog("log", "at utils/websocket.js:171", "消息发送成功:", message.type || message);
             },
             fail: (err) => {
-              formatAppLog("error", "at utils/websocket.js:174", "消息发送失败:", err);
+              formatAppLog("error", "at utils/websocket.js:186", "消息发送失败:", err);
             }
           });
         } catch (e) {
-          formatAppLog("error", "at utils/websocket.js:178", "消息序列化错误:", e);
+          formatAppLog("error", "at utils/websocket.js:190", "消息序列化错误:", e);
         }
       } else {
-        formatAppLog("warn", "at utils/websocket.js:181", "尝试发送消息但连接未就绪");
+        formatAppLog("warn", "at utils/websocket.js:193", "尝试发送消息但连接未就绪");
       }
     }
     // 关闭连接
@@ -5754,18 +5805,18 @@ if (uni.restoreGlobal) {
             this.socketTask.close(code2, reason);
           }
         } catch (e) {
-          formatAppLog("error", "at utils/websocket.js:208", "关闭连接时出错:", e);
+          formatAppLog("error", "at utils/websocket.js:220", "关闭连接时出错:", e);
         } finally {
           this.socketTask = null;
         }
       }
-      formatAppLog("log", "at utils/websocket.js:214", "WebSocket连接已关闭");
+      formatAppLog("log", "at utils/websocket.js:226", "WebSocket连接已关闭");
     }
   }
   const webSocketService = new WebSocketService();
   uni.$on("network-connected", () => {
     if (!webSocketService.isConnected()) {
-      formatAppLog("log", "at utils/websocket.js:224", "网络恢复，尝试重连WebSocket");
+      formatAppLog("log", "at utils/websocket.js:236", "网络恢复，尝试重连WebSocket");
       webSocketService.connect();
     }
   });
@@ -9156,26 +9207,15 @@ if (uni.restoreGlobal) {
     ]);
   }
   const PagesForumForum = /* @__PURE__ */ _export_sfc(_sfc_main$1Y, [["render", _sfc_render$1X], ["__scopeId", "data-v-aeadbf01"], ["__file", "D:/uniapp2023/studyParty/pages/forum/forum.vue"]]);
+  const _imports_0 = "/static/chat/lianxiren.png";
+  const _imports_1 = "/static/chat/qunzu.png";
   const _sfc_main$1X = {
     data() {
       return {
-        cateList: [
-          {
-            id: "1",
-            name: "分类1"
-          },
-          {
-            id: "2",
-            name: "分类2"
-          },
-          {
-            id: "3",
-            name: "分类4"
-          }
-        ],
         activeTab: "messages",
         activeNav: "messages",
         searchQuery: "",
+        chatList: [],
         chats: [
           {
             id: 1,
@@ -9306,21 +9346,27 @@ if (uni.restoreGlobal) {
       };
     },
     computed: {
+      imageUrl() {
+        return imageUrl;
+      },
+      ...mapState({
+        friendList: (state2) => state2.userFriend.friendList
+      }),
       filteredChats() {
         if (!this.searchQuery)
-          return this.chats;
+          return this.chatList;
         const query = this.searchQuery.toLowerCase();
-        return this.chats.filter((chat) => chat.name.toLowerCase().includes(query) || chat.lastMessage && chat.lastMessage.toLowerCase().includes(query));
+        return this.chatList.filter((chat) => chat.name.toLowerCase().includes(query) || chat.lastMessage && chat.lastMessage.toLowerCase().includes(query));
       },
       filteredContacts() {
-        const contacts = this.chats.filter((chat) => ["mentor-chat", "personal-chat"].includes(chat.type));
+        const contacts = this.chatList.filter((chat) => ["person"].includes(chat.statu));
         if (!this.searchQuery)
           return contacts;
         const query = this.searchQuery.toLowerCase();
         return contacts.filter((contact) => contact.name.toLowerCase().includes(query) || contact.lastMessage && contact.lastMessage.toLowerCase().includes(query));
       },
       filteredGroups() {
-        const groups = this.chats.filter((chat) => ["study-group", "group-chat", "system-notify"].includes(chat.type));
+        const groups = this.chatList.filter((chat) => ["group"].includes(chat.statu));
         if (!this.searchQuery)
           return groups;
         const query = this.searchQuery.toLowerCase();
@@ -9329,8 +9375,31 @@ if (uni.restoreGlobal) {
     },
     methods: {
       ...mapActions({
-        friendList: "userFriend/friendList"
+        friendLists: "userFriend/friendList"
       }),
+      getFriend(friendId, status) {
+        if (status == "group") {
+          return this.friendList.get(Number(friendId));
+        }
+        if (status == "person") {
+          return this.friendList.get(Number(friendId));
+        }
+      },
+      getHead(friendId, status) {
+        if (status == "group") {
+          return this.friendList.get(Number(friendId)).head;
+        }
+        if (status == "person") {
+          formatAppLog("log", "at pages/chatList/chatList.vue:337", this.friendList.get(Number(friendId)).head);
+          return this.friendList.get(Number(friendId)).head;
+        }
+      },
+      async getCharList() {
+        return await db.selectChatList().then((res) => {
+          formatAppLog("log", "at pages/chatList/chatList.vue:343", res);
+          return res;
+        });
+      },
       setActiveTab(tab) {
         this.activeTab = tab;
       },
@@ -9340,7 +9409,14 @@ if (uni.restoreGlobal) {
         this.chats = [...this.chats];
       }
     },
-    onLaunch() {
+    onShow() {
+      formatAppLog("log", "at pages/chatList/chatList.vue:361", "查询消息列表");
+      this.friendLists().then(() => {
+        this.getCharList().then((res) => {
+          formatAppLog("log", "at pages/chatList/chatList.vue:364", res);
+          this.chatList = res;
+        });
+      });
     }
   };
   function _sfc_render$1W(_ctx, _cache, $props, $setup, $data, $options) {
@@ -9374,28 +9450,8 @@ if (uni.restoreGlobal) {
           vue.createElementVNode(
             "div",
             {
-              class: vue.normalizeClass(["tab", { active: $data.activeTab === "contacts" }]),
-              onClick: _cache[2] || (_cache[2] = ($event) => $options.setActiveTab("contacts"))
-            },
-            "联系人列表",
-            2
-            /* CLASS */
-          ),
-          vue.createElementVNode(
-            "div",
-            {
-              class: vue.normalizeClass(["tab", { active: $data.activeTab === "groups" }]),
-              onClick: _cache[3] || (_cache[3] = ($event) => $options.setActiveTab("groups"))
-            },
-            "群组列表",
-            2
-            /* CLASS */
-          ),
-          vue.createElementVNode(
-            "div",
-            {
               class: vue.normalizeClass(["tab", { active: $data.activeTab === "addUser" }]),
-              onClick: _cache[4] || (_cache[4] = ($event) => $options.setActiveTab("addUser"))
+              onClick: _cache[2] || (_cache[2] = ($event) => $options.setActiveTab("addUser"))
             },
             "添加好友",
             2
@@ -9405,7 +9461,7 @@ if (uni.restoreGlobal) {
             "div",
             {
               class: vue.normalizeClass(["tab", { active: $data.activeTab === "addGroup" }]),
-              onClick: _cache[5] || (_cache[5] = ($event) => $options.setActiveTab("addGroup"))
+              onClick: _cache[3] || (_cache[3] = ($event) => $options.setActiveTab("addGroup"))
             },
             "加入群组",
             2
@@ -9415,7 +9471,7 @@ if (uni.restoreGlobal) {
             "div",
             {
               class: vue.normalizeClass(["tab", { active: $data.activeTab === "createGroup" }]),
-              onClick: _cache[6] || (_cache[6] = ($event) => $options.setActiveTab("createGroup"))
+              onClick: _cache[4] || (_cache[4] = ($event) => $options.setActiveTab("createGroup"))
             },
             "创建群组",
             2
@@ -9431,7 +9487,7 @@ if (uni.restoreGlobal) {
             "input",
             {
               type: "text",
-              "onUpdate:modelValue": _cache[7] || (_cache[7] = ($event) => $data.searchQuery = $event),
+              "onUpdate:modelValue": _cache[5] || (_cache[5] = ($event) => $data.searchQuery = $event),
               placeholder: "搜索联系人、群组或消息"
             },
             null,
@@ -9444,10 +9500,38 @@ if (uni.restoreGlobal) {
       ]),
       vue.createCommentVNode(" 聊天列表 "),
       vue.createElementVNode("div", { class: "chat-list" }, [
+        $data.activeTab === "messages" ? (vue.openBlock(), vue.createElementBlock("div", {
+          key: 0,
+          class: "chat-system"
+        }, [
+          vue.createElementVNode("div", null, [
+            vue.createElementVNode("image", {
+              class: "chat-avatar",
+              src: _imports_0
+            })
+          ]),
+          vue.createElementVNode("div", { class: "chat-header" }, [
+            vue.createElementVNode("div", { class: "chat-name" }, "好友列表")
+          ])
+        ])) : vue.createCommentVNode("v-if", true),
+        $data.activeTab === "messages" ? (vue.openBlock(), vue.createElementBlock("div", {
+          key: 1,
+          class: "chat-system"
+        }, [
+          vue.createElementVNode("div", null, [
+            vue.createElementVNode("image", {
+              class: "chat-avatar",
+              src: _imports_1
+            })
+          ]),
+          vue.createElementVNode("div", { class: "chat-header" }, [
+            vue.createElementVNode("div", { class: "chat-name" }, "群聊列表")
+          ])
+        ])) : vue.createCommentVNode("v-if", true),
         vue.createCommentVNode(" 消息视图 "),
         $data.activeTab === "messages" ? (vue.openBlock(), vue.createElementBlock(
           vue.Fragment,
-          { key: 0 },
+          { key: 2 },
           [
             $options.filteredChats.length === 0 ? (vue.openBlock(), vue.createElementBlock("div", {
               key: 0,
@@ -9462,95 +9546,47 @@ if (uni.restoreGlobal) {
               vue.renderList($options.filteredChats, (chat) => {
                 return vue.openBlock(), vue.createElementBlock("div", {
                   key: chat.id,
-                  class: vue.normalizeClass(["chat-item", [chat.type, { unread: chat.unreadCount > 0 }]]),
+                  class: vue.normalizeClass(["chat-item", [chat.statu, { unread: chat.message_count > 0 }]]),
                   onClick: ($event) => $options.openChat(chat)
                 }, [
-                  vue.createElementVNode("div", { class: "chat-avatar" }, [
-                    chat.icon ? (vue.openBlock(), vue.createElementBlock(
-                      "i",
-                      {
-                        key: 0,
-                        class: vue.normalizeClass(chat.icon)
-                      },
-                      null,
-                      2
-                      /* CLASS */
-                    )) : (vue.openBlock(), vue.createElementBlock(
-                      vue.Fragment,
-                      { key: 1 },
-                      [
-                        vue.createTextVNode(
-                          vue.toDisplayString(chat.name.substring(0, 1)),
-                          1
-                          /* TEXT */
-                        )
-                      ],
-                      64
-                      /* STABLE_FRAGMENT */
-                    )),
-                    vue.createElementVNode(
-                      "div",
-                      {
-                        class: vue.normalizeClass(["avatar-indicator", { online: chat.online, offline: !chat.online }])
-                      },
-                      null,
-                      2
-                      /* CLASS */
-                    )
+                  vue.createElementVNode("div", null, [
+                    vue.createElementVNode("image", {
+                      class: "chat-avatar",
+                      src: $options.imageUrl + "static/head/" + chat.friend + "/userHeadPhoto.png"
+                    }, null, 8, ["src"])
                   ]),
                   vue.createElementVNode("div", { class: "chat-info" }, [
                     vue.createElementVNode("div", { class: "chat-header" }, [
                       vue.createElementVNode(
                         "div",
                         { class: "chat-name" },
-                        vue.toDisplayString(chat.name),
+                        vue.toDisplayString($options.getFriend(chat.friend, chat.statu).name),
                         1
                         /* TEXT */
                       ),
                       vue.createElementVNode(
                         "div",
                         { class: "chat-time" },
-                        vue.toDisplayString(chat.lastMessageTime),
+                        vue.toDisplayString(chat.timestamp),
                         1
                         /* TEXT */
                       )
                     ]),
                     vue.createElementVNode("div", { class: "chat-preview" }, [
-                      vue.createElementVNode("div", { class: "chat-message" }, [
-                        chat.lastSender ? (vue.openBlock(), vue.createElementBlock(
-                          vue.Fragment,
-                          { key: 0 },
-                          [
-                            vue.createElementVNode("i", { class: "fas fa-user status-icon" }),
-                            vue.createTextVNode(
-                              " " + vue.toDisplayString(chat.lastSender) + "：" + vue.toDisplayString(chat.lastMessage),
-                              1
-                              /* TEXT */
-                            )
-                          ],
-                          64
-                          /* STABLE_FRAGMENT */
-                        )) : (vue.openBlock(), vue.createElementBlock(
-                          vue.Fragment,
-                          { key: 1 },
-                          [
-                            vue.createTextVNode(
-                              vue.toDisplayString(chat.lastMessage),
-                              1
-                              /* TEXT */
-                            )
-                          ],
-                          64
-                          /* STABLE_FRAGMENT */
-                        ))
-                      ]),
-                      chat.unreadCount > 0 ? (vue.openBlock(), vue.createElementBlock(
+                      vue.createElementVNode(
+                        "div",
+                        { class: "chat-message" },
+                        vue.toDisplayString(chat.content),
+                        1
+                        /* TEXT */
+                      ),
+                      chat.message_count > 0 ? (vue.openBlock(), vue.createElementBlock(
                         "div",
                         {
                           key: 0,
                           class: "unread-count"
                         },
-                        vue.toDisplayString(chat.unreadCount),
+                        vue.toDisplayString(chat.message_count),
                         1
                         /* TEXT */
                       )) : vue.createCommentVNode("v-if", true)
@@ -9568,7 +9604,7 @@ if (uni.restoreGlobal) {
         vue.createCommentVNode(" 联系人视图 "),
         $data.activeTab === "contacts" ? (vue.openBlock(), vue.createElementBlock(
           vue.Fragment,
-          { key: 1 },
+          { key: 3 },
           [
             $options.filteredContacts.length === 0 ? (vue.openBlock(), vue.createElementBlock("div", {
               key: 0,
@@ -9657,7 +9693,7 @@ if (uni.restoreGlobal) {
         vue.createCommentVNode(" 群组视图 "),
         $data.activeTab === "groups" ? (vue.openBlock(), vue.createElementBlock(
           vue.Fragment,
-          { key: 2 },
+          { key: 4 },
           [
             $options.filteredGroups.length === 0 ? (vue.openBlock(), vue.createElementBlock("div", {
               key: 0,
@@ -11136,11 +11172,14 @@ if (uni.restoreGlobal) {
   const userFriend = {
     namespaced: true,
     state: () => ({
-      friendList: {}
+      friendList: /* @__PURE__ */ new Map()
     }),
     mutations: {
-      SET_USER_FRIENDS(state2, info) {
-        formatAppLog("log", "at store/user/userFriend.js:9", info);
+      SET_FRIEND_LIST(state2, info) {
+        info.filter((res) => {
+          state2.friendList.set(res.friendId, res);
+          formatAppLog("log", "at store/user/userFriend.js:11", res);
+        });
       },
       SET_USER_INFO(state2) {
         state2.userInfo = null;
@@ -11174,8 +11213,9 @@ if (uni.restoreGlobal) {
       },
       friendList({ commit }, credentials) {
         return friendList(credentials).then((res) => {
+          formatAppLog("log", "at store/user/userFriend.js:46", res);
           if (res.code === 200) {
-            commit("SET_USER_FRIENDS", res.data);
+            commit("SET_FRIEND_LIST", res.data);
           }
           return res;
         });
@@ -11241,13 +11281,13 @@ if (uni.restoreGlobal) {
         const createTableSql = `
 				CREATE TABLE IF NOT EXISTS Messages (
 					id INTEGER PRIMARY KEY AUTOINCREMENT,
-					user TEXT NOT NULL,
-					friend TEXT NOT NULL,
-					content TEXT NOT NULL,
-					sender TEXT NOT NULL,
-					status INTEGER NOT NULL,
-					isread INTEGER NOT NULL,
-					type INTEGER NOT NULL,
+					userid TEXT,
+					friend TEXT,
+					content TEXT,
+					sender TEXT,
+					statu TEXT,
+					isread TEXT,
+					type TEXT,
 					timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
 				)
 			`;

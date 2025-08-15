@@ -67,20 +67,33 @@ class WebSocketService {
     try {
       const data = typeof res.data === 'string' ? JSON.parse(res.data) : res.data;
       if (data.type === 'pong') {
-        console.log('收到心跳响应');
+        // console.log('收到心跳响应');
         return;
       }
 	  if(data.type === 'text_private' || data.type === 'offline_text_private'){
-		db.insertOtherMessage(data.senderId,data.content,1,data.senderId,'text',0);
+		db.insertOtherMessage(data.senderId,data.content,'person',data.senderId,'text',0);
+		uni.$emit('websocket-message', data);
+		return
 	  }
 	  if(data.type === 'text_group' || data.type === 'offline_text_group'){
-		db.insertOtherMessage(data.groupId, data.content,2, data.senderId,'text',0);
+		db.insertOtherMessage(data.groupId, data.content,'group', data.senderId,'text',0);
+		uni.$emit('websocket-message', data);
+		return
+	  }
+	  if(data.type === 'text_public' || data.type === 'offline_text_public'){
+	  		db.insertOtherMessage(data.groupId, data.content,'system', data.senderId,'text',0);
+	  		uni.$emit('websocket-message', data);
+	  		return
 	  }
 	  if(data.groupId != null){
-		db.insertOtherMessage(data.groupId, data.content,2, data.senderId,data.fileType,0);
+		db.insertOtherMessage(data.groupId, data.content,'group', data.senderId,data.fileType,0);
+		uni.$emit('websocket-message', data);
+		return
 	  }
 	  if(data.receiverId != null){
-		  db.insertOtherMessage(data.senderId,data.content,1,data.senderId,data.fileType,0);
+		db.insertOtherMessage(data.senderId,data.content,'person',data.senderId,data.fileType,0);
+		uni.$emit('websocket-message', data);
+		return
 	  }
       // 触发全局消息事件
       uni.$emit('websocket-message', data);
@@ -113,7 +126,7 @@ class WebSocketService {
     this.heartbeatTimer = setInterval(() => {
       if (this.isConnected()) {
         this.sendMessage({ content: 'ping' });
-        console.log('发送心跳消息');
+        // console.log('发送心跳消息');
       }
     }, this.HEARTBEAT_INTERVAL);
   }
@@ -167,8 +180,7 @@ class WebSocketService {
         this.socketTask.send({
           data: payload,
           success: () => {
-			db.insertOtherMessage(message.id,message.content,message.senderType,message.senderId,"text",1);
-            console.log('消息发送成功:', message.type || message);
+			// console.log('消息发送成功:', message.type || message);
           },
           fail: (err) => {
             console.error('消息发送失败:', err);

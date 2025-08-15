@@ -1,3 +1,5 @@
+import { string } from "../uni_modules/uview-plus/libs/function/test";
+
 const dbName = 'studyParty';
 const dbpath = '_doc/studyParty.db';
 export default{
@@ -51,25 +53,34 @@ export default{
 			})
 		})
 	},
-	insertOtherMessage(friend,context,status,sender,type,isread){ //status 1:私聊   2：群聊
+	insertOtherMessage(friend,content,statu,sender,type,isread){ //statu person:私聊   group：群聊
 		console.log("添加未读消息")
-		let user = uni.getStorageSync('user').id;
+		let userid = uni.getStorageSync('user').id;
+		userid = String(userid);
+		friend = String(friend);
+		content = String(content);
+		statu = String(statu);
+		sender = String(sender);
+		type = String(type);
+		isread = String(isread);
 		return new Promise((resolve,reject) =>{
 			plus.sqlite.executeSql({
 				name:dbName,
 				sql: `
-					INSERT INTO Messages (user, friend, context,sender, type,status,isread)
-					VALUES (?, ?, ?, ?, ?, ?);
+					INSERT INTO Messages (userid, friend, content, sender, type, statu, isread)
+					VALUES ('${userid}', '${friend}', '${content}', '${sender}', '${type}', '${statu}', '${isread}');
 				`,
-				args: [user, friend, context, sender, type, status, isread], // 通过 args 传入参数
 				success:resolve,
-				fail:reject
+				fail(e) {
+					console.log(e)
+					console.log("参数值:", { userid, friend, content, sender, type, statu, isread });
+				}
 			})
 		})
 	},
-	selectMessage(friend,status,offset,limit){ 
+	selectMessage(friend,statu,offset,limit){ 
 		console.log("查询消息记录");
-		let user = uni.getStorageSync('user').id;
+		let userid = uni.getStorageSync('user').id;
 		return new Promise((resolve,reject) =>{
 			plus.sqlite.executeSql({
 				name:dbName,
@@ -77,13 +88,13 @@ export default{
 					SELECT *
 					FROM Messages
 					WHERE friend = ?
-					  AND user = ?
-					  AND status = ?
+					  AND userid = ?
+					  AND statu = ?
 					ORDER BY timestamp DESC
 					LIMIT ?
 					OFFSET ?;
 				`,
-				args: [friend, user, status,limit, offset],
+				args: [friend, userid, statu,limit, offset],
 				success:resolve,
 				fail:reject
 			})
@@ -91,38 +102,72 @@ export default{
 	},
 	updateMessageIsread(friend){
 		console.log("已读消息")
-		let user = uni.getStorageSync('user').id;
+		let userid = uni.getStorageSync('user').id;
 		return new Promise((resolve,reject) =>{
 			plus.sqlite.executeSql({
 				name:dbName,
 				sql:`UPDATE Messages
 					SET isread = 1
 					WHERE friend = ?
-					AND user = ?;
+					AND userid = ?;
 				  `,
-				args:[friend,user],
+				args:[friend,userid],
 				success:resolve,
 				fail:reject
 			})
 		})
 	},
-	insertMyMessage(friend,context,status,type){
+	insertMyMessage(friend,content,statu,type){
 		console.log("添加我发送的消息")
-		let user = uni.getStorageSync('user').id;
-		let sender = user;
+		let userid = uni.getStorageSync('user').id;
+		let sender = userid;
 		return new Promise((resolve,reject) =>{
 			plus.sqlite.executeSql({
 				name:dbName,
 				sql: `
-					INSERT INTO Messages (user, friend, context,sender, type,status,isread)
+					INSERT INTO Messages (userid, friend, content,sender, type,statu,isread)
 					VALUES (?, ?, ?, ?, ?, ?);
 				`,
-				args: [user, friend, context, sender, type, status, 1], // 通过 args 传入参数
+				args: [userid, friend, content, sender, type, statu, 1], // 通过 args 传入参数
 				success:resolve,
 				fail:reject
 			})
 		})
 	},
+	selectChatList(){
+		console.log("查询消息列表");
+		let userid = uni.getStorageSync('user').id;
+		return new Promise((resolve,reject) =>{
+			plus.sqlite.selectSql({
+				name:dbName,
+				sql:`
+					SELECT 
+					m1.friend,
+					m1.content,
+					m1.timestamp,
+					m1.sender,
+					m1.statu,
+					m1.type,
+					m1.isread,
+					COUNT(*) AS message_count
+				FROM Messages m1
+				INNER JOIN (
+					SELECT friend, MAX(timestamp) AS max_timestamp
+					FROM Messages
+					WHERE userid = '${userid}'
+					GROUP BY friend
+				) m2 ON m1.friend = m2.friend AND m1.timestamp = m2.max_timestamp
+				WHERE m1.userid = '${userid}'
+				GROUP BY m1.friend, m1.content, m1.timestamp, m1.sender, m1.statu, m1.type, m1.isread
+				ORDER BY m1.timestamp DESC
+				`,
+				success:resolve,
+				fail(e) {
+					console.log(e)
+				}
+			})
+		})
+	}
 }
 
 

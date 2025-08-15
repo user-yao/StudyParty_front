@@ -14,8 +14,6 @@
 			  </div>
 			  <div class="tabs-container">
 				  <div class="tab" :class="{ active: activeTab === 'messages' }" @click="setActiveTab('messages')">消息</div>
-				  <div class="tab" :class="{ active: activeTab === 'contacts' }" @click="setActiveTab('contacts')">联系人列表</div>
-				  <div class="tab" :class="{ active: activeTab === 'groups' }" @click="setActiveTab('groups')">群组列表</div>
 				  <div class="tab" :class="{ active: activeTab === 'addUser' }" @click="setActiveTab('addUser')">添加好友</div>
 				  <div class="tab" :class="{ active: activeTab === 'addGroup' }" @click="setActiveTab('addGroup')">加入群组</div>
 				  <div class="tab" :class="{ active: activeTab === 'createGroup' }" @click="setActiveTab('createGroup')">创建群组</div>
@@ -31,6 +29,26 @@
 		  
 		  <!-- 聊天列表 -->
 		  <div class="chat-list">
+			  <template v-if="activeTab === 'messages'">
+				  <div class="chat-system">
+					  <div >
+						  <image class="chat-avatar" src="@/static/chat/lianxiren.png"></image>
+					  </div>
+					  <div class="chat-header">
+						  <div class="chat-name">好友列表</div>
+					  </div>
+				  </div>
+			  </template>
+			  <template v-if="activeTab === 'messages'">
+				  <div class="chat-system">
+					  <div >
+						  <image class="chat-avatar" src="@/static/chat/qunzu.png"></image>
+					  </div>
+					  <div class="chat-header">
+						  <div class="chat-name">群聊列表</div>
+					  </div>
+				  </div>
+			  </template>
 			  <!-- 消息视图 -->
 			  <template v-if="activeTab === 'messages'">
 				  <div v-if="filteredChats.length === 0" class="empty-state">
@@ -38,31 +56,20 @@
 					  <p>暂无聊天记录</p>
 				  </div>
 				  
-				  <div v-for="chat in filteredChats" :key="chat.id" class="chat-item" :class="[chat.type, { unread: chat.unreadCount > 0 }]" @click="openChat(chat)">
-					  <div class="chat-avatar">
-						  <template v-if="chat.icon">
-							  <i :class="chat.icon"></i>
-						  </template>
-						  <template v-else>
-							  {{ chat.name.substring(0, 1) }}
-						  </template>
-						  <div class="avatar-indicator" :class="{ online: chat.online, offline: !chat.online }"></div>
+				  <div v-for="chat in filteredChats" :key="chat.id" class="chat-item" :class="[chat.statu, { unread: chat.message_count > 0 }]" @click="openChat(chat)">
+					  <div >
+						  <image class="chat-avatar" :src="imageUrl + 'static/head/'+chat.friend+'/userHeadPhoto.png'"></image>
 					  </div>
 					  <div class="chat-info">
 						  <div class="chat-header">
-							  <div class="chat-name">{{ chat.name }}</div>
-							  <div class="chat-time">{{ chat.lastMessageTime }}</div>
+							  <div class="chat-name">{{ getFriend(chat.friend,chat.statu).name }}</div>
+							  <div class="chat-time">{{ chat.timestamp }}</div>
 						  </div>
 						  <div class="chat-preview">
 							  <div class="chat-message">
-								  <template v-if="chat.lastSender">
-									  <i class="fas fa-user status-icon"></i> {{ chat.lastSender }}：{{ chat.lastMessage }}
-								  </template>
-								  <template v-else>
-									  {{ chat.lastMessage }}
-								  </template>
+									{{ chat.content }}
 							  </div>
-							  <div class="unread-count" v-if="chat.unreadCount > 0">{{ chat.unreadCount }}</div>
+							  <div class="unread-count" v-if="chat.message_count > 0">{{ chat.message_count }}</div>
 						  </div>
 					  </div>
 				  </div>
@@ -131,6 +138,7 @@
 </template>
 
 <script>
+	import db from '@/utils/SQLite.js';
 	import {
 		mapState,
 		mapMutations,
@@ -141,21 +149,10 @@
  export default {
    data() {
      return {
-		cateList: [{
-			id: '1',
-			name: '分类1'
-		},
-		{
-			id: '2',
-			name: '分类2'
-		},
-		{
-			id: '3',
-			name: '分类4'
-    }],
 		activeTab: 'messages',
 		activeNav: 'messages',
 		searchQuery: '',
+		chatList:[],
 		chats: [
 			{
 				id: 1,
@@ -286,16 +283,22 @@
 	 }
    },
    computed: {
+	   imageUrl() {
+	         return imageUrl
+	   },
+	...mapState({
+	    friendList: state => state.userFriend.friendList
+	}),
 	 filteredChats() {
-		 if (!this.searchQuery) return this.chats;
+		 if (!this.searchQuery) return this.chatList;
 		 const query = this.searchQuery.toLowerCase();
-		 return this.chats.filter(chat => 
+		 return this.chatList.filter(chat => 
 			 chat.name.toLowerCase().includes(query) || 
 			 (chat.lastMessage && chat.lastMessage.toLowerCase().includes(query)))
 	 },
 	 filteredContacts() {
-		 const contacts = this.chats.filter(chat => 
-			 ['mentor-chat', 'personal-chat'].includes(chat.type));
+		 const contacts = this.chatList.filter(chat => 
+			 ['person'].includes(chat.statu));
 		 
 		 if (!this.searchQuery) return contacts;
 		 const query = this.searchQuery.toLowerCase();
@@ -304,8 +307,8 @@
 			 (contact.lastMessage && contact.lastMessage.toLowerCase().includes(query)))
 	 },
 	 filteredGroups() {
-		 const groups = this.chats.filter(chat => 
-			 ['study-group', 'group-chat', 'system-notify'].includes(chat.type));
+		 const groups = this.chatList.filter(chat => 
+			 ['group',].includes(chat.statu));
 		 
 		 if (!this.searchQuery) return groups;
 		 const query = this.searchQuery.toLowerCase();
@@ -316,8 +319,31 @@
    },
    methods: {
 	   ...mapActions({
-	   	friendList: "userFriend/friendList",
+			friendLists: "userFriend/friendList",
 	   }),
+	   getFriend(friendId,status){
+		   if(status == 'group'){
+				return this.friendList.get(Number(friendId));
+		   }
+		   if(status == 'person'){
+			   return this.friendList.get(Number(friendId));
+		   }
+	   },
+	   getHead(friendId,status){
+		   if(status == 'group'){
+				return this.friendList.get(Number(friendId)).head;
+		   }
+		   if(status == 'person'){
+			   console.log(this.friendList.get(Number(friendId)).head)
+			   return this.friendList.get(Number(friendId)).head;
+		   }
+	   },
+	   async getCharList(){
+		return await db.selectChatList().then(res =>{
+			console.log(res);
+			return res;
+		});
+	   },
 	 setActiveTab(tab) {
 		 this.activeTab = tab;
 	 },
@@ -331,9 +357,15 @@
 		 this.chats = [...this.chats];
 	 }
    },
-   onLaunch() {
-   	
-   }
+   onShow() {
+	   console.log("查询消息列表");
+	   this.friendLists().then(()=>{
+		   this.getCharList().then(res =>{
+		   	console.log(res)
+		   	this.chatList = res;
+		   });
+	   })
+	}
  }
 </script>
 
@@ -477,6 +509,15 @@
               padding: 10px 0;
           }
           
+		  .chat-system {
+		      display: flex;
+		      padding: 10rpx 20px;
+		      background: var(--card-bg);
+		      border-bottom: 1px solid var(--light-gray);
+		      transition: all 0.3s;
+		      position: relative;
+		      cursor: pointer;
+		  }
           .chat-item {
               display: flex;
               padding: 15px 20px;

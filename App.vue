@@ -40,13 +40,13 @@ export default {
 			const createTableSql = `
 				CREATE TABLE IF NOT EXISTS Messages (
 					id INTEGER PRIMARY KEY AUTOINCREMENT,
-					user TEXT NOT NULL,
-					friend TEXT NOT NULL,
-					content TEXT NOT NULL,
-					sender TEXT NOT NULL,
-					status INTEGER NOT NULL,
-					isread INTEGER NOT NULL,
-					type INTEGER NOT NULL,
+					userid TEXT,
+					friend TEXT,
+					content TEXT,
+					sender TEXT,
+					statu TEXT,
+					isread TEXT,
+					type TEXT,
 					timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
 				)
 			`;

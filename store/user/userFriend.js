@@ -2,11 +2,14 @@ import { requestFriend, accept, deleteFriend, friendList, friendRequestList } fr
 export default {
   namespaced: true,
   state: () => ({ 
-	  friendList:{}
+	  friendList: new Map()
   }),
   mutations: {
-    SET_USER_FRIENDS(state, info) {
-		console.log(info)
+    SET_FRIEND_LIST(state, info) {
+		info.filter(res =>{
+			state.friendList.set(res.friendId,res);
+			console.log(res);
+		})
     },
     SET_USER_INFO(state) {
       state.userInfo = null;
@@ -40,8 +43,9 @@ export default {
 	},
 	friendList({ commit }, credentials) {
 	  return friendList(credentials).then(res =>{
+		  console.log(res)
 		  if (res.code === 200) {
-		    commit('SET_USER_FRIENDS', res.data);
+		    commit('SET_FRIEND_LIST', res.data);
 		  }
 		  return res;
 	  })
