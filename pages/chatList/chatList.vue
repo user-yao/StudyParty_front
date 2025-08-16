@@ -56,7 +56,7 @@
 					  <p>暂无聊天记录</p>
 				  </div>
 				  
-				  <div v-for="chat in filteredChats" :key="chat.id" class="chat-item" :class="[chat.statu, { unread: chat.message_count > 0 }]" @click="openChat(chat)">
+				  <div v-for="chat in filteredChats" :key="chat.id" class="chat-item" :class="[chat.statu, { unread: chat.message_count > 0 }]" @click="toChatPage(chat)">
 					  <div >
 						  <image class="chat-avatar" :src="imageUrl + 'static/head/'+chat.friend+'/userHeadPhoto.png'"></image>
 					  </div>
@@ -152,134 +152,7 @@
 		activeTab: 'messages',
 		activeNav: 'messages',
 		searchQuery: '',
-		chatList:[],
-		chats: [
-			{
-				id: 1,
-				type: 'study-group',
-				icon: 'fas fa-code',
-				name: '前端开发精英组',
-				lastMessageTime: '10:24',
-				lastMessage: '电商项目首页设计已完成，请大家审核',
-				lastSender: '李明轩',
-				unreadCount: 3,
-				online: true,
-				isGroup: true
-			},
-			{
-				id: 2,
-				type: 'study-group',
-				icon: 'fas fa-server',
-				name: '后端架构研究组',
-				lastMessageTime: '昨天',
-				lastMessage: '下次小组会议时间调整为周六下午',
-				lastSender: '王老师',
-				unreadCount: 0,
-				online: true,
-				isGroup: true
-			},
-			{
-				id: 3,
-				type: 'study-group',
-				icon: 'fas fa-database',
-				name: '数据库优化小组',
-				lastMessageTime: '昨天',
-				lastMessage: '分享了一个关于索引优化的文档',
-				lastSender: '张同学',
-				unreadCount: 12,
-				online: true,
-				isGroup: true
-			},
-			{
-				id: 4,
-				type: 'group-chat',
-				icon: 'fas fa-users',
-				name: 'React学习交流群',
-				lastMessageTime: '08:45',
-				lastMessage: '有人能帮忙看看这个Hooks问题吗？',
-				lastSender: '陈同学',
-				unreadCount: 5,
-				online: true,
-				isGroup: true
-			},
-			{
-				id: 5,
-				type: 'group-chat',
-				icon: 'fas fa-laptop-code',
-				name: '全栈开发交流群',
-				lastMessageTime: '昨天',
-				lastMessage: '本周技术分享主题征集',
-				lastSender: '管理员',
-				unreadCount: 0,
-				online: true,
-				isGroup: true
-			},
-			{
-				id: 6,
-				type: 'mentor-chat',
-				name: '李教授 (前端导师)',
-				lastMessageTime: '昨天',
-				lastMessage: '你的项目代码已审核，架构设计很合理',
-				unreadCount: 0,
-				online: true
-			},
-			{
-				id: 7,
-				type: 'mentor-chat',
-				name: '王老师 (全栈导师)',
-				lastMessageTime: '周三',
-				lastMessage: '关于你问的Node.js性能优化，我整理了一份文档',
-				unreadCount: 1,
-				online: false
-			},
-			{
-				id: 8,
-				type: 'personal-chat',
-				name: '张同学',
-				lastMessageTime: '09:30',
-				lastMessage: '算法题解已发送，请查收',
-				unreadCount: 2,
-				online: true
-			},
-			{
-				id: 9,
-				type: 'personal-chat',
-				name: '王明轩',
-				lastMessageTime: '昨天',
-				lastMessage: '下周的自习室安排好了吗？',
-				unreadCount: 0,
-				online: true
-			},
-			{
-				id: 10,
-				type: 'personal-chat',
-				name: '李同学',
-				lastMessageTime: '昨天',
-				lastMessage: '项目文档已更新，请查看最新版本',
-				unreadCount: 0,
-				online: false
-			},
-			{
-				id: 11,
-				type: 'system-notify',
-				icon: 'fas fa-bell',
-				name: '系统通知',
-				lastMessageTime: '今天',
-				lastMessage: '你参与的任务"React组件开发"已通过审核，积分+120',
-				unreadCount: 1,
-				online: true
-			},
-			{
-				id: 12,
-				type: 'system-notify',
-				icon: 'fas fa-trophy',
-				name: '成就通知',
-				lastMessageTime: '昨天',
-				lastMessage: '恭喜获得"七日坚持"成就，积分+50',
-				unreadCount: 0,
-				online: true
-			}
-		]
+		chatList:[]
 	 }
    },
    computed: {
@@ -321,6 +194,17 @@
 	   ...mapActions({
 			friendLists: "userFriend/friendList",
 	   }),
+	   toChatPage(chat){
+		   console.log(chat)
+		   let friend = this.friendList.get(Number(chat.friend));
+		   console.log(friend)
+		   uni.navigateTo({
+		   	url:`/pages/chatList/chatPage`,
+			success: (res) => {
+			    res.eventChannel.emit("chatData", { chat, friend });
+			  }
+		   })
+	   },
 	   getFriend(friendId,status){
 		   if(status == 'group'){
 				return this.friendList.get(Number(friendId));
