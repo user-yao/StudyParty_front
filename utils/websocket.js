@@ -71,32 +71,41 @@ class WebSocketService {
         return;
       }
 	  if(data.type === 'text_private' || data.type === 'offline_text_private'){
-		db.insertOtherMessage(data.senderId,data.content,'person',data.senderId,'text',0);
+		let friend = data.senderId;
+		if(data.senderId == uni.getStorageSync('id')){
+			friend = data.receiverId;
+		}
+		db.insertOtherMessage(friend,data.content,'person',data.senderId,'text',0,data.timestamp);
 		uni.$emit('websocket-message', data);
 		return
 	  }
 	  if(data.type === 'text_group' || data.type === 'offline_text_group'){
-		db.insertOtherMessage(data.groupId, data.content,'group', data.senderId,'text',0);
+		
+		db.insertOtherMessage(data.groupId, data.content,'group', data.senderId,'text',0,data.timestamp);
 		uni.$emit('websocket-message', data);
 		return
 	  }
 	  if(data.type === 'text_public' || data.type === 'offline_text_public'){
-	  		db.insertOtherMessage(data.groupId, data.content,'system', data.senderId,'text',0);
+	  		db.insertOtherMessage(data.groupId, data.content,'system', data.senderId,'text',0,data.timestamp);
 	  		uni.$emit('websocket-message', data);
 	  		return
 	  }
 	  if(data.groupId != null){
-		db.insertOtherMessage(data.groupId, data.content,'group', data.senderId,data.fileType,0);
+		db.insertOtherMessage(data.groupId, data.content,'group', data.senderId,data.fileType,0,data.timestamp);
 		uni.$emit('websocket-message', data);
 		return
 	  }
 	  if(data.receiverId != null){
-		db.insertOtherMessage(data.senderId,data.content,'person',data.senderId,data.fileType,0);
+		  let friend = data.senderId;
+		  if(data.senderId == uni.getStorageSync('id')){
+		  	friend = data.receiverId;
+		  }
+		db.insertOtherMessage(data.friend,data.content,'person',data.senderId,data.fileType,0,data.timestamp);
 		uni.$emit('websocket-message', data);
 		return
 	  }
       // 触发全局消息事件
-      uni.$emit('websocket-message', data);
+      uni.$emit('websocket-message-wring', data);
     } catch (e) {
       console.error('消息解析错误:', e, '原始数据:', res.data);
     }

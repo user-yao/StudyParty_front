@@ -1189,71 +1189,72 @@ to {
 		box-sizing: border-box;
 		z-index: 9999;
 }
-/* 	image {
+
+	/* 	image {
 		width: 50rpx;
 		height: 50rpx;
 	} */
 .input {
-			width: 17.1875rem;
-			/* height: v-bind(); */
-			display: flex;
-			padding: 0.625rem;
-			background-color: #F2F1F6;
-			border-radius: 0.46875rem;
-			box-sizing: border-box;
-			margin: 0 0.625rem;
-			transition: 300ms;
+		width: 17.1875rem;
+		/* height: v-bind(); */
+		display: flex;
+		padding: 0.625rem;
+		background-color: #F2F1F6;
+		border-radius: 0.46875rem;
+		box-sizing: border-box;
+		margin: 0 0.625rem;
+		transition: 300ms;
 }
 .talk {
-			width: 17.1875rem;
-			/* height: v-bind(); */
-			display: flex;
-			padding: 0.625rem;
-			justify-content: center;
-			background-color: #F2F1F6;
-			border-radius: 0.46875rem;
-			box-sizing: border-box;
-			margin: 0 0.625rem;
-			transition: 300ms;
+		width: 17.1875rem;
+		/* height: v-bind(); */
+		display: flex;
+		padding: 0.625rem;
+		justify-content: center;
+		background-color: #F2F1F6;
+		border-radius: 0.46875rem;
+		box-sizing: border-box;
+		margin: 0 0.625rem;
+		transition: 100ms;
 }
 
-/* 		// .talk:active{
+	/* 		// .talk:active{
 		// 	background-color: #828184;
 		// 	color: #fff;
 		// } */
 .talk.black {
-			width: 17.1875rem;
-			/* height: v-bind(); */
-			display: flex;
-			padding: 0.625rem;
-			justify-content: center;
-			border-radius: 0.46875rem;
-			box-sizing: border-box;
-			margin: 0 0.625rem;
-			transition: 300ms;
-			background-color: #828184;
-			color: #fff;
+		width: 17.1875rem;
+		/* height: v-bind(); */
+		display: flex;
+		padding: 0.625rem;
+		justify-content: center;
+		border-radius: 0.46875rem;
+		box-sizing: border-box;
+		margin: 0 0.625rem;
+		transition: 100ms;
+		background-color: #828184;
+		color: #fff;
 }
 .input.have {
-			width: 15.625rem;
-			height: 2.8125rem;
-			padding: 0.625rem;
-			display: flex;
-			background-color: #F2F1F6;
-			border-radius: 0.46875rem;
-			box-sizing: border-box;
-			margin: 0 0.625rem;
-			transition: 300ms;
+		width: 15.625rem;
+		height: 2.8125rem;
+		padding: 0.625rem;
+		display: flex;
+		background-color: #F2F1F6;
+		border-radius: 0.46875rem;
+		box-sizing: border-box;
+		margin: 0 0.625rem;
+		transition: 300ms;
 }
 .button {
-			width: 3.125rem;
-			height: 2.5rem;
-			display: flex;
-			justify-content: center;
-			align-items: center;
-			font-size: 0.9375rem;
-			background-color: #2979ff;
-			color: #fff;
-			border-radius: 0.46875rem;
-			transition: 300ms;
+		width: 3.125rem;
+		height: 2.5rem;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		font-size: 0.9375rem;
+		background-color: #2979ff;
+		color: #fff;
+		border-radius: 0.46875rem;
+		transition: 300ms;
 }

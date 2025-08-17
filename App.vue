@@ -47,7 +47,7 @@ export default {
 					statu TEXT,
 					isread TEXT,
 					type TEXT,
-					timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
+					timestamp INTEGER DEFAULT (strftime('%s', 'now', 'localtime'))
 				)
 			`;
 			let cTable1 = await db.createTable(createTableSql);

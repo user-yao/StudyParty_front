@@ -19,20 +19,24 @@
 			</div>
 
 			<!-- 聊天区域 -->
-			<scroll-view style="margin: 0;padding: 0;width: 100%;" scroll-y  class="chat-area" ref="chatArea">
+			<scroll-view style="margin: 0;padding: 0;width: 100%;height: 80vh; max-height: 100vh;" scroll-y
+				class="chat-area" refresher-background='#f5f7fb' :refresher-triggered='isRefresher'
+				@refresherrefresh='LoadMessage' :scroll-with-animation='true' :refresher-enabled='true' ref="chatArea"
+				:scroll-into-view='scrollToView'>
 				<div class="chat-date-divider">
-					<span>今天</span>
+					<span>{{messages[0].timestamp}}</span>
 				</div>
 
 				<!-- 消息列表 -->
-				<div v-for="(message, index) in messages" :key="index" class="message"
-					:class="message.sender === 'me' ? 'sender' : 'receiver'">
-					<div class="avatar">{{ message.sender === 'me' ? '我' : message.senderName.substring(0, 1) }}
-					</div>
-					<!-- <image :src=" imageUrl + friend.head" v-if="me" class="avatar" mode=""></image> -->
+				<div v-for="message in messages" class="message"
+					:class="message.sender == uni.getStorageSync('id') ? 'sender' : 'receiver'">
+					<image :src=" imageUrl + uni.getStorageSync('user').head"
+						v-if="message.sender == uni.getStorageSync('id')" class="avatar" mode=""></image>
+					<image :src=" imageUrl + friend.head" v-if="message.sender != uni.getStorageSync('id')"
+						class="avatar" mode=""></image>
 					<div class="message-content">
-						<span class="sender-name" v-if="currentChat.isGroup && message.sender !== 'me'">
-							{{ message.senderName }}
+						<span class="sender-name">
+							{{message.sender == uni.getStorageSync('id')?uni.getStorageSync('user').name:friend.name}}
 						</span>
 						<div class="bubble">
 							<!-- 文本消息 -->
@@ -93,54 +97,37 @@
 									</div>
 								</div>
 							</template>
-
-							<div class="message-time">{{ message.time }}</div>
 						</div>
 					</div>
 				</div>
-			</scroll-view >
+				<view id="bottom-anchor"></view>
+			</scroll-view>
 
 			<!-- 输入区域 -->
-			<!-- <div class="input-left">
-				<u-icon name="plus-circle-fill" size="50rpx" color="#5a5a5a"></u-icon>
-				<u-icon name="photo-fill" size="50rpx" color="#5a5a5a"></u-icon>
-				<u-icon name="mic" size="50rpx" color="#5a5a5a"></u-icon>
-			</div> -->
-			<!-- <div class="input-area"  >
-				
-				<up-input class="message-input" v-model="sendMessage"></up-input>
-				<div class="send-btn" @click="scrollToBottom()">
-					<u-icon name="arrow-upward" size="50rpx" color="#fff"></u-icon>
-				</div>
-			</div> -->
-			
 			<view class="Bottom">
 				<view class="say" v-show="!isKey">
-					<!-- <image src="../../static/img/yuyin2.png" style="width: 60rpx;height: 60rpx;" mode=""
-						@click="isKey = !isKey"></image> -->
 					<u-icon name="mic" size="60rpx" @click="isKey = !isKey"></u-icon>
 				</view>
 				<view class="say" v-show="isKey">
 					<image src="@/static/tool/jianpan.png" style="width: 60rpx;height: 60rpx;" mode=""
 						@click="isKey = !isKey"></image>
-					<!-- <u-icon name="mic" size="60rpx"></u-icon> -->
 				</view>
 				<view class="Input" @click="scrollToBottom" v-show="!isKey">
-					<textarea :class="{input:true,have:InputValue != ''}"  auto-height v-model="InputValue" auto-blur
-					 cursor-spacing="20"
-						:focus="keyword" :autosize="{minRows:1,maxRows:8}" autosize :rows="1"> </textarea>
+					<textarea :class="{input:true,have:InputValue != ''}" auto-height v-model="InputValue" auto-blur
+						cursor-spacing="20" :focus="keyword" :autosize="{minRows:1,maxRows:8}" autosize
+						:rows="1"> </textarea>
 				</view>
 				<view class="Input" v-show="isKey">
-					<view :class="{talk:true,black:black}" @touchstart="startVoice" @touchend="endVoice">{{tishi}}</view>
+					<view :class="{talk:true,black:black}" @touchstart="startVoice" @touchend="endVoice">{{hint}}</view>
 				</view>
 				<view class="photo" v-if="InputValue == ''" @click="AddIMG">
-					<!-- <image src="../../static/img/tupian2.png" style="width: 60rpx;height: 60rpx;" mode=""></image> -->
-					<!-- <image :src="initImagePath" mode=""></image> -->
 					<u-icon name="plus-circle-fill" size="60rpx" @click="showAction = true"></u-icon>
 				</view>
-				<view class="button" v-else @touchend.prevent="send">发送</view>
-				<view> 
-				    <up-action-sheet :actions="list" @close="showAction = false"  @select="selectClick" :closeOnClickOverlay="true" :closeOnClickAction="true" :title="title" :show="showAction"></up-action-sheet>
+				<view class="button" v-else @touchend.prevent="sendTextMessage">发送</view>
+				<view>
+					<up-action-sheet :actions="list" @close="showAction = false" @select="selectClick"
+						:closeOnClickOverlay="true" :closeOnClickAction="true" :title="title"
+						:show="showAction"></up-action-sheet>
 				</view>
 			</view>
 		</div>
@@ -153,9 +140,17 @@
 		mapState,
 		mapMutations,
 		mapActions
-	} from "vuex"; 
-	import{ref,onMounted} from 'vue';
-	import {imageUrl} from "@/config/config.js"
+	} from "vuex";
+	import {
+		ref,
+		onMounted
+	} from 'vue';
+	import {
+		imageUrl
+	} from "@/config/config.js";
+	import ws from "@/utils/websocket.js";
+	const recorderManager = uni.getRecorderManager();
+	const innerAudioContext2 = uni.createInnerAudioContext();
 	export default {
 		data() {
 			return {
@@ -163,138 +158,228 @@
 				isKey: false,
 				black: false,
 				keyword: false,
-				tishi: "按住说话",
-				showAction:false,
-				list:[{name:"相机",value:1},{name:"相册",value:2},{name:"选择文件",value:3}],
-				title:'请选择功能',
+				isRefresher: false,
+				hint: "按住说话",
+				showAction: false,
+				scrollToView: '',
+				offset: 0, //聊天记录刷新
+				list: [{
+					name: "相机",
+					value: 1
+				}, {
+					name: "相册",
+					value: 2
+				}, {
+					name: "选择文件",
+					value: 3
+				}],
+				title: '请选择功能',
 				keyboardHeight: 0, // 新增：键盘高度
-				headerHeight: 0,    // 新增：导航栏高度
-				friend:{},
-				chat:{},
+				headerHeight: 0, // 新增：导航栏高度
+				friend: {},
+				chat: {},
 				showUserDetail: false,
-				currentChat: {
-					id: 8,
-					name: '张同学',
-					isGroup: false
-				},
-				messages: [{
-						id: 1,
-						sender: 'other',
-						senderName: '张同学',
-						type: 'text',
-						content: '你好！请问项目进展如何了？',
-						time: '10:20'
-					},
-					{
-						id: 2,
-						sender: 'me',
-						type: 'text',
-						content: '基本完成了，我正在整理文档',
-						time: '10:21'
-					},
-					{
-						id: 3,
-						sender: 'other',
-						senderName: '张同学',
-						type: 'image',
-						content: 'design.jpg',
-						time: '10:22'
-					},
-					{
-						id: 4,
-						sender: 'me',
-						type: 'text',
-						content: '这个设计不错，很符合需求',
-						time: '10:23'
-					},
-					{
-						id: 5,
-						sender: 'other',
-						senderName: '张同学',
-						type: 'voice',
-						content: '',
-						duration: 24,
-						time: '10:25'
-					},
-					{
-						id: 6,
-						sender: 'me',
-						type: 'text',
-						content: '明白了，我会按照这个方向修改',
-						time: '10:26'
-					},
-					{
-						id: 7,
-						sender: 'me',
-						type: 'file',
-						content: '项目文档.docx',
-						size: '3.2 MB',
-						time: '10:28'
-					},
-					{
-						id: 8,
-						sender: 'other',
-						senderName: '张同学',
-						type: 'video',
-						content: 'demo.mp4',
-						size: '24.5 MB',
-						time: '10:30'
-					},
-					{
-						id: 9,
-						sender: 'me',
-						type: 'text',
-						content: '视频看完了，效果很好！',
-						time: '10:32'
-					}
-				]
+				voicePath: '',
+				messages: []
 			}
 		},
-		mounted() {
-			this.scrollToBottom();
-			// 新增：获取导航栏高度
-			this.$nextTick(() => {
-			  const header = this.$el.querySelector('.chat-header');
-			  if (header) {
-				this.headerHeight = header.offsetHeight;
-			  }
-			});
-		},
 		onLoad(options) {
-		    const eventChannel = this.getOpenerEventChannel();
-		    eventChannel.on("chatData", (data) => {
-		      this.chat = data.chat;
-		      this.friend = data.friend;
-		    });
-		  },
-
-		computed:{
+			const that = this;
+			const eventChannel = this.getOpenerEventChannel();
+			eventChannel.on("chatData", (data) => {
+				this.chat = data.chat;
+				this.friend = data.friend;
+				console.log(this.friend);
+				this.selectMessage();
+				this.MessageIsread();
+			});
+			let path = '';
+			recorderManager.onStop(function(res) {
+				// console.log('recorder stop' + JSON.stringify(res));
+				// console.log(res.tempFilePath)
+				that.voicePath = res.tempFilePath;
+				this.black = false;
+				innerAudioContext2.src = that.voicePath;
+			});
+			innerAudioContext2.onCanplay(() => {
+				// 音频已准备就绪，现在可以获取持续时间
+				const duration = innerAudioContext2.duration;
+				// console.log(duration);
+				if (duration > 1) {
+					console.log(this.voicePath);
+				} else {
+					uni.showToast({
+						title: "说话时间太短",
+						icon: 'none'
+					})
+				}
+			});
+			uni.$on('websocket-message', function(data) {
+				if (that.chat.statu == 'person') {
+					if (data.senderId == that.friend.friendId || data.receiverId == that.friend.friendId) {
+						that.selectNewMessage();
+					}
+				}
+				if (that.chat.statu == 'group') {
+					if (data.groupId == that.friend.friendId || data.receiverId == that.friend.friendId) {
+						that.selectNewMessage();
+					}
+				}
+			})
+		},
+		computed: {
 			imageUrl() {
-			      return imageUrl
+				return imageUrl
 			},
 		},
 		methods: {
-			selectClick(ref){
+			listen(item, index) {
+				// console.log('开始播放');
+				this.isL = index;
+				const innerAudioContext = uni.createInnerAudioContext();
+				innerAudioContext.autoplay = true;
+				innerAudioContext.src = item;
+				innerAudioContext.onPlay(() => {
+					// console.log('开始播放');
+				});
+				innerAudioContext.onEnded(() => {
+					this.isL = -1;
+				})
+			},
+			showPhoto(item) {
+				// console.log(item.substring(7))
+				var photo = [];
+				photo.push(item);
+				// console.log(photo);
+				uni.previewImage({
+					current: 0,
+					urls: photo,
+					success() {
+						// console.log("chenggong");
+					}
+				});
+			},
+			startVoice() {
+				this.black = true;
+				// 开始录音
+				// console.log('开始录音');
+				this.hint = '松开发送'
+				this.touchStartTimestamp = Date.now();
+				this.touchTimeout = setTimeout(() => {
+					// 如果触摸持续时间大于等于1秒，开始录音
+					recorderManager.start();
+				}, 500);
+			},
+			endVoice() {
+				this.black = false;
+				// 停止录音
+				// console.log('录音结束');
+
+				if (this.touchTimeout) {
+					clearTimeout(this.touchTimeout);
+				}
+				this.hint = '按住说话'
+				recorderManager.stop();
+
+			},
+			AddIMG() {
+				const that = this;
+				uni.chooseImage({ //图片上传
+					sourceType: ['album', 'camera'], //从相册选择
+					count: 1, //上传图片的数量，默认是9
+					sizeType: ['original', 'compressed'], //可以指定是原图还是压缩图，默认二者都有
+					success: function(res) {
+						const tempFilePaths = res.tempFilePaths; //临时文件路径
+						console.log(tempFilePaths);
+						//this.photo = this.photo.concat(res.tempFilePaths)
+						//this.photo = res.tempFilePaths
+						that.photo = that.photo.concat(res.tempFilePaths);
+						console.log(that.photo);
+						for (var i = 0; i < tempFilePaths.length; i++) {
+							pathToBase64(tempFilePaths[i])
+								.then(base64 => {
+									console.log(base64);
+									console.log(base64.indexOf(","))
+									var p = base64.substring(base64.indexOf(",") + 1);
+									that.sendp("@photo" + p);
+								})
+								.catch(error => {
+									console.error(error)
+								});
+						}
+					},
+				});
+			},
+			sendp(base64) {
+				this.keyword = true;
+
+				//消息内容 + "[" + 发送消息的人 + ";" + 接收消息的人","+0		0是单发1是群发
+				var id = uni.getStorageSync('id');
+				var cotnt = base64 + "[" + id + ";" + this.CurrentChatId + ',' + 0;
+				console.log(id + "===" + this.CurrentChatId);
+				this.clickRequest(cotnt).then(res => {
+					this.InputValue = ""
+					this.scrollToBottom()
+				})
+
+			},
+			async MessageIsread() {
+				await db.updateMessageIsread(this.friend.friendId);
+			},
+			sendTextMessage() {
+				let message = {};
+				if (this.chat.statu == 'person') {
+					message = {
+						type: "text",
+						content: this.InputValue,
+						receiverId: this.friend.friendId
+					};
+				} else if (this.chat.statu == 'group') {
+					message = {
+						type: "text",
+						content: this.InputValue,
+						groupId: this.friend.friendId
+					};
+				}
+				ws.sendMessage(message);
+				this.InputValue = '';
+			},
+			async selectNewMessage() {
+				let [message] = await db.selectNewMessage(this.friend.friendId, this.chat.statu);
+				this.messages.push(message);
+				this.MessageIsread();
+			},
+			async selectMessage() {
+				let message = await db.selectMessage(this.friend.friendId, this.chat.statu, 10, this.offset);
+				message = message.reverse();
+				this.messages = [...message, ...this.messages];
+				this.offset += message.length;
+				this.scrollToBottom();
+			},
+			async LoadMessage() {
+				if (this.isRefresher) return;
+				this.isRefresher = true;
+				let message = await db.selectMessage(this.friend.friendId, this.chat.statu, 10, this.offset);
+				message = message.reverse();
+				this.messages = [...message, ...this.messages];
+				this.offset += message.length;
+				this.isRefresher = false;
+			},
+			selectClick(ref) {
 				console.log(ref)
 			},
 			handleKeyboardShow(e) {
-			  this.keyboardHeight = e.height;
-			  this.$nextTick(() => {
-				this.scrollToBottom(); // 键盘弹出时滚动到底部
-			  });
+				this.keyboardHeight = e.height;
+				this.$nextTick(() => {
+					this.scrollToBottom(); // 键盘弹出时滚动到底部
+				});
 			},
 			// 新增：键盘隐藏事件处理
 			handleKeyboardHide() {
-			  this.keyboardHeight = 0;
-			},
-			sendMessage(){
-				// 滚动到底部
-				  this.$nextTick(() => {
-					this.scrollToBottom();
-				  });
+				this.keyboardHeight = 0;
 			},
 			goBack() {
-				console.log('返回上一页');
+				uni.navigateBack(1)
 			},
 			getFileIcon(filename) {
 				const ext = filename.split('.').pop().toLowerCase();
@@ -308,11 +393,9 @@
 				return Math.floor(Math.random() * 20) + 5;
 			},
 			scrollToBottom() {
+				this.scrollToView = ''; // 先清空，强制下一次变化
 				this.$nextTick(() => {
-					const container = this.$refs.chatArea;
-					if (container) {
-						container.scrollTop = container.scrollHeight;
-					}
+					this.scrollToView = 'bottom-anchor';
 				});
 			}
 		}
@@ -921,6 +1004,7 @@
 			width: 200px;
 		}
 	}
+
 	.Bottom {
 		display: flex;
 		position: sticky;
@@ -936,77 +1020,78 @@
 		box-sizing: border-box;
 		z-index: 9999;
 	}
-/* 	image {
+
+	/* 	image {
 		width: 50rpx;
 		height: 50rpx;
 	} */
 
 
-		.input {
-			width: 550rpx;
-			/* height: v-bind(); */
-			display: flex;
-			padding: 20rpx;
-			background-color: #F2F1F6;
-			border-radius: 15rpx;
-			box-sizing: border-box;
-			margin: 0 20rpx;
-			transition: 300ms;
-		}
+	.input {
+		width: 550rpx;
+		/* height: v-bind(); */
+		display: flex;
+		padding: 20rpx;
+		background-color: #F2F1F6;
+		border-radius: 15rpx;
+		box-sizing: border-box;
+		margin: 0 20rpx;
+		transition: 300ms;
+	}
 
-		.talk {
-			width: 550rpx;
-			/* height: v-bind(); */
-			display: flex;
-			padding: 20rpx;
-			justify-content: center;
-			background-color: #F2F1F6;
-			border-radius: 15rpx;
-			box-sizing: border-box;
-			margin: 0 20rpx;
-			transition: 300ms;
-		}
+	.talk {
+		width: 550rpx;
+		/* height: v-bind(); */
+		display: flex;
+		padding: 20rpx;
+		justify-content: center;
+		background-color: #F2F1F6;
+		border-radius: 15rpx;
+		box-sizing: border-box;
+		margin: 0 20rpx;
+		transition: 100ms;
+	}
 
-/* 		// .talk:active{
+	/* 		// .talk:active{
 		// 	background-color: #828184;
 		// 	color: #fff;
 		// } */
-		.talk.black {
-			width: 550rpx;
-			/* height: v-bind(); */
-			display: flex;
-			padding: 20rpx;
-			justify-content: center;
-			border-radius: 15rpx;
-			box-sizing: border-box;
-			margin: 0 20rpx;
-			transition: 300ms;
-			background-color: #828184;
-			color: #fff;
-		}
+	.talk.black {
+		width: 550rpx;
+		/* height: v-bind(); */
+		display: flex;
+		padding: 20rpx;
+		justify-content: center;
+		border-radius: 15rpx;
+		box-sizing: border-box;
+		margin: 0 20rpx;
+		transition: 100ms;
+		background-color: #828184;
+		color: #fff;
+	}
 
-		.input.have {
-			width: 500rpx;
-			height: 90rpx;
-			padding: 20rpx;
-			display: flex;
-			background-color: #F2F1F6;
-			border-radius: 15rpx;
-			box-sizing: border-box;
-			margin: 0 20rpx;
-			transition: 300ms;
-		}
+	.input.have {
+		width: 500rpx;
+		height: 90rpx;
+		padding: 20rpx;
+		display: flex;
+		background-color: #F2F1F6;
+		border-radius: 15rpx;
+		box-sizing: border-box;
+		margin: 0 20rpx;
+		transition: 300ms;
+	}
 
-		.button {
-			width: 100rpx;
-			height: 80rpx;
-			display: flex;
-			justify-content: center;
-			align-items: center;
-			font-size: 30rpx;
-			background-color: #2979ff;
-			color: #fff;
-			border-radius: 15rpx;
-			transition: 300ms;
-		}
+	.button {
+		width: 100rpx;
+		height: 80rpx;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		font-size: 30rpx;
+		background-color: #2979ff;
+		color: #fff;
+		border-radius: 15rpx;
+		transition: 300ms;
+	}
 </style>

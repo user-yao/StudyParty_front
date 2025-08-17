@@ -5509,7 +5509,7 @@ if (uni.restoreGlobal) {
         });
       });
     },
-    insertOtherMessage(friend, content, statu, sender, type2, isread) {
+    insertOtherMessage(friend, content, statu, sender, type2, isread, timestamp) {
       formatAppLog("log", "at utils/SQLite.js:57", "添加未读消息");
       let userid = uni.getStorageSync("user").id;
       userid = String(userid);
@@ -5523,8 +5523,8 @@ if (uni.restoreGlobal) {
         plus.sqlite.executeSql({
           name: dbName,
           sql: `
-					INSERT INTO Messages (userid, friend, content, sender, type, statu, isread)
-					VALUES ('${userid}', '${friend}', '${content}', '${sender}', '${type2}', '${statu}', '${isread}');
+					INSERT INTO Messages (userid, friend, content, sender, type, statu, isread,timestamp)
+					VALUES ('${userid}', '${friend}', '${content}', '${sender}', '${type2}', '${statu}', '${isread}',${timestamp});
 				`,
           success: resolve,
           fail(e) {
@@ -5534,47 +5534,50 @@ if (uni.restoreGlobal) {
         });
       });
     },
-    selectMessage(friend, statu, offset, limit) {
+    selectMessage(friend, statu, limit, offset) {
       formatAppLog("log", "at utils/SQLite.js:82", "查询消息记录");
-      let userid = uni.getStorageSync("user").id;
+      let userid = uni.getStorageSync("id");
+      formatAppLog("log", "at utils/SQLite.js:84", "limit= " + limit + ";offst= " + offset);
       return new Promise((resolve, reject) => {
-        plus.sqlite.executeSql({
+        plus.sqlite.selectSql({
           name: dbName,
           sql: `
 					SELECT *
 					FROM Messages
-					WHERE friend = ?
-					  AND userid = ?
-					  AND statu = ?
+					WHERE friend = '${friend}'
+					  AND userid = '${userid}'
+					  AND statu = '${statu}'
 					ORDER BY timestamp DESC
-					LIMIT ?
-					OFFSET ?;
+					LIMIT ${limit}
+					OFFSET ${offset};
 				`,
-          args: [friend, userid, statu, limit, offset],
           success: resolve,
-          fail: reject
+          fail(e) {
+            formatAppLog("log", "at utils/SQLite.js:100", e);
+          }
         });
       });
     },
     updateMessageIsread(friend) {
-      formatAppLog("log", "at utils/SQLite.js:104", "已读消息");
-      let userid = uni.getStorageSync("user").id;
+      formatAppLog("log", "at utils/SQLite.js:106", "已读消息");
+      let userid = uni.getStorageSync("id");
       return new Promise((resolve, reject) => {
         plus.sqlite.executeSql({
           name: dbName,
           sql: `UPDATE Messages
 					SET isread = 1
-					WHERE friend = ?
-					AND userid = ?;
+					WHERE friend = '${friend}'
+					AND userid = '${userid}';
 				  `,
-          args: [friend, userid],
           success: resolve,
-          fail: reject
+          fail(e) {
+            formatAppLog("log", "at utils/SQLite.js:118", e);
+          }
         });
       });
     },
     insertMyMessage(friend, content, statu, type2) {
-      formatAppLog("log", "at utils/SQLite.js:121", "添加我发送的消息");
+      formatAppLog("log", "at utils/SQLite.js:124", "添加我发送的消息");
       let userid = uni.getStorageSync("user").id;
       let sender = userid;
       return new Promise((resolve, reject) => {
@@ -5592,35 +5595,67 @@ if (uni.restoreGlobal) {
       });
     },
     selectChatList() {
-      formatAppLog("log", "at utils/SQLite.js:138", "查询消息列表");
+      formatAppLog("log", "at utils/SQLite.js:141", "查询消息列表");
       let userid = uni.getStorageSync("user").id;
       return new Promise((resolve, reject) => {
         plus.sqlite.selectSql({
           name: dbName,
           sql: `
 					SELECT 
-					m1.friend,
-					m1.content,
-					m1.timestamp,
-					m1.sender,
-					m1.statu,
-					m1.type,
-					m1.isread,
-					COUNT(*) AS message_count
-				FROM Messages m1
-				INNER JOIN (
-					SELECT friend, MAX(timestamp) AS max_timestamp
-					FROM Messages
-					WHERE userid = '${userid}'
-					GROUP BY friend
-				) m2 ON m1.friend = m2.friend AND m1.timestamp = m2.max_timestamp
-				WHERE m1.userid = '${userid}'
-				GROUP BY m1.friend, m1.content, m1.timestamp, m1.sender, m1.statu, m1.type, m1.isread
-				ORDER BY m1.timestamp DESC
+					    m1.friend,
+					    m1.content,
+					    m1.timestamp,
+					    m1.sender,
+					    m1.statu,
+					    m1.type,
+					    m1.isread,
+					    COALESCE(unread_counts.unread_count, 0) AS message_count
+					FROM Messages m1
+					INNER JOIN (
+					    SELECT 
+					        friend, 
+					        MAX(timestamp) AS max_timestamp
+					    FROM Messages
+					    WHERE userid = ${userid}
+					    GROUP BY friend
+					) latest ON m1.friend = latest.friend AND m1.timestamp = latest.max_timestamp
+					LEFT JOIN (
+					    SELECT 
+					        friend, 
+					        COUNT(*) AS unread_count
+					    FROM Messages
+					    WHERE userid = ${userid}
+					      AND isread = '0'  
+					    GROUP BY friend
+					) unread_counts ON m1.friend = unread_counts.friend
+					WHERE m1.userid = ${userid}
+					ORDER BY m1.timestamp DESC;
 				`,
           success: resolve,
           fail(e) {
-            formatAppLog("log", "at utils/SQLite.js:166", e);
+            formatAppLog("log", "at utils/SQLite.js:179", e);
+          }
+        });
+      });
+    },
+    selectNewMessage(friend, statu) {
+      formatAppLog("log", "at utils/SQLite.js:185", "最新一条");
+      let userid = uni.getStorageSync("id");
+      return new Promise((resolve, reject) => {
+        plus.sqlite.selectSql({
+          name: dbName,
+          sql: `
+					SELECT *
+					FROM Messages
+					WHERE userid = '${userid}'
+					  AND friend = '${friend}'
+					  AND statu = '${statu}'
+					ORDER BY timestamp DESC
+					LIMIT 1;
+				`,
+          success: resolve,
+          fail(e) {
+            formatAppLog("log", "at utils/SQLite.js:201", e);
           }
         });
       });
@@ -5685,38 +5720,46 @@ if (uni.restoreGlobal) {
           return;
         }
         if (data.type === "text_private" || data.type === "offline_text_private") {
-          db.insertOtherMessage(data.senderId, data.content, "person", data.senderId, "text", 0);
+          let friend = data.senderId;
+          if (data.senderId == uni.getStorageSync("id")) {
+            friend = data.receiverId;
+          }
+          db.insertOtherMessage(friend, data.content, "person", data.senderId, "text", 0, data.timestamp);
           uni.$emit("websocket-message", data);
           return;
         }
         if (data.type === "text_group" || data.type === "offline_text_group") {
-          db.insertOtherMessage(data.groupId, data.content, "group", data.senderId, "text", 0);
+          db.insertOtherMessage(data.groupId, data.content, "group", data.senderId, "text", 0, data.timestamp);
           uni.$emit("websocket-message", data);
           return;
         }
         if (data.type === "text_public" || data.type === "offline_text_public") {
-          db.insertOtherMessage(data.groupId, data.content, "system", data.senderId, "text", 0);
+          db.insertOtherMessage(data.groupId, data.content, "system", data.senderId, "text", 0, data.timestamp);
           uni.$emit("websocket-message", data);
           return;
         }
         if (data.groupId != null) {
-          db.insertOtherMessage(data.groupId, data.content, "group", data.senderId, data.fileType, 0);
+          db.insertOtherMessage(data.groupId, data.content, "group", data.senderId, data.fileType, 0, data.timestamp);
           uni.$emit("websocket-message", data);
           return;
         }
         if (data.receiverId != null) {
-          db.insertOtherMessage(data.senderId, data.content, "person", data.senderId, data.fileType, 0);
+          let friend = data.senderId;
+          if (data.senderId == uni.getStorageSync("id")) {
+            friend = data.receiverId;
+          }
+          db.insertOtherMessage(data.friend, data.content, "person", data.senderId, data.fileType, 0, data.timestamp);
           uni.$emit("websocket-message", data);
           return;
         }
-        uni.$emit("websocket-message", data);
+        uni.$emit("websocket-message-wring", data);
       } catch (e) {
-        formatAppLog("error", "at utils/websocket.js:101", "消息解析错误:", e, "原始数据:", res.data);
+        formatAppLog("error", "at utils/websocket.js:110", "消息解析错误:", e, "原始数据:", res.data);
       }
     }
     // 处理连接关闭
     handleClose(res) {
-      formatAppLog("log", "at utils/websocket.js:107", `WebSocket关闭，代码：${res.code}，原因：${res.reason || "未知原因"}`);
+      formatAppLog("log", "at utils/websocket.js:116", `WebSocket关闭，代码：${res.code}，原因：${res.reason || "未知原因"}`);
       this.stopHeartbeat();
       if (res.code !== 1e3) {
         this.reconnect();
@@ -5724,7 +5767,7 @@ if (uni.restoreGlobal) {
     }
     // 处理连接错误
     handleError(err) {
-      formatAppLog("error", "at utils/websocket.js:118", "WebSocket错误:", err.errMsg || err.message);
+      formatAppLog("error", "at utils/websocket.js:127", "WebSocket错误:", err.errMsg || err.message);
       this.stopHeartbeat();
       this.reconnect();
     }
@@ -5755,15 +5798,15 @@ if (uni.restoreGlobal) {
       if (this.reconnectTimer)
         clearTimeout(this.reconnectTimer);
       if (this.reconnectAttempts >= this.MAX_RECONNECT_ATTEMPTS) {
-        formatAppLog("warn", "at utils/websocket.js:157", `已达到最大重连次数(${this.MAX_RECONNECT_ATTEMPTS})，停止重连`);
+        formatAppLog("warn", "at utils/websocket.js:166", `已达到最大重连次数(${this.MAX_RECONNECT_ATTEMPTS})，停止重连`);
         uni.$emit("websocket-disconnected");
         return;
       }
       const delay = this.RECONNECT_DELAY_BASE * Math.pow(2, this.reconnectAttempts);
       this.reconnectAttempts++;
-      formatAppLog("log", "at utils/websocket.js:166", `将在 ${delay}ms 后尝试重连 (#${this.reconnectAttempts})`);
+      formatAppLog("log", "at utils/websocket.js:175", `将在 ${delay}ms 后尝试重连 (#${this.reconnectAttempts})`);
       this.reconnectTimer = setTimeout(() => {
-        formatAppLog("log", "at utils/websocket.js:169", `尝试重连 (#${this.reconnectAttempts})`);
+        formatAppLog("log", "at utils/websocket.js:178", `尝试重连 (#${this.reconnectAttempts})`);
         this.connect();
       }, delay);
     }
@@ -5777,14 +5820,14 @@ if (uni.restoreGlobal) {
             success: () => {
             },
             fail: (err) => {
-              formatAppLog("error", "at utils/websocket.js:186", "消息发送失败:", err);
+              formatAppLog("error", "at utils/websocket.js:195", "消息发送失败:", err);
             }
           });
         } catch (e) {
-          formatAppLog("error", "at utils/websocket.js:190", "消息序列化错误:", e);
+          formatAppLog("error", "at utils/websocket.js:199", "消息序列化错误:", e);
         }
       } else {
-        formatAppLog("warn", "at utils/websocket.js:193", "尝试发送消息但连接未就绪");
+        formatAppLog("warn", "at utils/websocket.js:202", "尝试发送消息但连接未就绪");
       }
     }
     // 关闭连接
@@ -5805,18 +5848,18 @@ if (uni.restoreGlobal) {
             this.socketTask.close(code2, reason);
           }
         } catch (e) {
-          formatAppLog("error", "at utils/websocket.js:220", "关闭连接时出错:", e);
+          formatAppLog("error", "at utils/websocket.js:229", "关闭连接时出错:", e);
         } finally {
           this.socketTask = null;
         }
       }
-      formatAppLog("log", "at utils/websocket.js:226", "WebSocket连接已关闭");
+      formatAppLog("log", "at utils/websocket.js:235", "WebSocket连接已关闭");
     }
   }
   const webSocketService = new WebSocketService();
   uni.$on("network-connected", () => {
     if (!webSocketService.isConnected()) {
-      formatAppLog("log", "at utils/websocket.js:236", "网络恢复，尝试重连WebSocket");
+      formatAppLog("log", "at utils/websocket.js:245", "网络恢复，尝试重连WebSocket");
       webSocketService.connect();
     }
   });
@@ -9218,6 +9261,17 @@ if (uni.restoreGlobal) {
         chatList: []
       };
     },
+    onLoad() {
+      const that2 = this;
+      uni.$on("websocket-message", function(data) {
+        formatAppLog("log", "at pages/chatList/chatList.vue:161", "监听到事件来自 websocket-message ，携带参数 msg 为：");
+        formatAppLog("log", "at pages/chatList/chatList.vue:162", data);
+        that2.getCharList().then((res) => {
+          formatAppLog("log", "at pages/chatList/chatList.vue:164", res);
+          that2.chatList = res;
+        });
+      });
+    },
     computed: {
       imageUrl() {
         return imageUrl;
@@ -9226,24 +9280,18 @@ if (uni.restoreGlobal) {
         friendList: (state2) => state2.userFriend.friendList
       }),
       filteredChats() {
-        if (!this.searchQuery)
+        var _a;
+        const query = (_a = this.searchQuery) == null ? void 0 : _a.trim().toLowerCase();
+        formatAppLog("log", "at pages/chatList/chatList.vue:178", !query);
+        if (!query) {
+          formatAppLog("log", "at pages/chatList/chatList.vue:181", query);
           return this.chatList;
-        const query = this.searchQuery.toLowerCase();
-        return this.chatList.filter((chat) => chat.name.toLowerCase().includes(query) || chat.lastMessage && chat.lastMessage.toLowerCase().includes(query));
-      },
-      filteredContacts() {
-        const contacts = this.chatList.filter((chat) => ["person"].includes(chat.statu));
-        if (!this.searchQuery)
-          return contacts;
-        const query = this.searchQuery.toLowerCase();
-        return contacts.filter((contact) => contact.name.toLowerCase().includes(query) || contact.lastMessage && contact.lastMessage.toLowerCase().includes(query));
-      },
-      filteredGroups() {
-        const groups = this.chatList.filter((chat) => ["group"].includes(chat.statu));
-        if (!this.searchQuery)
-          return groups;
-        const query = this.searchQuery.toLowerCase();
-        return groups.filter((group2) => group2.name.toLowerCase().includes(query) || group2.lastMessage && group2.lastMessage.toLowerCase().includes(query));
+        }
+        return this.chatList.filter((chat) => {
+          const name2 = this.friendList.get(Number(chat.friend)).name ? String(this.friendList.get(Number(chat.friend)).name).toLowerCase() : "";
+          const lastMessage = chat.content ? String(chat.content).toLowerCase() : "";
+          return name2.includes(query) || lastMessage.includes(query);
+        });
       }
     },
     methods: {
@@ -9251,9 +9299,9 @@ if (uni.restoreGlobal) {
         friendLists: "userFriend/friendList"
       }),
       toChatPage(chat) {
-        formatAppLog("log", "at pages/chatList/chatList.vue:198", chat);
+        formatAppLog("log", "at pages/chatList/chatList.vue:202", chat);
         let friend = this.friendList.get(Number(chat.friend));
-        formatAppLog("log", "at pages/chatList/chatList.vue:200", friend);
+        formatAppLog("log", "at pages/chatList/chatList.vue:204", friend);
         uni.navigateTo({
           url: `/pages/chatList/chatPage`,
           success: (res) => {
@@ -9274,13 +9322,13 @@ if (uni.restoreGlobal) {
           return this.friendList.get(Number(friendId)).head;
         }
         if (status == "person") {
-          formatAppLog("log", "at pages/chatList/chatList.vue:221", this.friendList.get(Number(friendId)).head);
+          formatAppLog("log", "at pages/chatList/chatList.vue:225", this.friendList.get(Number(friendId)).head);
           return this.friendList.get(Number(friendId)).head;
         }
       },
       async getCharList() {
         return await db.selectChatList().then((res) => {
-          formatAppLog("log", "at pages/chatList/chatList.vue:227", res);
+          formatAppLog("log", "at pages/chatList/chatList.vue:231", res);
           return res;
         });
       },
@@ -9294,10 +9342,10 @@ if (uni.restoreGlobal) {
       }
     },
     onShow() {
-      formatAppLog("log", "at pages/chatList/chatList.vue:245", "查询消息列表");
+      formatAppLog("log", "at pages/chatList/chatList.vue:249", "查询消息列表");
       this.friendLists().then(() => {
         this.getCharList().then((res) => {
-          formatAppLog("log", "at pages/chatList/chatList.vue:248", res);
+          formatAppLog("log", "at pages/chatList/chatList.vue:252", res);
           this.chatList = res;
         });
       });
@@ -9490,7 +9538,7 @@ if (uni.restoreGlobal) {
           vue.Fragment,
           { key: 3 },
           [
-            $options.filteredContacts.length === 0 ? (vue.openBlock(), vue.createElementBlock("div", {
+            _ctx.filteredContacts.length === 0 ? (vue.openBlock(), vue.createElementBlock("div", {
               key: 0,
               class: "empty-state"
             }, [
@@ -9500,7 +9548,7 @@ if (uni.restoreGlobal) {
             (vue.openBlock(true), vue.createElementBlock(
               vue.Fragment,
               null,
-              vue.renderList($options.filteredContacts, (contact) => {
+              vue.renderList(_ctx.filteredContacts, (contact) => {
                 return vue.openBlock(), vue.createElementBlock("div", {
                   key: contact.id,
                   class: vue.normalizeClass(["chat-item personal-chat", { unread: contact.unreadCount > 0 }]),
@@ -9579,7 +9627,7 @@ if (uni.restoreGlobal) {
           vue.Fragment,
           { key: 4 },
           [
-            $options.filteredGroups.length === 0 ? (vue.openBlock(), vue.createElementBlock("div", {
+            _ctx.filteredGroups.length === 0 ? (vue.openBlock(), vue.createElementBlock("div", {
               key: 0,
               class: "empty-state"
             }, [
@@ -9589,7 +9637,7 @@ if (uni.restoreGlobal) {
             (vue.openBlock(true), vue.createElementBlock(
               vue.Fragment,
               null,
-              vue.renderList($options.filteredGroups, (group2) => {
+              vue.renderList(_ctx.filteredGroups, (group2) => {
                 return vue.openBlock(), vue.createElementBlock("div", {
                   key: group2.id,
                   class: vue.normalizeClass(["chat-item", [group2.type, { unread: group2.unreadCount > 0 }]]),
@@ -13939,6 +13987,8 @@ if (uni.restoreGlobal) {
   }
   const __easycom_1$f = /* @__PURE__ */ _export_sfc(_sfc_main$24, [["render", _sfc_render$23], ["__scopeId", "data-v-05ea451b"], ["__file", "D:/uniapp2023/studyParty/node_modules/uview-plus/components/u-action-sheet/u-action-sheet.vue"]]);
   const _imports_0 = "/static/tool/jianpan.png";
+  const recorderManager = uni.getRecorderManager();
+  const innerAudioContext2 = uni.createInnerAudioContext();
   const _sfc_main$23 = {
     data() {
       return {
@@ -13946,9 +13996,22 @@ if (uni.restoreGlobal) {
         isKey: false,
         black: false,
         keyword: false,
-        tishi: "按住说话",
+        isRefresher: false,
+        hint: "按住说话",
         showAction: false,
-        list: [{ name: "相机", value: 1 }, { name: "相册", value: 2 }, { name: "选择文件", value: 3 }],
+        scrollToView: "",
+        offset: 0,
+        //聊天记录刷新
+        list: [{
+          name: "相机",
+          value: 1
+        }, {
+          name: "相册",
+          value: 2
+        }, {
+          name: "选择文件",
+          value: 3
+        }],
         title: "请选择功能",
         keyboardHeight: 0,
         // 新增：键盘高度
@@ -13957,99 +14020,47 @@ if (uni.restoreGlobal) {
         friend: {},
         chat: {},
         showUserDetail: false,
-        currentChat: {
-          id: 8,
-          name: "张同学",
-          isGroup: false
-        },
-        messages: [
-          {
-            id: 1,
-            sender: "other",
-            senderName: "张同学",
-            type: "text",
-            content: "你好！请问项目进展如何了？",
-            time: "10:20"
-          },
-          {
-            id: 2,
-            sender: "me",
-            type: "text",
-            content: "基本完成了，我正在整理文档",
-            time: "10:21"
-          },
-          {
-            id: 3,
-            sender: "other",
-            senderName: "张同学",
-            type: "image",
-            content: "design.jpg",
-            time: "10:22"
-          },
-          {
-            id: 4,
-            sender: "me",
-            type: "text",
-            content: "这个设计不错，很符合需求",
-            time: "10:23"
-          },
-          {
-            id: 5,
-            sender: "other",
-            senderName: "张同学",
-            type: "voice",
-            content: "",
-            duration: 24,
-            time: "10:25"
-          },
-          {
-            id: 6,
-            sender: "me",
-            type: "text",
-            content: "明白了，我会按照这个方向修改",
-            time: "10:26"
-          },
-          {
-            id: 7,
-            sender: "me",
-            type: "file",
-            content: "项目文档.docx",
-            size: "3.2 MB",
-            time: "10:28"
-          },
-          {
-            id: 8,
-            sender: "other",
-            senderName: "张同学",
-            type: "video",
-            content: "demo.mp4",
-            size: "24.5 MB",
-            time: "10:30"
-          },
-          {
-            id: 9,
-            sender: "me",
-            type: "text",
-            content: "视频看完了，效果很好！",
-            time: "10:32"
-          }
-        ]
+        voicePath: "",
+        messages: []
       };
     },
-    mounted() {
-      this.scrollToBottom();
-      this.$nextTick(() => {
-        const header = this.$el.querySelector(".chat-header");
-        if (header) {
-          this.headerHeight = header.offsetHeight;
-        }
-      });
-    },
     onLoad(options2) {
+      const that2 = this;
       const eventChannel = this.getOpenerEventChannel();
       eventChannel.on("chatData", (data) => {
         this.chat = data.chat;
         this.friend = data.friend;
+        formatAppLog("log", "at pages/chatList/chatPage.vue:192", this.friend);
+        this.selectMessage();
+        this.MessageIsread();
+      });
+      recorderManager.onStop(function(res) {
+        that2.voicePath = res.tempFilePath;
+        this.black = false;
+        innerAudioContext2.src = that2.voicePath;
+      });
+      innerAudioContext2.onCanplay(() => {
+        const duration = innerAudioContext2.duration;
+        if (duration > 1) {
+          formatAppLog("log", "at pages/chatList/chatPage.vue:209", this.voicePath);
+        } else {
+          uni.showToast({
+            title: "说话时间太短",
+            icon: "none"
+          });
+        }
+      });
+      uni.$on("websocket-message", function(data) {
+        if (that2.chat.statu == "person") {
+          if (data.senderId == that2.friend.friendId || data.receiverId == that2.friend.friendId) {
+            that2.selectNewMessage();
+          }
+        }
+        if (that2.chat.statu == "group") {
+          if (data.groupId == that2.friend.friendId || data.receiverId == that2.friend.friendId) {
+            that2.selectNewMessage();
+          }
+        }
       });
     },
     computed: {
@@ -14058,8 +14069,126 @@ if (uni.restoreGlobal) {
       }
     },
     methods: {
+      listen(item, index2) {
+        this.isL = index2;
+        const innerAudioContext = uni.createInnerAudioContext();
+        innerAudioContext.autoplay = true;
+        innerAudioContext.src = item;
+        innerAudioContext.onPlay(() => {
+        });
+        innerAudioContext.onEnded(() => {
+          this.isL = -1;
+        });
+      },
+      showPhoto(item) {
+        var photo = [];
+        photo.push(item);
+        uni.previewImage({
+          current: 0,
+          urls: photo,
+          success() {
+          }
+        });
+      },
+      startVoice() {
+        this.black = true;
+        this.hint = "松开发送";
+        this.touchStartTimestamp = Date.now();
+        this.touchTimeout = setTimeout(() => {
+          recorderManager.start();
+        }, 500);
+      },
+      endVoice() {
+        this.black = false;
+        if (this.touchTimeout) {
+          clearTimeout(this.touchTimeout);
+        }
+        this.hint = "按住说话";
+        recorderManager.stop();
+      },
+      AddIMG() {
+        const that2 = this;
+        uni.chooseImage({
+          //图片上传
+          sourceType: ["album", "camera"],
+          //从相册选择
+          count: 1,
+          //上传图片的数量，默认是9
+          sizeType: ["original", "compressed"],
+          //可以指定是原图还是压缩图，默认二者都有
+          success: function(res) {
+            const tempFilePaths = res.tempFilePaths;
+            formatAppLog("log", "at pages/chatList/chatPage.vue:293", tempFilePaths);
+            that2.photo = that2.photo.concat(res.tempFilePaths);
+            formatAppLog("log", "at pages/chatList/chatPage.vue:297", that2.photo);
+            for (var i = 0; i < tempFilePaths.length; i++) {
+              pathToBase64(tempFilePaths[i]).then((base64) => {
+                formatAppLog("log", "at pages/chatList/chatPage.vue:301", base64);
+                formatAppLog("log", "at pages/chatList/chatPage.vue:302", base64.indexOf(","));
+                var p = base64.substring(base64.indexOf(",") + 1);
+                that2.sendp("@photo" + p);
+              }).catch((error2) => {
+                formatAppLog("error", "at pages/chatList/chatPage.vue:307", error2);
+              });
+            }
+          }
+        });
+      },
+      sendp(base64) {
+        this.keyword = true;
+        var id = uni.getStorageSync("id");
+        var cotnt = base64 + "[" + id + ";" + this.CurrentChatId + ",0";
+        formatAppLog("log", "at pages/chatList/chatPage.vue:319", id + "===" + this.CurrentChatId);
+        this.clickRequest(cotnt).then((res) => {
+          this.InputValue = "";
+          this.scrollToBottom();
+        });
+      },
+      async MessageIsread() {
+        await db.updateMessageIsread(this.friend.friendId);
+      },
+      sendTextMessage() {
+        let message = {};
+        if (this.chat.statu == "person") {
+          message = {
+            type: "text",
+            content: this.InputValue,
+            receiverId: this.friend.friendId
+          };
+        } else if (this.chat.statu == "group") {
+          message = {
+            type: "text",
+            content: this.InputValue,
+            groupId: this.friend.friendId
+          };
+        }
+        webSocketService.sendMessage(message);
+        this.InputValue = "";
+      },
+      async selectNewMessage() {
+        let [message] = await db.selectNewMessage(this.friend.friendId, this.chat.statu);
+        this.messages.push(message);
+        this.MessageIsread();
+      },
+      async selectMessage() {
+        let message = await db.selectMessage(this.friend.friendId, this.chat.statu, 10, this.offset);
+        message = message.reverse();
+        this.messages = [...message, ...this.messages];
+        this.offset += message.length;
+        this.scrollToBottom();
+      },
+      async LoadMessage() {
+        if (this.isRefresher)
+          return;
+        this.isRefresher = true;
+        let message = await db.selectMessage(this.friend.friendId, this.chat.statu, 10, this.offset);
+        message = message.reverse();
+        this.messages = [...message, ...this.messages];
+        this.offset += message.length;
+        this.isRefresher = false;
+      },
       selectClick(ref) {
-        formatAppLog("log", "at pages/chatList/chatPage.vue:278", ref);
+        formatAppLog("log", "at pages/chatList/chatPage.vue:369", ref);
       },
       handleKeyboardShow(e) {
         this.keyboardHeight = e.height;
@@ -14071,13 +14200,8 @@ if (uni.restoreGlobal) {
       handleKeyboardHide() {
         this.keyboardHeight = 0;
       },
-      sendMessage() {
-        this.$nextTick(() => {
-          this.scrollToBottom();
-        });
-      },
       goBack() {
-        formatAppLog("log", "at pages/chatList/chatPage.vue:297", "返回上一页");
+        uni.navigateBack(1);
       },
       getFileIcon(filename) {
         const ext = filename.split(".").pop().toLowerCase();
@@ -14095,11 +14219,9 @@ if (uni.restoreGlobal) {
         return Math.floor(Math.random() * 20) + 5;
       },
       scrollToBottom() {
+        this.scrollToView = "";
         this.$nextTick(() => {
-          const container = this.$refs.chatArea;
-          if (container) {
-            container.scrollTop = container.scrollHeight;
-          }
+          this.scrollToView = "bottom-anchor";
         });
       }
     }
@@ -14147,229 +14269,226 @@ if (uni.restoreGlobal) {
           ])
         ]),
         vue.createCommentVNode(" 聊天区域 "),
-        vue.createElementVNode(
-          "scroll-view",
-          {
-            style: { "margin": "0", "padding": "0", "width": "100%" },
-            "scroll-y": "",
-            class: "chat-area",
-            ref: "chatArea"
-          },
-          [
-            vue.createElementVNode("div", { class: "chat-date-divider" }, [
-              vue.createElementVNode("span", null, "今天")
-            ]),
-            vue.createCommentVNode(" 消息列表 "),
-            (vue.openBlock(true), vue.createElementBlock(
-              vue.Fragment,
+        vue.createElementVNode("scroll-view", {
+          style: { "margin": "0", "padding": "0", "width": "100%", "height": "80vh", "max-height": "100vh" },
+          "scroll-y": "",
+          class: "chat-area",
+          "refresher-background": "#f5f7fb",
+          "refresher-triggered": $data.isRefresher,
+          onRefresherrefresh: _cache[1] || (_cache[1] = (...args) => $options.LoadMessage && $options.LoadMessage(...args)),
+          "scroll-with-animation": true,
+          "refresher-enabled": true,
+          ref: "chatArea",
+          "scroll-into-view": $data.scrollToView
+        }, [
+          vue.createElementVNode("div", { class: "chat-date-divider" }, [
+            vue.createElementVNode(
+              "span",
               null,
-              vue.renderList($data.messages, (message, index2) => {
-                return vue.openBlock(), vue.createElementBlock(
-                  "div",
-                  {
-                    key: index2,
-                    class: vue.normalizeClass(["message", message.sender === "me" ? "sender" : "receiver"])
-                  },
-                  [
+              vue.toDisplayString($data.messages[0].timestamp),
+              1
+              /* TEXT */
+            )
+          ]),
+          vue.createCommentVNode(" 消息列表 "),
+          (vue.openBlock(true), vue.createElementBlock(
+            vue.Fragment,
+            null,
+            vue.renderList($data.messages, (message) => {
+              return vue.openBlock(), vue.createElementBlock(
+                "div",
+                {
+                  class: vue.normalizeClass(["message", message.sender == uni.getStorageSync("id") ? "sender" : "receiver"])
+                },
+                [
+                  message.sender == uni.getStorageSync("id") ? (vue.openBlock(), vue.createElementBlock("image", {
+                    key: 0,
+                    src: $options.imageUrl + uni.getStorageSync("user").head,
+                    class: "avatar",
+                    mode: ""
+                  }, null, 8, ["src"])) : vue.createCommentVNode("v-if", true),
+                  message.sender != uni.getStorageSync("id") ? (vue.openBlock(), vue.createElementBlock("image", {
+                    key: 1,
+                    src: $options.imageUrl + $data.friend.head,
+                    class: "avatar",
+                    mode: ""
+                  }, null, 8, ["src"])) : vue.createCommentVNode("v-if", true),
+                  vue.createElementVNode("div", { class: "message-content" }, [
                     vue.createElementVNode(
-                      "div",
-                      { class: "avatar" },
-                      vue.toDisplayString(message.sender === "me" ? "我" : message.senderName.substring(0, 1)),
+                      "span",
+                      { class: "sender-name" },
+                      vue.toDisplayString(message.sender == uni.getStorageSync("id") ? uni.getStorageSync("user").name : $data.friend.name),
                       1
                       /* TEXT */
                     ),
-                    vue.createCommentVNode(' <image :src=" imageUrl + friend.head" v-if="me" class="avatar" mode=""></image> '),
-                    vue.createElementVNode("div", { class: "message-content" }, [
-                      $data.currentChat.isGroup && message.sender !== "me" ? (vue.openBlock(), vue.createElementBlock(
-                        "span",
+                    vue.createElementVNode("div", { class: "bubble" }, [
+                      vue.createCommentVNode(" 文本消息 "),
+                      message.type === "text" ? (vue.openBlock(), vue.createElementBlock(
+                        "div",
                         {
                           key: 0,
-                          class: "sender-name"
+                          class: "message-text"
                         },
-                        vue.toDisplayString(message.senderName),
+                        vue.toDisplayString(message.content),
                         1
                         /* TEXT */
                       )) : vue.createCommentVNode("v-if", true),
-                      vue.createElementVNode("div", { class: "bubble" }, [
-                        vue.createCommentVNode(" 文本消息 "),
-                        message.type === "text" ? (vue.openBlock(), vue.createElementBlock(
-                          "div",
-                          {
-                            key: 0,
-                            class: "message-text"
-                          },
-                          vue.toDisplayString(message.content),
-                          1
-                          /* TEXT */
-                        )) : vue.createCommentVNode("v-if", true),
-                        vue.createCommentVNode(" 图片消息 "),
-                        message.type === "image" ? (vue.openBlock(), vue.createElementBlock("div", {
-                          key: 1,
-                          class: "image-message"
-                        }, [
-                          vue.createElementVNode("div", { class: "image-preview" }, [
-                            vue.createElementVNode("i", { class: "fas fa-image" })
-                          ]),
-                          vue.createElementVNode("div", { class: "image-info" }, "图片.jpg")
-                        ])) : vue.createCommentVNode("v-if", true),
-                        vue.createCommentVNode(" 语音消息 "),
-                        message.type === "voice" ? (vue.openBlock(), vue.createElementBlock("div", {
-                          key: 2,
-                          class: "voice-message"
-                        }, [
-                          vue.createElementVNode("div", { class: "voice-play-btn" }, [
-                            vue.createElementVNode("i", { class: "fas fa-play" })
-                          ]),
-                          vue.createElementVNode("div", { class: "voice-wave" }, [
-                            vue.createElementVNode(
-                              "div",
-                              {
-                                class: "wave-bar",
-                                style: vue.normalizeStyle({ height: $options.getRandomHeight() + "px" })
-                              },
-                              null,
-                              4
-                              /* STYLE */
-                            ),
-                            vue.createElementVNode(
-                              "div",
-                              {
-                                class: "wave-bar",
-                                style: vue.normalizeStyle({ height: $options.getRandomHeight() + "px" })
-                              },
-                              null,
-                              4
-                              /* STYLE */
-                            ),
-                            vue.createElementVNode(
-                              "div",
-                              {
-                                class: "wave-bar",
-                                style: vue.normalizeStyle({ height: $options.getRandomHeight() + "px" })
-                              },
-                              null,
-                              4
-                              /* STYLE */
-                            ),
-                            vue.createElementVNode(
-                              "div",
-                              {
-                                class: "wave-bar",
-                                style: vue.normalizeStyle({ height: $options.getRandomHeight() + "px" })
-                              },
-                              null,
-                              4
-                              /* STYLE */
-                            ),
-                            vue.createElementVNode(
-                              "div",
-                              {
-                                class: "wave-bar",
-                                style: vue.normalizeStyle({ height: $options.getRandomHeight() + "px" })
-                              },
-                              null,
-                              4
-                              /* STYLE */
-                            ),
-                            vue.createElementVNode(
-                              "div",
-                              {
-                                class: "wave-bar",
-                                style: vue.normalizeStyle({ height: $options.getRandomHeight() + "px" })
-                              },
-                              null,
-                              4
-                              /* STYLE */
-                            )
-                          ]),
+                      vue.createCommentVNode(" 图片消息 "),
+                      message.type === "image" ? (vue.openBlock(), vue.createElementBlock("div", {
+                        key: 1,
+                        class: "image-message"
+                      }, [
+                        vue.createElementVNode("div", { class: "image-preview" }, [
+                          vue.createElementVNode("i", { class: "fas fa-image" })
+                        ]),
+                        vue.createElementVNode("div", { class: "image-info" }, "图片.jpg")
+                      ])) : vue.createCommentVNode("v-if", true),
+                      vue.createCommentVNode(" 语音消息 "),
+                      message.type === "voice" ? (vue.openBlock(), vue.createElementBlock("div", {
+                        key: 2,
+                        class: "voice-message"
+                      }, [
+                        vue.createElementVNode("div", { class: "voice-play-btn" }, [
+                          vue.createElementVNode("i", { class: "fas fa-play" })
+                        ]),
+                        vue.createElementVNode("div", { class: "voice-wave" }, [
                           vue.createElementVNode(
                             "div",
-                            { class: "voice-duration" },
-                            vue.toDisplayString(message.duration) + '"',
-                            1
-                            /* TEXT */
+                            {
+                              class: "wave-bar",
+                              style: vue.normalizeStyle({ height: $options.getRandomHeight() + "px" })
+                            },
+                            null,
+                            4
+                            /* STYLE */
+                          ),
+                          vue.createElementVNode(
+                            "div",
+                            {
+                              class: "wave-bar",
+                              style: vue.normalizeStyle({ height: $options.getRandomHeight() + "px" })
+                            },
+                            null,
+                            4
+                            /* STYLE */
+                          ),
+                          vue.createElementVNode(
+                            "div",
+                            {
+                              class: "wave-bar",
+                              style: vue.normalizeStyle({ height: $options.getRandomHeight() + "px" })
+                            },
+                            null,
+                            4
+                            /* STYLE */
+                          ),
+                          vue.createElementVNode(
+                            "div",
+                            {
+                              class: "wave-bar",
+                              style: vue.normalizeStyle({ height: $options.getRandomHeight() + "px" })
+                            },
+                            null,
+                            4
+                            /* STYLE */
+                          ),
+                          vue.createElementVNode(
+                            "div",
+                            {
+                              class: "wave-bar",
+                              style: vue.normalizeStyle({ height: $options.getRandomHeight() + "px" })
+                            },
+                            null,
+                            4
+                            /* STYLE */
+                          ),
+                          vue.createElementVNode(
+                            "div",
+                            {
+                              class: "wave-bar",
+                              style: vue.normalizeStyle({ height: $options.getRandomHeight() + "px" })
+                            },
+                            null,
+                            4
+                            /* STYLE */
                           )
-                        ])) : vue.createCommentVNode("v-if", true),
-                        vue.createCommentVNode(" 视频消息 "),
-                        message.type === "video" ? (vue.openBlock(), vue.createElementBlock("div", {
-                          key: 3,
-                          class: "video-message"
-                        }, [
-                          vue.createElementVNode("div", { class: "video-preview" }, [
-                            vue.createElementVNode("i", { class: "fas fa-play-circle video-play-icon" })
-                          ]),
-                          vue.createElementVNode("div", { class: "video-info" }, [
-                            vue.createElementVNode("div", { class: "file-name" }, "项目演示.mp4"),
-                            vue.createElementVNode("div", { class: "file-size" }, "24.5 MB")
-                          ])
-                        ])) : vue.createCommentVNode("v-if", true),
-                        vue.createCommentVNode(" 文件消息 "),
-                        message.type === "file" ? (vue.openBlock(), vue.createElementBlock("div", {
-                          key: 4,
-                          class: "file-message"
-                        }, [
-                          vue.createElementVNode("div", { class: "file-icon" }, [
-                            vue.createElementVNode(
-                              "i",
-                              {
-                                class: vue.normalizeClass($options.getFileIcon(message.content))
-                              },
-                              null,
-                              2
-                              /* CLASS */
-                            )
-                          ]),
-                          vue.createElementVNode("div", { class: "file-details" }, [
-                            vue.createElementVNode(
-                              "div",
-                              { class: "file-name" },
-                              vue.toDisplayString(message.content),
-                              1
-                              /* TEXT */
-                            ),
-                            vue.createElementVNode(
-                              "div",
-                              { class: "file-size" },
-                              vue.toDisplayString(message.size),
-                              1
-                              /* TEXT */
-                            )
-                          ])
-                        ])) : vue.createCommentVNode("v-if", true),
+                        ]),
                         vue.createElementVNode(
                           "div",
-                          { class: "message-time" },
-                          vue.toDisplayString(message.time),
+                          { class: "voice-duration" },
+                          vue.toDisplayString(message.duration) + '"',
                           1
                           /* TEXT */
                         )
-                      ])
+                      ])) : vue.createCommentVNode("v-if", true),
+                      vue.createCommentVNode(" 视频消息 "),
+                      message.type === "video" ? (vue.openBlock(), vue.createElementBlock("div", {
+                        key: 3,
+                        class: "video-message"
+                      }, [
+                        vue.createElementVNode("div", { class: "video-preview" }, [
+                          vue.createElementVNode("i", { class: "fas fa-play-circle video-play-icon" })
+                        ]),
+                        vue.createElementVNode("div", { class: "video-info" }, [
+                          vue.createElementVNode("div", { class: "file-name" }, "项目演示.mp4"),
+                          vue.createElementVNode("div", { class: "file-size" }, "24.5 MB")
+                        ])
+                      ])) : vue.createCommentVNode("v-if", true),
+                      vue.createCommentVNode(" 文件消息 "),
+                      message.type === "file" ? (vue.openBlock(), vue.createElementBlock("div", {
+                        key: 4,
+                        class: "file-message"
+                      }, [
+                        vue.createElementVNode("div", { class: "file-icon" }, [
+                          vue.createElementVNode(
+                            "i",
+                            {
+                              class: vue.normalizeClass($options.getFileIcon(message.content))
+                            },
+                            null,
+                            2
+                            /* CLASS */
+                          )
+                        ]),
+                        vue.createElementVNode("div", { class: "file-details" }, [
+                          vue.createElementVNode(
+                            "div",
+                            { class: "file-name" },
+                            vue.toDisplayString(message.content),
+                            1
+                            /* TEXT */
+                          ),
+                          vue.createElementVNode(
+                            "div",
+                            { class: "file-size" },
+                            vue.toDisplayString(message.size),
+                            1
+                            /* TEXT */
+                          )
+                        ])
+                      ])) : vue.createCommentVNode("v-if", true)
                     ])
-                  ],
-                  2
-                  /* CLASS */
-                );
-              }),
-              128
-              /* KEYED_FRAGMENT */
-            ))
-          ],
-          512
-          /* NEED_PATCH */
-        ),
+                  ])
+                ],
+                2
+                /* CLASS */
+              );
+            }),
+            256
+            /* UNKEYED_FRAGMENT */
+          )),
+          vue.createElementVNode("view", { id: "bottom-anchor" })
+        ], 40, ["refresher-triggered", "scroll-into-view"]),
         vue.createCommentVNode(" 输入区域 "),
-        vue.createCommentVNode(' <div class="input-left">\r\n				<u-icon name="plus-circle-fill" size="50rpx" color="#5a5a5a"></u-icon>\r\n				<u-icon name="photo-fill" size="50rpx" color="#5a5a5a"></u-icon>\r\n				<u-icon name="mic" size="50rpx" color="#5a5a5a"></u-icon>\r\n			</div> '),
-        vue.createCommentVNode(' <div class="input-area"  >\r\n				\r\n				<up-input class="message-input" v-model="sendMessage"></up-input>\r\n				<div class="send-btn" @click="scrollToBottom()">\r\n					<u-icon name="arrow-upward" size="50rpx" color="#fff"></u-icon>\r\n				</div>\r\n			</div> '),
         vue.createElementVNode("view", { class: "Bottom" }, [
           vue.withDirectives(vue.createElementVNode(
             "view",
             { class: "say" },
             [
-              vue.createCommentVNode(' <image src="../../static/img/yuyin2.png" style="width: 60rpx;height: 60rpx;" mode=""\r\n						@click="isKey = !isKey"></image> '),
               vue.createVNode(_component_u_icon, {
                 name: "mic",
                 size: "60rpx",
-                onClick: _cache[1] || (_cache[1] = ($event) => $data.isKey = !$data.isKey)
+                onClick: _cache[2] || (_cache[2] = ($event) => $data.isKey = !$data.isKey)
               })
             ],
             512
@@ -14385,9 +14504,8 @@ if (uni.restoreGlobal) {
                 src: _imports_0,
                 style: { "width": "60rpx", "height": "60rpx" },
                 mode: "",
-                onClick: _cache[2] || (_cache[2] = ($event) => $data.isKey = !$data.isKey)
-              }),
-              vue.createCommentVNode(' <u-icon name="mic" size="60rpx"></u-icon> ')
+                onClick: _cache[3] || (_cache[3] = ($event) => $data.isKey = !$data.isKey)
+              })
             ],
             512
             /* NEED_PATCH */
@@ -14398,13 +14516,13 @@ if (uni.restoreGlobal) {
             "view",
             {
               class: "Input",
-              onClick: _cache[4] || (_cache[4] = (...args) => $options.scrollToBottom && $options.scrollToBottom(...args))
+              onClick: _cache[5] || (_cache[5] = (...args) => $options.scrollToBottom && $options.scrollToBottom(...args))
             },
             [
               vue.withDirectives(vue.createElementVNode("textarea", {
                 class: vue.normalizeClass({ input: true, have: $data.InputValue != "" }),
                 "auto-height": "",
-                "onUpdate:modelValue": _cache[3] || (_cache[3] = ($event) => $data.InputValue = $event),
+                "onUpdate:modelValue": _cache[4] || (_cache[4] = ($event) => $data.InputValue = $event),
                 "auto-blur": "",
                 "cursor-spacing": "20",
                 focus: $data.keyword,
@@ -14427,10 +14545,10 @@ if (uni.restoreGlobal) {
                 "view",
                 {
                   class: vue.normalizeClass({ talk: true, black: $data.black }),
-                  onTouchstart: _cache[5] || (_cache[5] = (...args) => _ctx.startVoice && _ctx.startVoice(...args)),
-                  onTouchend: _cache[6] || (_cache[6] = (...args) => _ctx.endVoice && _ctx.endVoice(...args))
+                  onTouchstart: _cache[6] || (_cache[6] = (...args) => $options.startVoice && $options.startVoice(...args)),
+                  onTouchend: _cache[7] || (_cache[7] = (...args) => $options.endVoice && $options.endVoice(...args))
                 },
-                vue.toDisplayString($data.tishi),
+                vue.toDisplayString($data.hint),
                 35
                 /* TEXT, CLASS, NEED_HYDRATION */
               )
@@ -14443,21 +14561,19 @@ if (uni.restoreGlobal) {
           $data.InputValue == "" ? (vue.openBlock(), vue.createElementBlock("view", {
             key: 0,
             class: "photo",
-            onClick: _cache[8] || (_cache[8] = (...args) => _ctx.AddIMG && _ctx.AddIMG(...args))
+            onClick: _cache[9] || (_cache[9] = (...args) => $options.AddIMG && $options.AddIMG(...args))
           }, [
-            vue.createCommentVNode(' <image src="../../static/img/tupian2.png" style="width: 60rpx;height: 60rpx;" mode=""></image> '),
-            vue.createCommentVNode(' <image :src="initImagePath" mode=""></image> '),
             vue.createVNode(_component_u_icon, {
               name: "plus-circle-fill",
               size: "60rpx",
-              onClick: _cache[7] || (_cache[7] = ($event) => $data.showAction = true)
+              onClick: _cache[8] || (_cache[8] = ($event) => $data.showAction = true)
             })
           ])) : (vue.openBlock(), vue.createElementBlock(
             "view",
             {
               key: 1,
               class: "button",
-              onTouchend: _cache[9] || (_cache[9] = vue.withModifiers((...args) => _ctx.send && _ctx.send(...args), ["prevent"]))
+              onTouchend: _cache[10] || (_cache[10] = vue.withModifiers((...args) => $options.sendTextMessage && $options.sendTextMessage(...args), ["prevent"]))
             },
             "发送",
             32
@@ -14466,7 +14582,7 @@ if (uni.restoreGlobal) {
           vue.createElementVNode("view", null, [
             vue.createVNode(_component_up_action_sheet, {
               actions: $data.list,
-              onClose: _cache[10] || (_cache[10] = ($event) => $data.showAction = false),
+              onClose: _cache[11] || (_cache[11] = ($event) => $data.showAction = false),
               onSelect: $options.selectClick,
               closeOnClickOverlay: true,
               closeOnClickAction: true,
@@ -15666,7 +15782,7 @@ if (uni.restoreGlobal) {
 					statu TEXT,
 					isread TEXT,
 					type TEXT,
-					timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
+					timestamp INTEGER DEFAULT (strftime('%s', 'now', 'localtime'))
 				)
 			`;
         await db.createTable(createTableSql);

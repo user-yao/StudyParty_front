@@ -155,6 +155,17 @@
 		chatList:[]
 	 }
    },
+   onLoad() {
+	   const that = this;
+   	uni.$on('websocket-message',function(data){
+		console.log('监听到事件来自 websocket-message ，携带参数 msg 为：');
+		console.log(data)
+		that.getCharList().then(res =>{
+			console.log(res)
+			that.chatList = res;
+		});
+   	})
+   },
    computed: {
 	   imageUrl() {
 	         return imageUrl
@@ -163,31 +174,24 @@
 	    friendList: state => state.userFriend.friendList
 	}),
 	 filteredChats() {
-		 if (!this.searchQuery) return this.chatList;
-		 const query = this.searchQuery.toLowerCase();
-		 return this.chatList.filter(chat => 
-			 chat.name.toLowerCase().includes(query) || 
-			 (chat.lastMessage && chat.lastMessage.toLowerCase().includes(query)))
-	 },
-	 filteredContacts() {
-		 const contacts = this.chatList.filter(chat => 
-			 ['person'].includes(chat.statu));
-		 
-		 if (!this.searchQuery) return contacts;
-		 const query = this.searchQuery.toLowerCase();
-		 return contacts.filter(contact => 
-			 contact.name.toLowerCase().includes(query) || 
-			 (contact.lastMessage && contact.lastMessage.toLowerCase().includes(query)))
-	 },
-	 filteredGroups() {
-		 const groups = this.chatList.filter(chat => 
-			 ['group',].includes(chat.statu));
-		 
-		 if (!this.searchQuery) return groups;
-		 const query = this.searchQuery.toLowerCase();
-		 return groups.filter(group => 
-			 group.name.toLowerCase().includes(query) || 
-			 (group.lastMessage && group.lastMessage.toLowerCase().includes(query)))
+	   const query = this.searchQuery?.trim().toLowerCase();
+	   console.log(!query)
+	   // 如果搜索关键词为空，返回全部
+	   if (!query) {
+		   console.log(query)
+	     return this.chatList;
+	   }
+	 
+	   return this.chatList.filter(chat => {
+	     // 安全获取并处理 chat.name
+	     const name = this.friendList.get(Number(chat.friend)).name ? String(this.friendList.get(Number(chat.friend)).name).toLowerCase() : '';
+	     
+	     // 安全获取并处理 lastMessage
+	     const lastMessage = chat.content ? String(chat.content).toLowerCase() : '';
+	 
+	     // 模糊匹配：名称或最后消息包含关键词
+	     return name.includes(query) || lastMessage.includes(query);
+	   });
 	 }
    },
    methods: {
