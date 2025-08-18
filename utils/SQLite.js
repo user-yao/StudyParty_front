@@ -202,6 +202,23 @@ export default{
 				}
 			})
 		})
+	},
+	clearMessage(friend,statu){
+		console.log("删除聊天")
+		let userid = uni.getStorageSync('id');
+		return new Promise((resolve,reject) =>{
+			plus.sqlite.executeSql({
+				name:dbName,
+				sql:`
+					DELETE FROM Messages 
+					WHERE friend = '${friend}' AND statu = '${statu}' AND userid = '${userid}';
+				`,
+				success:resolve,
+				fail(e) {
+					console.log(e)
+				}
+			})
+		})
 	}
 }
 

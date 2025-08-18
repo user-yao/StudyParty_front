@@ -21,10 +21,10 @@
 			<!-- 聊天区域 -->
 			<scroll-view style="margin: 0;padding: 0;width: 100%;height: 80vh; max-height: 100vh;" scroll-y
 				class="chat-area" refresher-background='#f5f7fb' :refresher-triggered='isRefresher'
-				@refresherrefresh='LoadMessage' :scroll-with-animation='true' :refresher-enabled='true' ref="chatArea"
+				@refresherrefresh='LoadMessage'  :refresher-enabled='true' ref="chatArea"
 				:scroll-into-view='scrollToView'>
 				<div class="chat-date-divider">
-					<span>{{messages[0].timestamp}}</span>
+					<span>{{formatTime(messages[0].timestamp)}}</span>
 				</div>
 
 				<!-- 消息列表 -->
@@ -45,30 +45,35 @@
 							</template>
 
 							<!-- 图片消息 -->
-							<template v-if="message.type === 'image'">
-								<div class="image-message">
-									<div class="image-preview">
-										<i class="fas fa-image"></i>
-									</div>
-									<div class="image-info">图片.jpg</div>
+							<template v-if="message.type === 'image' || message.type === 'png' ">
+								<div class="image-message" @click="showPhoto(message.content)">
+									<!-- <i class="fas fa-image"></i> -->
+									<image style="max-width: 400rpx;"   :src="sourceUrl+message.content" mode="widthFix"></image>
 								</div>
 							</template>
 
 							<!-- 语音消息 -->
-							<template v-if="message.type === 'voice'">
-								<div class="voice-message">
-									<div class="voice-play-btn">
-										<i class="fas fa-play"></i>
+							<template v-if="message.type === 'mp3'">
+								<div class="voice-message"  @click="listen(message)">
+									<div class="voice-play-btn" v-if="isL != message.id">
+										<u-icon name="play-circle" bold color="#fff"></u-icon>
 									</div>
-									<div class="voice-wave">
-										<div class="wave-bar" :style="{ height: getRandomHeight() + 'px' }"></div>
-										<div class="wave-bar" :style="{ height: getRandomHeight() + 'px' }"></div>
-										<div class="wave-bar" :style="{ height: getRandomHeight() + 'px' }"></div>
-										<div class="wave-bar" :style="{ height: getRandomHeight() + 'px' }"></div>
-										<div class="wave-bar" :style="{ height: getRandomHeight() + 'px' }"></div>
-										<div class="wave-bar" :style="{ height: getRandomHeight() + 'px' }"></div>
+									<div class="voice-play-btn" v-if="isL == message.id">
+										<u-icon name="pause-circle" bold color="#fff"></u-icon>
 									</div>
-									<div class="voice-duration">{{ message.duration }}"</div>
+									<div class="voice-wave" :class="{isL:isL == message.id}">
+										<div class="wave-bar"></div>
+										  <div class="wave-bar"></div>
+										  <div class="wave-bar"></div>
+										  <div class="wave-bar"></div>
+										  <div class="wave-bar"></div>
+										  <div class="wave-bar"></div>
+										  <div class="wave-bar"></div>
+										  <div class="wave-bar"></div>
+										  <div class="wave-bar"></div>
+										  <div class="wave-bar"></div>
+										  <div class="wave-bar"></div>
+									</div>
 								</div>
 							</template>
 
@@ -81,19 +86,6 @@
 									<div class="video-info">
 										<div class="file-name">项目演示.mp4</div>
 										<div class="file-size">24.5 MB</div>
-									</div>
-								</div>
-							</template>
-
-							<!-- 文件消息 -->
-							<template v-if="message.type === 'file'">
-								<div class="file-message">
-									<div class="file-icon">
-										<i :class="getFileIcon(message.content)"></i>
-									</div>
-									<div class="file-details">
-										<div class="file-name">{{ message.content }}</div>
-										<div class="file-size">{{ message.size }}</div>
 									</div>
 								</div>
 							</template>
@@ -124,11 +116,6 @@
 					<u-icon name="plus-circle-fill" size="60rpx" @click="showAction = true"></u-icon>
 				</view>
 				<view class="button" v-else @touchend.prevent="sendTextMessage">发送</view>
-				<view>
-					<up-action-sheet :actions="list" @close="showAction = false" @select="selectClick"
-						:closeOnClickOverlay="true" :closeOnClickAction="true" :title="title"
-						:show="showAction"></up-action-sheet>
-				</view>
 			</view>
 		</div>
 	</div>
@@ -146,11 +133,12 @@
 		onMounted
 	} from 'vue';
 	import {
-		imageUrl
+		imageUrl,sourceUrl,
 	} from "@/config/config.js";
 	import ws from "@/utils/websocket.js";
-	const recorderManager = uni.getRecorderManager();
-	const innerAudioContext2 = uni.createInnerAudioContext();
+	import UploadUtils from '@/utils/uploadUtils.js'
+	let recorderManager = null;
+	let innerAudioContext2 = null;
 	export default {
 		data() {
 			return {
@@ -163,29 +151,24 @@
 				showAction: false,
 				scrollToView: '',
 				offset: 0, //聊天记录刷新
-				list: [{
-					name: "相机",
-					value: 1
-				}, {
-					name: "相册",
-					value: 2
-				}, {
-					name: "选择文件",
-					value: 3
-				}],
-				title: '请选择功能',
 				keyboardHeight: 0, // 新增：键盘高度
 				headerHeight: 0, // 新增：导航栏高度
 				friend: {},
 				chat: {},
 				showUserDetail: false,
-				voicePath: '',
-				messages: []
+				messages: [],
+				photo: [],
+				isL: -1,
+				currentAudioContext: null
+				
 			}
 		},
 		onLoad(options) {
 			const that = this;
 			const eventChannel = this.getOpenerEventChannel();
+			if (recorderManager && innerAudioContext2) return;
+			recorderManager = uni.getRecorderManager();
+			innerAudioContext2 = uni.createInnerAudioContext();
 			eventChannel.on("chatData", (data) => {
 				this.chat = data.chat;
 				this.friend = data.friend;
@@ -195,22 +178,32 @@
 			});
 			let path = '';
 			recorderManager.onStop(function(res) {
-				// console.log('recorder stop' + JSON.stringify(res));
-				// console.log(res.tempFilePath)
-				that.voicePath = res.tempFilePath;
-				this.black = false;
-				innerAudioContext2.src = that.voicePath;
+				console.log(res)
+				path = res.tempFilePath;
+				that.black = false;
+				innerAudioContext2.src = path;
 			});
 			innerAudioContext2.onCanplay(() => {
 				// 音频已准备就绪，现在可以获取持续时间
 				const duration = innerAudioContext2.duration;
-				// console.log(duration);
-				if (duration > 1) {
-					console.log(this.voicePath);
-				} else {
+				if (duration >= 1) {
+					console.log(path);
+					this.sendVoiceMessage(path);
+				} else if(duration < 1){
 					uni.showToast({
 						title: "说话时间太短",
 						icon: 'none'
+					});
+					uni.removeSavedFile({
+						filePath:this.path
+					})
+				}else if(duration > 60){
+					uni.showToast({
+						title: "时间过长（1分钟之内）",
+						icon: 'none'
+					});
+					uni.removeSavedFile({
+						filePath:this.path
 					})
 				}
 			});
@@ -231,29 +224,98 @@
 			imageUrl() {
 				return imageUrl
 			},
+			sourceUrl(){
+				return sourceUrl
+			}
+		},
+		onUnload() {
+		  // 停止并销毁录音管理器
+		  if (recorderManager) {
+		    recorderManager.stop(); // 停止当前录音
+		    recorderManager = null;  // 释放引用
+		  }
+		
+		  // 销毁音频上下文
+		  if (innerAudioContext2) {
+		    innerAudioContext2.destroy();
+		    innerAudioContext2 = null;
+		  }
+		
+		  // 移除全局事件监听器
+		  uni.$off('websocket-message');
 		},
 		methods: {
-			listen(item, index) {
-				// console.log('开始播放');
-				this.isL = index;
-				const innerAudioContext = uni.createInnerAudioContext();
-				innerAudioContext.autoplay = true;
-				innerAudioContext.src = item;
+			
+			async sendVoiceMessage(path) {
+			      if (!path) {
+			        uni.showToast({ title: '没有录音文件', icon: 'none' });
+			        return;
+			      }
+			
+			      uni.showLoading({ title: '上传中...' });
+				  let formData = {};
+				if(this.chat.statu == 'person'){
+					formData = {senderId:uni.getStorageSync('id'),fileType:'mp3',receiverId:this.friend.friendId}
+				}else if(this.chat.statu == 'group'){
+					formData = {senderId:uni.getStorageSync('id'),fileType:'mp3',groupId:this.friend.friendId}
+				}
+			      try {
+			        const result = await UploadUtils.uploadFile({
+			          url: '/studyParty-websocket/websocket/upload',
+			          filePath: path,
+			          name: 'file', // 后端接收字段名
+			          formData:formData,
+			          onProgress: (progress) => {
+			            console.log(`上传进度: ${progress}%`);
+			            // 可更新 UI 显示进度条
+			          }
+			        });
+			        // 上传成功
+			        uni.hideLoading();
+			        console.log('音频上传成功:', result.data);
+			      } catch (err) {
+			        uni.hideLoading();
+			        console.error('上传失败:', err);
+			        uni.showToast({ title: '发送失败', icon: 'none' });
+			      } finally {
+			        // 清空本次录音数据
+			        this.voiceDuration = 0;
+			      }
+			},
+			listen(message) {
+				console.log(message);
+				  // 如果当前有音频在播放，则先暂停
+				  if (this.isL == message.id) {
+				      this.currentAudioContext.pause();
+				      this.isL = -1;
+				  	return
+				  }
+				  const innerAudioContext = uni.createInnerAudioContext();
+				  innerAudioContext.autoplay = true;
+				  innerAudioContext.src = sourceUrl + message.content;
+				 this.currentAudioContext = innerAudioContext;
+				
 				innerAudioContext.onPlay(() => {
 					// console.log('开始播放');
+					this.isL = message.id;
 				});
 				innerAudioContext.onEnded(() => {
 					this.isL = -1;
-				})
+				});
+				// 错误处理
+				  innerAudioContext.onError((err) => {
+				    console.error('音频播放出错：', err);
+				    this.isL = -1;
+				  });
 			},
 			showPhoto(item) {
 				// console.log(item.substring(7))
 				var photo = [];
-				photo.push(item);
+				photo.push(sourceUrl + item);
 				// console.log(photo);
 				uni.previewImage({
 					current: 0,
-					urls: photo,
+					urls:  photo,
 					success() {
 						// console.log("chenggong");
 					}
@@ -268,7 +330,7 @@
 				this.touchTimeout = setTimeout(() => {
 					// 如果触摸持续时间大于等于1秒，开始录音
 					recorderManager.start();
-				}, 500);
+				}, 100);
 			},
 			endVoice() {
 				this.black = false;
@@ -282,46 +344,48 @@
 				recorderManager.stop();
 
 			},
-			AddIMG() {
+			 AddIMG() {
+				 console.log("1")
 				const that = this;
 				uni.chooseImage({ //图片上传
 					sourceType: ['album', 'camera'], //从相册选择
-					count: 1, //上传图片的数量，默认是9
+					count: 9, //上传图片的数量，默认是9
 					sizeType: ['original', 'compressed'], //可以指定是原图还是压缩图，默认二者都有
-					success: function(res) {
+					success: async function(res) {
+						console.log(res)
 						const tempFilePaths = res.tempFilePaths; //临时文件路径
 						console.log(tempFilePaths);
-						//this.photo = this.photo.concat(res.tempFilePaths)
-						//this.photo = res.tempFilePaths
 						that.photo = that.photo.concat(res.tempFilePaths);
 						console.log(that.photo);
-						for (var i = 0; i < tempFilePaths.length; i++) {
-							pathToBase64(tempFilePaths[i])
-								.then(base64 => {
-									console.log(base64);
-									console.log(base64.indexOf(","))
-									var p = base64.substring(base64.indexOf(",") + 1);
-									that.sendp("@photo" + p);
-								})
-								.catch(error => {
-									console.error(error)
-								});
+						uni.showLoading({ title: '上传中...' });
+						let formData = {};
+						if(that.chat.statu == 'person'){
+							formData = {senderId:uni.getStorageSync('id'),fileType:'png',receiverId:that.friend.friendId}
+						}else if(that.chat.statu == 'group'){
+							formData = {senderId:uni.getStorageSync('id'),fileType:'png',groupId:that.friend.friendId}
+						}
+						try {
+							const result = await UploadUtils.uploadFiles({
+							  url: '/studyParty-websocket/websocket/upload',
+							  filePaths: tempFilePaths,
+							  name: 'file', // 后端接收字段名
+							  formData:formData,
+							  onProgress: (progress) => {
+								console.log(`上传进度: ${progress}%`);
+								// 可更新 UI 显示进度条
+							  }
+							});
+							// 上传成功
+							uni.hideLoading();
+							console.log('图片上传成功:', result.data);
+						} catch (err) {
+						  uni.hideLoading();
+						  console.error('上传失败:', err);
+						  uni.showToast({ title: '发送失败', icon: 'none' });
+						} finally {
 						}
 					},
 				});
-			},
-			sendp(base64) {
-				this.keyword = true;
-
-				//消息内容 + "[" + 发送消息的人 + ";" + 接收消息的人","+0		0是单发1是群发
-				var id = uni.getStorageSync('id');
-				var cotnt = base64 + "[" + id + ";" + this.CurrentChatId + ',' + 0;
-				console.log(id + "===" + this.CurrentChatId);
-				this.clickRequest(cotnt).then(res => {
-					this.InputValue = ""
-					this.scrollToBottom()
-				})
-
 			},
 			async MessageIsread() {
 				await db.updateMessageIsread(this.friend.friendId);
@@ -348,9 +412,10 @@
 				let [message] = await db.selectNewMessage(this.friend.friendId, this.chat.statu);
 				this.messages.push(message);
 				this.MessageIsread();
+				this.scrollToBottom();
 			},
 			async selectMessage() {
-				let message = await db.selectMessage(this.friend.friendId, this.chat.statu, 10, this.offset);
+				let message = await db.selectMessage(this.friend.friendId, this.chat.statu, 5, this.offset);
 				message = message.reverse();
 				this.messages = [...message, ...this.messages];
 				this.offset += message.length;
@@ -359,14 +424,11 @@
 			async LoadMessage() {
 				if (this.isRefresher) return;
 				this.isRefresher = true;
-				let message = await db.selectMessage(this.friend.friendId, this.chat.statu, 10, this.offset);
+				let message = await db.selectMessage(this.friend.friendId, this.chat.statu, 5, this.offset);
 				message = message.reverse();
 				this.messages = [...message, ...this.messages];
 				this.offset += message.length;
 				this.isRefresher = false;
-			},
-			selectClick(ref) {
-				console.log(ref)
 			},
 			handleKeyboardShow(e) {
 				this.keyboardHeight = e.height;
@@ -381,14 +443,6 @@
 			goBack() {
 				uni.navigateBack(1)
 			},
-			getFileIcon(filename) {
-				const ext = filename.split('.').pop().toLowerCase();
-				if (ext === 'doc' || ext === 'docx') return 'fas fa-file-word';
-				if (ext === 'xls' || ext === 'xlsx') return 'fas fa-file-excel';
-				if (ext === 'ppt' || ext === 'pptx') return 'fas fa-file-powerpoint';
-				if (ext === 'pdf') return 'fas fa-file-pdf';
-				return 'fas fa-file';
-			},
 			getRandomHeight() {
 				return Math.floor(Math.random() * 20) + 5;
 			},
@@ -397,6 +451,50 @@
 				this.$nextTick(() => {
 					this.scrollToView = 'bottom-anchor';
 				});
+			},
+			formatTime(timestamp) {
+			  // 将输入转换为 Date 对象
+			  const date = new Date(timestamp);
+			  const now = new Date();
+			
+			  // 获取今天的年月日
+			  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+			  // 昨天
+			  const yesterday = new Date(today);
+			  yesterday.setDate(yesterday.getDate() - 1);
+			  // 前天
+			  const beforeYesterday = new Date(today);
+			  beforeYesterday.setDate(beforeYesterday.getDate() - 2);
+			
+			  // 输入时间的年月日
+			  const inputDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+			
+			  // 判断时间间隔
+			  if (inputDate.getTime() === today.getTime()) {
+			    // 今天：返回 15:35
+			    const hours = String(date.getHours()).padStart(2, '0');
+			    const minutes = String(date.getMinutes()).padStart(2, '0');
+			    return `${hours}:${minutes}`;
+			  } else if (inputDate.getTime() === yesterday.getTime()) {
+			    // 昨天
+			    return '昨天';
+			  } else if (inputDate.getTime() === beforeYesterday.getTime()) {
+			    // 前天
+			    return '前天';
+			  } else {
+			    // 更早的时间
+			    const year = date.getFullYear();
+			    const month = date.getMonth() + 1; // getMonth() 返回 0-11
+			    const day = date.getDate();
+			
+			    if (year === now.getFullYear()) {
+			      // 同一年，返回 6-12
+			      return `${month}-${day}`;
+			    } else {
+			      // 不同年，返回 2010-4-20
+			      return `${year}-${month}-${day}`;
+			    }
+			  }
 			}
 		}
 	}
@@ -639,33 +737,17 @@
 
 	/* 特殊消息样式 */
 	.image-message {
-		width: 220px;
 		border-radius: 12px;
-		overflow: hidden;
-		position: relative;
 		cursor: pointer;
 	}
-
+	
 	.image-preview {
-		width: 100%;
-		height: 150px;
 		background: linear-gradient(45deg, #ff9a9e, #fad0c4);
 		display: flex;
 		align-items: center;
 		justify-content: center;
 		color: white;
 		font-size: 2.5rem;
-	}
-
-	.image-info {
-		padding: 10px;
-		background: rgba(0, 0, 0, 0.5);
-		color: white;
-		position: absolute;
-		bottom: 0;
-		left: 0;
-		right: 0;
-		font-size: 0.8rem;
 	}
 
 	.voice-message {
@@ -703,6 +785,7 @@
 		width: 3px;
 		background: var(--primary);
 		border-radius: 2px;
+		height: 10rpx;
 		transition: height 0.3s ease;
 	}
 
@@ -1000,9 +1083,6 @@
 			max-width: 90%;
 		}
 
-		.image-message {
-			width: 200px;
-		}
 	}
 
 	.Bottom {
@@ -1036,7 +1116,7 @@
 		border-radius: 15rpx;
 		box-sizing: border-box;
 		margin: 0 20rpx;
-		transition: 300ms;
+		transition: 100ms;
 	}
 
 	.talk {
@@ -1079,7 +1159,7 @@
 		border-radius: 15rpx;
 		box-sizing: border-box;
 		margin: 0 20rpx;
-		transition: 300ms;
+		transition: 100ms;
 	}
 
 	.button {
@@ -1092,6 +1172,51 @@
 		background-color: #2979ff;
 		color: #fff;
 		border-radius: 15rpx;
-		transition: 300ms;
+		transition: 100ms;
+	}
+	
+	/* 播放中状态：启用动画 */
+	.voice-wave.isL .wave-bar {
+	  animation: random-wave 0.8s infinite ease-in-out;
+	}
+	
+	.voice-wave.isL .wave-bar:nth-child(1) {
+	  animation-delay: 0.1s;
+	}
+	.voice-wave.isL .wave-bar:nth-child(2) {
+	  animation-delay: 0.3s;
+	}
+	.voice-wave.isL .wave-bar:nth-child(3) {
+	  animation-delay: 0.0s;
+	}
+	.voice-wave.isL .wave-bar:nth-child(4) {
+	  animation-delay: 0.4s;
+	}
+	.voice-wave.isL .wave-bar:nth-child(5) {
+	  animation-delay: 0.2s;
+	}
+	.voice-wave.isL .wave-bar:nth-child(6) {
+	  animation-delay: 0.5s;
+	}
+	
+	/* 可选：让每个条的动画速度略有不同（更真实） */
+	.voice-wave.isL .wave-bar:nth-child(odd) {
+	  animation-duration: 0.7s;
+	}
+	.voice-wave.isL .wave-bar:nth-child(even) {
+	  animation-duration: 0.9s;
+	}
+	
+	/* 随机动效：高度在 5px ~ 25px 之间随机跳动 */
+	@keyframes random-wave {
+	  0% {
+	    height: 5px;
+	  }
+	  50% {
+	    height: 20px;
+	  }
+	  100% {
+	    height: 8px;
+	  }
 	}
 </style>

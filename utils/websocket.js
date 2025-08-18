@@ -64,6 +64,7 @@ class WebSocketService {
   }
   // 处理收到消息
   handleMessage(res) {
+	  console.log(res)
     try {
       const data = typeof res.data === 'string' ? JSON.parse(res.data) : res.data;
       if (data.type === 'pong') {
@@ -91,16 +92,17 @@ class WebSocketService {
 	  		return
 	  }
 	  if(data.groupId != null){
-		db.insertOtherMessage(data.groupId, data.content,'group', data.senderId,data.fileType,0,data.timestamp);
+		db.insertOtherMessage(data.groupId, data.fileUrl,'group', data.senderId,data.fileType,0,data.timestamp);
 		uni.$emit('websocket-message', data);
 		return
 	  }
 	  if(data.receiverId != null){
+		  console.log(data)
 		  let friend = data.senderId;
 		  if(data.senderId == uni.getStorageSync('id')){
 		  	friend = data.receiverId;
 		  }
-		db.insertOtherMessage(data.friend,data.content,'person',data.senderId,data.fileType,0,data.timestamp);
+		db.insertOtherMessage(friend,data.fileUrl,'person',data.senderId,data.fileType,0,data.timestamp);
 		uni.$emit('websocket-message', data);
 		return
 	  }

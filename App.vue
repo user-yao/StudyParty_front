@@ -26,6 +26,11 @@ export default {
 	},
 	onShow: function() {
 		console.log('App Show')
+		this.testDatabase();
+		const token = uni.getStorageSync('token');
+		if (token) {
+			webSocketService.reconnect();
+		}
 	},
 	onHide: function() {
 		console.log('App Hide')
