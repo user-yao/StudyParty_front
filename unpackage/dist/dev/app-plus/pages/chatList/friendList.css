@@ -1,0 +1,352 @@
+/**
+ * 这里是uni-app内置的常用样式变量
+ *
+ * uni-app 官方扩展插件及插件市场（https://ext.dcloud.net.cn）上很多三方插件均使用了这些样式变量
+ * 如果你是插件开发者，建议你使用scss预处理，并在插件代码中直接使用这些变量（无需 import 这个文件），方便用户通过搭积木的方式开发整体风格一致的App
+ *
+ */
+/**
+ * 如果你是App开发者（插件使用者），你可以通过修改这些变量来定制自己的插件主题，实现自定义主题功能
+ *
+ * 如果你的项目同样使用了scss预处理，你也可以直接在你的 scss 代码中使用如下变量，同时无需 import 这个文件
+ */
+/* 颜色变量 */
+/* 行为相关颜色 */
+/* 文字基本颜色 */
+/* 背景颜色 */
+/* 边框颜色 */
+/* 尺寸变量 */
+/* 文字尺寸 */
+/* 图片尺寸 */
+/* Border Radius */
+/* 水平间距 */
+/* 垂直间距 */
+/* 透明度 */
+/* 文章场景相关 */
+.u-icon[data-v-ac70166d] {
+  display: flex;
+  align-items: center;
+}
+.u-icon--left[data-v-ac70166d] {
+  flex-direction: row-reverse;
+  align-items: center;
+}
+.u-icon--right[data-v-ac70166d] {
+  flex-direction: row;
+  align-items: center;
+}
+.u-icon--top[data-v-ac70166d] {
+  flex-direction: column-reverse;
+  justify-content: center;
+}
+.u-icon--bottom[data-v-ac70166d] {
+  flex-direction: column;
+  justify-content: center;
+}
+.u-icon__icon[data-v-ac70166d] {
+  font-family: uicon-iconfont;
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.u-icon__icon--primary[data-v-ac70166d] {
+  color: #3c9cff;
+}
+.u-icon__icon--success[data-v-ac70166d] {
+  color: #5ac725;
+}
+.u-icon__icon--error[data-v-ac70166d] {
+  color: #f56c6c;
+}
+.u-icon__icon--warning[data-v-ac70166d] {
+  color: #f9ae3d;
+}
+.u-icon__icon--info[data-v-ac70166d] {
+  color: #909399;
+}
+.u-icon__img[data-v-ac70166d] {
+  height: auto;
+  will-change: transform;
+}
+.u-icon__label[data-v-ac70166d] {
+  line-height: 1;
+}
+
+* {
+		margin: 0;
+		padding: 0;
+		box-sizing: border-box;
+		font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+}
+:root {
+		--primary: #4361ee;
+		--secondary: #3f37c9;
+		--accent: #4895ef;
+		--success: #4cc9f0;
+		--warning: #f72585;
+		--light: #f8f9fa;
+		--dark: #212529;
+		--gray: #6c757d;
+		--light-gray: #e9ecef;
+		--card-bg: #ffffff;
+		--section-bg: #f5f7fb;
+}
+.body {
+		background-color: #f5f7fb;
+		color: var(--dark);
+		height: 100vh;
+		display: flex;
+		flex-direction: column;
+		max-width: 500px;
+		margin: 0 auto;
+		position: relative;
+		box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+	/* 顶部导航 */
+.app-header {
+		background: linear-gradient(135deg, var(--primary), var(--secondary));
+		color: white;
+		padding: 15px 20px;
+		padding-top: 5vh;
+		box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+		position: -webkit-sticky;
+		position: sticky;
+		top: 0;
+		z-index: 100;
+}
+.header-top {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin-bottom: 15px;
+}
+.logo {
+		display: flex;
+		align-items: center;
+		font-weight: 700;
+		font-size: 1.4rem;
+}
+.logo i {
+		margin-right: 8px;
+		font-size: 1.6rem;
+}
+.header-actions {
+		display: flex;
+		gap: 20px;
+}
+.header-actions i {
+		font-size: 1.3rem;
+}
+.search-bar {
+		background: rgba(255, 255, 255, 0.2);
+		border-radius: 50px;
+		padding: 8px 15px;
+		display: flex;
+		align-items: center;
+}
+.search-bar uni-input {
+		background: transparent;
+		border: none;
+		color: #fff;
+		width: 100%;
+		padding: 0 10px;
+		outline: none;
+		font-size: 0.95rem;
+}
+
+
+	/* 联系人列表容器 */
+.contacts-container {
+		flex: 1;
+		overflow-y: auto;
+		position: relative;
+		padding-bottom: 20px;
+}
+
+	/* 字母索引 */
+.index-bar {
+		position: fixed;
+		right: 5px;
+		top: 50%;
+		transform: translateY(-50%);
+		z-index: 10;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		padding: 5px 0;
+		border-radius: 20px;
+		background: rgba(255, 255, 255, 0.7);
+		-webkit-backdrop-filter: blur(2px);
+		        backdrop-filter: blur(2px);
+}
+.index-letter {
+		padding: 2px 8px;
+		font-size: 0.75rem;
+		font-weight: 500;
+		cursor: pointer;
+		color: var(--primary);
+		transition: all 0.2s;
+}
+.index-letter:hover,
+	.index-letter.active {
+		background: var(--primary);
+		color: white;
+		border-radius: 50%;
+}
+
+	/* 联系人分组 */
+.contact-group {
+		margin-bottom: 15px;
+		background: white;
+		border-radius: 16px;
+		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+		overflow: hidden;
+		margin: 10px 15px 20px;
+}
+.group-header {
+		padding: 8px 15px;
+		background: var(--light);
+		font-weight: 600;
+		color: var(--primary);
+		font-size: 1.1rem;
+}
+
+	/* 联系人卡片 */
+.contact-item {
+		display: flex;
+		align-items: center;
+		padding: 15px;
+		border-bottom: 1px solid var(--light-gray);
+		transition: all 0.2s;
+}
+.contact-item:last-child {
+		border-bottom: none;
+}
+.contact-item:hover {
+		background-color: #f8f9ff;
+}
+.statuStudent{
+		color: #4361ee;
+		font-weight: 600;
+		border-radius: 0.625rem;
+		font-size: 0.75rem;
+}
+.statuTeacher{
+		color: #f72585;
+		font-weight: 600;
+		border-radius: 0.625rem;
+		font-size: 0.75rem;
+}
+.statuEnterprise{
+		color: #4cc9f0;
+		font-weight: 600;
+		border-radius: 0.625rem;
+		font-size: 0.75rem;
+}
+.contact-avatar {
+		width: 45px;
+		height: 45px;
+		border-radius: 50%;
+		background: linear-gradient(45deg, var(--accent), var(--success));
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		color: white;
+		font-weight: bold;
+		font-size: 1.2rem;
+		margin-right: 15px;
+}
+.contact-info {
+		flex: 1;
+}
+.contact-name {
+		font-weight: 600;
+		margin-bottom: 3px;
+		font-size: 1.05rem;
+}
+.contact-phone {
+		font-size: 0.85rem;
+		color: var(--gray);
+}
+.contact-actions {
+		display: flex;
+		gap: 15px;
+}
+.action-icon {
+		width: 36px;
+		height: 36px;
+		border-radius: 50%;
+		background: var(--light);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		color: var(--primary);
+		cursor: pointer;
+		transition: all 0.2s;
+}
+.action-icon:hover {
+		background: var(--primary);
+		color: white;
+		transform: scale(1.1);
+}
+
+	/* 空状态 */
+.empty-state {
+		text-align: center;
+		padding: 40px 20px;
+		color: var(--gray);
+}
+.empty-state i {
+		font-size: 3rem;
+		margin-bottom: 15px;
+		color: var(--light-gray);
+}
+
+	/* 底部导航 */
+.bottom-nav {
+		position: fixed;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		background: white;
+		display: flex;
+		justify-content: space-around;
+		padding: 12px 0;
+		box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+		z-index: 100;
+		max-width: 500px;
+		margin: 0 auto;
+}
+.nav-item {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		color: var(--gray);
+		text-decoration: none;
+		font-size: 0.75rem;
+}
+.nav-item.active {
+		color: var(--primary);
+}
+.nav-item i {
+		font-size: 1.3rem;
+		margin-bottom: 3px;
+}
+
+	/* 响应式调整 */
+@media (max-width: 480px) {
+.contact-actions {
+			gap: 8px;
+}
+.action-icon {
+			width: 32px;
+			height: 32px;
+			font-size: 0.9rem;
+}
+.contact-item {
+			padding: 12px 15px;
+}
+}

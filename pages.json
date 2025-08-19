@@ -59,6 +59,13 @@
 				"navigationBarTitleText" : "聊天页面",
 				"softinputMode": "adjustResize"
 			}
+		},
+		{
+			"path" : "pages/userInfo/userInfo",
+			"style" : 
+			{
+				"navigationBarTitleText" : "用户信息"
+			}
 		}
 	],
 	"globalStyle": {

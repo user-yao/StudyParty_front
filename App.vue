@@ -31,12 +31,43 @@ export default {
 		if (token) {
 			webSocketService.reconnect();
 		}
+		this.getCharList().then(res => {
+			const hasMessage = res.some(item => item.message_count !== 0);
+			  console.log(hasMessage)
+			  if (hasMessage) {
+			    uni.showTabBarRedDot({
+			      index: 2,
+			      success: () => {
+			        console.log('小红点显示成功');
+			      },
+			      fail: (err) => {
+			        console.error('小红点显示失败', err);
+			      }
+			    });
+			  } else {
+			    uni.hideTabBarRedDot({
+			      index: 2,
+			      success: () => {
+			        console.log('小红点隐藏成功');
+			      },
+			      fail: (err) => {
+			        console.error('小红点隐藏失败', err);
+			      }
+			    });
+			  }
+		});
 	},
 	onHide: function() {
 		console.log('App Hide')
 		webSocketService.close();
 	},
 	methods: {
+		async getCharList() {
+			return await db.selectChatList().then(res => {
+				console.log(res);
+				return res;
+			});
+		},
 		 ...mapActions('user', ['login']),
 		async testDatabase(){
 			await db.createDatabases();

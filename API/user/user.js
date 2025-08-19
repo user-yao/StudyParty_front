@@ -61,3 +61,15 @@ export const updateHead = (data) => {
     data
   });
 }
+export const selectUser = (data) => {
+  return request({
+    url: '/user/selectUser',
+    method: 'POST',
+    data:{
+		id: data.id
+	},
+	header: {
+	    'Content-Type': 'application/x-www-form-urlencoded'
+	  }
+  });
+}

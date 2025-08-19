@@ -1,4 +1,4 @@
-import { login, register, updatePassword, updateUser, updateHead } from '../../API/user/user.js';
+import { login, register, updatePassword, updateUser, updateHead, selectUser} from '../../API/user/user.js';
 export default {
   namespaced: true,
   state: () => ({ 
@@ -62,7 +62,17 @@ export default {
 		    commit('SET_USER_INFO', res.data);
 		  }
 		  return res;
-	  }) // 调用API/user/user.js的login接口
-    }
+	  }) 
+    },
+	selectUser({ commit }, payload) {
+		console.log(payload)
+	  return selectUser(payload).then(res =>{
+		  console.log(res)
+		  if (res.code === 200) {
+		    return res.data;
+		  }
+		  return res;
+	  }) 
+	},
   }
 };

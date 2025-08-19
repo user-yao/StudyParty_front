@@ -17,41 +17,42 @@ export default {
     }
   },
   actions: {
-    requestFriend({ commit }, credentials) {
-      return requestFriend(credentials).then(res =>{
+    requestFriend({ commit }, payload) {
+      return requestFriend(payload).then(res =>{
 		  if (res.code === 200) {
 		    commit('SET_USER_INFO', res.data);
 		  }
 		  return res;
 	  })
     },
-	accept({ commit }, credentials) {
-	  return accept(credentials).then(res =>{
+	accept({ commit }, payload) {
+	  return accept(payload).then(res =>{
 		  if (res.code === 200) {
 		    commit('SET_USER_INFO', res.data);
 		  }
 		  return res;
 	  })
 	},
-	deleteFriend({ commit }, credentials) {
-	  return deleteFriend(credentials).then(res =>{
+	deleteFriend({ commit }, payload) {
+	  return deleteFriend(payload).then(res =>{
 		  if (res.code === 200) {
 		    commit('SET_USER_INFO', res.data);
 		  }
 		  return res;
 	  })
 	},
-	friendList({ commit }, credentials) {
-	  return friendList(credentials).then(res =>{
+	friendList({ commit }, payload) {
+	  return friendList(payload).then(res =>{
 		  console.log(res)
 		  if (res.code === 200) {
 		    commit('SET_FRIEND_LIST', res.data);
+			return res.data;
 		  }
 		  return res;
 	  })
 	},
-	friendRequestList({ commit }, credentials) {
-	  return friendRequestList(credentials).then(res =>{
+	friendRequestList({ commit }, payload) {
+	  return friendRequestList(payload).then(res =>{
 		  if (res.code === 200) {
 		    commit('SET_USER_INFO', res.data);
 		  }

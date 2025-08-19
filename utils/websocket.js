@@ -64,7 +64,6 @@ class WebSocketService {
   }
   // 处理收到消息
   handleMessage(res) {
-	  console.log(res)
     try {
       const data = typeof res.data === 'string' ? JSON.parse(res.data) : res.data;
       if (data.type === 'pong') {

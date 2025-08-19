@@ -13,40 +13,40 @@ export default {
     }
   },
   actions: {
-    addUserPlan({ commit }, credentials) {
-      return addUserPlan(credentials).then(res =>{
+    addUserPlan({ commit }, payload) {
+      return addUserPlan(payload).then(res =>{
 		  if (res.code === 200) {
 		    commit('SET_USER_INFO', res.data);
 		  }
 		  return res;
 	  }) 
     },
-	deleteUserPlan({ commit }, credentials) {
-	  return deleteUserPlan(credentials).then(res =>{
+	deleteUserPlan({ commit }, payload) {
+	  return deleteUserPlan(payload).then(res =>{
 		  if (res.code === 200) {
 		    commit('SET_USER_INFO', res.data);
 		  }
 		  return res;
 	  }) 
 	},
-	startUserPlan({ commit }, credentials) {
-	  return startUserPlan(credentials).then(res =>{
+	startUserPlan({ commit }, payload) {
+	  return startUserPlan(payload).then(res =>{
 		  if (res.code === 200) {
 		    commit('SET_USER_INFO', res.data);
 		  }
 		  return res;
 	  }) 
 	},
-	endUserPlan({ commit }, credentials) {
-	  return endUserPlan(credentials).then(res =>{
+	endUserPlan({ commit }, payload) {
+	  return endUserPlan(payload).then(res =>{
 		  if (res.code === 200) {
 		    commit('SET_USER_INFO', res.data);
 		  }
 		  return res;
 	  }) 
 	},
-	getUserPlans({ commit }, credentials) {
-	  return getUserPlans(credentials).then(res =>{
+	getUserPlans({ commit }, payload) {
+	  return getUserPlans(payload).then(res =>{
 		  if (res.code === 200) {
 		    commit('SET_USER_INFO', res.data);
 		  }

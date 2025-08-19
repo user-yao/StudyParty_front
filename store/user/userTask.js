@@ -14,8 +14,8 @@ export default {
     }
   },
   actions: {
-    selectMyUserTasks({ commit }, credentials) {
-      return selectMyUserTasks(credentials).then(res =>{
+    selectMyUserTasks({ commit }, payload) {
+      return selectMyUserTasks(payload).then(res =>{
 		  if (res.code === 200) {
 		    commit('SET_USER_INFO', res.data);
 		  }

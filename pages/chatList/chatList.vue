@@ -34,7 +34,9 @@
 		<!-- 聊天列表 -->
 		<div class="chat-list">
 			<template v-if="activeTab === 'messages'">
-				<div class="chat-system">
+				<div class="chat-system" @click="uni.navigateTo({
+					url:'/pages/chatList/friendList'
+				})">
 					<div>
 						<image class="chat-avatar" src="@/static/chat/lianxiren.png"></image>
 					</div>
@@ -122,6 +124,7 @@
 				that.getCharList().then(res => {
 					console.log(res)
 					that.chatList = res;
+					that.clearNode(res);
 				});
 			})
 		},
@@ -152,6 +155,31 @@
 			}
 		},
 		methods: {
+			clearNode(res) {
+				const hasMessage = res.some(item => item.message_count !== 0);
+				  console.log(hasMessage)
+				  if (hasMessage) {
+				    uni.showTabBarRedDot({
+				      index: 2,
+				      success: () => {
+				        console.log('小红点显示成功');
+				      },
+				      fail: (err) => {
+				        console.error('小红点显示失败', err);
+				      }
+				    });
+				  } else {
+				    uni.hideTabBarRedDot({
+				      index: 2,
+				      success: () => {
+				        console.log('小红点隐藏成功');
+				      },
+				      fail: (err) => {
+				        console.error('小红点隐藏失败', err);
+				      }
+				    });
+				  }
+			},
 			...mapActions({
 				friendLists: "userFriend/friendList",
 			}),
@@ -180,6 +208,7 @@
 							this.getCharList().then(res => {
 								console.log(res);
 								this.chatList = res;
+								this.clearNode(res);
 							});
 						} else if (res.cancel) {
 							console.log('用户点击取消');
@@ -288,6 +317,7 @@
 				this.getCharList().then(res => {
 					console.log(res)
 					this.chatList = res;
+					this.clearNode(res);
 				});
 			})
 		}

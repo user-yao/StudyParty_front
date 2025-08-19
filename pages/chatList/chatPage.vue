@@ -166,9 +166,6 @@
 		onLoad(options) {
 			const that = this;
 			const eventChannel = this.getOpenerEventChannel();
-			if (recorderManager && innerAudioContext2) return;
-			recorderManager = uni.getRecorderManager();
-			innerAudioContext2 = uni.createInnerAudioContext();
 			eventChannel.on("chatData", (data) => {
 				this.chat = data.chat;
 				this.friend = data.friend;
@@ -176,6 +173,9 @@
 				this.selectMessage();
 				this.MessageIsread();
 			});
+			if (recorderManager && innerAudioContext2) return;
+			recorderManager = uni.getRecorderManager();
+			innerAudioContext2 = uni.createInnerAudioContext();
 			let path = '';
 			recorderManager.onStop(function(res) {
 				console.log(res)
@@ -330,13 +330,14 @@
 				this.touchTimeout = setTimeout(() => {
 					// 如果触摸持续时间大于等于1秒，开始录音
 					recorderManager.start();
+					uni.showLoading({ title: '松开发送' });
 				}, 100);
 			},
 			endVoice() {
 				this.black = false;
 				// 停止录音
 				// console.log('录音结束');
-
+				uni.hideLoading();
 				if (this.touchTimeout) {
 					clearTimeout(this.touchTimeout);
 				}
