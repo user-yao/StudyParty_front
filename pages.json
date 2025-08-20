@@ -66,6 +66,13 @@
 			{
 				"navigationBarTitleText" : "用户信息"
 			}
+		},
+		{
+			"path" : "pages/chatList/addFriend",
+			"style" : 
+			{
+				"navigationBarTitleText" : "添加好友"
+			}
 		}
 	],
 	"globalStyle": {

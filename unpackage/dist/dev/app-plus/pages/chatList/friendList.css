@@ -287,7 +287,7 @@
 		cursor: pointer;
 		transition: all 0.2s;
 }
-.action-icon:hover {
+.action-icon:active {
 		background: var(--primary);
 		color: white;
 		transform: scale(1.1);

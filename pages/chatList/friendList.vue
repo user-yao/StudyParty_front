@@ -5,7 +5,7 @@
 			<header class="app-header">
 				<div class="header-top">
 					<div class="logo">
-						<i class="fas fa-address-book"></i>
+						<u-icon name="arrow-left" size="50rpx" color="#fff" bold @click="uni.navigateBack(1)"></u-icon>
 						<span>联系人</span>
 					</div>
 					<div class="header-actions">
@@ -27,9 +27,9 @@
 							<div class="group-header">
 								{{ group.letter }}
 							</div>
-							<div class="contact-item" v-for="contact in group.contacts" :key="contact.id" @click="toUserInfoPage(contact.friendId)">
-								<image class="contact-avatar" :src="imageUrl + contact.head" mode=""></image>
-								<div class="contact-info">
+							<div class="contact-item" v-for="contact in group.contacts" :key="contact.id" >
+								<image class="contact-avatar"  @click="toUserInfoPage(contact.friendId)" :src="imageUrl + contact.head" mode=""></image>
+								<div class="contact-info" @click="toUserInfoPage(contact.friendId)">
 									<div class="contact-name">{{ contact.remark == null?contact.name:contact.remark }}
 										<span class='statuStudent' v-if="contact.status == 1">学生</span>
 										<span class='statuTeacher' v-if="contact.status == 2">老师</span>
@@ -38,9 +38,8 @@
 									<div class="contact-phone">{{ contact.phone }}</div>
 								</div>
 								<div class="contact-actions">
-									<div class="action-icon">
-										
-										<u-icon name="chat" size="25" color="#4895ef" ></u-icon>
+									<div class="action-icon" @click="toChatPage(contact)">
+										<u-icon name="chat" size="25" color="#4895ef"></u-icon>
 									</div>
 								</div>
 							</div>
@@ -79,49 +78,23 @@ export default {
       contacts: [] // 将用于存储处理后的联系人数据
     }
   },
-  onLoad() {
+  onShow() {
   	this.friendLists().then(res=>{
-		this.friendList = res;
-		console.log(this.friendList)
-		console.log(res);
-		
-		  // 将 friendList 转换为 contacts 并排序
-		  this.contacts = this.friendList
-		    .map(friend => ({
-		      ...friend,
-		      // 如果需要 phone 字段用于搜索，可添加默认值或从其他字段获取
-		      // phone: friend.phone || ''
-		    }))
-		    .sort((a, b) => {
-		      const nameA = (a.remark || a.name).localeCompare((b.remark || b.name), 'zh');
-		      return nameA;
-		    });
-		
-		  // 监听滚动事件以更新当前活动字母
-		  this.$nextTick(() => {
-		    const container = document.querySelector('.contacts-container');
-		    if (container) {
-		      const groups = document.querySelectorAll('.contact-group');
-		
-		      container.addEventListener('scroll', () => {
-		        const scrollPosition = container.scrollTop + 100; // 偏移量调整
-		
-		        let currentGroup = '';
-		        groups.forEach(group => {
-		          const groupElement = group.parentElement;
-		          if (groupElement && groupElement.offsetTop <= scrollPosition) {
-		            const id = groupElement.id;
-		            if (id && id.startsWith('group-')) {
-		              currentGroup = id.split('-')[1];
-		            }
-		          }
-		        });
-		
-		        this.activeLetter = currentGroup;
-		      });
-		    }
-		  });
-	})
+  		this.friendList = res;
+  		console.log(this.friendList)
+  		console.log(res);
+  		  // 将 friendList 转换为 contacts 并排序
+  		  this.contacts = this.friendList
+  		    .map(friend => ({
+  		      ...friend,
+  		      // 如果需要 phone 字段用于搜索，可添加默认值或从其他字段获取
+  		      // phone: friend.phone || ''
+  		    }))
+  		    .sort((a, b) => { 
+  		      const nameA = (a.remark || a.name).localeCompare((b.remark || b.name), 'zh');
+  		      return nameA;
+  		    });
+  	})
   },
   computed: {
 	  imageUrl() {
@@ -184,6 +157,21 @@ export default {
     }
   },
   methods: {
+	  toChatPage(contact) {
+	  	let friend = contact;
+		let chat = {statu:'person'};
+		let navigateBack = 2;
+	  	uni.navigateTo({
+	  		url: `/pages/chatList/chatPage`,
+	  		success: (res) => {
+	  			res.eventChannel.emit("chatData", {
+	  				chat,
+	  				friend,
+					navigateBack
+	  			});
+	  		}
+	  	})
+	  },
 	  ...mapActions({
 	  	friendLists: "userFriend/friendList",
 	  }),
@@ -480,7 +468,7 @@ export default {
 		transition: all 0.2s;
 	}
 
-	.action-icon:hover {
+	.action-icon:active {
 		background: var(--primary);
 		color: white;
 		transform: scale(1.1);

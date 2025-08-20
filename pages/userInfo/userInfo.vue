@@ -20,9 +20,13 @@
 				<!-- 用户概要卡片 -->
 				<div class="user-profile-card">
 					<div class="user-avatar">
-						<img :src="imageUrl + userInfo.head" :alt="userInfo.name" v-if="userInfo.head" @click="showPhoto(userInfo.head)">
+						<img :src="imageUrl + userInfo.head" :alt="userInfo.name" v-if="userInfo.head" @click="showPhoto(imageUrl+userInfo.head)">
 					</div>
-					<h2 class="user-name">{{ userInfo.name }}</h2>
+					<h2 class="user-name">
+						<span class="alias-name" v-if="userInfo.remark">{{ userInfo.remark }}</span>
+						<span v-else>{{ userInfo.name }}</span>
+						<u-icon name="edit-pen-fill" size="50rpx" @click="showAliasModal = true"></u-icon>
+					</h2>
 					<p class="user-title">{{ userInfo.major }} · {{ userInfo.grade }}</p>
 
 					<div class="user-badges">
@@ -67,7 +71,7 @@
 							<image src="/static/userInfo/qiye.png" class="info-icon" mode="" v-if="userInfo.status==3"></image>
 							<image src="/static/userInfo/xuexiao_xuesheng.png" class="info-icon" mode="" v-if="userInfo.status==1||userInfo.status==2"></image>
 							<div class="info-content">
-								<div class="info-label">{{ roleSchoolLabel }}</div>
+								<div class="info-label">{{ userInfo.status==3?'企业':'学校' }}</div>
 								<div class="info-value">{{ userInfo.school }}</div>
 							</div>
 						</div>
@@ -144,23 +148,43 @@
 
 				<!-- 操作按钮 -->
 					<div class="action-buttons">
-						<button class="btn btn-primary" v-if="friendList.get(userInfo.id)">
+						<button class="btn btn-primary" v-if="friendList.get(userInfo.id)"  @click="toChatPage(userInfo)">
 							<u-icon name="chat-fill" color="#fff" size="50rpx" style="margin-right: 20rpx;"></u-icon> 发送消息
 						</button>
-						<button class="btn btn-error" v-if="friendList.get(userInfo.id)">
+						<button class="btn btn-error" v-if="friendList.get(userInfo.id)" @click="showDeleteModal = true">
 							<u-icon name="person-delete-fill" color="#fff" size="50rpx" style="margin-right: 20rpx;"></u-icon> 删除好友
 						</button>
 						<button class="btn btn-primary"v-if="!friendList.get(userInfo.id)">
 							<u-icon name="plus-people-fill" color="#fff" size="50rpx" style="margin-right: 20rpx;"></u-icon> 添加好友
 						</button>
 					</div>
+				<!-- 备注编辑弹窗 -->
+				<up-popup round="25" v-model:show="showAliasModal" mode="center">
+				        <div style="padding: 50rpx;">
+							<div class="modal-header">
+							    <h3 class="modal-title">编辑用户备注</h3>
+							</div>
+							<div class="form-group">
+							    <label class="form-label">备注名称</label>
+							    <u-input type="text" class="form-input" v-model="remarkInput" placeholder="输入备注名称"></u-input>
+							    <p style="font-size: 0.8rem; color: var(--gray); margin-top: 5px;">为空时将显示原名称</p>
+							</div>
+							<div class="modal-actions">
+							    <u-button type="info" class="modal-btn modal-btn-cancel" @click="showAliasModal = false">取消</u-button>
+							    <u-button type="primary" class="modal-btn modal-btn-save" @click="saveAlias">保存</u-button>
+							</div>
+						</div>
+				</up-popup>
+				<up-modal :show="showDeleteModal" showCancelButton confirmColor="#f72585" title="删除好友" content='是否要删除该好友' @confirm="deleteUser(userInfo.id)"></up-modal>
 			</div>
 		</div>
 	</view>
 </template>
 
 <script>
-	import {
+	import db from '@/utils/SQLite.js';
+	import user from "../../store/user/user";
+import {
 		imageUrl,sourceUrl
 	} from "@/config/config.js";
 	import {
@@ -171,7 +195,10 @@
 	export default {
 		data() {
 			return {
+				showAliasModal: false,
+				showDeleteModal:false,
 				isLoading: true,
+				remarkInput:'',
 				userInfo: {}
 			}
 		},
@@ -214,8 +241,46 @@
 		  }
 		},
 		methods: {
+			deleteUser(friendId){
+				this.deleteFriend({friendId:friendId}).then(()=>{
+					db.clearMessage(friendId, 'person'); 
+					this.showDeleteModal = false
+					uni.navigateBack(1)
+				})
+			},
+			saveAlias() {
+			    // 保存备注信息
+				let that = this;
+			    this.saveRemark({friendId:this.userInfo.id,remark:this.remarkInput.trim()}).then(()=>{
+					that.selectUser({ id: `${this.userInfo.id}` }).then(res =>{
+						console.log(res)
+						that.userInfo = res;
+					})
+				})
+			    // 关闭弹窗
+			    this.showAliasModal = false;
+			},
+			toChatPage(userInfo) {
+				let friend = userInfo;
+				friend.friendId = userInfo.id;
+				let chat = {statu:'person'};
+				uni.navigateTo({
+					url: `/pages/chatList/chatPage`,
+					success: (res) => {
+						res.eventChannel.emit("chatData", {
+							chat,
+							friend
+						});
+					},
+					fail(res) {
+						console.log(res)
+					}
+				})
+			},
 			...mapActions({
 				selectUser: "user/selectUser",
+				saveRemark:"userFriend/saveRemark",
+				deleteFriend:'userFriend/deleteFriend'
 			}),
 			
 			showPhoto(item) {
@@ -233,7 +298,7 @@
 			},
 			goBack() {
 				// 返回上一页的逻辑
-				console.log('返回上一页');
+				uni.navigateBack(1);
 			}
 		}
 	}
@@ -358,6 +423,10 @@
 		font-size: 1.5rem;
 		font-weight: 700;
 		margin-bottom: 5px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 8px;
 	}
 
 	.user-title {
@@ -563,26 +632,128 @@
 		transform: translateY(-2px);
 		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 	}
-
+	/* 弹窗样式 */
+	.modal-overlay {
+	    position: fixed;
+	    top: 0;
+	    left: 0;
+	    right: 0;
+	    bottom: 0;
+	    background: rgba(0, 0, 0, 0.5);
+	    display: flex;
+	    align-items: center;
+	    justify-content: center;
+	    z-index: 1000;
+	    padding: 20px;
+	}
+	
+	.modal-content {
+	    background: white;
+	    border-radius: 16px;
+	    padding: 25px;
+	    width: 100%;
+	    max-width: 400px;
+	    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+	}
+	
+	.modal-header {
+	    display: flex;
+	    justify-content: space-between;
+	    align-items: center;
+	    margin-bottom: 20px;
+	}
+	
+	.modal-title {
+	    font-size: 1.3rem;
+	    font-weight: 600;
+	    color: var(--dark);
+	}
+	
+	.modal-close {
+	    background: none;
+	    border: none;
+	    font-size: 1.5rem;
+	    cursor: pointer;
+	    color: var(--gray);
+	}
+	
+	.form-group {
+	    margin-bottom: 20px;
+	}
+	
+	.form-label {
+	    display: block;
+	    margin-bottom: 8px;
+	    font-weight: 500;
+	    color: var(--dark);
+	}
+	
+	.form-input {
+	    width: 80%;
+	    padding: 12px 15px;
+	    border: 1px solid var(--light-gray);
+	    border-radius: 10px;
+	    font-size: 1rem;
+	    transition: border-color 0.2s;
+	}
+	
+	.form-input:focus {
+	    outline: none;
+	    border-color: var(--primary);
+	}
+	
+	.modal-actions {
+	    display: flex;
+	    gap: 15px;
+	}
+	
+	.modal-btn {
+	    padding: 0 30rpx;
+	    border-radius: 12px;
+	    font-weight: 500;
+	    text-align: center;
+	    cursor: pointer;
+	    transition: all 0.2s;
+	    border: none;
+	    font-size: 1rem;
+	    display: flex;
+	    align-items: center;
+	    justify-content: center;
+	}
+	
+	.modal-btn-cancel {
+	    background: var(--light);
+	    color: var(--dark);
+	}
+	
+	.modal-btn-save {
+	    background: var(--primary);
+	    color: white;
+	}
+	
 	/* 响应式调整 */
 	@media (max-width: 480px) {
-		.user-avatar {
-			width: 80px;
-			height: 80px;
-			font-size: 2rem;
-		}
-
-		.user-name {
-			font-size: 1.3rem;
-		}
-
-		.stats-container {
-			grid-template-columns: repeat(3, 1fr);
-			gap: 10px;
-		}
-
-		.stat-value {
-			font-size: 1.2rem;
-		}
+	    .user-avatar {
+	        width: 80px;
+	        height: 80px;
+	        font-size: 2rem;
+	    }
+	    
+	    .user-name {
+	        font-size: 1.3rem;
+	    }
+	    
+	    .stats-container {
+	        grid-template-columns: repeat(3, 1fr);
+	        gap: 10px;
+	    }
+	    
+	    .stat-value {
+	        font-size: 1.2rem;
+	    }
+	    
+	    .modal-content {
+	        padding: 20px;
+	    }
 	}
 </style>

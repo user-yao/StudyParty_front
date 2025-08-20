@@ -65,9 +65,7 @@ export const selectUser = (data) => {
   return request({
     url: '/user/selectUser',
     method: 'POST',
-    data:{
-		id: data.id
-	},
+    data,
 	header: {
 	    'Content-Type': 'application/x-www-form-urlencoded'
 	  }

@@ -35,6 +35,18 @@
 		<div class="chat-list">
 			<template v-if="activeTab === 'messages'">
 				<div class="chat-system" @click="uni.navigateTo({
+					url:'/pages/chatList/addFriend'
+				})">
+					<div>
+						<image class="chat-avatar" style="padding: 5px;" src="@/static/chat/xinpengyou.png"></image>
+					</div>
+					<div class="chat-header">
+						<div class="chat-name">新朋友</div>
+					</div>
+				</div>
+			</template>
+			<template v-if="activeTab === 'messages'">
+				<div class="chat-system" @click="uni.navigateTo({
 					url:'/pages/chatList/friendList'
 				})">
 					<div>
@@ -204,7 +216,7 @@
 					success: (res) => {
 						if (res.confirm) {
 							// 执行删除操作
-							db.clearMessage(chat.friend, chat.statu, chat.userid); // 假设需要 userid
+							db.clearMessage(chat.friend, chat.statu); 
 							this.getCharList().then(res => {
 								console.log(res);
 								this.chatList = res;
@@ -655,11 +667,6 @@
 
 	/* 响应式调整 */
 	@media (max-width: 480px) {
-		.chat-avatar {
-			width: 48px;
-			height: 48px;
-			font-size: 1.2rem;
-		}
 
 		.chat-name {
 			font-size: 1rem;

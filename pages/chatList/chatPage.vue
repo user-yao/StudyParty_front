@@ -30,9 +30,10 @@
 				<!-- 消息列表 -->
 				<div v-for="message in messages" class="message"
 					:class="message.sender == uni.getStorageSync('id') ? 'sender' : 'receiver'">
-					<image :src=" imageUrl + uni.getStorageSync('user').head"
+					<image :src=" imageUrl + uni.getStorageSync('user').head" 
 						v-if="message.sender == uni.getStorageSync('id')" class="avatar" mode=""></image>
 					<image :src=" imageUrl + friend.head" v-if="message.sender != uni.getStorageSync('id')"
+					@click="toUserInfoPage(friend.friendId)"
 						class="avatar" mode=""></image>
 					<div class="message-content">
 						<span class="sender-name">
@@ -245,7 +246,16 @@
 		  uni.$off('websocket-message');
 		},
 		methods: {
-			
+			toUserInfoPage(id) {
+				uni.navigateTo({
+					url: `/pages/userInfo/userInfo`,
+					success: (res) => {
+						res.eventChannel.emit("chatData", {
+							id
+						});
+					}
+				})
+			},
 			async sendVoiceMessage(path) {
 			      if (!path) {
 			        uni.showToast({ title: '没有录音文件', icon: 'none' });
@@ -442,7 +452,9 @@
 				this.keyboardHeight = 0;
 			},
 			goBack() {
-				uni.navigateBack(1)
+				uni.switchTab({
+					url:'/pages/chatList/chatList'
+				})
 			},
 			getRandomHeight() {
 				return Math.floor(Math.random() * 20) + 5;
