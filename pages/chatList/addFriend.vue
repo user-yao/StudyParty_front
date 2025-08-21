@@ -1,5 +1,6 @@
 <template>
 	<view>
+		<up-toast ref="uToastRef"></up-toast>
 		<div class="body">
 			<!-- 顶部导航 -->
 			<div class="app-header">
@@ -25,17 +26,24 @@
 
 				<!-- 搜索框 -->
 				<div class="search-container" v-if="activeTab === 'search'">
-					<u-input class="search-input" v-model="searchKeyword" placeholder="输入用户名或手机号搜索" />
-					<button class="search-btn" @click="searchUsers">
-						<i class="u-icon-search"></i>
-					</button>
+					<up-input
+						style="width: 70rpx;"
+						class="search-input"
+					    placeholder="输入用户名或完整的手机号搜索"
+					    border="surround"
+						clearable
+					    v-model="searchKeyword"
+					  ></up-input>
+					<u-button style="width: 90rpx;" type="primary" class="search-btn" @click="searchUsers">
+						<u-icon name="search" size="40rpx" bold color="#fff"></u-icon>
+					</u-button>
 				</div>
 
 				<!-- 好友请求列表 -->
 				<div v-if="activeTab === 'requests'">
 					<div class="request-card" v-for="request in friendRequests" :key="request.id">
 						<div class="request-header"> 
-							<image class="request-avatar" :src="imageUrl + request.head" mode="" @click="toUserInfoPage(request.friendId)"></image>
+							<image class="request-avatar" :src="imageUrl + request.head" mode="" @click="toUserInfoPage(request.userId)"></image>
 							<div class="request-user-info">
 								<div class="request-user-name">{{ request.name || '未知用户' }}</div>
 								<div class="request-time">{{ formatTime(request.createTime) }}</div>
@@ -45,10 +53,10 @@
 							{{ request.context || '我想添加您为好友' }}
 						</div>
 						<div class="request-actions" v-if="request.isConsent === 0">
-							<div class="action-btn reject-btn" @click="handleRequest(request.id, 2)">
+							<div class="action-btn reject-btn" @click="toAccept(request.userId, 2)">
 								拒绝
 							</div>
-							<div class="action-btn accept-btn" @click="handleRequest(request.id, 1)">
+							<div class="action-btn accept-btn" @click="toAccept(request.userId, 1)">
 								同意
 							</div>
 						</div>
@@ -68,22 +76,48 @@
 				<!-- 搜索结果 -->
 				<div v-if="activeTab === 'search'">
 					<div class="user-card" v-for="user in searchResults" :key="user.id">
-						<div class="user-avatar">
-							{{ user.name.charAt(0) }}
-						</div>
+						<image class="user-avatar"  @click="toUserInfoPage(user.id)" :src="imageUrl + user.head" mode=""></image>
 						<div class="user-info">
 							<div class="user-name">{{ user.name }}</div>
 							<div class="user-school">{{ user.school }}</div>
 						</div>
-						<button class="add-btn" @click="showAddFriendModal(user)">
+						<button class="add-btn" @click="showAddFriendModal(user)" v-if="!user.friend">
 							添加
 						</button>
+						<div style="color: green;border: 2rpx; border-color: green; border-radius: 20rpx;padding: 5rpx;" v-else>好友</div>
 					</div>
 
 					<div class="empty-state" v-if="searchResults.length === 0 && searchKeyword">
-						<i class="u-icon-search"></i>
 						<h3>未找到相关用户</h3>
 						<p>请尝试其他搜索关键词</p>
+					</div>
+					<!-- 我的好友请求列表 -->
+					<div v-if="activeTab === 'search'">
+						<div class="request-card" v-for="request in myFriendRequests" :key="request.id">
+							<div class="request-header"> 
+								<image class="request-avatar" :src="imageUrl + request.head" mode="" @click="toUserInfoPage(request.friendId)"></image>
+								<div class="request-user-info">
+									<div class="request-user-name">{{ request.name || '未知用户' }}</div>
+									<div class="request-time">{{ formatTime(request.createTime) }}</div>
+								</div>
+							</div>
+							<div class="request-content">
+								{{ request.context || '我想添加您为好友' }}
+							</div>
+							<div>
+								<div class="request-content" v-if="request.isConsent!=0" :style="{color: request.isConsent == 1&&request.isConsent != 0 ? 'green' : 'red'}">
+									{{ request.isConsent == 1 ? '已同意' : '已拒绝' }}
+								</div>
+								<div class="request-content" v-if="request.isConsent ==0">
+									已发送
+								</div>
+							</div>
+						</div>
+					
+						<div class="empty-state" v-if="friendRequests.length === 0">
+							<i class="u-icon-file"></i>
+							<h3>暂无您申请的好友请求</h3>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -96,10 +130,6 @@
 						<div class="modal-close" @click="showModal = false">×</div>
 					</div>
 					<div class="modal-body">
-						<div class="form-group">
-							<label class="form-label">好友名称</label>
-							<input type="text" class="form-input" :value="selectedUser.name" disabled>
-						</div>
 						<div class="form-group">
 							<label class="form-label">验证信息</label>
 							<textarea class="form-textarea" v-model="applyContent" placeholder="请填写验证信息..."></textarea>
@@ -121,6 +151,7 @@
 		mapMutations,
 		mapActions
 	} from "vuex";
+	import { ref, computed } from 'vue'; 
 	import {
 		imageUrl
 	} from "@/config/config.js"
@@ -134,19 +165,7 @@
 				selectedUser: null, // 选中的用户
 				myFriendRequests: [],
 				// 模拟好友请求数据
-				friendRequests: [{
-					id: 3,
-					userId: 3,
-					friendId: 7,
-					createTime: "2025-08-14T11:25:14.000+00:00",
-					context: "你好，麻烦通过一下",
-					isConsent: 0,
-					name: "学生A",
-					head: "static/head/boys.png",
-					status: "1",
-					school: "天津职业技术师范大学"
-				}],
-
+				friendRequests: [],
 				// 模拟用户数据
 				allUsers: [{
 						id: 101,
@@ -179,14 +198,11 @@
 						phone: "13500135000"
 					}
 				],
-
 				searchResults: [] // 搜索结果
 			}
 		},
 		onLoad() {
 			let that = this;
-			
-
 			// 调用 myFriendRequestList 并处理结果
 			this.myFriendRequestList()
 				.then(res => {
@@ -200,25 +216,70 @@
 						icon: 'none'
 					});
 				});
-				// 调用 toRequestFriend 并处理结果
-				this.friendRequestList()
-					.then(res => {
-						console.log('friendRequestList 成功:', res); // 调试输出
-						this.friendRequests = res;
-					})
-					.catch(err => {
-						console.error('friendRequestList 失败:', err); // 错误捕获
-						uni.showToast({
-							title: '加载好友请求失败',
-							icon: 'none'
-						});
+			// 调用 toRequestFriend 并处理结果
+			this.friendRequestList()
+				.then(res => {
+					console.log('friendRequestList 成功:', res); // 调试输出
+					this.friendRequests = res;
+				})
+				.catch(err => {
+					console.error('friendRequestList 失败:', err); // 错误捕获
+					uni.showToast({
+						title: '加载好友请求失败',
+						icon: 'none'
 					});
+				});
+		},
+		watch:{
+			searchKeyword(newVal){
+				// 监听搜索关键词变化
+				if(!newVal){
+					this.searchResults = [];
+					return;
+				}
+				this.selectUser({name:newVal}).then(res =>{
+					console.log(res)
+					this.searchResults = res;
+				});
+			},
 		},
 		methods: {
+			search(){
+				// 监听搜索关键词变化
+				if(!this.searchKeyword){
+					this.searchResults = [];
+					return;
+				}
+				this.selectUser({name:this.searchKeyword}).then(res =>{
+					console.log(res)
+					this.searchResults = res;
+				});
+			},
+			toAccept(friendId,isConsent){
+				this.accept({
+					applicant:friendId,
+					isConsent:isConsent,
+				}).then(()=>{
+					this.friendRequestList()
+						.then(res => {
+							console.log('friendRequestList 成功:', res); // 调试输出
+							this.friendRequests = res;
+						})
+						.catch(err => {
+							console.error('friendRequestList 失败:', err); // 错误捕获
+							uni.showToast({
+								title: '加载好友请求失败',
+								icon: 'none'
+							});
+						});
+				})
+			},
 			...mapActions({
 				friendRequestList: "userFriend/friendRequestList",
 				myFriendRequestList: "userFriend/myFriendRequestList",
-				accept: "userFriend/accept"
+				accept: "userFriend/accept",
+				selectUser:'user/selectUser',
+				requestFriend:'userFriend/requestFriend'
 			}),
 			formatTime(timestamp) {
 				// 将输入转换为 Date 对象
@@ -276,16 +337,16 @@
 			},
 			// 搜索用户
 			searchUsers() {
-				if (!this.searchKeyword.trim()) {
-					this.searchResults = [];
-					return;
+				if(this.searchKeyword == ''){
+					uni.showToast({
+						title:'请输入内容'
+					})
+					return null;
 				}
-
-				const keyword = this.searchKeyword.toLowerCase();
-				this.searchResults = this.allUsers.filter(user =>
-					user.name.toLowerCase().includes(keyword) ||
-					user.phone.includes(keyword)
-				);
+				this.selectUser({phone:this.searchKeyword}).then(res =>{
+					console.log(res)
+					this.allUsers = res;
+				})
 			},
 
 			// 显示添加好友模态框
@@ -297,26 +358,36 @@
 
 			// 发送好友请求
 			sendFriendRequest() {
-				if (!this.applyContent.trim()) {
-					this.$toast('请填写验证信息');
-					return;
-				}
-
-				// 模拟发送请求
-				const newRequest = {
-					id: Date.now(),
-					userId: this.getCurrentUser().id,
-					friendId: this.selectedUser.id,
-					userName: this.getCurrentUser().name,
-					context: this.applyContent,
-					createTime: new Date().toLocaleString(),
-					isConsent: 0
-				};
-
-				// 在实际应用中，这里应该发送API请求
-				console.log('发送好友请求:', newRequest);
-
-				this.$toast('好友请求已发送');
+				this.requestFriend({
+					friendId:this.selectedUser.id,
+					context:this.applyContent
+				}).then(res=>{
+					if(res.code == 200){
+						this.$refs.uToastRef.show({
+							message: '发送成功',
+							type: 'success',
+						})
+					}else{
+						this.$refs.uToastRef.show({
+							message: res.msg,
+							type: 'error',
+						})
+					}
+					// 调用 myFriendRequestList 并处理结果
+					this.myFriendRequestList()
+						.then(res => {
+							console.log('myFriendRequestList 成功:', res); // 调试输出
+							this.myFriendRequests = res;
+						})
+						.catch(err => {
+							console.error('myFriendRequestList 失败:', err); // 错误捕获
+							uni.showToast({
+								title: '加载我的好友请求失败',
+								icon: 'none'
+							});
+						});
+				})
+				
 				this.showModal = false;
 				this.applyContent = '';
 			},
@@ -333,21 +404,7 @@
 
 			// 获取当前用户信息（模拟）
 			getCurrentUser() {
-				return {
-					id: 3,
-					name: "姚镇涛",
-					school: "天津职业技术师范大学"
-				};
-			}
-		},
-		watch: {
-			// 监听搜索关键词变化
-			searchKeyword(newVal) {
-				if (newVal) {
-					this.searchUsers();
-				} else {
-					this.searchResults = [];
-				}
+				return uni.getStorageSync('user');
 			}
 		},
 		computed: {
@@ -463,11 +520,12 @@
 	}
 
 	.search-input {
-		flex: 1;
+		width: 60vw;
 	}
 
 	.search-btn {
 		background: var(--primary);
+		width: 40rpx;
 		color: white;
 		border: none;
 		border-radius: 8px;
@@ -701,9 +759,9 @@
 		color: white;
 		border: none;
 		border-radius: 8px;
-		padding: 8px 15px;
 		cursor: pointer;
 		font-weight: 500;
+		font-size: 30rpx;
 	}
 
 	/* 底部导航 */

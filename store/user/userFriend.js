@@ -19,7 +19,7 @@ export default {
     requestFriend({ commit }, payload) {
       return requestFriend(payload).then(res =>{
 		  if (res.code === 200) {
-
+				return res;
 		  }
 		  return res;
 	  })

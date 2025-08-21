@@ -6,16 +6,20 @@ export const requestFriend = (data) => {
     data:{
 		friendId:data.friendId,
 		context:data.context
-	}
+	},
+	header: {
+	    'Content-Type': 'application/x-www-form-urlencoded'
+	  }
   });
 };
 export const accept = (data) => {
   return request({
     url: '/user/friend/accept',
     method: 'POST',
-    data:{
-		
-	}
+    data,
+	header: {
+	    'Content-Type': 'application/x-www-form-urlencoded'
+	  }
   });
 };
 export const deleteFriend = (data) => {

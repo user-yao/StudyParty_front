@@ -24,7 +24,7 @@
 				@refresherrefresh='LoadMessage'  :refresher-enabled='true' ref="chatArea"
 				:scroll-into-view='scrollToView'>
 				<div class="chat-date-divider">
-					<span>{{formatTime(messages[0].timestamp)}}</span>
+					<span>{{messages.length>0 ?formatTime(messages[0].timestamp):''}}</span>
 				</div>
 
 				<!-- 消息列表 -->

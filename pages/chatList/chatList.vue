@@ -12,16 +12,6 @@
 					<i class="fas fa-ellipsis-v"></i>
 				</div>
 			</div>
-			<div class="tabs-container">
-				<div class="tab" :class="{ active: activeTab === 'messages' }" @click="setActiveTab('messages')">消息
-				</div>
-				<div class="tab" :class="{ active: activeTab === 'addUser' }" @click="setActiveTab('addUser')">添加好友
-				</div>
-				<div class="tab" :class="{ active: activeTab === 'addGroup' }" @click="setActiveTab('addGroup')">加入群组
-				</div>
-				<div class="tab" :class="{ active: activeTab === 'createGroup' }" @click="setActiveTab('createGroup')">
-					创建群组</div>
-			</div>
 		</header>
 		<!-- 搜索区域 -->
 		<div class="search-container">
