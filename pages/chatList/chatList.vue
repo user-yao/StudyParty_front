@@ -48,7 +48,9 @@
 				</div>
 			</template>
 			<template v-if="activeTab === 'messages'">
-				<div class="chat-system">
+				<div class="chat-system" @click="uni.navigateTo({
+					url:'/pages/chatList/groupList'
+				})">
 					<div>
 						<image class="chat-avatar" src="@/static/chat/qunzu.png"></image>
 					</div>
@@ -68,12 +70,12 @@
 					@touchstart="handleTouchStart(chat, $event)" @touchend="handleTouchEnd"
 					@touchcancel="handleTouchEnd">
 					<div>
-						<image class="chat-avatar" :src="imageUrl + 'static/head/'+chat.friend+'/userHeadPhoto.png'">
+						<image class="chat-avatar" :src="getHead(chat.friend, chat.statu)">
 						</image>
 					</div>
 					<div class="chat-info">
 						<div class="chat-header">
-							<div class="chat-name">{{ getFriend(chat.friend,chat.statu).name }}</div>
+							<div class="chat-name">{{ getFriendName(chat.friend,chat.statu)}}</div>
 							<div class="chat-time">{{formatTime(chat.timestamp) }}</div>
 						</div>
 						<div class="chat-preview">
@@ -138,7 +140,8 @@
 				return imageUrl
 			},
 			...mapState({
-				friendList: state => state.userFriend.friendList
+				friendList: state => state.userFriend.friendList,
+				groupMap: state => state.group.groupMap
 			}),
 			filteredChats() {
 				const query = this.searchQuery?.trim().toLowerCase();
@@ -149,8 +152,8 @@
 					return this.chatList;
 				}
 				return this.chatList.filter(chat => {
-					const name = this.friendList.get(Number(chat.friend)).name ? String(this.friendList.get(Number(
-						chat.friend)).name).toLowerCase() : '';
+					const friendData = this.getFriend(chat.friend, chat.statu);
+					const name = friendData && friendData.name ? String(friendData.name).toLowerCase() : '';
 					const lastMessage = chat.content ? String(chat.content).toLowerCase() : '';
 					return name.includes(query) || lastMessage.includes(query);
 				});
@@ -184,6 +187,7 @@
 			},
 			...mapActions({
 				friendLists: "userFriend/friendList",
+				getMyGroup: "group/getMyGroup"
 			}),
 			handleTouchStart(chat, event) {
 				event.preventDefault();
@@ -221,21 +225,51 @@
 
 			toChatPage(chat) {
 				console.log(chat)
-				let friend = this.friendList.get(Number(chat.friend));
-				console.log(friend)
+				let friend, chatData;
+				
+				if (chat.statu === 'group') {
+					// 群组聊天参数格式
+					const groupData = this.getFriend(chat.friend, chat.statu);
+					friend = {
+						friendId: chat.friend, // 群组ID作为friendId
+						...groupData // 展开群组的所有数据
+					};
+					chatData = {
+						statu: 'group'
+					};
+				} else {
+					// 个人聊天参数格式
+					friend = this.getFriend(chat.friend, chat.statu);
+					friend.friendId = chat.friend; // 确保friendId字段存在
+					chatData = {
+						statu: 'person'
+					};
+				}
+				
+				console.log('friend:', friend)
+				console.log('chatData:', chatData)
+				
 				uni.navigateTo({
 					url: `/pages/chatList/chatPage`,
 					success: (res) => {
 						res.eventChannel.emit("chatData", {
-							chat,
+							chat: chatData,
 							friend
 						});
 					}
 				})
 			},
+			getFriendName(friendId, status) {
+				if (status == 'group') {
+					return this.groupMap.get(Number(friendId)).groupName;
+				}
+				if (status == 'person') {
+					return this.friendList.get(Number(friendId)).name;
+				}
+			},
 			getFriend(friendId, status) {
 				if (status == 'group') {
-					return this.friendList.get(Number(friendId));
+					return this.groupMap.get(Number(friendId));
 				}
 				if (status == 'person') {
 					return this.friendList.get(Number(friendId));
@@ -243,11 +277,10 @@
 			},
 			getHead(friendId, status) {
 				if (status == 'group') {
-					return this.friendList.get(Number(friendId)).head;
+					return this.imageUrl + 'static/head/' + friendId + '/groupHeadPhoto.png';
 				}
 				if (status == 'person') {
-					console.log(this.friendList.get(Number(friendId)).head)
-					return this.friendList.get(Number(friendId)).head;
+					return this.imageUrl + 'static/head/' + friendId + '/userHeadPhoto.png';
 				}
 			},
 			async getCharList() {
@@ -315,7 +348,19 @@
 		},
 		onShow() {
 			console.log("查询消息列表");
-			this.friendLists().then(() => {
+			// 同时加载好友列表和群组列表
+			Promise.all([
+				this.friendLists(),
+				this.getMyGroup()
+			]).then(() => {
+				this.getCharList().then(res => {
+					console.log(res)
+					this.chatList = res;
+					this.clearNode(res);
+				});
+			}).catch(error => {
+				console.error('加载数据失败:', error);
+				// 即使加载失败也要获取聊天列表
 				this.getCharList().then(res => {
 					console.log(res)
 					this.chatList = res;

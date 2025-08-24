@@ -13,7 +13,7 @@ export const searchGroup = (data) => {
 export const getMyGroup = (data) => {
   return request({
     url: '/group/getMyGroup',
-    method: 'GET',
+    method: 'POST',
     data
   });
 }
@@ -116,6 +116,19 @@ export const clearPredecessor = (data) => {
         predecessorId:data.predecessorId,
         status:data.status
     }
+  });
+}
+export const selectGroupById = (data) => {
+  console.log(data)
+  return request({
+    url: '/group/selectGroupById',
+    method: 'POST',
+    data:{
+        groupId:data.groupId,
+    },
+    header: {
+	    'Content-Type': 'application/x-www-form-urlencoded'
+	  }
   });
 }
 

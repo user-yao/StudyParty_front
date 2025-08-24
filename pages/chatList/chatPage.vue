@@ -7,7 +7,7 @@
 					<u-icon name="arrow-left" size="50rpx" color="#fff" bold @click="goBack"></u-icon>
 					<div class="user-info">
 						<div class="user-details">
-							<div class="user-name">{{ friend.name }}</div>
+							<div class="user-name">{{ friend.name?friend.name:friend.groupName }}</div>
 							<div class="user-status">{{ friend.school}}</div>
 						</div>
 					</div>

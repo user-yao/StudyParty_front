@@ -1,6 +1,7 @@
 import { joinGroup, getGroupJoin, agreeJoin } from '../../API/group/groupJoin.js';
 
 export default {
+namespaced: true,
   state: {
     joinRequests: []
   },

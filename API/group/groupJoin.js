@@ -1,7 +1,7 @@
 import { request } from '../../request/request.js';
 export const joinGroup = (data) => {
   return request({
-    url: '/groupJoin/joinGroup',
+    url: '/group/groupJoin/joinGroup',
     method: 'POST',
     data:{
         userId:data.userId,
@@ -12,14 +12,14 @@ export const joinGroup = (data) => {
 }
 export const getGroupJoin = (data) => {
   return request({
-    url: '/groupJoin/getGroupJoin',
+    url: '/group/groupJoin/getGroupJoin',
     method: 'GET',
     data
   });
 }
 export const agreeJoin = (data) => {
   return request({
-    url: '/groupJoin/agreeJoin',
+    url: '/group/groupJoin/agreeJoin',
     method: 'POST',
     data:{
         groupJoinId:data.groupJoinId,

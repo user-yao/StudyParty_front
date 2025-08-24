@@ -73,6 +73,41 @@
 			{
 				"navigationBarTitleText" : "添加好友"
 			}
+		},
+		{
+			"path" : "pages/chatList/groupList",
+			"style" : 
+			{
+				"navigationBarTitleText" : "小组列表"
+			}
+		},
+		{
+			"path" : "pages/userInfo/groupInfo",
+			"style" : 
+			{
+				"navigationBarTitleText" : "小组详情"
+			}
+		},
+		{
+			"path" : "pages/chatList/groupTaskList",
+			"style" : 
+			{
+				"navigationBarTitleText" : "小组任务列表"
+			}
+		},
+		{
+			"path" : "pages/chatList/searchGroup",
+			"style" : 
+			{
+				"navigationBarTitleText" : "搜索小组"
+			}
+		},
+		{
+			"path" : "pages/chatList/groupApplications",
+			"style" : 
+			{
+				"navigationBarTitleText" : "申请管理"
+			}
 		}
 	],
 	"globalStyle": {

@@ -1,7 +1,7 @@
 import { request } from '../../request/request.js';
 export const deleteUser = (data) => {
     return request({
-        url: '/groupUser/deleteUser',
+        url: '/group/groupUser/deleteUser',
         method: 'POST',
         data:{
             groupId:data.groupId,
@@ -11,11 +11,14 @@ export const deleteUser = (data) => {
 }
 export const selectGroupUser = (data) => {
     return request({
-        url: '/groupUser/selectGroupUser',
+        url: '/group/groupUser/selectGroupUser',
         method: 'POST',
         data:{
             groupId:data.groupId
-        }
+        },
+		header: {
+		    'Content-Type': 'application/x-www-form-urlencoded'
+		  }
     });
 }
 

@@ -1,7 +1,7 @@
 import { request } from '../../request/request.js';
 export const submit = (data) => {
     return request({
-        url: '/groupTaskAnswer/submit',
+        url: '/group/groupTaskAnswer/submit',
         method: 'POST',
         data:{
             taskId:data.taskId,
@@ -11,7 +11,7 @@ export const submit = (data) => {
 }
 export const score = (data) => {
     return request({
-        url: '/groupTaskAnswer/score',
+        url: '/group/groupTaskAnswer/score',
         method: 'POST',
         data:{
             groupTaskAnswerId:data.groupTaskAnswerId,
@@ -21,7 +21,7 @@ export const score = (data) => {
 }
 export const getGroupTaskAnswers = (data) => {
     return request({
-        url: '/groupTaskAnswer/getGroupTaskAnswers',
+        url: '/group/groupTaskAnswer/getGroupTaskAnswers',
         method: 'POST',
         data:{
             groupTaskId:data.groupTaskId
@@ -30,7 +30,7 @@ export const getGroupTaskAnswers = (data) => {
 }
 export const getMyGroupTaskAnswers = (data) => {
     return request({
-        url: '/groupTaskAnswer/getMyGroupTaskAnswers',
+        url: '/group/groupTaskAnswer/getMyGroupTaskAnswers',
         method: 'POST',
         data:{
             groupTaskAnswerId:data.groupTaskAnswerId
