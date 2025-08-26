@@ -7,7 +7,11 @@ export const searchGroup = (data) => {
       searchContext:data.searchContext,
       currentPage:data.currentPage,
       canJoin:data.canJoin
-    }
+    },
+    header: {
+	    'Content-Type': 'application/x-www-form-urlencoded'
+	  }
+    
   });
 }
 export const getMyGroup = (data) => {

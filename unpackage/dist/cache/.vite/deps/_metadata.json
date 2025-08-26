@@ -1,19 +1,13 @@
 {
-  "hash": "efab9e7c",
+  "hash": "cb34e177",
   "configHash": "d030030d",
-  "lockfileHash": "d76e8743",
-  "browserHash": "26070471",
+  "lockfileHash": "29c77485",
+  "browserHash": "63e53179",
   "optimized": {
-    "uview-plus": {
-      "src": "../../../../../node_modules/uview-plus/index.js",
-      "file": "uview-plus.js",
-      "fileHash": "13759032",
-      "needsInterop": false
-    },
     "dayjs/esm/index": {
       "src": "../../../../../node_modules/dayjs/esm/index.js",
       "file": "dayjs_esm_index.js",
-      "fileHash": "b3e39acd",
+      "fileHash": "f4677dcc",
       "needsInterop": false
     }
   },

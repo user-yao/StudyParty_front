@@ -4,10 +4,12 @@ export const joinGroup = (data) => {
     url: '/group/groupJoin/joinGroup',
     method: 'POST',
     data:{
-        userId:data.userId,
         groupId:data.groupId,
         context:data.context
-    }
+    },
+    header: {
+	    'Content-Type': 'application/x-www-form-urlencoded'
+	  }
   });
 }
 export const getGroupJoin = (data) => {

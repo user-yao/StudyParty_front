@@ -13,20 +13,22 @@
 				<div class="search-container">
 					<div class="search-bar">
 						<u-icon name="search" size="18" color="rgba(255,255,255,0.8)"></u-icon>
-						<input 
-							style="color: #fff;" 
-							type="text" 
-							v-model="searchQuery" 
+						<u-input 
+							v-model="searchQuery"
 							placeholder="输入小组名称搜索..."
+							placeholder-style="color: rgba(255,255,255,0.8)"
+							border="none"
+							color="#fff"
+							clearable
 							@input="onSearchInput"
-							@confirm="handleSearch">
-						<u-icon v-if="searchQuery" name="close-circle-fill" size="18" color="rgba(255,255,255,0.6)" @click="clearSearch"></u-icon>
+							@confirm="handleSearch"
+							style="background: transparent; flex: 1;">
+						</u-input>
 					</div>
 					<div class="filter-options">
 						<u-radio-group v-model="canJoinFilter" placement="row" @change="handleFilterChange">
-							<u-radio label="全部" value=""></u-radio>
-							<u-radio label="可加入" value="1"></u-radio>
-							<u-radio label="不可加入" value="0"></u-radio>
+							<u-radio label="全部" :value="0" active-color="#2414d0" inactive-color="rgba(255,255,255,0.7)" label-color="#fff"></u-radio>
+							<u-radio label="可加入" :value="1" active-color="#2414d0" inactive-color="rgba(255,255,255,0.7)" label-color="#fff"></u-radio>
 						</u-radio-group>
 					</div>
 				</div>
@@ -45,7 +47,7 @@
 					<u-pull-refresh v-model="refreshing" @refresh="onRefresh">
 						<scroll-view 
 							scroll-y="true" 
-							style="height: calc(100vh - 250px);" 
+							class="scroll-container" 
 							@scrolltolower="onLoadMore"
 							lower-threshold="50">
 							
@@ -144,7 +146,7 @@
 			</div>
 
 			<!-- 申请加入弹窗 -->
-			<u-popup v-model="showApplyModal" mode="center" border-radius="10">
+			<u-popup :show="showApplyModal" mode="center" border-radius="10" z-index="10080" @close="showApplyModal = false">
 				<div class="apply-modal">
 					<div class="modal-header">
 						<h3>申请加入小组</h3>
@@ -177,7 +179,7 @@ export default {
 	data() {
 		return {
 			searchQuery: '',
-			canJoinFilter: '', // 筛选条件：''全部, '1'可加入, '0'不可加入
+			canJoinFilter: 0, // 筛选条件：'0'全部, '1'可加入
 			searchResults: [],
 			loading: false,
 			refreshing: false,
@@ -195,7 +197,7 @@ export default {
 			applyMessage: '',
 			submitting: false,
 			
-			// 我的小组ID列表
+			// 我的小组ID列表（已废弃，改用groupMap）
 			myGroupIds: []
 		}
 	},
@@ -204,7 +206,9 @@ export default {
 			return imageUrl;
 		},
 		...mapState({
-			groupMap: state => state.group.groupMap
+			groupMap: state => state.group.groupMap,
+			myGroupIds: state => state.group.myGroupIds,
+			joinedGroupIds: state => state.group.joinedGroupIds
 		})
 	},
 	onShow() {
@@ -220,16 +224,10 @@ export default {
 		// 加载我的小组列表
 		async loadMyGroups() {
 			try {
+				// 调用store中的getMyGroup方法，它会自动更新groupMap、myGroupIds和joinedGroupIds
 				const res = await this.getMyGroup({});
-				if (res.code === 200 && res.data) {
-					// 收集我的小组ID
-					this.myGroupIds = [];
-					if (res.data[0]) {
-						this.myGroupIds.push(...res.data[0].map(group => group.id));
-					}
-					if (res.data[1]) {
-						this.myGroupIds.push(...res.data[1].map(group => group.id));
-					}
+				if (res.code !== 200) {
+					console.error('加载我的小组失败:', res.msg);
 				}
 			} catch (error) {
 				console.error('加载我的小组失败:', error);
@@ -238,7 +236,14 @@ export default {
 		
 		// 检查是否已是小组成员
 		isGroupMember(groupId) {
-			return this.myGroupIds.includes(groupId);
+			// 优先使用groupMap检查是否已在本地缓存中
+			if (this.groupMap && this.groupMap.has && this.groupMap.has(groupId)) {
+				// 如果在groupMap中找到了，说明已加入或管理该组
+				return true;
+			}
+			
+			// 备用检查：使用ID列表进行检查
+			return this.myGroupIds.includes(groupId) || this.joinedGroupIds.includes(groupId);
 		},
 		
 		// 搜索输入处理
@@ -277,15 +282,19 @@ export default {
 				this.loading = this.currentPage === 1;
 				this.loadingMore = this.currentPage > 1;
 				
-				const res = await this.searchGroup({
+				// 构建搜索参数，符合API要求的格式
+				const searchParams = {
 					searchContext: this.searchQuery.trim(),
 					currentPage: this.currentPage,
-					canJoin: this.canJoinFilter
-				});
+					canJoin: Number(this.canJoinFilter) // 必须传递canJoin参数
+				};
+				
+				const res = await this.searchGroup(searchParams);
 				
 				if (res.code === 200 && res.data) {
-					const newResults = res.data.records || res.data;
-					this.totalCount = res.data.total || newResults.length;
+					// 处理分页数据结构
+					const newResults = res.data.records || [];
+					this.totalCount = res.data.records.length || 0;
 					
 					if (this.currentPage === 1) {
 						this.searchResults = newResults;
@@ -294,7 +303,10 @@ export default {
 					}
 					
 					// 判断是否还有更多数据
-					this.hasMore = newResults.length === this.pageSize;
+					// 根据API返回的分页信息判断是否有更多数据
+					const currentPage = res.data.current || this.currentPage;
+					const totalPages = res.data.pages || 0;
+					this.hasMore = currentPage < totalPages && newResults.length > 0;
 				} else {
 					uni.showToast({
 						title: res.msg || '搜索失败',
@@ -391,32 +403,38 @@ export default {
 		async submitApplication() {
 			try {
 				this.submitting = true;
-				const userId = uni.getStorageSync('id');
 				
+				// 根据API接口要求，只需要传递groupId和context参数
 				const res = await this.joinGroup({
-					userId: userId,
 					groupId: this.currentGroup.id,
 					context: this.applyMessage || '申请加入小组'
 				});
 				
+				// 根据返回的code状态显示相应提示
 				if (res.code === 200) {
 					uni.showToast({
-						title: '申请已提交',
+						title: '申请成功',
 						icon: 'success'
 					});
 					this.showApplyModal = false;
 					// 刷新我的小组列表
-					this.loadMyGroups();
+					await this.loadMyGroups();
+					// 重新搜索以更新状态显示
+					if (this.hasSearched && this.searchQuery.trim()) {
+						this.handleSearch();
+					}
 				} else {
+					// 显示服务器返回的具体错误信息
 					uni.showToast({
 						title: res.msg || '申请失败',
-						icon: 'none'
+						icon: 'none',
+						duration: 2500 // 延长显示时间以便用户看清错误信息
 					});
 				}
 			} catch (error) {
 				console.error('提交申请失败:', error);
 				uni.showToast({
-					title: '申请失败，请重试',
+					title: '网络错误，请重试',
 					icon: 'none'
 				});
 			} finally {
@@ -433,6 +451,12 @@ export default {
 </script>
 
 <style scoped>
+	/* 根节点样式重置 */
+	page {
+		height: 100%;
+		overflow: hidden;
+	}
+	
 	* {
 		margin: 0;
 		padding: 0;
@@ -443,7 +467,8 @@ export default {
 	.body {
 		background-color: #f5f7fb;
 		color: #212529;
-		height: 100vh;
+		min-height: 100vh;
+		height: 100%;
 		display: flex;
 		flex-direction: column;
 	}
@@ -453,11 +478,12 @@ export default {
 		background: linear-gradient(135deg, #4361ee, #3f37c9);
 		color: white;
 		padding: 15px 20px;
-		padding-top: 5vh;
+		padding-top: calc(var(--status-bar-height, 0px) + 15px);
 		box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 		position: sticky;
 		top: 0;
 		z-index: 100;
+		flex-shrink: 0;
 	}
 
 	.header-top {
@@ -488,16 +514,6 @@ export default {
 		margin-bottom: 10px;
 	}
 
-	.search-bar input {
-		background: transparent;
-		border: none;
-		color: #fff;
-		flex: 1;
-		padding: 0 10px;
-		outline: none;
-		font-size: 0.95rem;
-	}
-
 	.filter-options {
 		display: flex;
 		justify-content: center;
@@ -507,6 +523,7 @@ export default {
 	.content {
 		flex: 1;
 		overflow: hidden;
+		min-height: 0; /* 重要：确保 flex 子项可以缩小 */
 	}
 
 	.loading-container {
@@ -516,6 +533,7 @@ export default {
 		justify-content: center;
 		padding: 60px 20px;
 		color: #6c757d;
+		height: 100%;
 	}
 
 	.loading-text {
@@ -631,6 +649,11 @@ export default {
 		justify-content: flex-end;
 	}
 
+	/* 内容滚动区域 */
+	.scroll-container {
+		height: 100%;
+	}
+
 	/* 空状态 */
 	.empty-state, .welcome-state {
 		display: flex;
@@ -638,7 +661,8 @@ export default {
 		align-items: center;
 		justify-content: center;
 		padding: 60px 20px;
-		height: calc(100vh - 250px);
+		height: 100%;
+		min-height: 50vh;
 	}
 
 	.empty-tips, .welcome-tips {
@@ -667,6 +691,8 @@ export default {
 		background: white;
 		border-radius: 12px;
 		padding: 20px;
+		position: relative;
+		z-index: 10081;
 	}
 
 	.modal-header {
