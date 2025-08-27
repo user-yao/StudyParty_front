@@ -50,11 +50,11 @@
 								<div class="application-list">
 									<div class="application-card" v-for="app in receivedApplications" :key="app.id">
 										<div class="application-header">
-											<image class="user-avatar" :src="getUserAvatar(app.user)" mode="aspectFill"></image>
+											<image class="user-avatar" :src="getUserAvatar(app.userId)" mode="aspectFill"></image>
 											<div class="application-info">
-												<div class="user-name">{{ app.user?.name || '匿名用户' }}</div>
-												<div class="group-name">申请加入：{{ app.group?.groupName || '未知小组' }}</div>
-												<div class="apply-time">{{ formatTime(app.createTime) }}</div>
+												<div class="user-name">{{ getUserName(app.userId) }}</div>
+												<div class="group-name">申请加入：{{ getGroupName(app.groupId) }}</div>
+												<div class="apply-time">{{ formatTime(app.joinTime) }}</div>
 											</div>
 											<div class="application-status" :class="getStatusClass(app.status)">
 												{{ getStatusText(app.status) }}
@@ -132,14 +132,13 @@
 								<div class="application-list">
 									<div class="application-card" v-for="app in sentApplications" :key="app.id">
 										<div class="application-header">
-											<image class="group-avatar" :src="getGroupAvatar(app.group)" mode="aspectFill"></image>
+											<image class="group-avatar" :src="getGroupAvatar(app.groupId)" mode="aspectFill"></image>
 											<div class="application-info">
-												<div class="group-name">{{ app.group?.groupName || '未知小组' }}</div>
+												<div class="group-name">{{ getGroupName(app.groupId) }}</div>
 												<div class="group-stats">
-													<span class="member-count">{{ app.group?.peopleNum || 0 }}人</span>
-													<span class="group-level">Lv.{{ app.group?.groupLevel || 1 }}</span>
+													<span class="member-count">申请状态</span>
 												</div>
-												<div class="apply-time">{{ formatTime(app.createTime) }}</div>
+												<div class="apply-time">{{ formatTime(app.joinTime) }}</div>
 											</div>
 											<div class="application-status" :class="getStatusClass(app.status)">
 												{{ getStatusText(app.status) }}
@@ -156,13 +155,14 @@
 												type="info" 
 												size="small" 
 												text="查看小组" 
-												@click="viewGroup(app.group)">
+												@click="viewGroup(app.groupId)">
 											</u-button>
 											<u-button 
 												v-if="app.status === 'pending'" 
 												type="error" 
 												size="small" 
 												text="取消申请" 
+												:loading="app.processing"
 												@click="cancelApplication(app)">
 											</u-button>
 										</div>
@@ -243,7 +243,8 @@ export default {
 	methods: {
 		...mapActions({
 			getGroupJoin: "groupJoin/getGroupJoin",
-			agreeJoin: "groupJoin/agreeJoin"
+			agreeJoin: "groupJoin/agreeJoin",
+			cancelJoin: "groupJoin/cancelJoin"
 		}),
 		
 		// 切换标签页
@@ -257,28 +258,36 @@ export default {
 			try {
 				this.loading = true;
 				
-				// 这里需要根据实际API调整
-				// 假设getGroupJoin接口可以通过参数区分收到的申请和发出的申请
-				const res = await this.getGroupJoin({
-					type: this.activeTab, // 'received' | 'sent'
-					page: this.activeTab === 'received' ? this.receivedPage : this.sentPage,
-					pageSize: this.pageSize
-				});
+				// 调用getGroupJoin接口，返回的data是[收到的申请数组, 我的申请数组]
+				const res = await this.getGroupJoin();
 				
-				if (res.code === 200 && res.data) {
-					const applications = Array.isArray(res.data) ? res.data : res.data.records || [];
+				if (res.code === 200 && res.data && Array.isArray(res.data)) {
+					const [receivedApps, sentApps] = res.data;
 					
-					if (this.activeTab === 'received') {
-						this.receivedApplications = applications.map(app => ({
-							...app,
-							processing: false // 用于按钮loading状态
-						}));
-						this.receivedCount = applications.filter(app => app.status === 'pending').length;
-						this.hasMoreReceived = applications.length === this.pageSize;
-					} else {
-						this.sentApplications = applications;
-						this.hasMoreSent = applications.length === this.pageSize;
-					}
+					// 处理收到的申请（别人想加入我的小组）
+					this.receivedApplications = (receivedApps || []).map(app => ({
+						...app,
+						processing: false, // 用于按钮loading状态
+						status: this.getApplicationStatus(app.isPass) // 转换状态
+					}));
+					
+					// 处理我的申请（我想加入别人的小组）
+					this.sentApplications = (sentApps || []).map(app => ({
+						...app,
+						processing: false, // 用于按钮loading状态
+						status: this.getApplicationStatus(app.isPass) // 转换状态
+					}));
+					
+					// 统计待处理的申请数量
+					this.receivedCount = this.receivedApplications.filter(app => app.status === 'pending').length;
+					
+					console.log('收到的申请:', this.receivedApplications);
+					console.log('我的申请:', this.sentApplications);
+				} else {
+					// 数据格式异常时的处理
+					this.receivedApplications = [];
+					this.sentApplications = [];
+					this.receivedCount = 0;
 				}
 			} catch (error) {
 				console.error('加载申请列表失败:', error);
@@ -290,6 +299,34 @@ export default {
 				this.loading = false;
 				this.refreshing = false;
 			}
+		},
+			
+		// 转换申请状态
+		getApplicationStatus(isPass) {
+			switch (isPass) {
+				case 0:
+					return 'pending'; // 待处理
+				case 1:
+					return 'approved'; // 已同意
+				case 2:
+					return 'rejected'; // 已拒绝
+				default:
+					return 'pending';
+			}
+		},
+			
+		// 获取用户名称
+		getUserName(userId) {
+			// 这里可以根据需要从全局状态或缓存中获取用户信息
+			// 暂时返回默认值
+			return `用户${userId}`;
+		},
+			
+		// 获取小组名称
+		getGroupName(groupId) {
+			// 这里可以根据需要从全局状态或缓存中获取小组信息
+			// 暂时返回默认值
+			return `小组${groupId}`;
 		},
 		
 		// 处理申请（同意/拒绝）
@@ -305,6 +342,7 @@ export default {
 				
 				if (res.code === 200) {
 					// 更新本地状态
+					application.isPass = agree ? 1 : 2; // 更新isPass字段
 					application.status = agree ? 'approved' : 'rejected';
 					application.processing = false;
 					
@@ -337,14 +375,18 @@ export default {
 			uni.showModal({
 				title: '确认取消',
 				content: '确定要取消这个申请吗？',
+				confirmText: '取消申请',
+				cancelText: '保留',
+				confirmColor: '#f56c6c',
 				success: async (res) => {
 					if (res.confirm) {
 						try {
-							// 这里需要调用取消申请的API
-							// 假设调用拒绝接口，传入自己的申请ID
-							const cancelRes = await this.agreeJoin({
-								groupJoinId: application.id,
-								agree: false
+							// 设置加载状态
+							application.processing = true;
+							
+							// 调用取消申请的API
+							const cancelRes = await this.cancelJoin({
+								groupJoinId: application.id
 							});
 							
 							if (cancelRes.code === 200) {
@@ -359,12 +401,14 @@ export default {
 									icon: 'success'
 								});
 							} else {
+								application.processing = false;
 								uni.showToast({
 									title: cancelRes.msg || '取消失败',
 									icon: 'none'
 								});
 							}
 						} catch (error) {
+							application.processing = false;
 							console.error('取消申请失败:', error);
 							uni.showToast({
 								title: '取消失败，请重试',
@@ -377,8 +421,8 @@ export default {
 		},
 		
 		// 查看小组
-		viewGroup(group) {
-			if (!group || !group.id) {
+		viewGroup(groupId) {
+			if (!groupId) {
 				uni.showToast({
 					title: '小组信息不存在',
 					icon: 'none'
@@ -390,7 +434,7 @@ export default {
 				url: `/pages/userInfo/groupInfo`,
 				success: (res) => {
 					res.eventChannel.emit("chatData", {
-						groupId: group.id
+						groupId: groupId
 					});
 				}
 			});
@@ -398,11 +442,6 @@ export default {
 		
 		// 下拉刷新
 		async onRefresh() {
-			if (this.activeTab === 'received') {
-				this.receivedPage = 1;
-			} else {
-				this.sentPage = 1;
-			}
 			await this.loadApplications();
 		},
 		
@@ -449,25 +488,23 @@ export default {
 		},
 		
 		// 获取用户头像
-		getUserAvatar(user) {
-			if (user?.head) {
-				if (user.head.startsWith('http')) {
-					return user.head;
-				}
-				return this.imageUrl + user.head;
+		getUserAvatar(userId) {
+			if (!userId) {
+				return this.generateDefaultAvatar('用户');
 			}
-			return this.generateDefaultAvatar(user?.name || '用户');
+			// 可以根据需要从全局状态或缓存中获取用户头像
+			// 暂时返回默认头像
+			return this.imageUrl + `static/head/${userId}/userHeadPhoto.png`;
 		},
 		
 		// 获取小组头像
-		getGroupAvatar(group) {
-			if (group?.head) {
-				if (group.head.startsWith('http')) {
-					return group.head;
-				}
-				return this.imageUrl + group.head;
+		getGroupAvatar(groupId) {
+			if (!groupId) {
+				return this.generateDefaultAvatar('小组');
 			}
-			return this.generateDefaultAvatar(group?.groupName || '小组');
+			// 可以根据需要从全局状态或缓存中获取小组头像
+			// 暂时返回默认头像
+			return this.imageUrl + `static/head/${groupId}/groupHeadPhoto.png`;
 		},
 		
 		// 生成默认头像

@@ -33,9 +33,8 @@
 				<u-pull-refresh v-model="refreshing" @refresh="onRefresh">
 					<scroll-view 
 						scroll-y="true" 
-						style="height: calc(100vh - 200px);" 
-						@scrolltolower="onLoadMore"
-						lower-threshold="50">
+						class="scroll-container"
+						enable-flex>
 						<!-- 我管理的小组 -->
 						<template v-if="filteredMyGroups.length > 0">
 							<div class="section-header">
@@ -127,18 +126,6 @@
 								</view>
 							</u-empty>
 						</div>
-
-						<!-- 加载更多提示 -->
-						<div v-if="hasMore && (myGroups.length > 0 || joinedGroups.length > 0)" class="load-more">
-							<u-loading-icon v-if="loadingMore" mode="spinner" size="24"></u-loading-icon>
-							<text class="load-more-text">
-								{{ loadingMore ? '正在加载...' : '上拉刷新' }}
-							</text>
-						</div>
-
-						<div v-else-if="!hasMore && (myGroups.length > 0 || joinedGroups.length > 0)" class="no-more">
-							<text>—— 没有更多小组了 ——</text>
-						</div>
 					</scroll-view>
 				</u-pull-refresh>
 			</div>
@@ -164,16 +151,17 @@ export default {
 			joinedGroups: [], // 我加入的小组
 			loading: false,
 			refreshing: false,
-			error: null,
-			// 分页加载相关
-			currentPage: 1,
-			pageSize: 10,
-			hasMore: true,
-			loadingMore: false
+			error: null
 		}
 	},
 	onShow() {
 		this.loadGroupData();
+		// 监听小组创建成功事件
+		uni.$on('groupCreated', this.onGroupCreated);
+	},
+	onHide() {
+		// 移除事件监听
+		uni.$off('groupCreated', this.onGroupCreated);
 	},
 	computed: {
 		imageUrl() {
@@ -223,26 +211,16 @@ export default {
 					
 					// 显示成功提示
 					if (this.myGroups.length === 0 && this.joinedGroups.length === 0) {
-						uni.showToast({
-							title: '您还没有加入任何小组',
-							icon: 'none',
-							duration: 2000
-						});
+						this.$u.toast('您还没有加入任何小组');
 					}
 				} else {
 					this.error = res.msg || '获取小组列表失败';
-					uni.showToast({
-						title: this.error,
-						icon: 'none'
-					});
+					this.$u.toast(this.error);
 				}
 			} catch (error) {
 				console.error('获取小组列表失败:', error);
 				this.error = error.message || '网络错误';
-				uni.showToast({
-					title: this.error,
-					icon: 'none'
-				});
+				this.$u.toast(this.error);
 			} finally {
 				this.loading = false;
 			}
@@ -251,18 +229,12 @@ export default {
 		async onRefresh() {
 			this.refreshing = true;
 			try {
-				// 重置分页数据
-				this.resetPagination();
 				// 清空现有数据
 				this.myGroups = [];
 				this.joinedGroups = [];
 				// 重新加载数据
 				await this.loadGroupData();
-				uni.showToast({
-					title: '刷新成功',
-					icon: 'success',
-					duration: 1500
-				});
+				this.$u.toast('刷新成功');
 			} catch (error) {
 				console.error('刷新失败:', error);
 			} finally {
@@ -271,81 +243,9 @@ export default {
 		},
 		// 手动刷新
 		refreshData() {
-			this.resetPagination();
 			this.myGroups = [];
 			this.joinedGroups = [];
 			this.loadGroupData();
-		},
-		// 上拉加载更多
-		async onLoadMore() {
-			if (this.loadingMore || !this.hasMore || this.loading) {
-				return;
-			}
-			
-			try {
-				this.loadingMore = true;
-				this.currentPage++;
-				
-				// 模拟加载更多数据（实际中要根据API支持情况修改）
-				const res = await this.getMyGroup({
-					currentPage: this.currentPage,
-					pageSize: this.pageSize
-				});
-				
-				if (res.code === 200 && res.data) {
-					const newMyGroups = res.data[0] || [];
-					const newJoinedGroups = res.data[1] || [];
-					
-					// 如果没有更多数据，设置 hasMore 为 false
-					if (newMyGroups.length === 0 && newJoinedGroups.length === 0) {
-						this.hasMore = false;
-						uni.showToast({
-							title: '没有更多数据了',
-							icon: 'none',
-							duration: 1500
-						});
-					} else {
-						// 合并数据（去重）
-						this.mergeGroups(newMyGroups, newJoinedGroups);
-					}
-				} else {
-					// API返回错误，也认为没有更多数据
-					this.hasMore = false;
-				}
-			} catch (error) {
-				console.error('加载更多失败:', error);
-				this.hasMore = false;
-				uni.showToast({
-					title: '加载失败',
-					icon: 'none'
-				});
-			} finally {
-				this.loadingMore = false;
-			}
-		},
-		// 合并新数据（去重）
-		mergeGroups(newMyGroups, newJoinedGroups) {
-			// 合并我管理的小组
-			newMyGroups.forEach(newGroup => {
-				const exists = this.myGroups.find(group => group.id === newGroup.id);
-				if (!exists) {
-					this.myGroups.push(newGroup);
-				}
-			});
-			
-			// 合并我加入的小组
-			newJoinedGroups.forEach(newGroup => {
-				const exists = this.joinedGroups.find(group => group.id === newGroup.id);
-				if (!exists) {
-					this.joinedGroups.push(newGroup);
-				}
-			});
-		},
-		// 重置分页数据
-		resetPagination() {
-			this.currentPage = 1;
-			this.hasMore = true;
-			this.loadingMore = false;
 		},
 		// 获取小组头像
 		getGroupAvatar(group) {
@@ -409,10 +309,7 @@ export default {
 				},
 				fail: (err) => {
 					console.error('跳转聊天页面失败:', err);
-					uni.showToast({
-						title: '跳转失败',
-						icon: 'none'
-					});
+					this.$u.toast('跳转失败');
 				}
 			})
 		},
@@ -445,18 +342,21 @@ export default {
 		},
 		// 创建小组
 		createGroup() {
-			uni.showToast({
-				title: '创建小组功能开发中',
-				icon: 'none'
+			uni.navigateTo({
+				url: '/pages/chatList/createGroup'
 			});
-			// TODO: 跳转到创建小组页面
-			// uni.navigateTo({
-			//   url: '/pages/group/createGroup'
-			// });
 		},
 		// 清空搜索
 		clearSearch() {
 			this.searchQuery = '';
+		},
+		// 处理小组创建成功事件
+		onGroupCreated(newGroup) {
+			console.log('新小组创建成功:', newGroup);
+			// 刷新小组列表数据
+			this.loadGroupData();
+			// 显示成功提示
+			this.$u.toast('欢迎来到新小组！');
 		}
 	}
 }
@@ -482,18 +382,21 @@ export default {
 		--light-gray: #e9ecef;
 		--card-bg: #ffffff;
 		--section-bg: #f5f7fb;
+		--app-header-height: 160px; /* header总高度 */
 	}
 
 	.body {
 		background-color: #f5f7fb;
 		color: var(--dark);
-		height: 100vh;
+		min-height: 100vh;
+		height: 100%;
 		display: flex;
 		flex-direction: column;
 		max-width: 500px;
 		margin: 0 auto;
 		position: relative;
 		box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+		padding-top: var(--app-header-height); /* 为header预留空间 */
 	}
 
 	/* 顶部导航 */
@@ -501,11 +404,16 @@ export default {
 		background: linear-gradient(135deg, var(--primary), var(--secondary));
 		color: white;
 		padding: 15px 20px;
-		padding-top: 5vh;
+		padding-top: calc(var(--status-bar-height, 0px) + 15px);
 		box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-		position: sticky;
+		position: fixed;
 		top: 0;
-		z-index: 100;
+		left: 0;
+		right: 0;
+		z-index: 1000;
+		width: 100%;
+		max-width: 500px;
+		margin: 0 auto;
 	}
 
 	.header-top {
@@ -563,6 +471,8 @@ export default {
 		justify-content: center;
 		padding: 60px 20px;
 		color: var(--gray);
+		height: calc(100vh - var(--app-header-height)); /* 减去header高度 */
+		min-height: 300px;
 	}
 
 	.loading-text {
@@ -573,10 +483,17 @@ export default {
 
 	/* 小组列表容器 */
 	.groups-container {
-		flex: 1;
-		overflow-y: auto;
+		height: calc(100vh - var(--app-header-height)); /* 减去header高度 */
+		min-height: 0;
+		overflow: hidden;
 		position: relative;
 		padding-bottom: 20px;
+	}
+
+	/* 滚动容器 */
+	.scroll-container {
+		height: 100%;
+		min-height: 0;
 	}
 
 	/* 分组标题 */
@@ -747,33 +664,17 @@ export default {
 		text-align: center;
 		padding: 40px 20px;
 		color: var(--gray);
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		min-height: 300px;
 	}
 
 	.empty-tips {
 		color: var(--gray);
 		font-size: 0.9rem;
-	}
-
-	/* 加载更多样式 */
-	.load-more {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		padding: 20px;
-		color: var(--gray);
-		gap: 8px;
-	}
-
-	.load-more-text {
-		font-size: 0.85rem;
-		color: var(--gray);
-	}
-
-	.no-more {
-		text-align: center;
-		padding: 20px;
-		color: var(--light-gray);
-		font-size: 0.8rem;
 	}
 
 	/* 响应式调整 */

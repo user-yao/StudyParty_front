@@ -29,4 +29,16 @@ export const agreeJoin = (data) => {
     }
   });
 }
+export const cancelJoin = (data) => {
+  return request({
+    url: '/group/groupJoin/cancelJoin',
+    method: 'POST',
+    data:{
+        groupJoinId:data.groupJoinId
+    },
+    header: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  });
+}
 

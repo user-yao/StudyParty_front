@@ -26,12 +26,14 @@ export const createGroup = (data) => {
     url: '/group/createGroup',
     method: 'POST',
     data:{
-        leader:localStorage.getItem('id'),
         groupName:data.groupName,
         slogan:data.slogan,
         rule:data.rule,
         canJoin:data.canJoin
-    }
+    },
+	header: {
+	    'Content-Type': 'application/x-www-form-urlencoded'
+	  }
   });
 }
 export const updateHead = (data) => {

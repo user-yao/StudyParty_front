@@ -1,7 +1,6 @@
 {
 	
 	"easycom": {
-		// 注意一定要放在custom里，否则无效，https://ask.dcloud.net.cn/question/131175
 		"custom": {
 			"^u--(.*)": "uview-plus/components/u-$1/u-$1.vue",
 			"^up-(.*)": "uview-plus/components/u-$1/u-$1.vue",
@@ -107,6 +106,13 @@
 			"style" : 
 			{
 				"navigationBarTitleText" : "申请管理"
+			}
+		},
+		{
+			"path" : "pages/chatList/createGroup",
+			"style" : 
+			{
+				"navigationBarTitleText" : "创建小组"
 			}
 		}
 	],

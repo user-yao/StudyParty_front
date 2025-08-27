@@ -26,10 +26,16 @@
 						</u-input>
 					</div>
 					<div class="filter-options">
-						<u-radio-group v-model="canJoinFilter" placement="row" @change="handleFilterChange">
-							<u-radio label="全部" :value="0" active-color="#2414d0" inactive-color="rgba(255,255,255,0.7)" label-color="#fff"></u-radio>
-							<u-radio label="可加入" :value="1" active-color="#2414d0" inactive-color="rgba(255,255,255,0.7)" label-color="#fff"></u-radio>
-						</u-radio-group>
+						<radio-group @change="onFilterChange" class="filter-radio-group">
+							<label class="radio-item" :class="{ active: canJoinFilter === 0 }">
+								<radio value="0" :checked="canJoinFilter === 0" color="#4361ee" />
+								<text class="radio-text">全部</text>
+							</label>
+							<label class="radio-item" :class="{ active: canJoinFilter === 1 }">
+								<radio value="1" :checked="canJoinFilter === 1" color="#4361ee" />
+								<text class="radio-text">可加入</text>
+							</label>
+						</radio-group>
 					</div>
 				</div>
 			</header>
@@ -44,73 +50,71 @@
 
 				<!-- 搜索结果列表 -->
 				<div v-else-if="searchResults.length > 0" class="groups-container">
-					<u-pull-refresh v-model="refreshing" @refresh="onRefresh">
-						<scroll-view 
-							scroll-y="true" 
-							class="scroll-container" 
-							@scrolltolower="onLoadMore"
-							lower-threshold="50">
-							
-							<div class="result-header">
-								<text class="result-count">找到 {{ totalCount }} 个小组</text>
-							</div>
-							
-							<div class="group-list">
-								<div class="group-card" v-for="group in searchResults" :key="group.id">
-									<div class="group-header" @click="viewGroupDetail(group)">
-										<image class="group-avatar" :src="getGroupAvatar(group)" mode="aspectFill"></image>
-										<div class="group-basic-info">
-											<div class="group-name">{{ group.groupName || '未命名小组' }}
-												<span class="group-level">Lv.{{ group.groupLevel || 1 }}</span>
-											</div>
-											<div class="group-slogan">{{ group.slogan || '暂无标语' }}</div>
-											<div class="group-stats">
-												<span class="member-count">{{ group.peopleNum || 0 }}/{{ group.maxPeopleNum || 10 }}人</span>
-												<span class="join-status" :class="group.canJoin == 1 ? 'can-join' : 'cannot-join'">
-													{{ group.canJoin == 1 ? '可加入' : '不可加入' }}
-												</span>
-											</div>
+					<div class="result-header">
+						<text class="result-count">找到 {{ totalCount }} 个小组</text>
+					</div>
+					<scroll-view 
+						scroll-y="true" 
+						class="scroll-container" 
+						@scrolltolower="onLoadMore"
+						lower-threshold="100"
+						style="height: calc(100vh - 200px);">
+						
+						<div class="group-list">
+							<div class="group-card" v-for="group in searchResults" :key="group.id">
+								<div class="group-header" @click="viewGroupDetail(group)">
+									<image class="group-avatar" :src="getGroupAvatar(group)" mode="aspectFill"></image>
+									<div class="group-basic-info">
+										<div class="group-name">{{ group.groupName || '未命名小组' }}
+											<span class="group-level">Lv.{{ group.groupLevel || 1 }}</span>
+										</div>
+										<div class="group-slogan">{{ group.slogan || '暂无标语' }}</div>
+										<div class="group-stats">
+											<span class="member-count">{{ group.peopleNum || 0 }}/{{ group.maxPeopleNum || 10 }}人</span>
+											<span class="join-status" :class="group.canJoin == 1 ? 'can-join' : 'cannot-join'">
+												{{ group.canJoin == 1 ? '可加入' : '不可加入' }}
+											</span>
 										</div>
 									</div>
-									
-									<div class="group-actions">
-										<u-button 
-											v-if="group.canJoin == 1 && !isGroupMember(group.id)" 
-											type="primary" 
-											size="small" 
-											text="申请加入" 
-											@click="applyToJoin(group)">
-										</u-button>
-										<u-button 
-											v-else-if="isGroupMember(group.id)" 
-											type="success" 
-											size="small" 
-											text="已加入" 
-											disabled>
-										</u-button>
-										<u-button 
-											v-else 
-											type="info" 
-											size="small" 
-											text="不可加入" 
-											disabled>
-										</u-button>
-									</div>
+								</div>
+								
+								<div class="group-actions">
+									<u-button 
+										v-if="group.canJoin == 1 && !isGroupMember(group.id)" 
+										type="primary" 
+										size="small" 
+										text="申请加入" 
+										@click="applyToJoin(group)">
+									</u-button>
+									<u-button 
+										v-else-if="isGroupMember(group.id)" 
+										type="success" 
+										size="small" 
+										text="已加入" 
+										disabled>
+									</u-button>
+									<u-button 
+										v-else 
+										type="info" 
+										size="small" 
+										text="不可加入" 
+										disabled>
+									</u-button>
 								</div>
 							</div>
+						</div>
 
-							<!-- 加载更多 -->
-							<div v-if="hasMore" class="load-more">
-								<u-loading-icon v-if="loadingMore" mode="spinner" size="24"></u-loading-icon>
-								<text class="load-more-text">
-									{{ loadingMore ? '正在加载...' : '上拉加载更多' }}
-								</text>
-							</div>
-							<div v-else-if="searchResults.length > 0" class="no-more">
-								<text>—— 没有更多小组了 ——</text>
-							</div>
-						</scroll-view>
-					</u-pull-refresh>
+						<!-- 加载更多 -->
+						<div v-if="hasMore" class="load-more">
+							<u-loading-icon v-if="loadingMore" mode="spinner" size="24"></u-loading-icon>
+							<text class="load-more-text">
+								{{ loadingMore ? '正在加载...' : '上拉加载更多' }}
+							</text>
+						</div>
+						<div v-else-if="searchResults.length > 0" class="no-more">
+							<text>—— 没有更多小组了 ——</text>
+						</div>
+					</scroll-view>
 				</div>
 
 				<!-- 空状态 -->
@@ -179,7 +183,11 @@ export default {
 	data() {
 		return {
 			searchQuery: '',
-			canJoinFilter: 0, // 筛选条件：'0'全部, '1'可加入
+			canJoinFilter: 1, // 筛选条件：0-全部, 1-可加入，默认为可加入
+			filterOptions: [
+				{ value: 0, label: '全部' },
+				{ value: 1, label: '可加入' }
+			],
 			searchResults: [],
 			loading: false,
 			refreshing: false,
@@ -190,6 +198,7 @@ export default {
 			pageSize: 10,
 			totalCount: 0,
 			searchTimeout: null,
+			loadFailCount: 0, // 加载失败计数
 			
 			// 申请相关
 			showApplyModal: false,
@@ -214,12 +223,66 @@ export default {
 	onShow() {
 		this.loadMyGroups();
 	},
+	onReady() {
+		// 页面渲染完成时确保默认值正确
+		this.$nextTick(() => {
+			this.canJoinFilter = 1;
+		});
+	},
+	mounted() {
+		// 确保默认值正确设置
+		this.canJoinFilter = 1;
+	},
+	watch: {
+		// 监听搜索输入变化
+		searchQuery(newVal, oldVal) {
+			if (this.searchTimeout) {
+				clearTimeout(this.searchTimeout);
+			}
+			this.searchTimeout = setTimeout(() => {
+				if (newVal && newVal.trim()) {
+					// 有搜索内容时执行搜索
+					this.autoSearch();
+				} else if (oldVal && oldVal.trim() && (!newVal || !newVal.trim())) {
+					// 从有内容变为空时清空结果
+					this.clearSearch();
+				}
+			}, 500);
+		},
+		// 监听筛选条件变化
+		canJoinFilter(newVal, oldVal) {
+			// 防止初始化时的重复触发
+			if (oldVal === undefined) {
+				return;
+			}
+			
+			// 只有在已搜索状态且有搜索内容时才重新搜索
+			if (this.hasSearched && this.searchQuery && this.searchQuery.trim()) {
+				// 清理之前的定时器
+				if (this.searchTimeout) {
+					clearTimeout(this.searchTimeout);
+				}
+				// 添加防抖机制
+				this.searchTimeout = setTimeout(() => {
+					this.autoSearch();
+				}, 300); // 筛选条件变化的防抖时间设置为300ms
+			}
+		}
+	},
 	methods: {
 		...mapActions({
 			searchGroup: "group/searchGroup",
 			getMyGroup: "group/getMyGroup",
 			joinGroup: "groupJoin/joinGroup"
 		}),
+		
+		// 筛选条件改变处理（原生单选组件事件）
+		onFilterChange(event) {
+			const value = parseInt(event.detail.value);
+			console.log('筛选条件变化:', value);
+			this.canJoinFilter = value;
+			// 搜索逻辑由watch监听器处理，避免重复调用
+		},
 		
 		// 加载我的小组列表
 		async loadMyGroups() {
@@ -246,26 +309,15 @@ export default {
 			return this.myGroupIds.includes(groupId) || this.joinedGroupIds.includes(groupId);
 		},
 		
-		// 搜索输入处理
+		// 搜索输入处理（主要逻辑在watch中处理）
 		onSearchInput() {
-			// 防抖处理
-			if (this.searchTimeout) {
-				clearTimeout(this.searchTimeout);
-			}
-			this.searchTimeout = setTimeout(() => {
-				if (this.searchQuery.trim()) {
-					this.handleSearch();
-				}
-			}, 500);
+			// 这里可以保留为空，或者放一些即时的UI反馈
 		},
 		
 		// 执行搜索
 		async handleSearch() {
 			if (!this.searchQuery.trim()) {
-				uni.showToast({
-					title: '请输入搜索关键词',
-					icon: 'none'
-				});
+				this.$u.toast('请输入搜索关键词');
 				return;
 			}
 			
@@ -273,6 +325,21 @@ export default {
 			this.searchResults = [];
 			this.hasMore = true;
 			this.hasSearched = true;
+			this.loadFailCount = 0; // 重置失败计数
+			await this.performSearch();
+		},
+		
+		// 自动搜索（不显示错误提示）
+		async autoSearch() {
+			if (!this.searchQuery.trim()) {
+				return;
+			}
+			
+			this.currentPage = 1;
+			this.searchResults = [];
+			this.hasMore = true;
+			this.hasSearched = true;
+			this.loadFailCount = 0; // 重置失败计数
 			await this.performSearch();
 		},
 		
@@ -285,16 +352,16 @@ export default {
 				// 构建搜索参数，符合API要求的格式
 				const searchParams = {
 					searchContext: this.searchQuery.trim(),
-					currentPage: this.currentPage,
-					canJoin: Number(this.canJoinFilter) // 必须传递canJoin参数
+					currentPage: this.currentPage
 				};
-				
+				searchParams.canJoin = this.canJoinFilter;
 				const res = await this.searchGroup(searchParams);
 				
 				if (res.code === 200 && res.data) {
 					// 处理分页数据结构
 					const newResults = res.data.records || [];
-					this.totalCount = res.data.records.length || 0;
+					// 使用API返回的总数量，如果没有则使用当前页结果数量
+					this.totalCount = res.data.total;
 					
 					if (this.currentPage === 1) {
 						this.searchResults = newResults;
@@ -302,23 +369,18 @@ export default {
 						this.searchResults.push(...newResults);
 					}
 					
+					
+					
 					// 判断是否还有更多数据
 					// 根据API返回的分页信息判断是否有更多数据
 					const currentPage = res.data.current || this.currentPage;
-					const totalPages = res.data.pages || 0;
+					const totalPages = res.data.pages || 1;
 					this.hasMore = currentPage < totalPages && newResults.length > 0;
 				} else {
-					uni.showToast({
-						title: res.msg || '搜索失败',
-						icon: 'none'
-					});
+					this.$u.toast(res.msg || '搜索失败');
 				}
 			} catch (error) {
-				console.error('搜索小组失败:', error);
-				uni.showToast({
-					title: '搜索失败，请重试',
-					icon: 'none'
-				});
+				this.$u.toast('搜索失败，请重试');
 			} finally {
 				this.loading = false;
 				this.loadingMore = false;
@@ -326,28 +388,94 @@ export default {
 			}
 		},
 		
-		// 筛选条件改变
-		handleFilterChange() {
-			if (this.hasSearched && this.searchQuery.trim()) {
-				this.handleSearch();
-			}
-		},
-		
+
 		// 下拉刷新
 		async onRefresh() {
 			if (this.searchQuery.trim()) {
 				this.currentPage = 1;
 				this.searchResults = [];
 				this.hasMore = true;
+				this.loadFailCount = 0; // 重置失败计数
 				await this.performSearch();
 			}
 		},
 		
 		// 上拉加载更多
 		async onLoadMore() {
-			if (this.hasMore && !this.loadingMore && this.searchQuery.trim()) {
+			// 防止重复触发和无效触发
+			if (this.loadingMore || !this.hasMore || this.loading || !this.searchQuery.trim()) {
+				return;
+			}
+			
+			// 检查是否有搜索结果
+			if (this.searchResults.length === 0) {
+				return;
+			}
+			
+			try {
+				this.loadingMore = true;
 				this.currentPage++;
-				await this.performSearch();
+				
+				// 构建搜索参数
+				const searchParams = {
+					searchContext: this.searchQuery.trim(),
+					currentPage: this.currentPage,
+					canJoin: this.canJoinFilter
+				};
+				
+				const res = await this.searchGroup(searchParams);
+				
+				if (res.code === 200 && res.data) {
+					const newResults = res.data.records || [];
+					
+					// 检查是否有新数据
+					if (newResults.length === 0) {
+						this.hasMore = false;
+						this.$u.toast('已加载全部搜索结果');
+					} else {
+						// 合并新数据（去重）
+						const existingIds = new Set(this.searchResults.map(item => item.id));
+						const uniqueNewResults = newResults.filter(item => !existingIds.has(item.id));
+						
+						if (uniqueNewResults.length > 0) {
+							this.searchResults.push(...uniqueNewResults);
+							
+							// 显示加载成功提示
+							this.$u.toast(`成功加载${uniqueNewResults.length}个`);
+						} else {
+							// 如果没有新增数据（全是重复的），也认为没有更多了
+							this.hasMore = false;
+							this.$u.toast('没有更多新结果了');
+						}
+						
+						// 更新分页状态
+						const currentPage = res.data.current || this.currentPage;
+						const totalPages = res.data.pages || 1;
+						this.hasMore = currentPage < totalPages;
+						
+						// 更新总数
+						this.totalCount = res.data.total || this.totalCount;
+					}
+				} else {
+					// API返回错误
+					this.currentPage--; // 回退页码
+					this.$u.toast(res.msg || '加载失败');
+				}
+			} catch (error) {
+				this.currentPage--; // 回退页码
+				
+				// 网络错误时不立即设置hasMore=false，给用户重试机会
+				this.$u.toast('网络错误，请重试');
+				
+				// 如果连续失败多次，才设置hasMore=false
+				if (!this.loadFailCount) this.loadFailCount = 0;
+				this.loadFailCount++;
+				if (this.loadFailCount >= 3) {
+					this.hasMore = false;
+					this.$u.toast('加载失败次数过多，请稍后重试');
+				}
+			} finally {
+				this.loadingMore = false;
 			}
 		},
 		
@@ -358,6 +486,10 @@ export default {
 			this.hasSearched = false;
 			this.currentPage = 1;
 			this.hasMore = true;
+			this.totalCount = 0;
+			this.loadFailCount = 0; // 重置失败计数
+			// 重置筛选条件为默认值
+			this.canJoinFilter = 1;
 		},
 		
 		// 获取小组头像
@@ -412,31 +544,20 @@ export default {
 				
 				// 根据返回的code状态显示相应提示
 				if (res.code === 200) {
-					uni.showToast({
-						title: '申请成功',
-						icon: 'success'
-					});
+					this.$u.toast('申请成功');
 					this.showApplyModal = false;
 					// 刷新我的小组列表
 					await this.loadMyGroups();
 					// 重新搜索以更新状态显示
 					if (this.hasSearched && this.searchQuery.trim()) {
-						this.handleSearch();
+						this.autoSearch();
 					}
 				} else {
 					// 显示服务器返回的具体错误信息
-					uni.showToast({
-						title: res.msg || '申请失败',
-						icon: 'none',
-						duration: 2500 // 延长显示时间以便用户看清错误信息
-					});
+					this.$u.toast(res.msg || '申请失败');
 				}
 			} catch (error) {
-				console.error('提交申请失败:', error);
-				uni.showToast({
-					title: '网络错误，请重试',
-					icon: 'none'
-				});
+				this.$u.toast('网络错误，请重试');
 			} finally {
 				this.submitting = false;
 			}
@@ -519,6 +640,62 @@ export default {
 		justify-content: center;
 	}
 
+	/* 原生单选组件样式 */
+	.filter-radio-group {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: center;
+		gap: 20px;
+	}
+
+	.radio-item {
+		display: flex;
+		align-items: center;
+		gap: 6px;
+		padding: 6px 12px;
+		border-radius: 20px;
+		transition: all 0.3s ease;
+		cursor: pointer;
+		background: rgba(255, 255, 255, 0.1);
+		border: 1px solid rgba(255, 255, 255, 0.3);
+	}
+
+	.radio-item.active {
+		background: rgba(255, 255, 255, 0.2);
+		border-color: rgba(255, 255, 255, 0.6);
+		transform: scale(1.05);
+	}
+
+	.radio-item:hover {
+		background: rgba(255, 255, 255, 0.15);
+		transform: scale(1.02);
+	}
+
+	.radio-text {
+		color: #fff;
+		font-size: 0.9rem;
+		font-weight: 500;
+		user-select: none;
+	}
+
+	.radio-item.active .radio-text {
+		font-weight: 600;
+		text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+	}
+
+	/* 覆盖原生单选按钮的默认样式 */
+	.radio-item radio {
+		transform: scale(1.1);
+	}
+
+	/* 适配小程序环境 */
+	/* #ifdef MP */
+	.radio-item {
+		padding: 8px 15px;
+	}
+	/* #endif */
+
 	/* 内容区域 */
 	.content {
 		flex: 1;
@@ -544,13 +721,15 @@ export default {
 
 	.groups-container {
 		height: 100%;
-		overflow: hidden;
+		display: flex;
+		flex-direction: column;
 	}
 
 	.result-header {
 		padding: 15px 20px 10px;
 		border-bottom: 1px solid #e9ecef;
 		background: white;
+		flex-shrink: 0;
 	}
 
 	.result-count {
@@ -651,7 +830,10 @@ export default {
 
 	/* 内容滚动区域 */
 	.scroll-container {
-		height: 100%;
+		flex: 1;
+		min-height: 300px;
+		max-height: calc(100vh - 200px);
+		overflow-y: auto;
 	}
 
 	/* 空状态 */

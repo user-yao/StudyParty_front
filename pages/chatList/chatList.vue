@@ -66,7 +66,10 @@
 					<p>暂无聊天记录</p>
 				</div>
 				<div v-for="chat in filteredChats" :key="chat.id" class="chat-item"
-					:class="[chat.statu, { unread: chat.message_count > 0 }]" @click="toChatPage(chat)"
+					:class="[chat.statu, { 
+						unread: chat.message_count > 0,
+						unavailable: isUnavailable(chat.friend, chat.statu)
+					}]" @click="toChatPage(chat)"
 					@touchstart="handleTouchStart(chat, $event)" @touchend="handleTouchEnd"
 					@touchcancel="handleTouchEnd">
 					<div>
@@ -230,6 +233,28 @@
 				if (chat.statu === 'group') {
 					// 群组聊天参数格式
 					const groupData = this.getFriend(chat.friend, chat.statu);
+					
+					// 检查是否为不在群聊状态
+					if (!this.groupMap.get(Number(chat.friend))) {
+						uni.showModal({
+							title: '无法进入群聊',
+							content: '您已不在该群聊中，无法进入聊天。是否删除该聊天记录？',
+							confirmText: '删除',
+							cancelText: '取消',
+							success: (res) => {
+								if (res.confirm) {
+									// 删除聊天记录
+									db.clearMessage(chat.friend, chat.statu);
+									this.getCharList().then(res => {
+										this.chatList = res;
+										this.clearNode(res);
+									});
+								}
+							}
+						});
+						return;
+					}
+					
 					friend = {
 						friendId: chat.friend, // 群组ID作为friendId
 						...groupData // 展开群组的所有数据
@@ -240,6 +265,28 @@
 				} else {
 					// 个人聊天参数格式
 					friend = this.getFriend(chat.friend, chat.statu);
+					
+					// 检查是否为非好友状态
+					if (!this.friendList.get(Number(chat.friend))) {
+						uni.showModal({
+							title: '无法进入聊天',
+							content: '该用户已不是您的好友，无法进入聊天。是否删除该聊天记录？',
+							confirmText: '删除',
+							cancelText: '取消',
+							success: (res) => {
+								if (res.confirm) {
+									// 删除聊天记录
+									db.clearMessage(chat.friend, chat.statu);
+									this.getCharList().then(res => {
+										this.chatList = res;
+										this.clearNode(res);
+									});
+								}
+							}
+						});
+						return;
+					}
+					
 					friend.friendId = chat.friend; // 确保friendId字段存在
 					chatData = {
 						statu: 'person'
@@ -261,27 +308,66 @@
 			},
 			getFriendName(friendId, status) {
 				if (status == 'group') {
-					return this.groupMap.get(Number(friendId)).groupName;
+					const groupInfo = this.groupMap.get(Number(friendId));
+					return groupInfo ? groupInfo.groupName : '不在群聊';
 				}
 				if (status == 'person') {
-					return this.friendList.get(Number(friendId)).name;
+					const friendInfo = this.friendList.get(Number(friendId));
+					return friendInfo ? friendInfo.name : '非好友';
 				}
+				return '未知用户';
 			},
 			getFriend(friendId, status) {
 				if (status == 'group') {
-					return this.groupMap.get(Number(friendId));
+					const groupInfo = this.groupMap.get(Number(friendId));
+					return groupInfo || {
+						groupId: friendId,
+						groupName: '不在群聊',
+						slogan: '该群组信息不可用'
+					};
 				}
 				if (status == 'person') {
-					return this.friendList.get(Number(friendId));
+					const friendInfo = this.friendList.get(Number(friendId));
+					return friendInfo || {
+						userid: friendId,
+						name: '非好友',
+						username: '该用户信息不可用'
+					};
 				}
+				return {
+					id: friendId,
+					name: '未知用户'
+				};
 			},
 			getHead(friendId, status) {
 				if (status == 'group') {
+					const groupInfo = this.groupMap.get(Number(friendId));
+					if (!groupInfo) {
+						// 群组信息不存在时返回默认群组头像
+						return this.imageUrl + 'static/head/group.png';
+					}
 					return this.imageUrl + 'static/head/' + friendId + '/groupHeadPhoto.png';
 				}
 				if (status == 'person') {
+					const friendInfo = this.friendList.get(Number(friendId));
+					if (!friendInfo) {
+						// 好友信息不存在时返回默认用户头像
+						return this.imageUrl + 'static/head/user.png';
+					}
 					return this.imageUrl + 'static/head/' + friendId + '/userHeadPhoto.png';
 				}
+				// 未知类型返回通用默认头像
+				return this.imageUrl + 'static/head/default.png';
+			},
+			isUnavailable(friendId, status) {
+				// 检查群组或好友是否不可用
+				if (status === 'group') {
+					return !this.groupMap.get(Number(friendId));
+				}
+				if (status === 'person') {
+					return !this.friendList.get(Number(friendId));
+				}
+				return false;
 			},
 			async getCharList() {
 				return await db.selectChatList().then(res => {
@@ -533,6 +619,20 @@
 
 	.chat-item.unread {
 		background: var(--unread-bg);
+	}
+
+	.chat-item.unavailable {
+		background: #f8f9fa;
+		opacity: 0.7;
+	}
+
+	.chat-item.unavailable .chat-name {
+		color: var(--gray);
+		font-style: italic;
+	}
+
+	.chat-item.unavailable .chat-message {
+		color: #adb5bd;
 	}
 
 	.chat-item:hover {

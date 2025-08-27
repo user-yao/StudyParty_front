@@ -147,6 +147,17 @@ header[data-v-ee09427d] {
 .chat-item.unread[data-v-ee09427d] {
 		background: var(--unread-bg);
 }
+.chat-item.unavailable[data-v-ee09427d] {
+		background: #f8f9fa;
+		opacity: 0.7;
+}
+.chat-item.unavailable .chat-name[data-v-ee09427d] {
+		color: var(--gray);
+		font-style: italic;
+}
+.chat-item.unavailable .chat-message[data-v-ee09427d] {
+		color: #adb5bd;
+}
 .chat-item[data-v-ee09427d]:hover {
 		background: #f8faff;
 }

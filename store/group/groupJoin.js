@@ -1,4 +1,4 @@
-import { joinGroup, getGroupJoin, agreeJoin } from '../../API/group/groupJoin.js';
+import { joinGroup, getGroupJoin, agreeJoin, cancelJoin } from '../../API/group/groupJoin.js';
 
 export default {
 namespaced: true,
@@ -14,6 +14,9 @@ namespaced: true,
       if (index !== -1) {
         state.joinRequests[index].status = agree ? '已通过' : '已拒绝';
       }
+    },
+    REMOVE_JOIN_REQUEST(state, groupJoinId) {
+      state.joinRequests = state.joinRequests.filter(req => req.id !== groupJoinId);
     }
   },
   actions: {
@@ -29,6 +32,13 @@ namespaced: true,
     async agreeJoin({ commit }, data) {
       const res = await agreeJoin(data);
       commit('UPDATE_JOIN_STATUS', data);
+      return res;
+    },
+    async cancelJoin({ commit }, data) {
+      const res = await cancelJoin(data);
+      if (res.code === 200) {
+        commit('REMOVE_JOIN_REQUEST', data.groupJoinId);
+      }
       return res;
     }
   }
