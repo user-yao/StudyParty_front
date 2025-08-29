@@ -5,45 +5,96 @@
 			<header class="app-header">
 				<div class="header-top">
 					<div class="logo">
-						<i class="u-icon-arrow-left" @click="goBack"></i>
+						<u-icon name="arrow-left" @click="goBack" color="#ffffff" size="20"></u-icon>
 						<span>小组详情</span>
 					</div>
 					<div class="header-actions">
-						<i class="u-icon-chat" @click="goToChat"></i>
-						<i class="u-icon-more"></i>
+						<u-icon name="chat" @click="goToChat" color="#ffffff" size="18"></u-icon>
+						<u-icon name="more-dot-fill" color="#ffffff" size="18"></u-icon>
 					</div>
 				</div>
 			</header>
 
 			<!-- 内容区域 -->
 			<div class="content">
+				<!-- 错误提示 -->
+				<div v-if="error" class="error-message">
+					<div class="error-icon">
+						<u-icon name="info-circle" color="#ff4d4f" size="24"></u-icon>
+					</div>
+					<div class="error-content">
+						<div class="error-text">{{ error }}</div>
+						<button class="retry-btn" @click="loadGroupData">重新加载</button>
+					</div>
+				</div>
 				<!-- 小组基本信息卡片 -->
 				<div class="group-profile-card">
-					<div class="group-avatar">
-						<span v-if="!groupDetail.head">{{ groupDetail.groupName ? groupDetail.groupName.charAt(0) : '?' }}</span>
-						<img v-else :src="getGroupAvatar()" :alt="groupDetail.groupName">
-					</div>
-					<h2 class="group-name">{{ groupDetail.groupName }}</h2>
-					<div class="group-level">Lv.{{ groupDetail.groupLevel }}</div>
-					<div class="group-slogan">{{ groupDetail.slogan || '暂无小组口号' }}</div>
-
-					<div class="progress-bar">
-						<div class="progress-fill"
-							:style="{width: `${(groupDetail.experience / groupDetail.needExperience) * 100}%`}"></div>
-					</div>
-
-					<div class="group-stats">
-						<div class="stat-item">
-							<div class="stat-value">{{ groupDetail.experience }}</div>
-							<div class="stat-label">经验值</div>
+					<!-- 头像和基本信息区域 -->
+					<div class="profile-header">
+						<!-- 头像区域（移除编辑功能） -->
+						<div class="avatar-section">
+							<div class="group-avatar">
+								<span v-if="!groupDetail.head">{{ groupDetail.groupName ? groupDetail.groupName.charAt(0) : '?' }}</span>
+								<img v-else :src="getGroupAvatar()" :alt="groupDetail.groupName">
+							</div>
+							<div class="group-level">Lv.{{ groupDetail.groupLevel }}</div>
 						</div>
-						<div class="stat-item">
-							<div class="stat-value">{{ groupDetail.peopleNum }}/{{ groupDetail.maxPeopleNum }}</div>
-							<div class="stat-label">成员</div>
+						
+						<!-- 基本信息和操作 -->
+						<div class="basic-info">
+							<h2 class="group-name">{{ groupDetail.groupName }}</h2>
+							
+							<!-- 标语显示（移除编辑功能） -->
+							<div class="group-slogan">
+								{{ groupDetail.slogan || '暂无小组口号' }}
+							</div>
+							
+							<!-- 移除此处的管理操作，将其移到小组信息卡片中 -->
+							
+							<!-- 普通成员退出操作 -->
+							<div class="member-actions" v-if="!isLeader">
+								<div class="action-button danger" @click="leaveGroup">
+									<u-icon name="logout" color="#f72585" size="14"></u-icon>
+									<span>退出小组</span>
+								</div>
+							</div>
 						</div>
-						<div class="stat-item">
-							<div class="stat-value">{{ memberContribution }}</div>
-							<div class="stat-label">我的贡献</div>
+					</div>
+					
+					<!-- 经验值进度条 -->
+					<div class="progress-section">
+						<div class="progress-info">
+							<span class="progress-label">经验值</span>
+							<span class="progress-value">{{ groupDetail.experience }}/{{ groupDetail.needExperience }}</span>
+						</div>
+						<div class="progress-bar">
+							<div class="progress-fill" :style="{width: `${(groupDetail.experience / groupDetail.needExperience) * 100}%`}"></div>
+						</div>
+					</div>
+					
+					<!-- 统计数据和快速操作 -->
+					<div class="stats-actions">
+						<div class="group-stats">
+							<div class="stat-item" @click="viewAllMembers">
+								<div class="stat-value">{{ groupDetail.peopleNum }}/{{ groupDetail.maxPeopleNum }}</div>
+								<div class="stat-label">成员</div>
+							</div>
+							<div class="stat-item" @click="viewAllTasks">
+								<div class="stat-value">{{ groupTasks.length }}</div>
+								<div class="stat-label">任务</div>
+							</div>
+							<div class="stat-item">
+								<div class="stat-value">{{ memberContribution }}</div>
+								<div class="stat-label">我的贡献</div>
+							</div>
+						</div>
+						
+						<!-- 主要功能按钮 -->
+						<div class="main-actions">
+							<u-button type="primary" shape="round" @click="goToChat" :custom-style="{width: '100%'}">
+								<u-icon name="chat" color="#ffffff" size="16" style="margin-right: 8px;"></u-icon>
+								进入小组聊天
+							</u-button>
 						</div>
 					</div>
 				</div>
@@ -52,236 +103,232 @@
 				<div class="info-card">
 					<div class="card-header">
 						<div class="card-title">
-							<i class="u-icon-info-circle"></i>
+							<u-icon name="info-circle" color="#4361ee" size="16"></u-icon>
 							<span>小组信息</span>
+						</div>
+						<!-- 小组规则编辑功能 -->
+						<div class="card-actions" v-if="isLeader">
+							<div class="action-icon" @click="editGroupInfo" title="编辑小组信息">
+								<u-icon name="edit-pen" color="#4361ee" size="14"></u-icon>
+							</div>
 						</div>
 					</div>
 					<div class="info-content">
-						<div class="info-item">
-							<div class="info-label">组长:</div>
-							<div class="info-value">{{ getLeaderName() }}</div>
+						<div class="info-grid">
+							<div class="info-item">
+								<div class="info-label">组长:</div>
+								<div class="info-value leader-info" @click="viewLeaderProfile">
+									<span>{{ getLeaderName() }}</span>
+								</div>
+							</div>
+							<div class="info-item">
+								<div class="info-label">代理组长:</div>
+								<div class="info-value deputy-info" @click="viewDeputyProfile">
+									<span>{{ getDeputyName() }}</span>
+									<u-icon name="reload" v-if="isLeader" @click.stop="changeDeputy" color="#4361ee" size="14" style="cursor: pointer; margin-left: 5px;"></u-icon>
+								</div>
+							</div>
+							<div class="info-item">
+								<div class="info-label">负责老师:</div>
+								<div class="info-value">{{ groupDetail.teacher || '暂无' }}</div>
+							</div>
+							<div class="info-item">
+								<div class="info-label">负责企业:</div>
+								<div class="info-value">{{ groupDetail.enterprise || '暂无' }}</div>
+							</div>
+							<div class="info-item full-width">
+								<div class="info-label">创建时间:</div>
+								<div class="info-value">{{ formatDate(groupDetail.createTime) }}</div>
+							</div>
 						</div>
-						<div class="info-item">
-							<div class="info-label">代理组长:</div>
-							<div class="info-value">{{ getDeputyName() }}</div>
+						
+						<!-- 小组规则区域 -->
+						<div class="rule-section">
+							<div class="rule-header">
+								<span class="rule-title">小组规则</span>
+							</div>
+							<div class="rule-content">
+								{{ groupDetail.rule || '星期一至周六：每日至少19点前提交学习报告\n周日：总结本周学习情况，分享学习心得' }}
+							</div>
 						</div>
-						<div class="info-item">
-							<div class="info-label">负责老师:</div>
-							<div class="info-value">{{ groupDetail.teacher || '暂无' }}</div>
-						</div>
-						<div class="info-item">
-							<div class="info-label">负责企业:</div>
-							<div class="info-value">{{ groupDetail.enterprise || '暂无' }}</div>
-						</div>
-						<div class="info-item">
-							<div class="info-label">创建时间:</div>
-							<div class="info-value">{{ formatDate(groupDetail.createTime) }}</div>
-						</div>
-						<div class="info-item">
-							<div class="info-label">小组规则:</div>
-							<div class="info-value">{{ groupDetail.rule || '暂无小组规则' }}</div>
+													
+						<!-- 组长管理功能 -->
+						<div class="management-actions" v-if="isLeader">
+							<!-- 常规管理功能 -->
+							<div class="management-row">
+								<div class="management-item" @click="changeDeputy">
+									<u-icon name="account" color="#4361ee" size="16"></u-icon>
+									<span>更换代理组长</span>
+								</div>
+								<div class="management-item" v-if="!groupDetail.teacher || !groupDetail.enterprise" @click="inviteTeacherOrEnterprise">
+									<u-icon name="plus-circle" color="#4361ee" size="16"></u-icon>
+									<span>邀请老师/企业</span>
+								</div>
+							</div>
+							<!-- 危险操作功能 -->
+							<div class="management-row dangerous-actions">
+								<div class="management-item transfer-action" @click="transferGroup">
+									<u-icon name="share" color="#4361ee" size="16"></u-icon>
+									<span>转让小组</span>
+								</div>
+								<div class="management-item dissolve-action" @click="dissolveGroup">
+									<u-icon name="trash" color="#f72585" size="16"></u-icon>
+									<span>解散小组</span>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
 
 				<!-- 小组成员卡片 -->
-				<div class="info-card">
+				<div class="info-card members-card">
 					<div class="card-header">
 						<div class="card-title">
-							<i class="u-icon-users"></i>
+							<u-icon name="account" color="#4361ee" size="16"></u-icon>
 							<span>小组成员 ({{ groupDetail.peopleNum }})</span>
 						</div>
-						<div class="view-more">
-							<a href="#" class="view-more-btn" @click="viewAllMembers">
-								查看全部 <i class="u-icon-arrow-right"></i>
-							</a>
+						<div class="card-actions">
+							<div class="action-icon" @click="viewAllMembers" title="查看全部成员">
+								<u-icon name="arrow-right" color="#4361ee" size="14"></u-icon>
+							</div>
 						</div>
 					</div>
-					<div class="members-grid">
+					
+					<!-- 加载状态 -->
+					<div v-if="loading" class="loading-state">
+						<div class="loading-spinner"></div>
+						<div class="loading-text">正在加载成员信息...</div>
+					</div>
+					
+					<!-- 成员列表 -->
+					<div v-else class="members-content">
 						<div v-if="displayedMembers.length === 0" class="empty-state members-empty">
 							<div class="empty-icon">
-								<i class="u-icon-users"></i>
+								<u-icon name="account-circle" color="#e9ecef" size="48"></u-icon>
 							</div>
 							<div class="empty-text">暂无成员数据</div>
+							<div class="empty-desc">请稍后刷新试试</div>
 						</div>
-						<div v-else class="member-item" v-for="(member, index) in displayedMembers" :key="member.id || index">
-							<div class="member-avatar" @click="goToUserInfo(member)">
-								<span v-if="!member.head">{{ member.name ? member.name.charAt(0) : '?' }}</span>
-								<img v-else :src="imageUrl + member.head" :alt="member.name" />
+						<div v-else>
+							<div class="members-grid">
+								<div class="member-item" v-for="(member, index) in displayedMembers" :key="member.id || index">
+									<div class="member-avatar" @click="goToUserInfo(member)">
+										<span v-if="!member.head">{{ member.name ? member.name.charAt(0) : '?' }}</span>
+										<img v-else :src="imageUrl + member.head" :alt="member.name" />
+									</div>
+									<div class="member-info">
+										<div class="member-name">{{ member.name || '未知用户' }}</div>
+										<div class="member-role">{{ getMemberRole(member) }}</div>
+									</div>
+								</div>
 							</div>
-							<div class="member-name">{{ member.name || '未知用户' }}</div>
-							<div class="member-role">{{ getMemberRole(member) }}</div>
+							<div class="view-more-members" @click="viewAllMembers" v-if="groupDetail.peopleNum > 6">
+								<span>查看全部 {{ groupDetail.peopleNum }} 个成员</span>
+								<u-icon name="arrow-right" color="#4361ee" size="14"></u-icon>
+							</div>
 						</div>
 					</div>
 				</div>
 
 				<!-- 小组任务卡片 -->
-				<div class="info-card">
+				<div class="info-card tasks-card">
 					<div class="card-header">
 						<div class="card-title">
-							<i class="u-icon-task"></i>
+							<u-icon name="list" color="#4361ee" size="16"></u-icon>
 							<span>小组任务</span>
 						</div>
-						<div class="view-more">
-							<a href="#" class="view-more-btn" @click="viewAllTasks">
-								查看全部 <i class="u-icon-arrow-right"></i>
-							</a>
+						<div class="card-actions">
+							<div class="action-icon" @click="viewAllTasks" title="查看全部任务">
+								<u-icon name="arrow-right" color="#4361ee" size="14"></u-icon>
+							</div>
 						</div>
 					</div>
-					<div class="task-list">
+					
+					<!-- 加载状态 -->
+					<div v-if="loading" class="loading-state">
+						<div class="loading-spinner"></div>
+						<div class="loading-text">正在加载任务信息...</div>
+					</div>
+					
+					<!-- 任务列表 -->
+					<div v-else class="tasks-content">
 						<div v-if="displayedTasks.length === 0" class="empty-state">
 							<div class="empty-icon">
-								<i class="u-icon-file-text"></i>
+								<u-icon name="file-text" color="#e9ecef" size="48"></u-icon>
 							</div>
 							<div class="empty-text">暂无任务数据</div>
+							<div class="empty-desc">组长可以创建新任务</div>
 						</div>
-						<div v-else class="task-item" v-for="(task, index) in displayedTasks" :key="task.id || index"
-							@click="viewTaskDetails(task)">
-							<div class="task-icon">
-								<image :src="getTaskStatusIcon(task)" alt="任务状态" class="task-status-icon"></image>
-							</div>
-							<div class="task-info">
-								<div class="task-title">{{ task.groupTask || task.group_task || task.title || '未命名任务' }}</div>
-								<div class="task-progress">
-									完成:
-									{{ task.groupTaskFinish || task.group_task_finish || 0 }}/{{ (task.groupTaskFinish || task.group_task_finish || 0) + (task.groupTaskUnfinished || task.group_task_unfinished || 0) }}
+						<div v-else>
+							<div class="task-list">
+								<div class="task-item" v-for="(task, index) in displayedTasks" :key="task.id || index" @click="viewTaskDetails(task)">
+									<div class="task-icon">
+										<image :src="getTaskStatusIcon(task)" alt="任务状态" class="task-status-icon"></image>
+									</div>
+									<div class="task-info">
+										<!-- 按规范只显示任务题目 -->
+										<div class="task-title">{{ task.groupTask || task.group_task || task.title || '未命名任务' }}</div>
+									</div>
+									<div class="task-actions">
+										<u-icon name="arrow-right" color="#909399" size="14"></u-icon>
+									</div>
 								</div>
 							</div>
-							<div class="task-actions">
-								<i class="u-icon-arrow-right"></i>
+							<div class="view-more-tasks" @click="viewAllTasks" v-if="groupTasks.length > 3">
+								<span>查看全部 {{ groupTasks.length }} 个任务</span>
+								<u-icon name="arrow-right" color="#4361ee" size="14"></u-icon>
 							</div>
 						</div>
 					</div>
 				</div>
 
-				<!-- 选项列表 -->
-				<div class="options-list">
-					<!-- 组长专属选项 -->
-					<div class="option-item" v-if="isLeader" @click="editGroupInfo">
-						<div class="option-icon">
-							<i class="u-icon-edit"></i>
-						</div>
-						<div class="option-content">
-							<div class="option-title">编辑小组信息</div>
-							<div class="option-desc">修改小组口号和规则</div>
-						</div>
-						<div class="option-arrow">
-							<i class="u-icon-arrow-right"></i>
-						</div>
-					</div>
 
-					<div class="option-item" v-if="isLeader" @click="changeDeputy">
-						<div class="option-icon">
-							<i class="u-icon-user-switch"></i>
-						</div>
-						<div class="option-content">
-							<div class="option-title">更换代理组长</div>
-							<div class="option-desc">每周一轮换制度</div>
-						</div>
-						<div class="option-arrow">
-							<i class="u-icon-arrow-right"></i>
-						</div>
-					</div>
-
-					<div class="option-item" v-if="isLeader && (!groupDetail.teacher || !groupDetail.enterprise)"
-						@click="inviteTeacherOrEnterprise">
-						<div class="option-icon">
-							<i class="u-icon-user-add"></i>
-						</div>
-						<div class="option-content">
-							<div class="option-title">邀请老师/企业</div>
-							<div class="option-desc">从好友列表邀请</div>
-						</div>
-						<div class="option-arrow">
-							<i class="u-icon-arrow-right"></i>
-						</div>
-					</div>
-
-					<div class="option-item" v-if="isLeader" @click="transferGroup">
-						<div class="option-icon">
-							<i class="u-icon-swap"></i>
-						</div>
-						<div class="option-content">
-							<div class="option-title">转让小组</div>
-							<div class="option-desc">将组长身份转让给其他成员</div>
-						</div>
-						<div class="option-arrow">
-							<i class="u-icon-arrow-right"></i>
-						</div>
-					</div>
-
-					<div class="option-item" v-if="!isLeader" @click="leaveGroup">
-						<div class="option-icon">
-							<i class="u-icon-exit"></i>
-						</div>
-						<div class="option-content">
-							<div class="option-title">退出小组</div>
-							<div class="option-desc">离开当前小组</div>
-						</div>
-						<div class="option-arrow">
-							<i class="u-icon-arrow-right"></i>
-						</div>
-					</div>
-
-					<div class="option-item" @click="viewAllTasks">
-						<div class="option-icon">
-							<i class="u-icon-task"></i>
-						</div>
-						<div class="option-content">
-							<div class="option-title">查看所有任务</div>
-							<div class="option-desc">浏览小组全部任务</div>
-						</div>
-						<div class="option-arrow">
-							<i class="u-icon-arrow-right"></i>
-						</div>
-					</div>
-
-					<div class="option-item" @click="viewAllMembers">
-						<div class="option-icon">
-							<i class="u-icon-users"></i>
-						</div>
-						<div class="option-content">
-							<div class="option-title">查看所有成员</div>
-							<div class="option-desc">浏览小组全部成员</div>
-						</div>
-						<div class="option-arrow">
-							<i class="u-icon-arrow-right"></i>
-						</div>
-					</div>
-				</div>
-
-				<!-- 操作按钮区域 -->
-				<div class="action-buttons">
-					<button class="btn btn-primary" @click="goToChat">
-						<i class="u-icon-chat"></i> 小组聊天
-					</button>
-
-					<button class="btn btn-warning" v-if="isLeader" @click="dissolveGroup">
-						<i class="u-icon-delete"></i> 解散小组
-					</button>
-				</div>
 			</div>
 
 			<!-- 编辑小组信息模态框 -->
-			<div class="modal-mask" v-if="showEditModal">
-				<div class="modal-container">
+			<div class="modal-mask" v-if="showEditModal" @touchmove.prevent @scroll.prevent>
+				<div class="modal-container" @touchmove.stop>
 					<div class="modal-header">
 						<div class="modal-title">编辑小组信息</div>
-						<div class="modal-close" @click="showEditModal = false">×</div>
+						<div class="modal-close" @click="closeEditModal">
+							<u-icon name="close" color="#909399" size="18"></u-icon>
+						</div>
 					</div>
 					<div class="modal-body">
-						<div class="form-group">
-							<label class="form-label">小组口号</label>
-							<textarea class="form-textarea" v-model="editSlogan" placeholder="请输入小组口号..."></textarea>
+						<!-- 头像编辑区域 -->
+						<div class="form-section avatar-edit-section">
+							<div class="section-title">小组头像</div>
+							<div class="avatar-edit-container" @click="editAvatar">
+								<div class="current-avatar">
+									<span v-if="!groupDetail.head">{{ groupDetail.groupName ? groupDetail.groupName.charAt(0) : '?' }}</span>
+									<img v-else :src="getGroupAvatar()" :alt="groupDetail.groupName">
+								</div>
+								<div class="avatar-edit-btn">
+									<u-icon name="camera" color="#4361ee" size="16"></u-icon>
+									<span>更换头像</span>
+								</div>
+							</div>
 						</div>
-						<div class="form-group">
-							<label class="form-label">小组规则</label>
-							<textarea class="form-textarea" v-model="editRule" placeholder="请输入小组规则..."></textarea>
+						
+						<!-- 信息编辑区域 -->
+						<div class="form-section">
+							<div class="form-row">
+								<div class="form-label">小组口号</div>
+								<div class="form-input">
+									<u-textarea v-model="editSlogan" placeholder="请输入小组口号..." :maxlength="100" show-confirm-bar="false" :auto-height="true"></u-textarea>
+								</div>
+							</div>
+							<div class="form-row">
+								<div class="form-label">小组规则</div>
+								<div class="form-input">
+									<u-textarea v-model="editRule" placeholder="请输入小组规则..." :maxlength="500" show-confirm-bar="false" :auto-height="true"></u-textarea>
+								</div>
+							</div>
 						</div>
 					</div>
 					<div class="modal-footer">
-						<button class="modal-btn modal-btn-cancel" @click="showEditModal = false">取消</button>
-						<button class="modal-btn modal-btn-submit" @click="saveGroupInfo">保存</button>
+						<u-button type="info" plain @click="closeEditModal" :custom-style="{marginRight: '10px'}">取消</u-button>
+						<u-button type="primary" @click="saveGroupInfo">保存</u-button>
 					</div>
 				</div>
 			</div>
@@ -317,6 +364,8 @@ export default {
 			showEditModal: false,
 			editSlogan: "",
 			editRule: "",
+			// 滚动位置保存
+			scrollTop: 0,
 			// 当前用户ID（后续从用户store获取）
 			currentUserId: uni.getStorageSync('id') || 3
 		}
@@ -580,11 +629,35 @@ export default {
 			this.editSlogan = this.groupDetail.slogan;
 			this.editRule = this.groupDetail.rule;
 			this.showEditModal = true;
+			// 阻止背景滚动
+			this.lockBodyScroll();
+		},
+		
+		// 编辑头像
+		editAvatar() {
+			uni.showToast({ title: '头像编辑功能开发中', icon: 'none' });
+		},
+		
+		// 编辑标语
+		editSlogan() {
+			uni.showPrompt({
+				title: '编辑小组口号',
+				placeholderText: '请输入小组口号...',
+				text: this.groupDetail.slogan || '',
+				success: (res) => {
+					if (res.confirm) {
+						console.log('新的标语:', res.content);
+						uni.showToast({ title: '功能开发中', icon: 'none' });
+					}
+				}
+			});
 		},
 		
 		// 保存小组信息
 		saveGroupInfo() {
 			this.showEditModal = false;
+			// 恢复背景滚动
+			this.unlockBodyScroll();
 			uni.showToast({ title: '功能开发中', icon: 'none' });
 		},
 		
@@ -627,24 +700,35 @@ export default {
 		
 		// 获取任务状态图标
 		getTaskStatusIcon(task) {
-			console.log(task);
-			if (!task) return '/static/groupInfo/dengdai.png';
+			console.log('获取任务状态图标:', task);
+			if (!task) {
+				console.log('任务为空，返回默认等待状态');
+				return '/static/groupInfo/dengdai.png';
+			}
 			
-			// 获取任务开始时间和结束时间
+			// 获取任务开始时间和结束时间（支持两种格式）
 			const startTime = task.groupTaskStartTime || task.group_task_start_time;
 			const endTime = task.groupTaskLastTime || task.group_task_last_time;
 			const currentTime = new Date();
 			
 			// 如果没有时间信息，默认为等待状态
 			if (!startTime) {
+				console.log('缺少开始时间，默认等待状态');
 				return '/static/groupInfo/dengdai.png';
 			}
 			
 			// 将时间字符串转换为 Date 对象
 			const taskStartTime = new Date(startTime);
 			const taskEndTime = endTime ? new Date(endTime) : null;
-			console.log(currentTime<taskEndTime);
-			console.log(currentTime);
+			
+			console.log('任务时间判断:', {
+				currentTime,
+				taskStartTime,
+				taskEndTime,
+				isBeforeStart: currentTime < taskStartTime,
+				isAfterEnd: taskEndTime && currentTime > taskEndTime
+			});
+			
 			// 判断任务状态
 			if (currentTime < taskStartTime) {
 				// 当前时间小于开始时间，任务未开始（等待）
@@ -714,6 +798,61 @@ export default {
 			}
 			
 			return '暂无';
+		},
+		
+		// 模态框滚动控制方法
+		lockBodyScroll() {
+			// H5环境下的滚动锁定
+			// #ifdef H5
+			// 保存当前滚动位置
+			this.scrollTop = document.documentElement.scrollTop || document.body.scrollTop || 0;
+			// 锁定背景滚动
+			document.body.style.position = 'fixed';
+			document.body.style.top = `-${this.scrollTop}px`;
+			document.body.style.width = '100%';
+			document.body.style.overflow = 'hidden';
+			// #endif
+			
+			// 小程序和App环境下使用page-meta组件控制
+			// #ifndef H5
+			// 小程序和App中可以通过设置样式来阻止滚动
+			this.$nextTick(() => {
+				uni.pageScrollTo({
+					scrollTop: 0,
+					duration: 0
+				});
+			});
+			// #endif
+		},
+		
+		unlockBodyScroll() {
+			// H5环境下的滚动恢复
+			// #ifdef H5
+			// 恢复背景滚动
+			document.body.style.position = '';
+			document.body.style.top = '';
+			document.body.style.width = '';
+			document.body.style.overflow = '';
+			// 恢复滚动位置
+			if (this.scrollTop) {
+				this.$nextTick(() => {
+					document.documentElement.scrollTop = this.scrollTop;
+					document.body.scrollTop = this.scrollTop;
+				});
+			}
+			// #endif
+			
+			// 小程序和App环境下不需要特殊处理
+			// #ifndef H5
+			// 小程序和App中模态框关闭后会自动恢复
+			// #endif
+		},
+		
+		// 关闭模态框
+		closeEditModal() {
+			this.showEditModal = false;
+			// 恢复背景滚动
+			this.unlockBodyScroll();
 		}
 	},
 	
@@ -805,6 +944,7 @@ export default {
 		padding: 20px;
 		overflow-y: auto;
 		padding-bottom: 70px;
+		-webkit-overflow-scrolling: touch;
 	}
 
 	/* 小组基本信息卡片 */
@@ -814,14 +954,26 @@ export default {
 		padding: 20px;
 		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 		margin-bottom: 20px;
-		text-align: center;
 	}
-
+	
+	.profile-header {
+		display: flex;
+		align-items: flex-start;
+		gap: 20px;
+		margin-bottom: 20px;
+	}
+	
+	.avatar-section {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 10px;
+	}
+	
 	.group-avatar {
 		width: 80px;
 		height: 80px;
 		border-radius: 50%;
-		margin: 0 auto 15px;
 		border: 4px solid var(--light);
 		box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 		background: linear-gradient(45deg, var(--accent), var(--success));
@@ -832,6 +984,7 @@ export default {
 		font-size: 2rem;
 		font-weight: bold;
 		overflow: hidden;
+		position: relative;
 	}
 
 	.group-avatar img {
@@ -840,10 +993,190 @@ export default {
 		object-fit: cover;
 	}
 
+	
+	.basic-info {
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+		gap: 12px;
+	}
+	
+	.leader-actions,
+	.member-actions {
+		display: flex;
+		gap: 10px;
+		flex-wrap: nowrap;
+		align-items: center;
+		justify-content: flex-start;
+	}
+	
+	.action-button {
+		display: flex;
+		align-items: center;
+		gap: 5px;
+		padding: 8px 12px;
+		border-radius: 8px;
+		background: var(--light);
+		border: 1px solid var(--light-gray);
+		color: var(--primary);
+		font-size: 0.85rem;
+		cursor: pointer;
+		transition: all 0.2s ease;
+	}
+	
+	.action-button:hover {
+		background: var(--primary);
+		color: white;
+		transform: translateY(-1px);
+	}
+	
+	.action-button.danger {
+		color: var(--warning);
+		border-color: rgba(247, 37, 133, 0.3);
+	}
+	
+	.action-button.danger:hover {
+		background: var(--warning);
+		color: white;
+	}
+	
+	.main-actions {
+		margin-top: 15px;
+	}
+	
+	.action-btn.full-width {
+		width: 100%;
+		justify-content: center;
+		padding: 12px;
+		font-weight: 600;
+	}
+	
+	.quick-action-btn {
+		display: flex;
+		align-items: center;
+		gap: 5px;
+		padding: 8px 12px;
+		border-radius: 8px;
+		background: var(--primary);
+		color: white;
+		font-size: 0.85rem;
+		cursor: pointer;
+		transition: all 0.2s ease;
+	}
+	
+	.quick-action-btn:hover {
+		background: var(--secondary);
+		transform: translateY(-1px);
+	}
+	
+	.management-actions {
+		margin-top: 15px;
+		padding-top: 15px;
+		border-top: 1px solid var(--light-gray);
+	}
+	
+	.management-row {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 10px;
+		margin-bottom: 10px;
+		min-width: 0;
+		width: 100%;
+	}
+	
+	.management-row:last-child {
+		margin-bottom: 0;
+	}
+	
+	.management-item {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		padding: 12px 15px;
+		border-radius: 10px;
+		background: var(--section-bg);
+		color: var(--primary);
+		font-size: 0.9rem;
+		cursor: pointer;
+		transition: all 0.2s ease;
+		justify-content: center;
+		border: 1px solid transparent;
+		flex-wrap: nowrap;
+		white-space: nowrap;
+		min-width: 0;
+	}
+	
+	.management-item:hover {
+		background: var(--primary);
+		color: white;
+		transform: translateY(-1px);
+	}
+	
+	/* 危险操作样式 */
+	.dangerous-actions {
+		padding-top: 15px;
+		border-top: 1px solid rgba(247, 37, 133, 0.1);
+	}
+	
+	.transfer-action {
+		color: var(--primary);
+		border: 1px solid rgba(67, 97, 238, 0.2);
+		background: rgba(67, 97, 238, 0.05);
+	}
+	
+	.transfer-action:hover {
+		background: var(--primary);
+		color: white;
+		border-color: var(--primary);
+	}
+	
+	.dissolve-action {
+		color: var(--warning);
+		border: 1px solid rgba(247, 37, 133, 0.2);
+		background: rgba(247, 37, 133, 0.05);
+	}
+	
+	.dissolve-action:hover {
+		background: var(--warning);
+		color: white;
+		border-color: var(--warning);
+	}
+	
+	/* 规则编辑区域样式 */
+	.rule-section {
+		margin-top: 20px;
+		padding-top: 15px;
+		border-top: 1px solid var(--light-gray);
+	}
+	
+	.rule-header {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin-bottom: 10px;
+	}
+	
+	.rule-title {
+		font-weight: 600;
+		color: var(--dark);
+		font-size: 1rem;
+	}
+	
+	.rule-content {
+		padding: 12px;
+		background: var(--section-bg);
+		border-radius: 8px;
+		color: var(--dark);
+		line-height: 1.5;
+		font-size: 0.9rem;
+		white-space: pre-line;
+	}
+
 	.group-name {
 		font-size: 1.5rem;
 		font-weight: 700;
 		margin-bottom: 5px;
+		text-align: left;
 	}
 
 	.group-level {
@@ -852,7 +1185,6 @@ export default {
 		padding: 4px 12px;
 		border-radius: 20px;
 		font-size: 0.9rem;
-		margin-bottom: 15px;
 		color: var(--primary);
 		font-weight: 500;
 	}
@@ -860,10 +1192,32 @@ export default {
 	.group-slogan {
 		font-style: italic;
 		color: var(--primary);
-		margin-bottom: 15px;
 		padding: 10px;
 		background: rgba(67, 97, 238, 0.05);
 		border-radius: 8px;
+		text-align: left;
+	}
+	
+	.progress-section {
+		margin: 15px 0;
+	}
+	
+	.progress-info {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin-bottom: 8px;
+	}
+	
+	.progress-label {
+		font-size: 0.9rem;
+		color: var(--gray);
+	}
+	
+	.progress-value {
+		font-size: 0.9rem;
+		font-weight: 600;
+		color: var(--primary);
 	}
 
 	.group-stats {
@@ -967,6 +1321,9 @@ export default {
 	.info-value {
 		flex: 1;
 		font-weight: 500;
+		display: flex;
+		align-items: center;
+		gap: 5px;
 	}
 
 	/* 成员列表 */
@@ -1049,22 +1406,101 @@ export default {
 		text-align: center;
 		padding: 40px 20px;
 		color: var(--gray);
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
 	}
 	
 	.empty-state .empty-icon {
-		font-size: 3rem;
+		display: flex;
+		justify-content: center;
+		align-items: center;
 		margin-bottom: 15px;
-		opacity: 0.5;
+		width: 100%;
 	}
 	
 	.empty-state .empty-text {
-		font-size: 0.9rem;
-		line-height: 1.5;
+		font-size: 1rem;
+		font-weight: 500;
+		margin-bottom: 8px;
+		color: var(--dark);
+	}
+	
+	.empty-state .empty-desc {
+		font-size: 0.85rem;
+		color: var(--gray);
+		line-height: 1.4;
 	}
 	
 	.members-empty {
 		grid-column: 1 / -1;
 		padding: 30px 20px;
+	}
+	
+	/* 加载状态样式 */
+	.loading-state {
+		text-align: center;
+		padding: 40px 20px;
+		color: var(--gray);
+	}
+	
+	.loading-spinner {
+		width: 32px;
+		height: 32px;
+		margin: 0 auto 15px;
+		border: 3px solid var(--light-gray);
+		border-top: 3px solid var(--primary);
+		border-radius: 50%;
+		animation: spin 1s linear infinite;
+	}
+	
+	.loading-text {
+		font-size: 0.9rem;
+		color: var(--gray);
+	}
+	
+	/* 错误提示样式 */
+	.error-message {
+		background: #fff2f0;
+		border: 1px solid #ffccc7;
+		border-radius: 12px;
+		padding: 16px;
+		margin-bottom: 20px;
+		display: flex;
+		align-items: center;
+		gap: 12px;
+	}
+	
+	.error-icon {
+		color: #ff4d4f;
+		font-size: 1.2rem;
+	}
+	
+	.error-content {
+		flex: 1;
+	}
+	
+	.error-text {
+		color: #ff4d4f;
+		font-size: 0.9rem;
+		margin-bottom: 8px;
+	}
+	
+	.retry-btn {
+		background: #ff4d4f;
+		color: white;
+		border: none;
+		padding: 6px 12px;
+		border-radius: 6px;
+		font-size: 0.85rem;
+		cursor: pointer;
+		transition: all 0.2s;
+	}
+	
+	.retry-btn:hover {
+		background: #d9363e;
+		transform: translateY(-1px);
 	}
 
 	.task-item {
@@ -1101,12 +1537,9 @@ export default {
 
 	.task-title {
 		font-weight: 600;
-		margin-bottom: 5px;
-	}
-
-	.task-progress {
-		font-size: 0.85rem;
-		color: var(--gray);
+		color: var(--dark);
+		font-size: 0.95rem;
+		line-height: 1.4;
 	}
 
 	.task-actions {
@@ -1220,7 +1653,11 @@ export default {
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		z-index: 1000;
+		z-index: 10080;
+		/* 阻止背景滚动 */
+		overflow: hidden;
+		/* 阻止触摸事件穿透 */
+		touch-action: none;
 	}
 
 	.modal-container {
@@ -1247,62 +1684,121 @@ export default {
 	}
 
 	.modal-close {
-		font-size: 1.5rem;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 32px;
+		height: 32px;
+		border-radius: 50%;
+		background: #f5f5f5;
 		cursor: pointer;
-		color: var(--gray);
+		transition: background-color 0.2s;
+	}
+	
+	.modal-close:hover {
+		background: #e9ecef;
 	}
 
 	.modal-body {
 		margin-bottom: 20px;
 	}
 
-	.form-group {
-		margin-bottom: 15px;
-	}
-
-	.form-label {
-		display: block;
-		margin-bottom: 5px;
-		font-weight: 500;
-	}
-
-	.form-input,
-	.form-textarea {
-		width: 100%;
-		padding: 10px;
-		border: 1px solid var(--light-gray);
-		border-radius: 8px;
-		font-size: 1rem;
-	}
-
-	.form-textarea {
-		min-height: 100px;
-		resize: vertical;
-	}
-
 	.modal-footer {
 		display: flex;
 		gap: 10px;
+		justify-content: flex-end;
 	}
-
-	.modal-btn {
-		flex: 1;
-		padding: 10px;
-		border-radius: 8px;
-		text-align: center;
+	
+	/* 表单样式优化 */
+	.form-section {
+		margin-bottom: 20px;
+	}
+	
+	.section-title {
+		font-size: 1rem;
+		font-weight: 600;
+		color: var(--dark);
+		margin-bottom: 15px;
+	}
+	
+	.form-row {
+		display: flex;
+		align-items: flex-start;
+		gap: 15px;
+		margin-bottom: 20px;
+	}
+	
+	.form-label {
+		min-width: 80px;
+		font-size: 0.95rem;
 		font-weight: 500;
+		color: var(--dark);
+		padding-top: 8px;
+		flex-shrink: 0;
+	}
+	
+	.form-input {
+		flex: 1;
+	}
+	
+	/* 头像编辑样式 */
+	.avatar-edit-section {
+		padding-bottom: 20px;
+		border-bottom: 1px solid var(--light-gray);
+	}
+	
+	.avatar-edit-container {
+		display: flex;
+		align-items: center;
+		gap: 15px;
+		padding: 15px;
+		border-radius: 12px;
+		background: var(--section-bg);
 		cursor: pointer;
-		border: none;
+		transition: all 0.2s ease;
+		border: 2px solid transparent;
 	}
-
-	.modal-btn-cancel {
-		background: var(--light);
-		color: var(--gray);
+	
+	.avatar-edit-container:hover {
+		background: rgba(67, 97, 238, 0.05);
+		border-color: var(--primary);
+		transform: translateY(-2px);
 	}
-
-	.modal-btn-submit {
-		background: var(--primary);
+	
+	.current-avatar {
+		width: 60px;
+		height: 60px;
+		border-radius: 50%;
+		background: linear-gradient(45deg, var(--accent), var(--success));
+		display: flex;
+		align-items: center;
+		justify-content: center;
 		color: white;
+		font-size: 1.5rem;
+		font-weight: bold;
+		overflow: hidden;
+		flex-shrink: 0;
+		border: 3px solid white;
+		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+	}
+	
+	.current-avatar img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+	
+	.avatar-edit-btn {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		color: var(--primary);
+		font-size: 0.95rem;
+		font-weight: 500;
+	}
+	
+	.avatar-edit-btn:hover {
+		color: var(--secondary);
 	}
 
 	/* 底部导航 */

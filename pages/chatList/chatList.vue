@@ -16,8 +16,18 @@
 		<!-- 搜索区域 -->
 		<div class="search-container">
 			<div class="search-bar">
-				<i class="fas fa-search"></i>
-				<input type="text" v-model="searchQuery" placeholder="搜索联系人、群组或消息">
+				<u-input 
+					v-model="searchQuery"
+					placeholder="搜索联系人、群组或消息内容"
+					clearable
+					:loading="searchLoading"
+					border="none"
+					style="flex: 1; background: transparent;"
+					@input="onSearchInput">
+					<template #prefix>
+						<i class="fas fa-search"></i>
+					</template>
+				</u-input>
 			</div>
 		</div>
 
@@ -78,7 +88,10 @@
 					</div>
 					<div class="chat-info">
 						<div class="chat-header">
-							<div class="chat-name">{{ getFriendName(chat.friend,chat.statu)}}</div>
+							<div class="chat-name-container">
+								<span class="chat-name">{{ getFriendName(chat.friend,chat.statu)}}</span>
+								<span v-if="chat.statu === 'group'" class="group-badge">群聊</span>
+							</div>
 							<div class="chat-time">{{formatTime(chat.timestamp) }}</div>
 						</div>
 						<div class="chat-preview">
@@ -120,7 +133,14 @@
 				activeTab: 'messages',
 				activeNav: 'messages',
 				searchQuery: '',
-				chatList: []
+				chatList: [],
+				// 搜索相关状态
+				searchLoading: false,
+				searchTimeout: null,
+				matchedChatIds: new Set(), // 匹配的聊天ID集合
+				// 长按删除相关
+				currentChat: null,
+				longPressTimer: null
 			}
 		},
 		onLoad() {
@@ -137,6 +157,10 @@
 		},
 		onUnload() {
 			uni.$off('websocket-message');
+			// 清理搜索定时器
+			if (this.searchTimeout) {
+				clearTimeout(this.searchTimeout);
+			}
 		},
 		computed: {
 			imageUrl() {
@@ -148,18 +172,37 @@
 			}),
 			filteredChats() {
 				const query = this.searchQuery?.trim().toLowerCase();
-				console.log(!query)
 				// 如果搜索关键词为空，返回全部
 				if (!query) {
-					console.log(query)
 					return this.chatList;
 				}
-				return this.chatList.filter(chat => {
+				
+				// 基础搜索：联系人名称和最后一条消息
+				let baseFilteredChats = this.chatList.filter(chat => {
 					const friendData = this.getFriend(chat.friend, chat.statu);
 					const name = friendData && friendData.name ? String(friendData.name).toLowerCase() : '';
+					const groupName = friendData && friendData.groupName ? String(friendData.groupName).toLowerCase() : '';
 					const lastMessage = chat.content ? String(chat.content).toLowerCase() : '';
-					return name.includes(query) || lastMessage.includes(query);
+					return name.includes(query) || groupName.includes(query) || lastMessage.includes(query);
 				});
+				
+				// 合并搜索结果：基础搜索 + 聊天记录内容搜索
+				const allMatchedChats = [...baseFilteredChats];
+				
+				// 添加通过聊天记录内容搜索到的结果
+				this.matchedChatIds.forEach(chatKey => {
+					const [friend, statu] = chatKey.split('_');
+					const existingChat = this.chatList.find(chat => 
+						chat.friend === friend && chat.statu === statu
+					);
+					if (existingChat && !allMatchedChats.find(chat => 
+						chat.friend === existingChat.friend && chat.statu === existingChat.statu
+					)) {
+						allMatchedChats.push(existingChat);
+					}
+				});
+				
+				return allMatchedChats;
 			}
 		},
 		methods: {
@@ -387,6 +430,45 @@
 				// 更新未读状态
 				this.chats = [...this.chats];
 			},
+			// 搜索相关方法
+			onSearchInput() {
+				// 清除之前的定时器
+				if (this.searchTimeout) {
+					clearTimeout(this.searchTimeout);
+				}
+				
+				// 设置防抖
+				this.searchTimeout = setTimeout(() => {
+					if (this.searchQuery.trim()) {
+						this.performChatMessagesSearch();
+					} else {
+						// 清空搜索时重置状态
+						this.matchedChatIds.clear();
+						this.chatTypeFilter = 'all';
+					}
+				}, 500);
+			},
+			
+			// 执行聊天记录内容搜索
+			async performChatMessagesSearch() {
+				try {
+					this.searchLoading = true;
+					const result = await db.searchChatMessages(this.searchQuery.trim());
+					
+					// 更新匹配的聊天ID集合
+					this.matchedChatIds.clear();
+					if (result && result.length > 0) {
+						result.forEach(item => {
+							this.matchedChatIds.add(`${item.friend}_${item.statu}`);
+						});
+					}
+				} catch (error) {
+					console.error('搜索聊天记录失败:', error);
+				} finally {
+					this.searchLoading = false;
+				}
+			},
+
 			formatTime(timestamp) {
 				// 将输入转换为 Date 对象
 				const date = new Date(timestamp);
@@ -588,6 +670,24 @@
 
 	.search-bar input::placeholder {
 		color: var(--gray);
+	}
+
+	/* 群聊标记样式 */
+	.chat-name-container {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+	}
+
+	.group-badge {
+		background: rgba(220, 53, 69, 0.15);
+		color: #dc3545;
+		font-size: 0.7rem;
+		padding: 2px 6px;
+		border-radius: 8px;
+		font-weight: 500;
+		white-space: nowrap;
+		border: 1px solid rgba(220, 53, 69, 0.3);
 	}
 
 	/* 聊天列表 */

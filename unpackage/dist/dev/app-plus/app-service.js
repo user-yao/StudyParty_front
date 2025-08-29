@@ -5700,6 +5700,29 @@ if (uni.restoreGlobal) {
           }
         });
       });
+    },
+    // 搜索聊天记录内容
+    searchChatMessages(searchQuery) {
+      formatAppLog("log", "at utils/SQLite.js:225", "搜索聊天记录内容:", searchQuery);
+      let userid = uni.getStorageSync("id");
+      return new Promise((resolve, reject) => {
+        plus.sqlite.selectSql({
+          name: dbName,
+          sql: `
+					SELECT DISTINCT friend, statu, COUNT(*) as matchCount
+					FROM Messages
+					WHERE userid = '${userid}'
+					  AND content LIKE '%${searchQuery}%'
+					GROUP BY friend, statu
+					ORDER BY matchCount DESC;
+				`,
+          success: resolve,
+          fail(e) {
+            formatAppLog("log", "at utils/SQLite.js:240", "搜索聊天记录失败:", e);
+            reject(e);
+          }
+        });
+      });
     }
   };
   class WebSocketService {
@@ -9330,16 +9353,24 @@ if (uni.restoreGlobal) {
         activeTab: "messages",
         activeNav: "messages",
         searchQuery: "",
-        chatList: []
+        chatList: [],
+        // 搜索相关状态
+        searchLoading: false,
+        searchTimeout: null,
+        matchedChatIds: /* @__PURE__ */ new Set(),
+        // 匹配的聊天ID集合
+        // 长按删除相关
+        currentChat: null,
+        longPressTimer: null
       };
     },
     onLoad() {
       const that2 = this;
       uni.$on("websocket-message", function(data) {
-        formatAppLog("log", "at pages/chatList/chatList.vue:129", "监听到事件来自 websocket-message ，携带参数 msg 为：");
-        formatAppLog("log", "at pages/chatList/chatList.vue:130", data);
+        formatAppLog("log", "at pages/chatList/chatList.vue:149", "监听到事件来自 websocket-message ，携带参数 msg 为：");
+        formatAppLog("log", "at pages/chatList/chatList.vue:150", data);
         that2.getCharList().then((res2) => {
-          formatAppLog("log", "at pages/chatList/chatList.vue:132", res2);
+          formatAppLog("log", "at pages/chatList/chatList.vue:152", res2);
           that2.chatList = res2;
           that2.clearNode(res2);
         });
@@ -9347,6 +9378,9 @@ if (uni.restoreGlobal) {
     },
     onUnload() {
       uni.$off("websocket-message");
+      if (this.searchTimeout) {
+        clearTimeout(this.searchTimeout);
+      }
     },
     computed: {
       imageUrl() {
@@ -9359,41 +9393,53 @@ if (uni.restoreGlobal) {
       filteredChats() {
         var _a;
         const query = (_a = this.searchQuery) == null ? void 0 : _a.trim().toLowerCase();
-        formatAppLog("log", "at pages/chatList/chatList.vue:151", !query);
         if (!query) {
-          formatAppLog("log", "at pages/chatList/chatList.vue:154", query);
           return this.chatList;
         }
-        return this.chatList.filter((chat) => {
+        let baseFilteredChats = this.chatList.filter((chat) => {
           const friendData = this.getFriend(chat.friend, chat.statu);
           const name2 = friendData && friendData.name ? String(friendData.name).toLowerCase() : "";
+          const groupName = friendData && friendData.groupName ? String(friendData.groupName).toLowerCase() : "";
           const lastMessage = chat.content ? String(chat.content).toLowerCase() : "";
-          return name2.includes(query) || lastMessage.includes(query);
+          return name2.includes(query) || groupName.includes(query) || lastMessage.includes(query);
         });
+        const allMatchedChats = [...baseFilteredChats];
+        this.matchedChatIds.forEach((chatKey) => {
+          const [friend, statu] = chatKey.split("_");
+          const existingChat = this.chatList.find(
+            (chat) => chat.friend === friend && chat.statu === statu
+          );
+          if (existingChat && !allMatchedChats.find(
+            (chat) => chat.friend === existingChat.friend && chat.statu === existingChat.statu
+          )) {
+            allMatchedChats.push(existingChat);
+          }
+        });
+        return allMatchedChats;
       }
     },
     methods: {
       clearNode(res2) {
         const hasMessage = res2.some((item) => item.message_count !== 0);
-        formatAppLog("log", "at pages/chatList/chatList.vue:168", hasMessage);
+        formatAppLog("log", "at pages/chatList/chatList.vue:211", hasMessage);
         if (hasMessage) {
           uni.showTabBarRedDot({
             index: 2,
             success: () => {
-              formatAppLog("log", "at pages/chatList/chatList.vue:173", "小红点显示成功");
+              formatAppLog("log", "at pages/chatList/chatList.vue:216", "小红点显示成功");
             },
             fail: (err) => {
-              formatAppLog("error", "at pages/chatList/chatList.vue:176", "小红点显示失败", err);
+              formatAppLog("error", "at pages/chatList/chatList.vue:219", "小红点显示失败", err);
             }
           });
         } else {
           uni.hideTabBarRedDot({
             index: 2,
             success: () => {
-              formatAppLog("log", "at pages/chatList/chatList.vue:183", "小红点隐藏成功");
+              formatAppLog("log", "at pages/chatList/chatList.vue:226", "小红点隐藏成功");
             },
             fail: (err) => {
-              formatAppLog("error", "at pages/chatList/chatList.vue:186", "小红点隐藏失败", err);
+              formatAppLog("error", "at pages/chatList/chatList.vue:229", "小红点隐藏失败", err);
             }
           });
         }
@@ -9424,18 +9470,18 @@ if (uni.restoreGlobal) {
             if (res2.confirm) {
               db.clearMessage(chat.friend, chat.statu);
               this.getCharList().then((res3) => {
-                formatAppLog("log", "at pages/chatList/chatList.vue:218", res3);
+                formatAppLog("log", "at pages/chatList/chatList.vue:261", res3);
                 this.chatList = res3;
                 this.clearNode(res3);
               });
             } else if (res2.cancel) {
-              formatAppLog("log", "at pages/chatList/chatList.vue:223", "用户点击取消");
+              formatAppLog("log", "at pages/chatList/chatList.vue:266", "用户点击取消");
             }
           }
         });
       },
       toChatPage(chat) {
-        formatAppLog("log", "at pages/chatList/chatList.vue:230", chat);
+        formatAppLog("log", "at pages/chatList/chatList.vue:273", chat);
         let friend, chatData;
         if (chat.statu === "group") {
           const groupData = this.getFriend(chat.friend, chat.statu);
@@ -9491,8 +9537,8 @@ if (uni.restoreGlobal) {
             statu: "person"
           };
         }
-        formatAppLog("log", "at pages/chatList/chatList.vue:296", "friend:", friend);
-        formatAppLog("log", "at pages/chatList/chatList.vue:297", "chatData:", chatData);
+        formatAppLog("log", "at pages/chatList/chatList.vue:339", "friend:", friend);
+        formatAppLog("log", "at pages/chatList/chatList.vue:340", "chatData:", chatData);
         uni.navigateTo({
           url: `/pages/chatList/chatPage`,
           success: (res2) => {
@@ -9564,7 +9610,7 @@ if (uni.restoreGlobal) {
       },
       async getCharList() {
         return await db.selectChatList().then((res2) => {
-          formatAppLog("log", "at pages/chatList/chatList.vue:374", res2);
+          formatAppLog("log", "at pages/chatList/chatList.vue:417", res2);
           return res2;
         });
       },
@@ -9575,6 +9621,37 @@ if (uni.restoreGlobal) {
         alert(`打开聊天: ${chat.name}`);
         chat.unreadCount = 0;
         this.chats = [...this.chats];
+      },
+      // 搜索相关方法
+      onSearchInput() {
+        if (this.searchTimeout) {
+          clearTimeout(this.searchTimeout);
+        }
+        this.searchTimeout = setTimeout(() => {
+          if (this.searchQuery.trim()) {
+            this.performChatMessagesSearch();
+          } else {
+            this.matchedChatIds.clear();
+            this.chatTypeFilter = "all";
+          }
+        }, 500);
+      },
+      // 执行聊天记录内容搜索
+      async performChatMessagesSearch() {
+        try {
+          this.searchLoading = true;
+          const result = await db.searchChatMessages(this.searchQuery.trim());
+          this.matchedChatIds.clear();
+          if (result && result.length > 0) {
+            result.forEach((item) => {
+              this.matchedChatIds.add(`${item.friend}_${item.statu}`);
+            });
+          }
+        } catch (error2) {
+          formatAppLog("error", "at pages/chatList/chatList.vue:466", "搜索聊天记录失败:", error2);
+        } finally {
+          this.searchLoading = false;
+        }
       },
       formatTime(timestamp) {
         const date3 = new Date(timestamp);
@@ -9606,20 +9683,20 @@ if (uni.restoreGlobal) {
       }
     },
     onShow() {
-      formatAppLog("log", "at pages/chatList/chatList.vue:436", "查询消息列表");
+      formatAppLog("log", "at pages/chatList/chatList.vue:518", "查询消息列表");
       Promise.all([
         this.friendLists(),
         this.getMyGroup()
       ]).then(() => {
         this.getCharList().then((res2) => {
-          formatAppLog("log", "at pages/chatList/chatList.vue:443", res2);
+          formatAppLog("log", "at pages/chatList/chatList.vue:525", res2);
           this.chatList = res2;
           this.clearNode(res2);
         });
       }).catch((error2) => {
-        formatAppLog("error", "at pages/chatList/chatList.vue:448", "加载数据失败:", error2);
+        formatAppLog("error", "at pages/chatList/chatList.vue:530", "加载数据失败:", error2);
         this.getCharList().then((res2) => {
-          formatAppLog("log", "at pages/chatList/chatList.vue:451", res2);
+          formatAppLog("log", "at pages/chatList/chatList.vue:533", res2);
           this.chatList = res2;
           this.clearNode(res2);
         });
@@ -9627,6 +9704,7 @@ if (uni.restoreGlobal) {
     }
   };
   function _sfc_render$2l(_ctx, _cache, $props, $setup, $data, $options) {
+    const _component_u_input = resolveEasycom(vue.resolveDynamicComponent("u-input"), uvInput);
     return vue.openBlock(), vue.createElementBlock("div", { class: "body" }, [
       vue.createCommentVNode(" 顶部导航 "),
       vue.createElementVNode("header", null, [
@@ -9647,20 +9725,22 @@ if (uni.restoreGlobal) {
       vue.createCommentVNode(" 搜索区域 "),
       vue.createElementVNode("div", { class: "search-container" }, [
         vue.createElementVNode("div", { class: "search-bar" }, [
-          vue.createElementVNode("i", { class: "fas fa-search" }),
-          vue.withDirectives(vue.createElementVNode(
-            "input",
-            {
-              type: "text",
-              "onUpdate:modelValue": _cache[1] || (_cache[1] = ($event) => $data.searchQuery = $event),
-              placeholder: "搜索联系人、群组或消息"
-            },
-            null,
-            512
-            /* NEED_PATCH */
-          ), [
-            [vue.vModelText, $data.searchQuery]
-          ])
+          vue.createVNode(_component_u_input, {
+            modelValue: $data.searchQuery,
+            "onUpdate:modelValue": _cache[1] || (_cache[1] = ($event) => $data.searchQuery = $event),
+            placeholder: "搜索联系人、群组或消息内容",
+            clearable: "",
+            loading: $data.searchLoading,
+            border: "none",
+            style: { "flex": "1", "background": "transparent" },
+            onInput: $options.onSearchInput
+          }, {
+            prefix: vue.withCtx(() => [
+              vue.createElementVNode("i", { class: "fas fa-search" })
+            ]),
+            _: 1
+            /* STABLE */
+          }, 8, ["modelValue", "loading", "onInput"])
         ])
       ]),
       vue.createCommentVNode(" 聊天列表 "),
@@ -9752,13 +9832,19 @@ if (uni.restoreGlobal) {
                   ]),
                   vue.createElementVNode("div", { class: "chat-info" }, [
                     vue.createElementVNode("div", { class: "chat-header" }, [
-                      vue.createElementVNode(
-                        "div",
-                        { class: "chat-name" },
-                        vue.toDisplayString($options.getFriendName(chat.friend, chat.statu)),
-                        1
-                        /* TEXT */
-                      ),
+                      vue.createElementVNode("div", { class: "chat-name-container" }, [
+                        vue.createElementVNode(
+                          "span",
+                          { class: "chat-name" },
+                          vue.toDisplayString($options.getFriendName(chat.friend, chat.statu)),
+                          1
+                          /* TEXT */
+                        ),
+                        chat.statu === "group" ? (vue.openBlock(), vue.createElementBlock("span", {
+                          key: 0,
+                          class: "group-badge"
+                        }, "群聊")) : vue.createCommentVNode("v-if", true)
+                      ]),
                       vue.createElementVNode(
                         "div",
                         { class: "chat-time" },
@@ -43308,6 +43394,292 @@ if (uni.restoreGlobal) {
     ]);
   }
   const PagesChatListGroupList = /* @__PURE__ */ _export_sfc(_sfc_main$23, [["render", _sfc_render$22], ["__file", "D:/uniapp2023/studyParty/pages/chatList/groupList.vue"]]);
+  const props$1s = defineMixin$1({
+    props: {
+      // 输入框的内容
+      value: {
+        type: [String, Number],
+        default: () => props$1O.textarea.value
+      },
+      // 输入框的内容
+      modelValue: {
+        type: [String, Number],
+        default: () => props$1O.textarea.value
+      },
+      // 输入框为空时占位符
+      placeholder: {
+        type: [String, Number],
+        default: () => props$1O.textarea.placeholder
+      },
+      // 指定placeholder的样式类，注意页面或组件的style中写了scoped时，需要在类名前写/deep/
+      placeholderClass: {
+        type: String,
+        default: () => props$1O.input.placeholderClass
+      },
+      // 指定placeholder的样式
+      placeholderStyle: {
+        type: [String, Object],
+        default: () => props$1O.input.placeholderStyle
+      },
+      // 输入框高度
+      height: {
+        type: [String, Number],
+        default: () => props$1O.textarea.height
+      },
+      // 设置键盘右下角按钮的文字，仅微信小程序，App-vue和H5有效
+      confirmType: {
+        type: String,
+        default: () => props$1O.textarea.confirmType
+      },
+      // 是否禁用
+      disabled: {
+        type: Boolean,
+        default: () => props$1O.textarea.disabled
+      },
+      // 是否显示统计字数
+      count: {
+        type: Boolean,
+        default: () => props$1O.textarea.count
+      },
+      // 是否自动获取焦点，nvue不支持，H5取决于浏览器的实现
+      focus: {
+        type: Boolean,
+        default: () => props$1O.textarea.focus
+      },
+      // 是否自动增加高度
+      autoHeight: {
+        type: Boolean,
+        default: () => props$1O.textarea.autoHeight
+      },
+      // 如果textarea是在一个position:fixed的区域，需要显示指定属性fixed为true
+      fixed: {
+        type: Boolean,
+        default: () => props$1O.textarea.fixed
+      },
+      // 指定光标与键盘的距离
+      cursorSpacing: {
+        type: Number,
+        default: () => props$1O.textarea.cursorSpacing
+      },
+      // 指定focus时的光标位置
+      cursor: {
+        type: [String, Number],
+        default: () => props$1O.textarea.cursor
+      },
+      // 是否显示键盘上方带有”完成“按钮那一栏，
+      showConfirmBar: {
+        type: Boolean,
+        default: () => props$1O.textarea.showConfirmBar
+      },
+      // 光标起始位置，自动聚焦时有效，需与selection-end搭配使用
+      selectionStart: {
+        type: Number,
+        default: () => props$1O.textarea.selectionStart
+      },
+      // 光标结束位置，自动聚焦时有效，需与selection-start搭配使用
+      selectionEnd: {
+        type: Number,
+        default: () => props$1O.textarea.selectionEnd
+      },
+      // 键盘弹起时，是否自动上推页面
+      adjustPosition: {
+        type: Boolean,
+        default: () => props$1O.textarea.adjustPosition
+      },
+      // 是否去掉 iOS 下的默认内边距，只微信小程序有效
+      disableDefaultPadding: {
+        type: Boolean,
+        default: () => props$1O.textarea.disableDefaultPadding
+      },
+      // focus时，点击页面的时候不收起键盘，只微信小程序有效
+      holdKeyboard: {
+        type: Boolean,
+        default: () => props$1O.textarea.holdKeyboard
+      },
+      // 最大输入长度，设置为 -1 的时候不限制最大长度
+      maxlength: {
+        type: [String, Number],
+        default: () => props$1O.textarea.maxlength
+      },
+      // 边框类型，surround-四周边框，bottom-底部边框
+      border: {
+        type: String,
+        default: () => props$1O.textarea.border
+      },
+      // 用于处理或者过滤输入框内容的方法
+      formatter: {
+        type: [Function, null],
+        default: () => props$1O.textarea.formatter
+      },
+      // 是否忽略组件内对文本合成系统事件的处理
+      ignoreCompositionEvent: {
+        type: Boolean,
+        default: true
+      }
+    }
+  });
+  const _sfc_main$22 = {
+    name: "u-textarea",
+    mixins: [mpMixin$1, mixin$1, props$1s],
+    data() {
+      return {
+        // 输入框的值
+        innerValue: "",
+        // 是否处于获得焦点状态
+        focused: false,
+        // value是否第一次变化，在watch中，由于加入immediate属性，会在第一次触发，此时不应该认为value发生了变化
+        firstChange: true,
+        // value绑定值的变化是由内部还是外部引起的
+        changeFromInner: false,
+        // 过滤处理方法
+        innerFormatter: (value2) => value2
+      };
+    },
+    created() {
+    },
+    watch: {
+      modelValue: {
+        immediate: true,
+        handler(newVal, oldVal) {
+          this.innerValue = newVal;
+          this.firstChange = false;
+          this.changeFromInner = false;
+        }
+      }
+    },
+    computed: {
+      fieldStyle() {
+        let style = {};
+        style["height"] = addUnit$1(this.height);
+        if (this.autoHeight) {
+          style["height"] = "auto";
+          style["minHeight"] = addUnit$1(this.height);
+        }
+        return style;
+      },
+      // 组件的类名
+      textareaClass() {
+        let classes = [], { border, disabled } = this;
+        border === "surround" && (classes = classes.concat(["u-border", "u-textarea--radius"]));
+        border === "bottom" && (classes = classes.concat([
+          "u-border-bottom",
+          "u-textarea--no-radius"
+        ]));
+        disabled && classes.push("u-textarea--disabled");
+        return classes.join(" ");
+      },
+      // 组件的样式
+      textareaStyle() {
+        const style = {};
+        return deepMerge$3(style, addStyle$1(this.customStyle));
+      }
+    },
+    emits: ["update:modelValue", "linechange", "focus", "blur", "change", "confirm", "keyboardheightchange"],
+    methods: {
+      addStyle: addStyle$1,
+      addUnit: addUnit$1,
+      // 在微信小程序中，不支持将函数当做props参数，故只能通过ref形式调用
+      setFormatter(e) {
+        this.innerFormatter = e;
+      },
+      onFocus(e) {
+        this.$emit("focus", e);
+      },
+      onBlur(e) {
+        this.$emit("blur", e);
+        formValidate$1(this, "blur");
+      },
+      onLinechange(e) {
+        this.$emit("linechange", e);
+      },
+      onInput(e) {
+        let { value: value2 = "" } = e.detail || {};
+        const formatter = this.formatter || this.innerFormatter;
+        const formatValue = formatter(value2);
+        this.innerValue = value2;
+        this.$nextTick(() => {
+          this.innerValue = formatValue;
+          this.valueChange();
+        });
+      },
+      // 内容发生变化，进行处理
+      valueChange() {
+        const value2 = this.innerValue;
+        this.$nextTick(() => {
+          this.$emit("update:modelValue", value2);
+          this.changeFromInner = true;
+          this.$emit("change", value2);
+          formValidate$1(this, "change");
+        });
+      },
+      onConfirm(e) {
+        this.$emit("confirm", e);
+      },
+      onKeyboardheightchange(e) {
+        this.$emit("keyboardheightchange", e);
+      }
+    }
+  };
+  function _sfc_render$21(_ctx, _cache, $props, $setup, $data, $options) {
+    return vue.openBlock(), vue.createElementBlock(
+      "view",
+      {
+        class: vue.normalizeClass(["u-textarea", $options.textareaClass]),
+        style: vue.normalizeStyle([$options.textareaStyle])
+      },
+      [
+        vue.createElementVNode("textarea", {
+          class: "u-textarea__field",
+          value: $data.innerValue,
+          style: vue.normalizeStyle($options.fieldStyle),
+          placeholder: _ctx.placeholder,
+          "placeholder-style": $options.addStyle(_ctx.placeholderStyle, typeof _ctx.placeholderStyle === "string" ? "string" : "object"),
+          "placeholder-class": _ctx.placeholderClass,
+          disabled: _ctx.disabled,
+          focus: _ctx.focus,
+          autoHeight: _ctx.autoHeight,
+          fixed: _ctx.fixed,
+          cursorSpacing: _ctx.cursorSpacing,
+          cursor: _ctx.cursor,
+          showConfirmBar: _ctx.showConfirmBar,
+          selectionStart: _ctx.selectionStart,
+          selectionEnd: _ctx.selectionEnd,
+          adjustPosition: _ctx.adjustPosition,
+          disableDefaultPadding: _ctx.disableDefaultPadding,
+          holdKeyboard: _ctx.holdKeyboard,
+          maxlength: _ctx.maxlength,
+          "confirm-type": _ctx.confirmType,
+          ignoreCompositionEvent: _ctx.ignoreCompositionEvent,
+          onFocus: _cache[0] || (_cache[0] = (...args) => $options.onFocus && $options.onFocus(...args)),
+          onBlur: _cache[1] || (_cache[1] = (...args) => $options.onBlur && $options.onBlur(...args)),
+          onLinechange: _cache[2] || (_cache[2] = (...args) => $options.onLinechange && $options.onLinechange(...args)),
+          onInput: _cache[3] || (_cache[3] = (...args) => $options.onInput && $options.onInput(...args)),
+          onConfirm: _cache[4] || (_cache[4] = (...args) => $options.onConfirm && $options.onConfirm(...args)),
+          onKeyboardheightchange: _cache[5] || (_cache[5] = (...args) => $options.onKeyboardheightchange && $options.onKeyboardheightchange(...args))
+        }, null, 44, ["value", "placeholder", "placeholder-style", "placeholder-class", "disabled", "focus", "autoHeight", "fixed", "cursorSpacing", "cursor", "showConfirmBar", "selectionStart", "selectionEnd", "adjustPosition", "disableDefaultPadding", "holdKeyboard", "maxlength", "confirm-type", "ignoreCompositionEvent"]),
+        _ctx.count ? (vue.openBlock(), vue.createElementBlock(
+          "text",
+          {
+            key: 0,
+            class: "u-textarea__count",
+            style: vue.normalizeStyle({
+              "background-color": _ctx.disabled ? "transparent" : "#fff"
+            })
+          },
+          vue.toDisplayString($data.innerValue.length) + "/" + vue.toDisplayString(_ctx.maxlength),
+          5
+          /* TEXT, STYLE */
+        )) : vue.createCommentVNode("v-if", true)
+      ],
+      6
+      /* CLASS, STYLE */
+    );
+  }
+  const uvTextarea = /* @__PURE__ */ _export_sfc(_sfc_main$22, [["render", _sfc_render$21], ["__scopeId", "data-v-b6c174a6"], ["__file", "D:/uniapp2023/studyParty/uni_modules/uview-plus/components/u-textarea/u-textarea.vue"]]);
+  const __vite_glob_0_112 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+    __proto__: null,
+    default: uvTextarea
+  }, Symbol.toStringTag, { value: "Module" }));
   const selectMyGroupTask = (data) => {
     return request({
       url: "/group/groupTask/selectMyGroupTask",
@@ -43366,7 +43738,7 @@ if (uni.restoreGlobal) {
       }
     });
   };
-  const _sfc_main$22 = {
+  const _sfc_main$21 = {
     data() {
       return {
         groupId: null,
@@ -43385,6 +43757,8 @@ if (uni.restoreGlobal) {
         showEditModal: false,
         editSlogan: "",
         editRule: "",
+        // 滚动位置保存
+        scrollTop: 0,
         // 当前用户ID（后续从用户store获取）
         currentUserId: uni.getStorageSync("id") || 3
       };
@@ -43465,7 +43839,7 @@ if (uni.restoreGlobal) {
       // 显示前3个任务（按照规范只显示任务题目）
       displayedTasks() {
         const tasks = this.groupTasks.slice(0, 3);
-        formatAppLog("log", "at pages/userInfo/groupInfo.vue:417", "当前显示任务:", tasks.length, "/", this.groupTasks.length);
+        formatAppLog("log", "at pages/userInfo/groupInfo.vue:466", "当前显示任务:", tasks.length, "/", this.groupTasks.length);
         return tasks;
       }
     },
@@ -43484,7 +43858,7 @@ if (uni.restoreGlobal) {
           this.error = null;
           const groupRes = await this.selectGroupById({ groupId: this.groupId });
           if (groupRes.code === 200) {
-            formatAppLog("log", "at pages/userInfo/groupInfo.vue:440", "群组详情加载成功:", groupRes.data);
+            formatAppLog("log", "at pages/userInfo/groupInfo.vue:489", "群组详情加载成功:", groupRes.data);
           } else {
             this.error = "群组详情加载失败";
           }
@@ -43492,22 +43866,22 @@ if (uni.restoreGlobal) {
             const taskRes = await selectMyGroupTask({ groupId: this.groupId, currentPage: 1 });
             if (taskRes.code === 200) {
               this.groupTasks = taskRes.data.records || [];
-              formatAppLog("log", "at pages/userInfo/groupInfo.vue:450", "群组任务加载成功:", this.groupTasks.length, "个任务");
+              formatAppLog("log", "at pages/userInfo/groupInfo.vue:499", "群组任务加载成功:", this.groupTasks.length, "个任务");
             }
           } catch (e) {
-            formatAppLog("error", "at pages/userInfo/groupInfo.vue:453", "任务加载失败:", e);
+            formatAppLog("error", "at pages/userInfo/groupInfo.vue:502", "任务加载失败:", e);
           }
           try {
             const memberRes = await selectGroupUser({ groupId: this.groupId });
             if (memberRes.code === 200) {
               this.groupMembers = memberRes.data || [];
-              formatAppLog("log", "at pages/userInfo/groupInfo.vue:461", "群组成员加载成功:", this.groupMembers.length, "个成员");
+              formatAppLog("log", "at pages/userInfo/groupInfo.vue:510", "群组成员加载成功:", this.groupMembers.length, "个成员");
             }
           } catch (e) {
-            formatAppLog("error", "at pages/userInfo/groupInfo.vue:464", "成员加载失败:", e);
+            formatAppLog("error", "at pages/userInfo/groupInfo.vue:513", "成员加载失败:", e);
           }
         } catch (error2) {
-          formatAppLog("error", "at pages/userInfo/groupInfo.vue:468", "加载群组数据失败:", error2);
+          formatAppLog("error", "at pages/userInfo/groupInfo.vue:517", "加载群组数据失败:", error2);
           this.error = "网络错误，请稍后重试";
         } finally {
           this.loading = false;
@@ -43561,7 +43935,7 @@ if (uni.restoreGlobal) {
       },
       // 查看所有成员
       viewAllMembers() {
-        formatAppLog("log", "at pages/userInfo/groupInfo.vue:525", "查看所有成员");
+        formatAppLog("log", "at pages/userInfo/groupInfo.vue:574", "查看所有成员");
         uni.showToast({ title: "功能开发中", icon: "none" });
       },
       // 查看所有任务
@@ -43575,7 +43949,7 @@ if (uni.restoreGlobal) {
       },
       // 查看任务详情
       viewTaskDetails(task2) {
-        formatAppLog("log", "at pages/userInfo/groupInfo.vue:541", "查看任务详情:", task2);
+        formatAppLog("log", "at pages/userInfo/groupInfo.vue:590", "查看任务详情:", task2);
         uni.showToast({ title: "功能开发中", icon: "none" });
       },
       // 进入聊天页面
@@ -43602,7 +43976,7 @@ if (uni.restoreGlobal) {
             });
           },
           fail: (err) => {
-            formatAppLog("error", "at pages/userInfo/groupInfo.vue:572", "跳转聊天页面失败:", err);
+            formatAppLog("error", "at pages/userInfo/groupInfo.vue:621", "跳转聊天页面失败:", err);
             uni.showToast({ title: "跳转失败", icon: "none" });
           }
         });
@@ -43612,10 +43986,30 @@ if (uni.restoreGlobal) {
         this.editSlogan = this.groupDetail.slogan;
         this.editRule = this.groupDetail.rule;
         this.showEditModal = true;
+        this.lockBodyScroll();
+      },
+      // 编辑头像
+      editAvatar() {
+        uni.showToast({ title: "头像编辑功能开发中", icon: "none" });
+      },
+      // 编辑标语
+      editSlogan() {
+        uni.showPrompt({
+          title: "编辑小组口号",
+          placeholderText: "请输入小组口号...",
+          text: this.groupDetail.slogan || "",
+          success: (res2) => {
+            if (res2.confirm) {
+              formatAppLog("log", "at pages/userInfo/groupInfo.vue:649", "新的标语:", res2.content);
+              uni.showToast({ title: "功能开发中", icon: "none" });
+            }
+          }
+        });
       },
       // 保存小组信息
       saveGroupInfo() {
         this.showEditModal = false;
+        this.unlockBodyScroll();
         uni.showToast({ title: "功能开发中", icon: "none" });
       },
       // 其他方法（简化处理）
@@ -43663,19 +44057,27 @@ if (uni.restoreGlobal) {
       },
       // 获取任务状态图标
       getTaskStatusIcon(task2) {
-        formatAppLog("log", "at pages/userInfo/groupInfo.vue:630", task2);
-        if (!task2)
+        formatAppLog("log", "at pages/userInfo/groupInfo.vue:703", "获取任务状态图标:", task2);
+        if (!task2) {
+          formatAppLog("log", "at pages/userInfo/groupInfo.vue:705", "任务为空，返回默认等待状态");
           return "/static/groupInfo/dengdai.png";
+        }
         const startTime = task2.groupTaskStartTime || task2.group_task_start_time;
         const endTime = task2.groupTaskLastTime || task2.group_task_last_time;
         const currentTime = /* @__PURE__ */ new Date();
         if (!startTime) {
+          formatAppLog("log", "at pages/userInfo/groupInfo.vue:716", "缺少开始时间，默认等待状态");
           return "/static/groupInfo/dengdai.png";
         }
         const taskStartTime = new Date(startTime);
         const taskEndTime = endTime ? new Date(endTime) : null;
-        formatAppLog("log", "at pages/userInfo/groupInfo.vue:646", currentTime < taskEndTime);
-        formatAppLog("log", "at pages/userInfo/groupInfo.vue:647", currentTime);
+        formatAppLog("log", "at pages/userInfo/groupInfo.vue:724", "任务时间判断:", {
+          currentTime,
+          taskStartTime,
+          taskEndTime,
+          isBeforeStart: currentTime < taskStartTime,
+          isAfterEnd: taskEndTime && currentTime > taskEndTime
+        });
         if (currentTime < taskStartTime) {
           return "/static/groupInfo/dengdai.png";
         } else if (taskEndTime && currentTime > taskEndTime) {
@@ -43698,7 +44100,7 @@ if (uni.restoreGlobal) {
             });
           },
           fail: (err) => {
-            formatAppLog("error", "at pages/userInfo/groupInfo.vue:677", "跳转失败:", err);
+            formatAppLog("error", "at pages/userInfo/groupInfo.vue:761", "跳转失败:", err);
             uni.showToast({ title: "跳转失败", icon: "none" });
           }
         });
@@ -43728,6 +44130,22 @@ if (uni.restoreGlobal) {
           }
         }
         return "暂无";
+      },
+      // 模态框滚动控制方法
+      lockBodyScroll() {
+        this.$nextTick(() => {
+          uni.pageScrollTo({
+            scrollTop: 0,
+            duration: 0
+          });
+        });
+      },
+      unlockBodyScroll() {
+      },
+      // 关闭模态框
+      closeEditModal() {
+        this.showEditModal = false;
+        this.unlockBodyScroll();
       }
     },
     mounted() {
@@ -43735,108 +44153,216 @@ if (uni.restoreGlobal) {
       this.editRule = this.groupDetail.rule || "";
     }
   };
-  function _sfc_render$21(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$20(_ctx, _cache, $props, $setup, $data, $options) {
+    const _component_u_icon = resolveEasycom(vue.resolveDynamicComponent("u-icon"), __easycom_0$c);
+    const _component_u_button = resolveEasycom(vue.resolveDynamicComponent("u-button"), __easycom_1$g);
+    const _component_u_textarea = resolveEasycom(vue.resolveDynamicComponent("u-textarea"), uvTextarea);
     return vue.openBlock(), vue.createElementBlock("view", null, [
       vue.createElementVNode("div", { class: "body" }, [
         vue.createCommentVNode(" 顶部导航 "),
         vue.createElementVNode("header", { class: "app-header" }, [
           vue.createElementVNode("div", { class: "header-top" }, [
             vue.createElementVNode("div", { class: "logo" }, [
-              vue.createElementVNode("i", {
-                class: "u-icon-arrow-left",
-                onClick: _cache[0] || (_cache[0] = (...args) => $options.goBack && $options.goBack(...args))
-              }),
+              vue.createVNode(_component_u_icon, {
+                name: "arrow-left",
+                onClick: $options.goBack,
+                color: "#ffffff",
+                size: "20"
+              }, null, 8, ["onClick"]),
               vue.createElementVNode("span", null, "小组详情")
             ]),
             vue.createElementVNode("div", { class: "header-actions" }, [
-              vue.createElementVNode("i", {
-                class: "u-icon-chat",
-                onClick: _cache[1] || (_cache[1] = (...args) => $options.goToChat && $options.goToChat(...args))
-              }),
-              vue.createElementVNode("i", { class: "u-icon-more" })
+              vue.createVNode(_component_u_icon, {
+                name: "chat",
+                onClick: $options.goToChat,
+                color: "#ffffff",
+                size: "18"
+              }, null, 8, ["onClick"]),
+              vue.createVNode(_component_u_icon, {
+                name: "more-dot-fill",
+                color: "#ffffff",
+                size: "18"
+              })
             ])
           ])
         ]),
         vue.createCommentVNode(" 内容区域 "),
         vue.createElementVNode("div", { class: "content" }, [
-          vue.createCommentVNode(" 小组基本信息卡片 "),
-          vue.createElementVNode("div", { class: "group-profile-card" }, [
-            vue.createElementVNode("div", { class: "group-avatar" }, [
-              !$options.groupDetail.head ? (vue.openBlock(), vue.createElementBlock(
-                "span",
-                { key: 0 },
-                vue.toDisplayString($options.groupDetail.groupName ? $options.groupDetail.groupName.charAt(0) : "?"),
-                1
-                /* TEXT */
-              )) : (vue.openBlock(), vue.createElementBlock("img", {
-                key: 1,
-                src: $options.getGroupAvatar(),
-                alt: $options.groupDetail.groupName
-              }, null, 8, ["src", "alt"]))
+          vue.createCommentVNode(" 错误提示 "),
+          $data.error ? (vue.openBlock(), vue.createElementBlock("div", {
+            key: 0,
+            class: "error-message"
+          }, [
+            vue.createElementVNode("div", { class: "error-icon" }, [
+              vue.createVNode(_component_u_icon, {
+                name: "info-circle",
+                color: "#ff4d4f",
+                size: "24"
+              })
             ]),
-            vue.createElementVNode(
-              "h2",
-              { class: "group-name" },
-              vue.toDisplayString($options.groupDetail.groupName),
-              1
-              /* TEXT */
-            ),
-            vue.createElementVNode(
-              "div",
-              { class: "group-level" },
-              "Lv." + vue.toDisplayString($options.groupDetail.groupLevel),
-              1
-              /* TEXT */
-            ),
-            vue.createElementVNode(
-              "div",
-              { class: "group-slogan" },
-              vue.toDisplayString($options.groupDetail.slogan || "暂无小组口号"),
-              1
-              /* TEXT */
-            ),
-            vue.createElementVNode("div", { class: "progress-bar" }, [
+            vue.createElementVNode("div", { class: "error-content" }, [
               vue.createElementVNode(
                 "div",
-                {
-                  class: "progress-fill",
-                  style: vue.normalizeStyle({ width: `${$options.groupDetail.experience / $options.groupDetail.needExperience * 100}%` })
-                },
-                null,
-                4
-                /* STYLE */
-              )
+                { class: "error-text" },
+                vue.toDisplayString($data.error),
+                1
+                /* TEXT */
+              ),
+              vue.createElementVNode("button", {
+                class: "retry-btn",
+                onClick: _cache[0] || (_cache[0] = (...args) => $options.loadGroupData && $options.loadGroupData(...args))
+              }, "重新加载")
+            ])
+          ])) : vue.createCommentVNode("v-if", true),
+          vue.createCommentVNode(" 小组基本信息卡片 "),
+          vue.createElementVNode("div", { class: "group-profile-card" }, [
+            vue.createCommentVNode(" 头像和基本信息区域 "),
+            vue.createElementVNode("div", { class: "profile-header" }, [
+              vue.createCommentVNode(" 头像区域（移除编辑功能） "),
+              vue.createElementVNode("div", { class: "avatar-section" }, [
+                vue.createElementVNode("div", { class: "group-avatar" }, [
+                  !$options.groupDetail.head ? (vue.openBlock(), vue.createElementBlock(
+                    "span",
+                    { key: 0 },
+                    vue.toDisplayString($options.groupDetail.groupName ? $options.groupDetail.groupName.charAt(0) : "?"),
+                    1
+                    /* TEXT */
+                  )) : (vue.openBlock(), vue.createElementBlock("img", {
+                    key: 1,
+                    src: $options.getGroupAvatar(),
+                    alt: $options.groupDetail.groupName
+                  }, null, 8, ["src", "alt"]))
+                ]),
+                vue.createElementVNode(
+                  "div",
+                  { class: "group-level" },
+                  "Lv." + vue.toDisplayString($options.groupDetail.groupLevel),
+                  1
+                  /* TEXT */
+                )
+              ]),
+              vue.createCommentVNode(" 基本信息和操作 "),
+              vue.createElementVNode("div", { class: "basic-info" }, [
+                vue.createElementVNode(
+                  "h2",
+                  { class: "group-name" },
+                  vue.toDisplayString($options.groupDetail.groupName),
+                  1
+                  /* TEXT */
+                ),
+                vue.createCommentVNode(" 标语显示（移除编辑功能） "),
+                vue.createElementVNode(
+                  "div",
+                  { class: "group-slogan" },
+                  vue.toDisplayString($options.groupDetail.slogan || "暂无小组口号"),
+                  1
+                  /* TEXT */
+                ),
+                vue.createCommentVNode(" 移除此处的管理操作，将其移到小组信息卡片中 "),
+                vue.createCommentVNode(" 普通成员退出操作 "),
+                !$options.isLeader ? (vue.openBlock(), vue.createElementBlock("div", {
+                  key: 0,
+                  class: "member-actions"
+                }, [
+                  vue.createElementVNode("div", {
+                    class: "action-button danger",
+                    onClick: _cache[1] || (_cache[1] = (...args) => $options.leaveGroup && $options.leaveGroup(...args))
+                  }, [
+                    vue.createVNode(_component_u_icon, {
+                      name: "logout",
+                      color: "#f72585",
+                      size: "14"
+                    }),
+                    vue.createElementVNode("span", null, "退出小组")
+                  ])
+                ])) : vue.createCommentVNode("v-if", true)
+              ])
             ]),
-            vue.createElementVNode("div", { class: "group-stats" }, [
-              vue.createElementVNode("div", { class: "stat-item" }, [
+            vue.createCommentVNode(" 经验值进度条 "),
+            vue.createElementVNode("div", { class: "progress-section" }, [
+              vue.createElementVNode("div", { class: "progress-info" }, [
+                vue.createElementVNode("span", { class: "progress-label" }, "经验值"),
                 vue.createElementVNode(
-                  "div",
-                  { class: "stat-value" },
-                  vue.toDisplayString($options.groupDetail.experience),
+                  "span",
+                  { class: "progress-value" },
+                  vue.toDisplayString($options.groupDetail.experience) + "/" + vue.toDisplayString($options.groupDetail.needExperience),
                   1
                   /* TEXT */
-                ),
-                vue.createElementVNode("div", { class: "stat-label" }, "经验值")
+                )
               ]),
-              vue.createElementVNode("div", { class: "stat-item" }, [
+              vue.createElementVNode("div", { class: "progress-bar" }, [
                 vue.createElementVNode(
                   "div",
-                  { class: "stat-value" },
-                  vue.toDisplayString($options.groupDetail.peopleNum) + "/" + vue.toDisplayString($options.groupDetail.maxPeopleNum),
-                  1
-                  /* TEXT */
-                ),
-                vue.createElementVNode("div", { class: "stat-label" }, "成员")
+                  {
+                    class: "progress-fill",
+                    style: vue.normalizeStyle({ width: `${$options.groupDetail.experience / $options.groupDetail.needExperience * 100}%` })
+                  },
+                  null,
+                  4
+                  /* STYLE */
+                )
+              ])
+            ]),
+            vue.createCommentVNode(" 统计数据和快速操作 "),
+            vue.createElementVNode("div", { class: "stats-actions" }, [
+              vue.createElementVNode("div", { class: "group-stats" }, [
+                vue.createElementVNode("div", {
+                  class: "stat-item",
+                  onClick: _cache[2] || (_cache[2] = (...args) => $options.viewAllMembers && $options.viewAllMembers(...args))
+                }, [
+                  vue.createElementVNode(
+                    "div",
+                    { class: "stat-value" },
+                    vue.toDisplayString($options.groupDetail.peopleNum) + "/" + vue.toDisplayString($options.groupDetail.maxPeopleNum),
+                    1
+                    /* TEXT */
+                  ),
+                  vue.createElementVNode("div", { class: "stat-label" }, "成员")
+                ]),
+                vue.createElementVNode("div", {
+                  class: "stat-item",
+                  onClick: _cache[3] || (_cache[3] = (...args) => $options.viewAllTasks && $options.viewAllTasks(...args))
+                }, [
+                  vue.createElementVNode(
+                    "div",
+                    { class: "stat-value" },
+                    vue.toDisplayString($data.groupTasks.length),
+                    1
+                    /* TEXT */
+                  ),
+                  vue.createElementVNode("div", { class: "stat-label" }, "任务")
+                ]),
+                vue.createElementVNode("div", { class: "stat-item" }, [
+                  vue.createElementVNode(
+                    "div",
+                    { class: "stat-value" },
+                    vue.toDisplayString($data.memberContribution),
+                    1
+                    /* TEXT */
+                  ),
+                  vue.createElementVNode("div", { class: "stat-label" }, "我的贡献")
+                ])
               ]),
-              vue.createElementVNode("div", { class: "stat-item" }, [
-                vue.createElementVNode(
-                  "div",
-                  { class: "stat-value" },
-                  vue.toDisplayString($data.memberContribution),
-                  1
-                  /* TEXT */
-                ),
-                vue.createElementVNode("div", { class: "stat-label" }, "我的贡献")
+              vue.createCommentVNode(" 主要功能按钮 "),
+              vue.createElementVNode("div", { class: "main-actions" }, [
+                vue.createVNode(_component_u_button, {
+                  type: "primary",
+                  shape: "round",
+                  onClick: $options.goToChat,
+                  "custom-style": { width: "100%" }
+                }, {
+                  default: vue.withCtx(() => [
+                    vue.createVNode(_component_u_icon, {
+                      name: "chat",
+                      color: "#ffffff",
+                      size: "16",
+                      style: { "margin-right": "8px" }
+                    }),
+                    vue.createTextVNode(" 进入小组聊天 ")
+                  ]),
+                  _: 1
+                  /* STABLE */
+                }, 8, ["onClick"])
               ])
             ])
           ]),
@@ -43844,78 +44370,183 @@ if (uni.restoreGlobal) {
           vue.createElementVNode("div", { class: "info-card" }, [
             vue.createElementVNode("div", { class: "card-header" }, [
               vue.createElementVNode("div", { class: "card-title" }, [
-                vue.createElementVNode("i", { class: "u-icon-info-circle" }),
+                vue.createVNode(_component_u_icon, {
+                  name: "info-circle",
+                  color: "#4361ee",
+                  size: "16"
+                }),
                 vue.createElementVNode("span", null, "小组信息")
-              ])
+              ]),
+              vue.createCommentVNode(" 小组规则编辑功能 "),
+              $options.isLeader ? (vue.openBlock(), vue.createElementBlock("div", {
+                key: 0,
+                class: "card-actions"
+              }, [
+                vue.createElementVNode("div", {
+                  class: "action-icon",
+                  onClick: _cache[4] || (_cache[4] = (...args) => $options.editGroupInfo && $options.editGroupInfo(...args)),
+                  title: "编辑小组信息"
+                }, [
+                  vue.createVNode(_component_u_icon, {
+                    name: "edit-pen",
+                    color: "#4361ee",
+                    size: "14"
+                  })
+                ])
+              ])) : vue.createCommentVNode("v-if", true)
             ]),
             vue.createElementVNode("div", { class: "info-content" }, [
-              vue.createElementVNode("div", { class: "info-item" }, [
-                vue.createElementVNode("div", { class: "info-label" }, "组长:"),
+              vue.createElementVNode("div", { class: "info-grid" }, [
+                vue.createElementVNode("div", { class: "info-item" }, [
+                  vue.createElementVNode("div", { class: "info-label" }, "组长:"),
+                  vue.createElementVNode("div", {
+                    class: "info-value leader-info",
+                    onClick: _cache[5] || (_cache[5] = (...args) => _ctx.viewLeaderProfile && _ctx.viewLeaderProfile(...args))
+                  }, [
+                    vue.createElementVNode(
+                      "span",
+                      null,
+                      vue.toDisplayString($options.getLeaderName()),
+                      1
+                      /* TEXT */
+                    )
+                  ])
+                ]),
+                vue.createElementVNode("div", { class: "info-item" }, [
+                  vue.createElementVNode("div", { class: "info-label" }, "代理组长:"),
+                  vue.createElementVNode("div", {
+                    class: "info-value deputy-info",
+                    onClick: _cache[6] || (_cache[6] = (...args) => _ctx.viewDeputyProfile && _ctx.viewDeputyProfile(...args))
+                  }, [
+                    vue.createElementVNode(
+                      "span",
+                      null,
+                      vue.toDisplayString($options.getDeputyName()),
+                      1
+                      /* TEXT */
+                    ),
+                    $options.isLeader ? (vue.openBlock(), vue.createBlock(_component_u_icon, {
+                      key: 0,
+                      name: "reload",
+                      onClick: vue.withModifiers($options.changeDeputy, ["stop"]),
+                      color: "#4361ee",
+                      size: "14",
+                      style: { "cursor": "pointer", "margin-left": "5px" }
+                    }, null, 8, ["onClick"])) : vue.createCommentVNode("v-if", true)
+                  ])
+                ]),
+                vue.createElementVNode("div", { class: "info-item" }, [
+                  vue.createElementVNode("div", { class: "info-label" }, "负责老师:"),
+                  vue.createElementVNode(
+                    "div",
+                    { class: "info-value" },
+                    vue.toDisplayString($options.groupDetail.teacher || "暂无"),
+                    1
+                    /* TEXT */
+                  )
+                ]),
+                vue.createElementVNode("div", { class: "info-item" }, [
+                  vue.createElementVNode("div", { class: "info-label" }, "负责企业:"),
+                  vue.createElementVNode(
+                    "div",
+                    { class: "info-value" },
+                    vue.toDisplayString($options.groupDetail.enterprise || "暂无"),
+                    1
+                    /* TEXT */
+                  )
+                ]),
+                vue.createElementVNode("div", { class: "info-item full-width" }, [
+                  vue.createElementVNode("div", { class: "info-label" }, "创建时间:"),
+                  vue.createElementVNode(
+                    "div",
+                    { class: "info-value" },
+                    vue.toDisplayString($options.formatDate($options.groupDetail.createTime)),
+                    1
+                    /* TEXT */
+                  )
+                ])
+              ]),
+              vue.createCommentVNode(" 小组规则区域 "),
+              vue.createElementVNode("div", { class: "rule-section" }, [
+                vue.createElementVNode("div", { class: "rule-header" }, [
+                  vue.createElementVNode("span", { class: "rule-title" }, "小组规则")
+                ]),
                 vue.createElementVNode(
                   "div",
-                  { class: "info-value" },
-                  vue.toDisplayString($options.getLeaderName()),
+                  { class: "rule-content" },
+                  vue.toDisplayString($options.groupDetail.rule || "星期一至周六：每日至少19点前提交学习报告\n周日：总结本周学习情况，分享学习心得"),
                   1
                   /* TEXT */
                 )
               ]),
-              vue.createElementVNode("div", { class: "info-item" }, [
-                vue.createElementVNode("div", { class: "info-label" }, "代理组长:"),
-                vue.createElementVNode(
-                  "div",
-                  { class: "info-value" },
-                  vue.toDisplayString($options.getDeputyName()),
-                  1
-                  /* TEXT */
-                )
-              ]),
-              vue.createElementVNode("div", { class: "info-item" }, [
-                vue.createElementVNode("div", { class: "info-label" }, "负责老师:"),
-                vue.createElementVNode(
-                  "div",
-                  { class: "info-value" },
-                  vue.toDisplayString($options.groupDetail.teacher || "暂无"),
-                  1
-                  /* TEXT */
-                )
-              ]),
-              vue.createElementVNode("div", { class: "info-item" }, [
-                vue.createElementVNode("div", { class: "info-label" }, "负责企业:"),
-                vue.createElementVNode(
-                  "div",
-                  { class: "info-value" },
-                  vue.toDisplayString($options.groupDetail.enterprise || "暂无"),
-                  1
-                  /* TEXT */
-                )
-              ]),
-              vue.createElementVNode("div", { class: "info-item" }, [
-                vue.createElementVNode("div", { class: "info-label" }, "创建时间:"),
-                vue.createElementVNode(
-                  "div",
-                  { class: "info-value" },
-                  vue.toDisplayString($options.formatDate($options.groupDetail.createTime)),
-                  1
-                  /* TEXT */
-                )
-              ]),
-              vue.createElementVNode("div", { class: "info-item" }, [
-                vue.createElementVNode("div", { class: "info-label" }, "小组规则:"),
-                vue.createElementVNode(
-                  "div",
-                  { class: "info-value" },
-                  vue.toDisplayString($options.groupDetail.rule || "暂无小组规则"),
-                  1
-                  /* TEXT */
-                )
-              ])
+              vue.createCommentVNode(" 组长管理功能 "),
+              $options.isLeader ? (vue.openBlock(), vue.createElementBlock("div", {
+                key: 0,
+                class: "management-actions"
+              }, [
+                vue.createCommentVNode(" 常规管理功能 "),
+                vue.createElementVNode("div", { class: "management-row" }, [
+                  vue.createElementVNode("div", {
+                    class: "management-item",
+                    onClick: _cache[7] || (_cache[7] = (...args) => $options.changeDeputy && $options.changeDeputy(...args))
+                  }, [
+                    vue.createVNode(_component_u_icon, {
+                      name: "account",
+                      color: "#4361ee",
+                      size: "16"
+                    }),
+                    vue.createElementVNode("span", null, "更换代理组长")
+                  ]),
+                  !$options.groupDetail.teacher || !$options.groupDetail.enterprise ? (vue.openBlock(), vue.createElementBlock("div", {
+                    key: 0,
+                    class: "management-item",
+                    onClick: _cache[8] || (_cache[8] = (...args) => $options.inviteTeacherOrEnterprise && $options.inviteTeacherOrEnterprise(...args))
+                  }, [
+                    vue.createVNode(_component_u_icon, {
+                      name: "plus-circle",
+                      color: "#4361ee",
+                      size: "16"
+                    }),
+                    vue.createElementVNode("span", null, "邀请老师/企业")
+                  ])) : vue.createCommentVNode("v-if", true)
+                ]),
+                vue.createCommentVNode(" 危险操作功能 "),
+                vue.createElementVNode("div", { class: "management-row dangerous-actions" }, [
+                  vue.createElementVNode("div", {
+                    class: "management-item transfer-action",
+                    onClick: _cache[9] || (_cache[9] = (...args) => $options.transferGroup && $options.transferGroup(...args))
+                  }, [
+                    vue.createVNode(_component_u_icon, {
+                      name: "share",
+                      color: "#4361ee",
+                      size: "16"
+                    }),
+                    vue.createElementVNode("span", null, "转让小组")
+                  ]),
+                  vue.createElementVNode("div", {
+                    class: "management-item dissolve-action",
+                    onClick: _cache[10] || (_cache[10] = (...args) => $options.dissolveGroup && $options.dissolveGroup(...args))
+                  }, [
+                    vue.createVNode(_component_u_icon, {
+                      name: "trash",
+                      color: "#f72585",
+                      size: "16"
+                    }),
+                    vue.createElementVNode("span", null, "解散小组")
+                  ])
+                ])
+              ])) : vue.createCommentVNode("v-if", true)
             ])
           ]),
           vue.createCommentVNode(" 小组成员卡片 "),
-          vue.createElementVNode("div", { class: "info-card" }, [
+          vue.createElementVNode("div", { class: "info-card members-card" }, [
             vue.createElementVNode("div", { class: "card-header" }, [
               vue.createElementVNode("div", { class: "card-title" }, [
-                vue.createElementVNode("i", { class: "u-icon-users" }),
+                vue.createVNode(_component_u_icon, {
+                  name: "account",
+                  color: "#4361ee",
+                  size: "16"
+                }),
                 vue.createElementVNode(
                   "span",
                   null,
@@ -43924,337 +44555,368 @@ if (uni.restoreGlobal) {
                   /* TEXT */
                 )
               ]),
-              vue.createElementVNode("div", { class: "view-more" }, [
-                vue.createElementVNode("a", {
-                  href: "#",
-                  class: "view-more-btn",
-                  onClick: _cache[2] || (_cache[2] = (...args) => $options.viewAllMembers && $options.viewAllMembers(...args))
+              vue.createElementVNode("div", { class: "card-actions" }, [
+                vue.createElementVNode("div", {
+                  class: "action-icon",
+                  onClick: _cache[11] || (_cache[11] = (...args) => $options.viewAllMembers && $options.viewAllMembers(...args)),
+                  title: "查看全部成员"
                 }, [
-                  vue.createTextVNode(" 查看全部 "),
-                  vue.createElementVNode("i", { class: "u-icon-arrow-right" })
+                  vue.createVNode(_component_u_icon, {
+                    name: "arrow-right",
+                    color: "#4361ee",
+                    size: "14"
+                  })
                 ])
               ])
             ]),
-            vue.createElementVNode("div", { class: "members-grid" }, [
-              $options.displayedMembers.length === 0 ? (vue.openBlock(), vue.createElementBlock("div", {
-                key: 0,
-                class: "empty-state members-empty"
-              }, [
-                vue.createElementVNode("div", { class: "empty-icon" }, [
-                  vue.createElementVNode("i", { class: "u-icon-users" })
-                ]),
-                vue.createElementVNode("div", { class: "empty-text" }, "暂无成员数据")
-              ])) : (vue.openBlock(true), vue.createElementBlock(
-                vue.Fragment,
-                { key: 1 },
-                vue.renderList($options.displayedMembers, (member, index2) => {
-                  return vue.openBlock(), vue.createElementBlock("div", {
-                    class: "member-item",
-                    key: member.id || index2
+            vue.createCommentVNode(" 加载状态 "),
+            $data.loading ? (vue.openBlock(), vue.createElementBlock("div", {
+              key: 0,
+              class: "loading-state"
+            }, [
+              vue.createElementVNode("div", { class: "loading-spinner" }),
+              vue.createElementVNode("div", { class: "loading-text" }, "正在加载成员信息...")
+            ])) : (vue.openBlock(), vue.createElementBlock(
+              vue.Fragment,
+              { key: 1 },
+              [
+                vue.createCommentVNode(" 成员列表 "),
+                vue.createElementVNode("div", { class: "members-content" }, [
+                  $options.displayedMembers.length === 0 ? (vue.openBlock(), vue.createElementBlock("div", {
+                    key: 0,
+                    class: "empty-state members-empty"
                   }, [
-                    vue.createElementVNode("div", {
-                      class: "member-avatar",
-                      onClick: ($event) => $options.goToUserInfo(member)
-                    }, [
-                      !member.head ? (vue.openBlock(), vue.createElementBlock(
-                        "span",
-                        { key: 0 },
-                        vue.toDisplayString(member.name ? member.name.charAt(0) : "?"),
-                        1
-                        /* TEXT */
-                      )) : (vue.openBlock(), vue.createElementBlock("img", {
-                        key: 1,
-                        src: $options.imageUrl + member.head,
-                        alt: member.name
-                      }, null, 8, ["src", "alt"]))
-                    ], 8, ["onClick"]),
-                    vue.createElementVNode(
-                      "div",
-                      { class: "member-name" },
-                      vue.toDisplayString(member.name || "未知用户"),
-                      1
-                      /* TEXT */
-                    ),
-                    vue.createElementVNode(
-                      "div",
-                      { class: "member-role" },
-                      vue.toDisplayString($options.getMemberRole(member)),
-                      1
-                      /* TEXT */
-                    )
-                  ]);
-                }),
-                128
-                /* KEYED_FRAGMENT */
-              ))
-            ])
-          ]),
-          vue.createCommentVNode(" 小组任务卡片 "),
-          vue.createElementVNode("div", { class: "info-card" }, [
-            vue.createElementVNode("div", { class: "card-header" }, [
-              vue.createElementVNode("div", { class: "card-title" }, [
-                vue.createElementVNode("i", { class: "u-icon-task" }),
-                vue.createElementVNode("span", null, "小组任务")
-              ]),
-              vue.createElementVNode("div", { class: "view-more" }, [
-                vue.createElementVNode("a", {
-                  href: "#",
-                  class: "view-more-btn",
-                  onClick: _cache[3] || (_cache[3] = (...args) => $options.viewAllTasks && $options.viewAllTasks(...args))
-                }, [
-                  vue.createTextVNode(" 查看全部 "),
-                  vue.createElementVNode("i", { class: "u-icon-arrow-right" })
-                ])
-              ])
-            ]),
-            vue.createElementVNode("div", { class: "task-list" }, [
-              $options.displayedTasks.length === 0 ? (vue.openBlock(), vue.createElementBlock("div", {
-                key: 0,
-                class: "empty-state"
-              }, [
-                vue.createElementVNode("div", { class: "empty-icon" }, [
-                  vue.createElementVNode("i", { class: "u-icon-file-text" })
-                ]),
-                vue.createElementVNode("div", { class: "empty-text" }, "暂无任务数据")
-              ])) : (vue.openBlock(true), vue.createElementBlock(
-                vue.Fragment,
-                { key: 1 },
-                vue.renderList($options.displayedTasks, (task2, index2) => {
-                  return vue.openBlock(), vue.createElementBlock("div", {
-                    class: "task-item",
-                    key: task2.id || index2,
-                    onClick: ($event) => $options.viewTaskDetails(task2)
-                  }, [
-                    vue.createElementVNode("div", { class: "task-icon" }, [
-                      vue.createElementVNode("image", {
-                        src: $options.getTaskStatusIcon(task2),
-                        alt: "任务状态",
-                        class: "task-status-icon"
-                      }, null, 8, ["src"])
+                    vue.createElementVNode("div", { class: "empty-icon" }, [
+                      vue.createVNode(_component_u_icon, {
+                        name: "account-circle",
+                        color: "#e9ecef",
+                        size: "48"
+                      })
                     ]),
-                    vue.createElementVNode("div", { class: "task-info" }, [
+                    vue.createElementVNode("div", { class: "empty-text" }, "暂无成员数据"),
+                    vue.createElementVNode("div", { class: "empty-desc" }, "请稍后刷新试试")
+                  ])) : (vue.openBlock(), vue.createElementBlock("div", { key: 1 }, [
+                    vue.createElementVNode("div", { class: "members-grid" }, [
+                      (vue.openBlock(true), vue.createElementBlock(
+                        vue.Fragment,
+                        null,
+                        vue.renderList($options.displayedMembers, (member, index2) => {
+                          return vue.openBlock(), vue.createElementBlock("div", {
+                            class: "member-item",
+                            key: member.id || index2
+                          }, [
+                            vue.createElementVNode("div", {
+                              class: "member-avatar",
+                              onClick: ($event) => $options.goToUserInfo(member)
+                            }, [
+                              !member.head ? (vue.openBlock(), vue.createElementBlock(
+                                "span",
+                                { key: 0 },
+                                vue.toDisplayString(member.name ? member.name.charAt(0) : "?"),
+                                1
+                                /* TEXT */
+                              )) : (vue.openBlock(), vue.createElementBlock("img", {
+                                key: 1,
+                                src: $options.imageUrl + member.head,
+                                alt: member.name
+                              }, null, 8, ["src", "alt"]))
+                            ], 8, ["onClick"]),
+                            vue.createElementVNode("div", { class: "member-info" }, [
+                              vue.createElementVNode(
+                                "div",
+                                { class: "member-name" },
+                                vue.toDisplayString(member.name || "未知用户"),
+                                1
+                                /* TEXT */
+                              ),
+                              vue.createElementVNode(
+                                "div",
+                                { class: "member-role" },
+                                vue.toDisplayString($options.getMemberRole(member)),
+                                1
+                                /* TEXT */
+                              )
+                            ])
+                          ]);
+                        }),
+                        128
+                        /* KEYED_FRAGMENT */
+                      ))
+                    ]),
+                    $options.groupDetail.peopleNum > 6 ? (vue.openBlock(), vue.createElementBlock("div", {
+                      key: 0,
+                      class: "view-more-members",
+                      onClick: _cache[12] || (_cache[12] = (...args) => $options.viewAllMembers && $options.viewAllMembers(...args))
+                    }, [
                       vue.createElementVNode(
-                        "div",
-                        { class: "task-title" },
-                        vue.toDisplayString(task2.groupTask || task2.group_task || task2.title || "未命名任务"),
+                        "span",
+                        null,
+                        "查看全部 " + vue.toDisplayString($options.groupDetail.peopleNum) + " 个成员",
                         1
                         /* TEXT */
                       ),
+                      vue.createVNode(_component_u_icon, {
+                        name: "arrow-right",
+                        color: "#4361ee",
+                        size: "14"
+                      })
+                    ])) : vue.createCommentVNode("v-if", true)
+                  ]))
+                ])
+              ],
+              2112
+              /* STABLE_FRAGMENT, DEV_ROOT_FRAGMENT */
+            ))
+          ]),
+          vue.createCommentVNode(" 小组任务卡片 "),
+          vue.createElementVNode("div", { class: "info-card tasks-card" }, [
+            vue.createElementVNode("div", { class: "card-header" }, [
+              vue.createElementVNode("div", { class: "card-title" }, [
+                vue.createVNode(_component_u_icon, {
+                  name: "list",
+                  color: "#4361ee",
+                  size: "16"
+                }),
+                vue.createElementVNode("span", null, "小组任务")
+              ]),
+              vue.createElementVNode("div", { class: "card-actions" }, [
+                vue.createElementVNode("div", {
+                  class: "action-icon",
+                  onClick: _cache[13] || (_cache[13] = (...args) => $options.viewAllTasks && $options.viewAllTasks(...args)),
+                  title: "查看全部任务"
+                }, [
+                  vue.createVNode(_component_u_icon, {
+                    name: "arrow-right",
+                    color: "#4361ee",
+                    size: "14"
+                  })
+                ])
+              ])
+            ]),
+            vue.createCommentVNode(" 加载状态 "),
+            $data.loading ? (vue.openBlock(), vue.createElementBlock("div", {
+              key: 0,
+              class: "loading-state"
+            }, [
+              vue.createElementVNode("div", { class: "loading-spinner" }),
+              vue.createElementVNode("div", { class: "loading-text" }, "正在加载任务信息...")
+            ])) : (vue.openBlock(), vue.createElementBlock(
+              vue.Fragment,
+              { key: 1 },
+              [
+                vue.createCommentVNode(" 任务列表 "),
+                vue.createElementVNode("div", { class: "tasks-content" }, [
+                  $options.displayedTasks.length === 0 ? (vue.openBlock(), vue.createElementBlock("div", {
+                    key: 0,
+                    class: "empty-state"
+                  }, [
+                    vue.createElementVNode("div", { class: "empty-icon" }, [
+                      vue.createVNode(_component_u_icon, {
+                        name: "file-text",
+                        color: "#e9ecef",
+                        size: "48"
+                      })
+                    ]),
+                    vue.createElementVNode("div", { class: "empty-text" }, "暂无任务数据"),
+                    vue.createElementVNode("div", { class: "empty-desc" }, "组长可以创建新任务")
+                  ])) : (vue.openBlock(), vue.createElementBlock("div", { key: 1 }, [
+                    vue.createElementVNode("div", { class: "task-list" }, [
+                      (vue.openBlock(true), vue.createElementBlock(
+                        vue.Fragment,
+                        null,
+                        vue.renderList($options.displayedTasks, (task2, index2) => {
+                          return vue.openBlock(), vue.createElementBlock("div", {
+                            class: "task-item",
+                            key: task2.id || index2,
+                            onClick: ($event) => $options.viewTaskDetails(task2)
+                          }, [
+                            vue.createElementVNode("div", { class: "task-icon" }, [
+                              vue.createElementVNode("image", {
+                                src: $options.getTaskStatusIcon(task2),
+                                alt: "任务状态",
+                                class: "task-status-icon"
+                              }, null, 8, ["src"])
+                            ]),
+                            vue.createElementVNode("div", { class: "task-info" }, [
+                              vue.createCommentVNode(" 按规范只显示任务题目 "),
+                              vue.createElementVNode(
+                                "div",
+                                { class: "task-title" },
+                                vue.toDisplayString(task2.groupTask || task2.group_task || task2.title || "未命名任务"),
+                                1
+                                /* TEXT */
+                              )
+                            ]),
+                            vue.createElementVNode("div", { class: "task-actions" }, [
+                              vue.createVNode(_component_u_icon, {
+                                name: "arrow-right",
+                                color: "#909399",
+                                size: "14"
+                              })
+                            ])
+                          ], 8, ["onClick"]);
+                        }),
+                        128
+                        /* KEYED_FRAGMENT */
+                      ))
+                    ]),
+                    $data.groupTasks.length > 3 ? (vue.openBlock(), vue.createElementBlock("div", {
+                      key: 0,
+                      class: "view-more-tasks",
+                      onClick: _cache[14] || (_cache[14] = (...args) => $options.viewAllTasks && $options.viewAllTasks(...args))
+                    }, [
                       vue.createElementVNode(
-                        "div",
-                        { class: "task-progress" },
-                        " 完成: " + vue.toDisplayString(task2.groupTaskFinish || task2.group_task_finish || 0) + "/" + vue.toDisplayString((task2.groupTaskFinish || task2.group_task_finish || 0) + (task2.groupTaskUnfinished || task2.group_task_unfinished || 0)),
+                        "span",
+                        null,
+                        "查看全部 " + vue.toDisplayString($data.groupTasks.length) + " 个任务",
                         1
                         /* TEXT */
-                      )
-                    ]),
-                    vue.createElementVNode("div", { class: "task-actions" }, [
-                      vue.createElementVNode("i", { class: "u-icon-arrow-right" })
-                    ])
-                  ], 8, ["onClick"]);
-                }),
-                128
-                /* KEYED_FRAGMENT */
-              ))
-            ])
-          ]),
-          vue.createCommentVNode(" 选项列表 "),
-          vue.createElementVNode("div", { class: "options-list" }, [
-            vue.createCommentVNode(" 组长专属选项 "),
-            $options.isLeader ? (vue.openBlock(), vue.createElementBlock("div", {
-              key: 0,
-              class: "option-item",
-              onClick: _cache[4] || (_cache[4] = (...args) => $options.editGroupInfo && $options.editGroupInfo(...args))
-            }, [
-              vue.createElementVNode("div", { class: "option-icon" }, [
-                vue.createElementVNode("i", { class: "u-icon-edit" })
-              ]),
-              vue.createElementVNode("div", { class: "option-content" }, [
-                vue.createElementVNode("div", { class: "option-title" }, "编辑小组信息"),
-                vue.createElementVNode("div", { class: "option-desc" }, "修改小组口号和规则")
-              ]),
-              vue.createElementVNode("div", { class: "option-arrow" }, [
-                vue.createElementVNode("i", { class: "u-icon-arrow-right" })
-              ])
-            ])) : vue.createCommentVNode("v-if", true),
-            $options.isLeader ? (vue.openBlock(), vue.createElementBlock("div", {
-              key: 1,
-              class: "option-item",
-              onClick: _cache[5] || (_cache[5] = (...args) => $options.changeDeputy && $options.changeDeputy(...args))
-            }, [
-              vue.createElementVNode("div", { class: "option-icon" }, [
-                vue.createElementVNode("i", { class: "u-icon-user-switch" })
-              ]),
-              vue.createElementVNode("div", { class: "option-content" }, [
-                vue.createElementVNode("div", { class: "option-title" }, "更换代理组长"),
-                vue.createElementVNode("div", { class: "option-desc" }, "每周一轮换制度")
-              ]),
-              vue.createElementVNode("div", { class: "option-arrow" }, [
-                vue.createElementVNode("i", { class: "u-icon-arrow-right" })
-              ])
-            ])) : vue.createCommentVNode("v-if", true),
-            $options.isLeader && (!$options.groupDetail.teacher || !$options.groupDetail.enterprise) ? (vue.openBlock(), vue.createElementBlock("div", {
-              key: 2,
-              class: "option-item",
-              onClick: _cache[6] || (_cache[6] = (...args) => $options.inviteTeacherOrEnterprise && $options.inviteTeacherOrEnterprise(...args))
-            }, [
-              vue.createElementVNode("div", { class: "option-icon" }, [
-                vue.createElementVNode("i", { class: "u-icon-user-add" })
-              ]),
-              vue.createElementVNode("div", { class: "option-content" }, [
-                vue.createElementVNode("div", { class: "option-title" }, "邀请老师/企业"),
-                vue.createElementVNode("div", { class: "option-desc" }, "从好友列表邀请")
-              ]),
-              vue.createElementVNode("div", { class: "option-arrow" }, [
-                vue.createElementVNode("i", { class: "u-icon-arrow-right" })
-              ])
-            ])) : vue.createCommentVNode("v-if", true),
-            $options.isLeader ? (vue.openBlock(), vue.createElementBlock("div", {
-              key: 3,
-              class: "option-item",
-              onClick: _cache[7] || (_cache[7] = (...args) => $options.transferGroup && $options.transferGroup(...args))
-            }, [
-              vue.createElementVNode("div", { class: "option-icon" }, [
-                vue.createElementVNode("i", { class: "u-icon-swap" })
-              ]),
-              vue.createElementVNode("div", { class: "option-content" }, [
-                vue.createElementVNode("div", { class: "option-title" }, "转让小组"),
-                vue.createElementVNode("div", { class: "option-desc" }, "将组长身份转让给其他成员")
-              ]),
-              vue.createElementVNode("div", { class: "option-arrow" }, [
-                vue.createElementVNode("i", { class: "u-icon-arrow-right" })
-              ])
-            ])) : vue.createCommentVNode("v-if", true),
-            !$options.isLeader ? (vue.openBlock(), vue.createElementBlock("div", {
-              key: 4,
-              class: "option-item",
-              onClick: _cache[8] || (_cache[8] = (...args) => $options.leaveGroup && $options.leaveGroup(...args))
-            }, [
-              vue.createElementVNode("div", { class: "option-icon" }, [
-                vue.createElementVNode("i", { class: "u-icon-exit" })
-              ]),
-              vue.createElementVNode("div", { class: "option-content" }, [
-                vue.createElementVNode("div", { class: "option-title" }, "退出小组"),
-                vue.createElementVNode("div", { class: "option-desc" }, "离开当前小组")
-              ]),
-              vue.createElementVNode("div", { class: "option-arrow" }, [
-                vue.createElementVNode("i", { class: "u-icon-arrow-right" })
-              ])
-            ])) : vue.createCommentVNode("v-if", true),
-            vue.createElementVNode("div", {
-              class: "option-item",
-              onClick: _cache[9] || (_cache[9] = (...args) => $options.viewAllTasks && $options.viewAllTasks(...args))
-            }, [
-              vue.createElementVNode("div", { class: "option-icon" }, [
-                vue.createElementVNode("i", { class: "u-icon-task" })
-              ]),
-              vue.createElementVNode("div", { class: "option-content" }, [
-                vue.createElementVNode("div", { class: "option-title" }, "查看所有任务"),
-                vue.createElementVNode("div", { class: "option-desc" }, "浏览小组全部任务")
-              ]),
-              vue.createElementVNode("div", { class: "option-arrow" }, [
-                vue.createElementVNode("i", { class: "u-icon-arrow-right" })
-              ])
-            ]),
-            vue.createElementVNode("div", {
-              class: "option-item",
-              onClick: _cache[10] || (_cache[10] = (...args) => $options.viewAllMembers && $options.viewAllMembers(...args))
-            }, [
-              vue.createElementVNode("div", { class: "option-icon" }, [
-                vue.createElementVNode("i", { class: "u-icon-users" })
-              ]),
-              vue.createElementVNode("div", { class: "option-content" }, [
-                vue.createElementVNode("div", { class: "option-title" }, "查看所有成员"),
-                vue.createElementVNode("div", { class: "option-desc" }, "浏览小组全部成员")
-              ]),
-              vue.createElementVNode("div", { class: "option-arrow" }, [
-                vue.createElementVNode("i", { class: "u-icon-arrow-right" })
-              ])
-            ])
-          ]),
-          vue.createCommentVNode(" 操作按钮区域 "),
-          vue.createElementVNode("div", { class: "action-buttons" }, [
-            vue.createElementVNode("button", {
-              class: "btn btn-primary",
-              onClick: _cache[11] || (_cache[11] = (...args) => $options.goToChat && $options.goToChat(...args))
-            }, [
-              vue.createElementVNode("i", { class: "u-icon-chat" }),
-              vue.createTextVNode(" 小组聊天 ")
-            ]),
-            $options.isLeader ? (vue.openBlock(), vue.createElementBlock("button", {
-              key: 0,
-              class: "btn btn-warning",
-              onClick: _cache[12] || (_cache[12] = (...args) => $options.dissolveGroup && $options.dissolveGroup(...args))
-            }, [
-              vue.createElementVNode("i", { class: "u-icon-delete" }),
-              vue.createTextVNode(" 解散小组 ")
-            ])) : vue.createCommentVNode("v-if", true)
+                      ),
+                      vue.createVNode(_component_u_icon, {
+                        name: "arrow-right",
+                        color: "#4361ee",
+                        size: "14"
+                      })
+                    ])) : vue.createCommentVNode("v-if", true)
+                  ]))
+                ])
+              ],
+              2112
+              /* STABLE_FRAGMENT, DEV_ROOT_FRAGMENT */
+            ))
           ])
         ]),
         vue.createCommentVNode(" 编辑小组信息模态框 "),
-        $data.showEditModal ? (vue.openBlock(), vue.createElementBlock("div", {
-          key: 0,
-          class: "modal-mask"
-        }, [
-          vue.createElementVNode("div", { class: "modal-container" }, [
-            vue.createElementVNode("div", { class: "modal-header" }, [
-              vue.createElementVNode("div", { class: "modal-title" }, "编辑小组信息"),
-              vue.createElementVNode("div", {
-                class: "modal-close",
-                onClick: _cache[13] || (_cache[13] = ($event) => $data.showEditModal = false)
-              }, "×")
-            ]),
-            vue.createElementVNode("div", { class: "modal-body" }, [
-              vue.createElementVNode("div", { class: "form-group" }, [
-                vue.createElementVNode("label", { class: "form-label" }, "小组口号"),
-                vue.withDirectives(vue.createElementVNode(
-                  "textarea",
-                  {
-                    class: "form-textarea",
-                    "onUpdate:modelValue": _cache[14] || (_cache[14] = ($event) => $data.editSlogan = $event),
-                    placeholder: "请输入小组口号..."
-                  },
-                  null,
-                  512
-                  /* NEED_PATCH */
-                ), [
-                  [vue.vModelText, $data.editSlogan]
+        $data.showEditModal ? (vue.openBlock(), vue.createElementBlock(
+          "div",
+          {
+            key: 0,
+            class: "modal-mask",
+            onTouchmove: _cache[20] || (_cache[20] = vue.withModifiers(() => {
+            }, ["prevent"])),
+            onScroll: _cache[21] || (_cache[21] = vue.withModifiers(() => {
+            }, ["prevent"]))
+          },
+          [
+            vue.createElementVNode(
+              "div",
+              {
+                class: "modal-container",
+                onTouchmove: _cache[19] || (_cache[19] = vue.withModifiers(() => {
+                }, ["stop"]))
+              },
+              [
+                vue.createElementVNode("div", { class: "modal-header" }, [
+                  vue.createElementVNode("div", { class: "modal-title" }, "编辑小组信息"),
+                  vue.createElementVNode("div", {
+                    class: "modal-close",
+                    onClick: _cache[15] || (_cache[15] = (...args) => $options.closeEditModal && $options.closeEditModal(...args))
+                  }, [
+                    vue.createVNode(_component_u_icon, {
+                      name: "close",
+                      color: "#909399",
+                      size: "18"
+                    })
+                  ])
+                ]),
+                vue.createElementVNode("div", { class: "modal-body" }, [
+                  vue.createCommentVNode(" 头像编辑区域 "),
+                  vue.createElementVNode("div", { class: "form-section avatar-edit-section" }, [
+                    vue.createElementVNode("div", { class: "section-title" }, "小组头像"),
+                    vue.createElementVNode("div", {
+                      class: "avatar-edit-container",
+                      onClick: _cache[16] || (_cache[16] = (...args) => $options.editAvatar && $options.editAvatar(...args))
+                    }, [
+                      vue.createElementVNode("div", { class: "current-avatar" }, [
+                        !$options.groupDetail.head ? (vue.openBlock(), vue.createElementBlock(
+                          "span",
+                          { key: 0 },
+                          vue.toDisplayString($options.groupDetail.groupName ? $options.groupDetail.groupName.charAt(0) : "?"),
+                          1
+                          /* TEXT */
+                        )) : (vue.openBlock(), vue.createElementBlock("img", {
+                          key: 1,
+                          src: $options.getGroupAvatar(),
+                          alt: $options.groupDetail.groupName
+                        }, null, 8, ["src", "alt"]))
+                      ]),
+                      vue.createElementVNode("div", { class: "avatar-edit-btn" }, [
+                        vue.createVNode(_component_u_icon, {
+                          name: "camera",
+                          color: "#4361ee",
+                          size: "16"
+                        }),
+                        vue.createElementVNode("span", null, "更换头像")
+                      ])
+                    ])
+                  ]),
+                  vue.createCommentVNode(" 信息编辑区域 "),
+                  vue.createElementVNode("div", { class: "form-section" }, [
+                    vue.createElementVNode("div", { class: "form-row" }, [
+                      vue.createElementVNode("div", { class: "form-label" }, "小组口号"),
+                      vue.createElementVNode("div", { class: "form-input" }, [
+                        vue.createVNode(_component_u_textarea, {
+                          modelValue: $options.editSlogan,
+                          "onUpdate:modelValue": _cache[17] || (_cache[17] = ($event) => $options.editSlogan = $event),
+                          placeholder: "请输入小组口号...",
+                          maxlength: 100,
+                          "show-confirm-bar": "false",
+                          "auto-height": true
+                        }, null, 8, ["modelValue"])
+                      ])
+                    ]),
+                    vue.createElementVNode("div", { class: "form-row" }, [
+                      vue.createElementVNode("div", { class: "form-label" }, "小组规则"),
+                      vue.createElementVNode("div", { class: "form-input" }, [
+                        vue.createVNode(_component_u_textarea, {
+                          modelValue: $data.editRule,
+                          "onUpdate:modelValue": _cache[18] || (_cache[18] = ($event) => $data.editRule = $event),
+                          placeholder: "请输入小组规则...",
+                          maxlength: 500,
+                          "show-confirm-bar": "false",
+                          "auto-height": true
+                        }, null, 8, ["modelValue"])
+                      ])
+                    ])
+                  ])
+                ]),
+                vue.createElementVNode("div", { class: "modal-footer" }, [
+                  vue.createVNode(_component_u_button, {
+                    type: "info",
+                    plain: "",
+                    onClick: $options.closeEditModal,
+                    "custom-style": { marginRight: "10px" }
+                  }, {
+                    default: vue.withCtx(() => [
+                      vue.createTextVNode("取消")
+                    ]),
+                    _: 1
+                    /* STABLE */
+                  }, 8, ["onClick"]),
+                  vue.createVNode(_component_u_button, {
+                    type: "primary",
+                    onClick: $options.saveGroupInfo
+                  }, {
+                    default: vue.withCtx(() => [
+                      vue.createTextVNode("保存")
+                    ]),
+                    _: 1
+                    /* STABLE */
+                  }, 8, ["onClick"])
                 ])
-              ]),
-              vue.createElementVNode("div", { class: "form-group" }, [
-                vue.createElementVNode("label", { class: "form-label" }, "小组规则"),
-                vue.withDirectives(vue.createElementVNode(
-                  "textarea",
-                  {
-                    class: "form-textarea",
-                    "onUpdate:modelValue": _cache[15] || (_cache[15] = ($event) => $data.editRule = $event),
-                    placeholder: "请输入小组规则..."
-                  },
-                  null,
-                  512
-                  /* NEED_PATCH */
-                ), [
-                  [vue.vModelText, $data.editRule]
-                ])
-              ])
-            ]),
-            vue.createElementVNode("div", { class: "modal-footer" }, [
-              vue.createElementVNode("button", {
-                class: "modal-btn modal-btn-cancel",
-                onClick: _cache[16] || (_cache[16] = ($event) => $data.showEditModal = false)
-              }, "取消"),
-              vue.createElementVNode("button", {
-                class: "modal-btn modal-btn-submit",
-                onClick: _cache[17] || (_cache[17] = (...args) => $options.saveGroupInfo && $options.saveGroupInfo(...args))
-              }, "保存")
-            ])
-          ])
-        ])) : vue.createCommentVNode("v-if", true)
+              ],
+              32
+              /* NEED_HYDRATION */
+            )
+          ],
+          32
+          /* NEED_HYDRATION */
+        )) : vue.createCommentVNode("v-if", true)
       ])
     ]);
   }
-  const PagesUserInfoGroupInfo = /* @__PURE__ */ _export_sfc(_sfc_main$22, [["render", _sfc_render$21], ["__file", "D:/uniapp2023/studyParty/pages/userInfo/groupInfo.vue"]]);
-  const _sfc_main$21 = {
+  const PagesUserInfoGroupInfo = /* @__PURE__ */ _export_sfc(_sfc_main$21, [["render", _sfc_render$20], ["__file", "D:/uniapp2023/studyParty/pages/userInfo/groupInfo.vue"]]);
+  const _sfc_main$20 = {
     data() {
       return {
         searchKeyword: "",
@@ -44444,7 +45106,7 @@ if (uni.restoreGlobal) {
       }
     }
   };
-  function _sfc_render$20(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$1$(_ctx, _cache, $props, $setup, $data, $options) {
     return vue.openBlock(), vue.createElementBlock("div", null, [
       vue.createElementVNode("div", { id: "app" }, [
         vue.createCommentVNode(" 顶部导航 "),
@@ -44653,293 +45315,7 @@ if (uni.restoreGlobal) {
       ])
     ]);
   }
-  const PagesChatListGroupTaskList = /* @__PURE__ */ _export_sfc(_sfc_main$21, [["render", _sfc_render$20], ["__file", "D:/uniapp2023/studyParty/pages/chatList/groupTaskList.vue"]]);
-  const props$1s = defineMixin$1({
-    props: {
-      // 输入框的内容
-      value: {
-        type: [String, Number],
-        default: () => props$1O.textarea.value
-      },
-      // 输入框的内容
-      modelValue: {
-        type: [String, Number],
-        default: () => props$1O.textarea.value
-      },
-      // 输入框为空时占位符
-      placeholder: {
-        type: [String, Number],
-        default: () => props$1O.textarea.placeholder
-      },
-      // 指定placeholder的样式类，注意页面或组件的style中写了scoped时，需要在类名前写/deep/
-      placeholderClass: {
-        type: String,
-        default: () => props$1O.input.placeholderClass
-      },
-      // 指定placeholder的样式
-      placeholderStyle: {
-        type: [String, Object],
-        default: () => props$1O.input.placeholderStyle
-      },
-      // 输入框高度
-      height: {
-        type: [String, Number],
-        default: () => props$1O.textarea.height
-      },
-      // 设置键盘右下角按钮的文字，仅微信小程序，App-vue和H5有效
-      confirmType: {
-        type: String,
-        default: () => props$1O.textarea.confirmType
-      },
-      // 是否禁用
-      disabled: {
-        type: Boolean,
-        default: () => props$1O.textarea.disabled
-      },
-      // 是否显示统计字数
-      count: {
-        type: Boolean,
-        default: () => props$1O.textarea.count
-      },
-      // 是否自动获取焦点，nvue不支持，H5取决于浏览器的实现
-      focus: {
-        type: Boolean,
-        default: () => props$1O.textarea.focus
-      },
-      // 是否自动增加高度
-      autoHeight: {
-        type: Boolean,
-        default: () => props$1O.textarea.autoHeight
-      },
-      // 如果textarea是在一个position:fixed的区域，需要显示指定属性fixed为true
-      fixed: {
-        type: Boolean,
-        default: () => props$1O.textarea.fixed
-      },
-      // 指定光标与键盘的距离
-      cursorSpacing: {
-        type: Number,
-        default: () => props$1O.textarea.cursorSpacing
-      },
-      // 指定focus时的光标位置
-      cursor: {
-        type: [String, Number],
-        default: () => props$1O.textarea.cursor
-      },
-      // 是否显示键盘上方带有”完成“按钮那一栏，
-      showConfirmBar: {
-        type: Boolean,
-        default: () => props$1O.textarea.showConfirmBar
-      },
-      // 光标起始位置，自动聚焦时有效，需与selection-end搭配使用
-      selectionStart: {
-        type: Number,
-        default: () => props$1O.textarea.selectionStart
-      },
-      // 光标结束位置，自动聚焦时有效，需与selection-start搭配使用
-      selectionEnd: {
-        type: Number,
-        default: () => props$1O.textarea.selectionEnd
-      },
-      // 键盘弹起时，是否自动上推页面
-      adjustPosition: {
-        type: Boolean,
-        default: () => props$1O.textarea.adjustPosition
-      },
-      // 是否去掉 iOS 下的默认内边距，只微信小程序有效
-      disableDefaultPadding: {
-        type: Boolean,
-        default: () => props$1O.textarea.disableDefaultPadding
-      },
-      // focus时，点击页面的时候不收起键盘，只微信小程序有效
-      holdKeyboard: {
-        type: Boolean,
-        default: () => props$1O.textarea.holdKeyboard
-      },
-      // 最大输入长度，设置为 -1 的时候不限制最大长度
-      maxlength: {
-        type: [String, Number],
-        default: () => props$1O.textarea.maxlength
-      },
-      // 边框类型，surround-四周边框，bottom-底部边框
-      border: {
-        type: String,
-        default: () => props$1O.textarea.border
-      },
-      // 用于处理或者过滤输入框内容的方法
-      formatter: {
-        type: [Function, null],
-        default: () => props$1O.textarea.formatter
-      },
-      // 是否忽略组件内对文本合成系统事件的处理
-      ignoreCompositionEvent: {
-        type: Boolean,
-        default: true
-      }
-    }
-  });
-  const _sfc_main$20 = {
-    name: "u-textarea",
-    mixins: [mpMixin$1, mixin$1, props$1s],
-    data() {
-      return {
-        // 输入框的值
-        innerValue: "",
-        // 是否处于获得焦点状态
-        focused: false,
-        // value是否第一次变化，在watch中，由于加入immediate属性，会在第一次触发，此时不应该认为value发生了变化
-        firstChange: true,
-        // value绑定值的变化是由内部还是外部引起的
-        changeFromInner: false,
-        // 过滤处理方法
-        innerFormatter: (value2) => value2
-      };
-    },
-    created() {
-    },
-    watch: {
-      modelValue: {
-        immediate: true,
-        handler(newVal, oldVal) {
-          this.innerValue = newVal;
-          this.firstChange = false;
-          this.changeFromInner = false;
-        }
-      }
-    },
-    computed: {
-      fieldStyle() {
-        let style = {};
-        style["height"] = addUnit$1(this.height);
-        if (this.autoHeight) {
-          style["height"] = "auto";
-          style["minHeight"] = addUnit$1(this.height);
-        }
-        return style;
-      },
-      // 组件的类名
-      textareaClass() {
-        let classes = [], { border, disabled } = this;
-        border === "surround" && (classes = classes.concat(["u-border", "u-textarea--radius"]));
-        border === "bottom" && (classes = classes.concat([
-          "u-border-bottom",
-          "u-textarea--no-radius"
-        ]));
-        disabled && classes.push("u-textarea--disabled");
-        return classes.join(" ");
-      },
-      // 组件的样式
-      textareaStyle() {
-        const style = {};
-        return deepMerge$3(style, addStyle$1(this.customStyle));
-      }
-    },
-    emits: ["update:modelValue", "linechange", "focus", "blur", "change", "confirm", "keyboardheightchange"],
-    methods: {
-      addStyle: addStyle$1,
-      addUnit: addUnit$1,
-      // 在微信小程序中，不支持将函数当做props参数，故只能通过ref形式调用
-      setFormatter(e) {
-        this.innerFormatter = e;
-      },
-      onFocus(e) {
-        this.$emit("focus", e);
-      },
-      onBlur(e) {
-        this.$emit("blur", e);
-        formValidate$1(this, "blur");
-      },
-      onLinechange(e) {
-        this.$emit("linechange", e);
-      },
-      onInput(e) {
-        let { value: value2 = "" } = e.detail || {};
-        const formatter = this.formatter || this.innerFormatter;
-        const formatValue = formatter(value2);
-        this.innerValue = value2;
-        this.$nextTick(() => {
-          this.innerValue = formatValue;
-          this.valueChange();
-        });
-      },
-      // 内容发生变化，进行处理
-      valueChange() {
-        const value2 = this.innerValue;
-        this.$nextTick(() => {
-          this.$emit("update:modelValue", value2);
-          this.changeFromInner = true;
-          this.$emit("change", value2);
-          formValidate$1(this, "change");
-        });
-      },
-      onConfirm(e) {
-        this.$emit("confirm", e);
-      },
-      onKeyboardheightchange(e) {
-        this.$emit("keyboardheightchange", e);
-      }
-    }
-  };
-  function _sfc_render$1$(_ctx, _cache, $props, $setup, $data, $options) {
-    return vue.openBlock(), vue.createElementBlock(
-      "view",
-      {
-        class: vue.normalizeClass(["u-textarea", $options.textareaClass]),
-        style: vue.normalizeStyle([$options.textareaStyle])
-      },
-      [
-        vue.createElementVNode("textarea", {
-          class: "u-textarea__field",
-          value: $data.innerValue,
-          style: vue.normalizeStyle($options.fieldStyle),
-          placeholder: _ctx.placeholder,
-          "placeholder-style": $options.addStyle(_ctx.placeholderStyle, typeof _ctx.placeholderStyle === "string" ? "string" : "object"),
-          "placeholder-class": _ctx.placeholderClass,
-          disabled: _ctx.disabled,
-          focus: _ctx.focus,
-          autoHeight: _ctx.autoHeight,
-          fixed: _ctx.fixed,
-          cursorSpacing: _ctx.cursorSpacing,
-          cursor: _ctx.cursor,
-          showConfirmBar: _ctx.showConfirmBar,
-          selectionStart: _ctx.selectionStart,
-          selectionEnd: _ctx.selectionEnd,
-          adjustPosition: _ctx.adjustPosition,
-          disableDefaultPadding: _ctx.disableDefaultPadding,
-          holdKeyboard: _ctx.holdKeyboard,
-          maxlength: _ctx.maxlength,
-          "confirm-type": _ctx.confirmType,
-          ignoreCompositionEvent: _ctx.ignoreCompositionEvent,
-          onFocus: _cache[0] || (_cache[0] = (...args) => $options.onFocus && $options.onFocus(...args)),
-          onBlur: _cache[1] || (_cache[1] = (...args) => $options.onBlur && $options.onBlur(...args)),
-          onLinechange: _cache[2] || (_cache[2] = (...args) => $options.onLinechange && $options.onLinechange(...args)),
-          onInput: _cache[3] || (_cache[3] = (...args) => $options.onInput && $options.onInput(...args)),
-          onConfirm: _cache[4] || (_cache[4] = (...args) => $options.onConfirm && $options.onConfirm(...args)),
-          onKeyboardheightchange: _cache[5] || (_cache[5] = (...args) => $options.onKeyboardheightchange && $options.onKeyboardheightchange(...args))
-        }, null, 44, ["value", "placeholder", "placeholder-style", "placeholder-class", "disabled", "focus", "autoHeight", "fixed", "cursorSpacing", "cursor", "showConfirmBar", "selectionStart", "selectionEnd", "adjustPosition", "disableDefaultPadding", "holdKeyboard", "maxlength", "confirm-type", "ignoreCompositionEvent"]),
-        _ctx.count ? (vue.openBlock(), vue.createElementBlock(
-          "text",
-          {
-            key: 0,
-            class: "u-textarea__count",
-            style: vue.normalizeStyle({
-              "background-color": _ctx.disabled ? "transparent" : "#fff"
-            })
-          },
-          vue.toDisplayString($data.innerValue.length) + "/" + vue.toDisplayString(_ctx.maxlength),
-          5
-          /* TEXT, STYLE */
-        )) : vue.createCommentVNode("v-if", true)
-      ],
-      6
-      /* CLASS, STYLE */
-    );
-  }
-  const uvTextarea = /* @__PURE__ */ _export_sfc(_sfc_main$20, [["render", _sfc_render$1$], ["__scopeId", "data-v-b6c174a6"], ["__file", "D:/uniapp2023/studyParty/uni_modules/uview-plus/components/u-textarea/u-textarea.vue"]]);
-  const __vite_glob_0_112 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
-    __proto__: null,
-    default: uvTextarea
-  }, Symbol.toStringTag, { value: "Module" }));
+  const PagesChatListGroupTaskList = /* @__PURE__ */ _export_sfc(_sfc_main$20, [["render", _sfc_render$1$], ["__file", "D:/uniapp2023/studyParty/pages/chatList/groupTaskList.vue"]]);
   const _sfc_main$1$ = {
     data() {
       return {
