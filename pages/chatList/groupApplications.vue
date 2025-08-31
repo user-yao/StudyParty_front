@@ -50,10 +50,31 @@
 								<div class="application-list">
 									<div class="application-card" v-for="app in receivedApplications" :key="app.id">
 										<div class="application-header">
-											<image class="user-avatar" :src="getUserAvatar(app.userId)" mode="aspectFill"></image>
+											<!-- 根据isInvited字段决定显示申请人头像还是小组头像 -->
+											<image 
+												v-if="app.isInvited === 0" 
+												class="user-avatar" 
+												:src="getUserAvatar(app.userId)" 
+												mode="aspectFill"
+												@click="goToUserDetail(app.userId)">
+											</image>
+											<image 
+												v-else 
+												class="group-avatar" 
+												:src="getGroupAvatar(app.groupId)" 
+												mode="aspectFill"
+												@click="goToGroupDetail(app.groupId)">
+											</image>
+											
 											<div class="application-info">
-												<div class="user-name">{{ getUserName(app.userId) }}</div>
-												<div class="group-name">申请加入：{{ getGroupName(app.groupId) }}</div>
+												<!-- 根据isInvited字段决定显示申请人姓名还是小组名称 -->
+												<div v-if="app.isInvited === 0" class="user-name">{{ app.username }}</div>
+												<div v-else class="group-name">{{ app.groupName }}</div>
+												
+												<!-- 根据isInvited字段决定显示小组名称还是申请人姓名 -->
+												<div v-if="app.isInvited === 0" class="group-name">申请加入：{{ app.groupName }}</div>
+												<div v-else class="user-name">邀请人：{{ app.leaderName}}</div>
+												
 												<div class="apply-time">{{ formatTime(app.joinTime) }}</div>
 											</div>
 											<div class="application-status" :class="getStatusClass(app.status)">
@@ -132,12 +153,36 @@
 								<div class="application-list">
 									<div class="application-card" v-for="app in sentApplications" :key="app.id">
 										<div class="application-header">
-											<image class="group-avatar" :src="getGroupAvatar(app.groupId)" mode="aspectFill"></image>
+											<!-- 根据isInvited字段决定显示小组头像还是用户头像 -->
+											<image 
+												v-if="app.isInvited === 0" 
+												class="group-avatar" 
+												:src="getGroupAvatar(app.groupId)" 
+												mode="aspectFill"
+												@click="goToGroupDetail(app.groupId)">
+											</image>
+											<image 
+												v-else 
+												class="user-avatar" 
+												:src="getUserAvatar(app.userId)" 
+												mode="aspectFill"
+												@click="goToUserDetail(app.userId)">
+											</image>
+											
 											<div class="application-info">
-												<div class="group-name">{{ getGroupName(app.groupId) }}</div>
-												<div class="group-stats">
+												<!-- 根据isInvited字段决定显示小组名称还是用户姓名 -->
+												<div v-if="app.isInvited === 0" class="group-name">{{ app.groupName }}</div>
+												<div v-else class="user-name">{{ app.username }}</div>
+												
+												<!-- 根据isInvited字段决定显示小组信息还是申请人信息 -->
+												<div v-if="app.isInvited === 0" class="group-stats">
 													<span class="member-count">申请状态</span>
 												</div>
+												<div v-else class="user-info">我邀请 {{ app.username }} 加入我的小组</div>
+												
+												<!-- 显示小组名称 -->
+												<div v-if="app.isInvited === 1" class="group-name">小组：{{ app.groupName }}</div>
+												
 												<div class="apply-time">{{ formatTime(app.joinTime) }}</div>
 											</div>
 											<div class="application-status" :class="getStatusClass(app.status)">
@@ -577,6 +622,46 @@ export default {
 		// 返回上一页
 		goBack() {
 			uni.navigateBack({ delta: 1 });
+		},
+		
+		// 跳转到用户详情页面
+		goToUserDetail(userId) {
+			if (!userId) {
+				uni.showToast({
+					title: '用户信息不存在',
+					icon: 'none'
+				});
+				return;
+			}
+			
+			uni.navigateTo({
+				url: '/pages/userInfo/userInfo',
+				success: (res) => {
+					res.eventChannel.emit("chatData", {
+						id: userId
+					});
+				}
+			});
+		},
+		
+		// 跳转到小组详情页面
+		goToGroupDetail(groupId) {
+			if (!groupId) {
+				uni.showToast({
+					title: '小组信息不存在',
+					icon: 'none'
+				});
+				return;
+			}
+			
+			uni.navigateTo({
+				url: '/pages/userInfo/groupInfo',
+				success: (res) => {
+					res.eventChannel.emit("chatData", {
+						groupId: groupId
+					});
+				}
+			});
 		}
 	}
 }

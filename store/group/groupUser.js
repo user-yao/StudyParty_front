@@ -1,6 +1,7 @@
 import { deleteUser, selectGroupUser } from '../../API/group/groupUser.js';
 
 export default {
+  namespaced: true,
   state: {
     groupUsers: []
   },

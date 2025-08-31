@@ -151,10 +151,14 @@ export default {
 			joinedGroups: [], // 我加入的小组
 			loading: false,
 			refreshing: false,
-			error: null
+			error: null,
+			// 用于强制刷新头像的时间戳
+			avatarTimestamp: Date.now()
 		}
 	},
 	onShow() {
+		// 更新时间戳以强制刷新头像
+		this.avatarTimestamp = Date.now();
 		this.loadGroupData();
 		// 监听小组创建成功事件
 		uni.$on('groupCreated', this.onGroupCreated);
@@ -252,10 +256,13 @@ export default {
 			if (group && group.head) {
 				// 如果是完整URL，直接返回
 				if (group.head.startsWith('http')) {
-					return group.head;
+					// 添加时间戳参数来避免缓存问题
+					const timestamp = this.avatarTimestamp || Date.now();
+					return group.head + (group.head.includes('?') ? '&' : '?') + 't=' + timestamp;
 				}
-				// 否则拼接baseUrl
-				return this.imageUrl + group.head;
+				// 否则拼接baseUrl并添加时间戳参数来避免缓存问题
+				const timestamp = this.avatarTimestamp || Date.now();
+				return this.imageUrl + group.head + '?t=' + timestamp;
 			}
 			// 默认头像：使用小组名称的首字母
 			return this.generateDefaultAvatar(group?.groupName || '小组');

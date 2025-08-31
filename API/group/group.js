@@ -48,9 +48,13 @@ export const updateGroup = (data) => {
     url: '/group/updateGroup',
     method: 'POST',
     data:{
-        slogan:data.slogan,
-        rule:data.rule,
-        groupName:data.groupName
+        groupId: data.groupId,
+        slogan: data.slogan,
+        rule: data.rule,
+        groupName: data.groupName
+    },
+    header: {
+        'Content-Type': 'application/x-www-form-urlencoded'
     }
   });
 }
@@ -70,17 +74,24 @@ export const transferGroup = (data) => {
     data:{
         groupId:data.groupId,
         newLeader:data.newLeader
-    }
+    },
+    header: {
+	    'Content-Type': 'application/x-www-form-urlencoded'
+	  }
   });
 }
 export const changeDeputy = (data) => {
+  console.log('调用changeDeputy API，参数:', data);
   return request({
     url: '/group/changeDeputy',
     method: 'POST',
     data:{
         groupId:data.groupId,
         deputy:data.deputy
-    }
+    },
+    header: {
+	    'Content-Type': 'application/x-www-form-urlencoded'
+	  }
   });
 }
 export const changeCanJoin = (data) => {
@@ -137,6 +148,47 @@ export const selectGroupById = (data) => {
 	  }
   });
 }
+export const inviteUserToGroup = (data) => {
+  console.log(data)
+  return request({
+    url: '/group/inviteUserToGroup',
+    method: 'POST',
+    data:{
+        groupId:data.groupId,
+        invitedUserId:data.invitedUserId // 被邀请人id
+    },
+    header: {
+	    'Content-Type': 'application/x-www-form-urlencoded'
+	  }
+  });
+}
+export const acceptGroupInvitation = (data) => {
+  console.log(data)
+  return request({
+    url: '/group/acceptGroupInvitation',
+    method: 'POST',
+    data:{
+        groupId:data.groupId
+    },
+    header: {
+	    'Content-Type': 'application/x-www-form-urlencoded'
+	  }
+  });
+}
+export const rejectGroupInvitation = (data) => {
+  console.log(data)
+  return request({
+    url: '/group/rejectGroupInvitation',
+    method: 'POST',
+    data:{
+        groupId:data.groupId
+    },
+    header: {
+	    'Content-Type': 'application/x-www-form-urlencoded'
+	  }
+  });
+}
+
 
 
 

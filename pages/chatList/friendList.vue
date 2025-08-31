@@ -5,16 +5,25 @@
 			<header class="app-header">
 				<div class="header-top">
 					<div class="logo">
-						<u-icon name="arrow-left" size="50rpx" color="#fff" bold @click="uni.navigateBack(1)"></u-icon>
-						<span>联系人</span>
+						<u-icon name="arrow-left" size="50rpx" color="#fff" bold @click="goBack"></u-icon>
+						<span>{{ getHeaderTitle() }}</span>
 					</div>
-					<div class="header-actions">
+					<div class="header-actions" v-if="!selectMode">
 						<i class="fas fa-plus"></i>
 						<i class="fas fa-ellipsis-v"></i>
 					</div>
 				</div>
 				<div class="search-bar">
 					<input style="color: #fff;" type="text" v-model="searchQuery" placeholder="搜索联系人...">
+				</div>
+				<!-- 身份筛选（仅在邀请老师或企业时显示） -->
+				<div class="status-filter" v-if="selectMode && (inviteType === 'teacher' || inviteType === 'enterprise')">
+					<u-tag 
+						:text="inviteType === 'teacher' ? '仅显示老师' : '仅显示企业'" 
+						type="primary" 
+						size="mini" 
+						plain>
+					</u-tag>
 				</div>
 			</header>
 
@@ -28,8 +37,8 @@
 								{{ group.letter }}
 							</div>
 							<div class="contact-item" v-for="contact in group.contacts" :key="contact.id" >
-								<image class="contact-avatar"  @click="toUserInfoPage(contact.friendId)" :src="imageUrl + contact.head" mode=""></image>
-								<div class="contact-info" @click="toUserInfoPage(contact.friendId)">
+								<image class="contact-avatar"  @click="handleContactClick(contact)" :src="imageUrl + contact.head" mode=""></image>
+								<div class="contact-info" @click="handleContactClick(contact)">
 									<div class="contact-name">{{ contact.remark == null?contact.name:contact.remark }}
 										<span class='statuStudent' v-if="contact.status == 1">学生</span>
 										<span class='statuTeacher' v-if="contact.status == 2">老师</span>
@@ -37,9 +46,15 @@
 									</div>
 									<div class="contact-phone">{{ contact.phone }}</div>
 								</div>
-								<div class="contact-actions">
+								<div class="contact-actions" v-if="!selectMode">
 									<div class="action-icon" @click="toChatPage(contact)">
 										<u-icon name="chat" size="25" color="#4895ef"></u-icon>
+									</div>
+								</div>
+								<!-- 选择模式下的选中状态 -->
+								<div class="contact-actions" v-if="selectMode">
+									<div class="select-indicator" :class="{ selected: isSelected(contact.friendId) }">
+										<u-icon :name="isSelected(contact.friendId) ? 'checkbox-mark' : 'minus'" size="20" :color="isSelected(contact.friendId) ? '#4361ee' : '#ccc'"></u-icon>
 									</div>
 								</div>
 							</div>
@@ -53,6 +68,12 @@
 					<h3>未找到联系人</h3>
 					<p>请尝试其他搜索关键词</p>
 				</div>
+			</div>
+			
+			<!-- 选择模式下的底部操作栏 -->
+			<div v-if="selectMode" class="select-footer">
+				<div class="selected-count">已选择 {{ selectedContacts.length }} 位{{ inviteType === 'teacher' ? '老师' : inviteType === 'enterprise' ? '企业' : '好友' }}</div>
+				<u-button type="primary" :disabled="!canConfirmSelection" @click="confirmSelection">确定</u-button>
 			</div>
 		</div>
 	</view>
@@ -75,8 +96,24 @@ export default {
       activeLetter: '',
       alphabet: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ#'.split(''),
 	  friendList:[],
-      contacts: [] // 将用于存储处理后的联系人数据
+      contacts: [], // 将用于存储处理后的联系人数据
+	  // 选择模式相关数据
+	  selectMode: false,
+	  groupId: null,
+	  selectedContacts: [],
+	  // 邀请类型和身份筛选
+	  inviteType: 'friend', // friend, teacher, enterprise
+	  statusFilter: null // 用于筛选老师(2)或企业(3)
     }
+  },
+  onLoad(options) {
+	  // 检查是否为选择模式
+	  if (options.selectMode === 'true') {
+		  this.selectMode = true;
+		  this.groupId = options.groupId || null;
+		  this.inviteType = options.inviteType || 'friend';
+		  this.statusFilter = options.status ? parseInt(options.status) : null;
+	  }
   },
   onShow() {
   	this.friendLists().then(res=>{
@@ -100,11 +137,23 @@ export default {
 	  imageUrl() {
 	  	return imageUrl
 	  },
+	  // 检查是否可以确认选择（邀请老师或企业时只能选择一人）
+	  canConfirmSelection() {
+		  if (this.inviteType === 'teacher' || this.inviteType === 'enterprise') {
+			  return this.selectedContacts.length === 1;
+		  }
+		  return this.selectedContacts.length > 0;
+	  },
     // 按字母分组联系人
     groupedContacts() {
       const groups = {};
 
-      this.contacts.forEach(contact => {
+      // 根据身份筛选过滤联系人
+      const filteredContacts = this.statusFilter ? 
+        this.contacts.filter(contact => contact.status === this.statusFilter) : 
+        this.contacts;
+
+      filteredContacts.forEach(contact => {
         // 获取用于排序的名称：优先使用 remark，否则使用 name
         const displayName = contact.remark || contact.name;
         // 获取首字母（假设为中文，获取拼音首字母）
@@ -157,7 +206,31 @@ export default {
     }
   },
   methods: {
+	  // 获取页面标题
+	  getHeaderTitle() {
+		  if (!this.selectMode) return '联系人';
+		  
+		  switch (this.inviteType) {
+			  case 'teacher':
+				  return '邀请老师';
+			  case 'enterprise':
+				  return '邀请企业';
+			  default:
+				  return '选择好友';
+		  }
+	  },
+	  goBack() {
+		  // 如果是选择模式，返回时传递选中的联系人信息
+		  if (this.selectMode) {
+			  uni.navigateBack({ delta: 1 });
+		  } else {
+			  uni.navigateBack({ delta: 1 });
+		  }
+	  },
 	  toChatPage(contact) {
+		  // 在选择模式下不执行聊天操作
+		  if (this.selectMode) return;
+		  
 	  	let friend = contact;
 		let chat = {statu:'person'};
 		let navigateBack = 2;
@@ -176,6 +249,9 @@ export default {
 	  	friendLists: "userFriend/friendList",
 	  }),
 	  toUserInfoPage(id) {
+		  // 在选择模式下不跳转到用户详情页
+		  if (this.selectMode) return;
+		  
 	  	uni.navigateTo({
 	  		url: `/pages/userInfo/userInfo`,
 	  		success: (res) => {
@@ -195,6 +271,159 @@ export default {
 		  		return 'color:#4cc9f0;';
 		  	default:
 		  		return '';
+		  }
+	  },
+	  // 处理联系人点击事件
+	  handleContactClick(contact) {
+		  if (this.selectMode) {
+			  // 选择模式下切换选中状态
+			  this.toggleSelection(contact);
+		  } else {
+			  // 普通模式下跳转到用户详情页
+			  this.toUserInfoPage(contact.friendId);
+		  }
+	  },
+	  // 切换联系人选择状态
+	  toggleSelection(contact) {
+		  // 检查身份是否符合邀请要求
+		  if (this.statusFilter && contact.status !== this.statusFilter) {
+			  uni.showToast({
+				  title: `请选择${this.statusFilter === 2 ? '老师' : '企业'}身份的用户`,
+				  icon: 'none'
+			  });
+			  return;
+		  }
+		  
+		  const index = this.selectedContacts.findIndex(item => item.friendId === contact.friendId);
+		  if (index > -1) {
+			  // 如果已选中，则取消选中
+			  this.selectedContacts.splice(index, 1);
+		  } else {
+			  // 如果未选中，检查是否超过选择限制
+			  if (this.inviteType === 'teacher' || this.inviteType === 'enterprise') {
+				  // 邀请老师或企业时只能选择一人
+				  if (this.selectedContacts.length >= 1) {
+					  uni.showToast({
+						  title: '只能邀请一位' + (this.inviteType === 'teacher' ? '老师' : '企业'),
+						  icon: 'none'
+					  });
+					  return;
+				  }
+			  }
+			  // 添加到选中列表
+			  this.selectedContacts.push(contact);
+		  }
+	  },
+	  // 检查联系人是否已选中
+	  isSelected(friendId) {
+		  return this.selectedContacts.some(item => item.friendId === friendId);
+	  },
+	  // 确认选择
+	  async confirmSelection() {
+		  if (this.selectedContacts.length === 0) {
+			  uni.showToast({
+				  title: '请选择好友',
+				  icon: 'none'
+			  });
+			  return;
+		  }
+		  
+		  // 检查老师/企业邀请的限制
+		  if ((this.inviteType === 'teacher' || this.inviteType === 'enterprise') && this.selectedContacts.length > 1) {
+			  uni.showToast({
+				  title: '只能邀请一位' + (this.inviteType === 'teacher' ? '老师' : '企业'),
+				  icon: 'none'
+			  });
+			  return;
+		  }
+		  
+		  // 发送邀请
+		  if (this.groupId) {
+			  // 这里需要调用群组邀请接口
+			  // 由于我们无法直接访问群组成员页面的实例，需要通过事件或其他方式通知
+			  const pages = getCurrentPages();
+			  const prevPage = pages[pages.length - 2]; // 上一个页面
+			  
+			  if (prevPage && typeof prevPage.$vm.sendInvitation === 'function') {
+				  // 显示加载提示
+				  uni.showLoading({
+					  title: '正在发送邀请...'
+				  });
+				  
+				  try {
+					  // 逐个发送邀请并统计结果
+					  let successCount = 0;
+					  let alreadyInGroupCount = 0;
+					  let failCount = 0;
+					  
+					  for (const contact of this.selectedContacts) {
+						  const result = await prevPage.$vm.sendInvitation(contact.friendId);
+						  if (result.success) {
+							  successCount++;
+						  } else if (result.reason === 'already_in_group') {
+							  alreadyInGroupCount++;
+						  } else {
+							  failCount++;
+						  }
+					  }
+					  
+					  uni.hideLoading();
+					  
+					  // 根据邀请类型设置提示文本
+					  const inviteTypeName = this.inviteType === 'teacher' ? '老师' : 
+											this.inviteType === 'enterprise' ? '企业' : '好友';
+					  
+					  // 根据结果给出不同的提示
+					  if (successCount > 0 && alreadyInGroupCount === 0 && failCount === 0) {
+						  // 全部成功
+						  uni.showToast({
+							  title: `成功邀请${successCount}位${inviteTypeName}`,
+							  icon: 'success'
+						  });
+					  } else if (successCount > 0 && (alreadyInGroupCount > 0 || failCount > 0)) {
+						  // 部分成功
+						  let message = `成功邀请${successCount}位${inviteTypeName}`;
+						  if (alreadyInGroupCount > 0) {
+							  message += `，${alreadyInGroupCount}位已在群组中`;
+						  }
+						  if (failCount > 0) {
+							  message += `，${failCount}位邀请失败`;
+						  }
+						  uni.showToast({
+							  title: message,
+							  icon: 'none'
+						  });
+					  } else if (successCount === 0 && alreadyInGroupCount > 0 && failCount === 0) {
+						  // 全部已在群组中
+						  uni.showToast({
+							  title: `选择的${inviteTypeName}均已在群组中`,
+							  icon: 'none'
+						  });
+					  } else {
+						  // 全部失败或其他情况
+						  uni.showToast({
+							  title: '邀请发送失败',
+							  icon: 'none'
+						  });
+					  }
+					  
+					  // 返回上一页
+					  setTimeout(() => {
+						  uni.navigateBack({ delta: 1 });
+					  }, 1500);
+				  } catch (error) {
+					  uni.hideLoading();
+					  uni.showToast({
+						  title: '邀请发送失败',
+						  icon: 'none'
+					  });
+				  }
+			  } else {
+				  uni.showToast({
+					  title: '无法发送邀请',
+					  icon: 'none'
+				  });
+			  }
 		  }
 	  },
     // 获取中文拼音首字母（简化版）
@@ -327,6 +556,12 @@ export default {
 		font-size: 0.95rem;
 	}
 
+	/* 身份筛选标签 */
+	.status-filter {
+		margin-top: 10px;
+		display: flex;
+		justify-content: center;
+	}
 
 	/* 联系人列表容器 */
 	.contacts-container {
@@ -473,6 +708,23 @@ export default {
 		color: white;
 		transform: scale(1.1);
 	}
+	
+	/* 选择指示器 */
+	.select-indicator {
+		width: 36px;
+		height: 36px;
+		border-radius: 50%;
+		background: var(--light);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		cursor: pointer;
+		transition: all 0.2s;
+	}
+	
+	.select-indicator.selected {
+		background: #e0e7ff;
+	}
 
 	/* 空状态 */
 	.empty-state {
@@ -519,6 +771,28 @@ export default {
 	.nav-item i {
 		font-size: 1.3rem;
 		margin-bottom: 3px;
+	}
+	
+	/* 选择模式底部操作栏 */
+	.select-footer {
+		position: fixed;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		background: white;
+		padding: 15px 20px;
+		box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+		z-index: 100;
+		max-width: 500px;
+		margin: 0 auto;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
+	
+	.selected-count {
+		font-size: 0.9rem;
+		color: var(--gray);
 	}
 
 	/* 响应式调整 */

@@ -10,7 +10,11 @@ import { searchGroup,
           contributionGroup, 
           invitePredecessor, 
           clearPredecessor, 
-          selectGroupById } from '../../API/group/group.js';
+          selectGroupById,
+          inviteUserToGroup,
+          acceptGroupInvitation,
+          rejectGroupInvitation
+       } from '../../API/group/group.js';
 export default {
   namespaced: true,
   state: () => ({
@@ -174,7 +178,9 @@ export default {
       return res;
     },
     async changeDeputy({ commit }, data) {
+      console.log('调用store中的changeDeputy，参数:', data);
       const res = await changeDeputy(data); // 调用变更副主接口
+      console.log('store中的changeDeputy返回结果:', res);
       if (res.code === 200 && data.groupId) {
         // 更新副主信息
         commit('UPDATE_GROUP', { id: data.groupId, deputy: data.deputy });
@@ -201,6 +207,19 @@ export default {
       const res = await clearPredecessor(data); // 调用清除前驱接口
       return res;
     },
+    // 新增的方法
+    async inviteUserToGroup({ commit }, data) {
+      const res = await inviteUserToGroup(data); // 调用邀请用户接口
+      return res;
+    },
+    async acceptGroupInvitation({ commit }, data) {
+      const res = await acceptGroupInvitation(data); // 调用接受邀请接口
+      return res;
+    },
+    async rejectGroupInvitation({ commit }, data) {
+      const res = await rejectGroupInvitation(data); // 调用拒绝邀请接口
+      return res;
+    },
     async searchGroup({ commit }, data) {
       const res = await searchGroup(data); // 调用搜索群组接口
       return res;
@@ -224,6 +243,7 @@ export default {
       }
       return res;
     },
+
     // 新增的辅助方法
     // 根据ID获取群组信息
     getGroupById({ getters }, groupId) {

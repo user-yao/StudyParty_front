@@ -38,7 +38,7 @@
 					url:'/pages/chatList/addFriend'
 				})">
 					<div>
-						<image class="chat-avatar" style="padding: 5px;" src="@/static/chat/xinpengyou.png"></image>
+						<image class="chat-avatar" style="padding: 5px;" src="@/static/chat/xinpengyou.png" mode="aspectFill"></image>
 					</div>
 					<div class="chat-header">
 						<div class="chat-name">新朋友</div>
@@ -50,7 +50,7 @@
 					url:'/pages/chatList/friendList'
 				})">
 					<div>
-						<image class="chat-avatar" src="@/static/chat/lianxiren.png"></image>
+						<image class="chat-avatar" src="@/static/chat/lianxiren.png" mode="aspectFill"></image>
 					</div>
 					<div class="chat-header">
 						<div class="chat-name">好友列表</div>
@@ -83,7 +83,7 @@
 					@touchstart="handleTouchStart(chat, $event)" @touchend="handleTouchEnd"
 					@touchcancel="handleTouchEnd">
 					<div>
-						<image class="chat-avatar" :src="getHead(chat.friend, chat.statu)">
+						<image class="chat-avatar" :src="getHead(chat.friend, chat.statu)" mode="aspectFill">
 						</image>
 					</div>
 					<div class="chat-info">
@@ -140,7 +140,9 @@
 				matchedChatIds: new Set(), // 匹配的聊天ID集合
 				// 长按删除相关
 				currentChat: null,
-				longPressTimer: null
+				longPressTimer: null,
+				// 用于强制刷新头像的时间戳
+				avatarTimestamp: Date.now()
 			}
 		},
 		onLoad() {
@@ -389,7 +391,9 @@
 						// 群组信息不存在时返回默认群组头像
 						return this.imageUrl + 'static/head/group.png';
 					}
-					return this.imageUrl + 'static/head/' + friendId + '/groupHeadPhoto.png';
+					// 添加时间戳参数来避免缓存问题
+					const timestamp = this.avatarTimestamp || Date.now();
+					return this.imageUrl + 'static/head/' + friendId + '/groupHeadPhoto.png?t=' + timestamp;
 				}
 				if (status == 'person') {
 					const friendInfo = this.friendList.get(Number(friendId));
@@ -397,7 +401,9 @@
 						// 好友信息不存在时返回默认用户头像
 						return this.imageUrl + 'static/head/user.png';
 					}
-					return this.imageUrl + 'static/head/' + friendId + '/userHeadPhoto.png';
+					// 添加时间戳参数来避免缓存问题
+					const timestamp = this.avatarTimestamp || Date.now();
+					return this.imageUrl + 'static/head/' + friendId + '/userHeadPhoto.png?t=' + timestamp;
 				}
 				// 未知类型返回通用默认头像
 				return this.imageUrl + 'static/head/default.png';
@@ -516,6 +522,9 @@
 		},
 		onShow() {
 			console.log("查询消息列表");
+			// 更新时间戳以强制刷新头像
+			this.avatarTimestamp = Date.now();
+			
 			// 同时加载好友列表和群组列表
 			Promise.all([
 				this.friendLists(),

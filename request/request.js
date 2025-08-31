@@ -15,6 +15,43 @@ import {
 
 export const request = (options) => {
 	return new Promise((resolve, reject) => {
+		console.log('准备发送请求，参数:', {
+			url: baseUrl + options.url,
+			method: options.method || 'GET',
+			data: options.data || {},
+			header: (() => {
+				const excludePaths = ['/user/login', '/user/register'];
+				const defaultHeader = options.header || {};
+
+				// 如果不在排除列表中，添加 Authorization 头，并默认使用 application/json
+				if (!excludePaths.includes(options.url)) {
+					const token = uni.getStorageSync('token');
+					if (!token) {
+						reject(new Error('未登录，请先登录'));
+						return;
+					}
+					// 如果用户显式指定了 Content-Type，直接保留
+					if (defaultHeader['Content-Type']) {
+						return {
+							...defaultHeader,
+							'Authorization': `${token}`
+						};
+					}
+					return {
+						...defaultHeader,
+						'Authorization': `${token}`,
+						'Content-Type': 'application/json'
+					};
+				}
+				// 登录/注册接口，默认使用 application/json（可自定义）
+				return {
+					...defaultHeader,
+					'Content-Type': 'application/json'
+				};
+			})(),
+			timeout: timeout
+		});
+		
 		uni.request({
 			url: baseUrl + options.url,
 			method: options.method || 'GET',
@@ -51,7 +88,7 @@ export const request = (options) => {
 			})(),
 			timeout: timeout,
 			success: (res) => {
-				console.log(res)
+				console.log('请求成功，响应数据:', res);
 				if (res.statusCode >= 200 && res.statusCode < 300) {
 					resolve(res.data);
 				} else if (res.statusCode == 401) {
@@ -67,7 +104,7 @@ export const request = (options) => {
 				}
 			},
 			fail: (err) => {
-				console.log(err)
+				console.log('请求失败，错误信息:', err);
 				reject(err);
 			}
 		});

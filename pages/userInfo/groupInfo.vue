@@ -50,14 +50,6 @@
 							</div>
 							
 							<!-- 移除此处的管理操作，将其移到小组信息卡片中 -->
-							
-							<!-- 普通成员退出操作 -->
-							<div class="member-actions" v-if="!isLeader">
-								<div class="action-button danger" @click="leaveGroup">
-									<u-icon name="logout" color="#f72585" size="14"></u-icon>
-									<span>退出小组</span>
-								</div>
-							</div>
 						</div>
 					</div>
 					
@@ -125,7 +117,7 @@
 								<div class="info-label">代理组长:</div>
 								<div class="info-value deputy-info" @click="viewDeputyProfile">
 									<span>{{ getDeputyName() }}</span>
-									<u-icon name="reload" v-if="isLeader" @click.stop="changeDeputy" color="#4361ee" size="14" style="cursor: pointer; margin-left: 5px;"></u-icon>
+									<u-icon name="reload" v-if="isLeader" @click.stop="navigateToChangeDeputy" color="#4361ee" size="14" style="cursor: pointer; margin-left: 5px;"></u-icon>
 								</div>
 							</div>
 							<div class="info-item">
@@ -156,24 +148,29 @@
 						<div class="management-actions" v-if="isLeader">
 							<!-- 常规管理功能 -->
 							<div class="management-row">
-								<div class="management-item" @click="changeDeputy">
+								<div class="management-item" @click="navigateToChangeDeputy">
 									<u-icon name="account" color="#4361ee" size="16"></u-icon>
 									<span>更换代理组长</span>
 								</div>
-								<div class="management-item" v-if="!groupDetail.teacher || !groupDetail.enterprise" @click="inviteTeacherOrEnterprise">
-									<u-icon name="plus-circle" color="#4361ee" size="16"></u-icon>
-									<span>邀请老师/企业</span>
+								<div class="management-item" @click="transferLeader">
+									<u-icon name="share" color="#4361ee" size="16"></u-icon>
+									<span>转让组长</span>
 								</div>
 							</div>
 							<!-- 危险操作功能 -->
-							<div class="management-row dangerous-actions">
-								<div class="management-item transfer-action" @click="transferGroup">
-									<u-icon name="share" color="#4361ee" size="16"></u-icon>
-									<span>转让小组</span>
-								</div>
+							<div class="management-row dangerous-actions single-item">
 								<div class="management-item dissolve-action" @click="dissolveGroup">
 									<u-icon name="trash" color="#f72585" size="16"></u-icon>
 									<span>解散小组</span>
+								</div>
+							</div>
+						</div>
+						<!-- 普通成员操作 -->
+						<div class="management-actions" v-else>
+							<div class="management-row dangerous-actions single-item">
+								<div class="management-item leave-action" @click="leaveGroup">
+									<u-icon name="close-circle" color="#f72585" size="16"></u-icon>
+									<span>退出小组</span>
 								</div>
 							</div>
 						</div>
@@ -300,8 +297,13 @@
 							<div class="section-title">小组头像</div>
 							<div class="avatar-edit-container" @click="editAvatar">
 								<div class="current-avatar">
-									<span v-if="!groupDetail.head">{{ groupDetail.groupName ? groupDetail.groupName.charAt(0) : '?' }}</span>
-									<img v-else :src="getGroupAvatar()" :alt="groupDetail.groupName">
+									<!-- 预览选中的头像 -->
+									<img v-if="avatarPreview" :src="avatarPreview" alt="选中头像">
+									<!-- 当前头像 -->
+									<template v-else>
+										<span v-if="!groupDetail.head">{{ groupDetail.groupName ? groupDetail.groupName.charAt(0) : '?' }}</span>
+										<img v-else :src="getGroupAvatar()" :alt="groupDetail.groupName">
+									</template>
 								</div>
 								<div class="avatar-edit-btn">
 									<u-icon name="camera" color="#4361ee" size="16"></u-icon>
@@ -313,22 +315,34 @@
 						<!-- 信息编辑区域 -->
 						<div class="form-section">
 							<div class="form-row">
+								<div class="form-label">小组名称</div>
+								<div class="form-input">
+									<u-input v-model="editGroupName" placeholder="请输入小组名称..." :maxlength="20" clearable></u-input>
+								</div>
+							</div>
+							<div class="form-row">
 								<div class="form-label">小组口号</div>
 								<div class="form-input">
-									<u-textarea v-model="editSlogan" placeholder="请输入小组口号..." :maxlength="100" show-confirm-bar="false" :auto-height="true"></u-textarea>
+									<u-textarea 
+										v-model="editSlogan" 
+										placeholder="请输入小组口号..." 
+										:maxlength="100" 
+										:show-confirm-bar="false" 
+										:auto-height="true"
+									></u-textarea>
 								</div>
 							</div>
 							<div class="form-row">
 								<div class="form-label">小组规则</div>
 								<div class="form-input">
-									<u-textarea v-model="editRule" placeholder="请输入小组规则..." :maxlength="500" show-confirm-bar="false" :auto-height="true"></u-textarea>
+									<u-textarea v-model="editRule" placeholder="请输入小组规则..." :maxlength="500" :show-confirm-bar="false" :auto-height="true"></u-textarea>
 								</div>
 							</div>
 						</div>
 					</div>
 					<div class="modal-footer">
-						<u-button type="info" plain @click="closeEditModal" :custom-style="{marginRight: '10px'}">取消</u-button>
-						<u-button type="primary" @click="saveGroupInfo">保存</u-button>
+						<u-button type="info" plain @click="closeEditModal" :custom-style="{marginRight: '10px'}" :disabled="saving">取消</u-button>
+						<u-button type="primary" @click="saveGroupInfo" :loading="saving" :disabled="saving">保存</u-button>
 					</div>
 				</div>
 			</div>
@@ -348,6 +362,7 @@ import {
 } from "vuex";
 import { selectMyGroupTask } from "@/API/group/groupTask.js";
 import { selectGroupUser } from "@/API/group/groupUser.js";
+import UploadUtils from "@/utils/uploadUtils.js";
 
 export default {
 	data() {
@@ -362,8 +377,16 @@ export default {
 			groupTasks: [],
 			// 模态框状态
 			showEditModal: false,
+			editGroupName: "",
 			editSlogan: "",
 			editRule: "",
+			// 头像编辑相关
+			selectedAvatarFile: null, // 选中的头像文件
+			avatarPreview: null, // 头像预览URL
+			// 用于强制刷新头像的时间戳
+			avatarTimestamp: null,
+			// 保存状态
+			saving: false,
 			// 滚动位置保存
 			scrollTop: 0,
 			// 当前用户ID（后续从用户store获取）
@@ -462,13 +485,11 @@ export default {
 		
 		// 显示前3个任务（按照规范只显示任务题目）
 		displayedTasks() {
-			const tasks = this.groupTasks.slice(0, 3);
-			console.log('当前显示任务:', tasks.length, '/', this.groupTasks.length);
-			return tasks;
+			return this.groupTasks.slice(0, 3);
 		}
 	},
 	methods: {
-		...mapActions('group', ['selectGroupById']),
+		...mapActions('group', ['selectGroupById', 'updateGroup', 'changeDeputy', 'transferGroup']),
 		// 直接引用 selectMyGroupTask
 		// ...mapActions('groupTask', ['selectMyGroupTask']),
 		
@@ -485,9 +506,7 @@ export default {
 				
 				// 加载群组详情
 				const groupRes = await this.selectGroupById({ groupId: this.groupId });
-				if (groupRes.code === 200) {
-					console.log('群组详情加载成功:', groupRes.data);
-				} else {
+				if (groupRes.code !== 200) {
 					this.error = '群组详情加载失败';
 				}
 				
@@ -496,10 +515,9 @@ export default {
 					const taskRes = await selectMyGroupTask({ groupId: this.groupId, currentPage: 1 });
 					if (taskRes.code === 200) {
 						this.groupTasks = taskRes.data.records || [];
-						console.log('群组任务加载成功:', this.groupTasks.length, '个任务');
 					}
 				} catch (e) {
-					console.error('任务加载失败:', e);
+					// 静默失败
 				}
 				
 				// 加载群组成员
@@ -507,14 +525,12 @@ export default {
 					const memberRes = await selectGroupUser({ groupId: this.groupId });
 					if (memberRes.code === 200) {
 						this.groupMembers = memberRes.data || [];
-						console.log('群组成员加载成功:', this.groupMembers.length, '个成员');
 					}
 				} catch (e) {
-					console.error('成员加载失败:', e);
+					// 静默失败
 				}
 				
 			} catch (error) {
-				console.error('加载群组数据失败:', error);
 				this.error = '网络错误，请稍后重试';
 			} finally {
 				this.loading = false;
@@ -572,7 +588,13 @@ export default {
 		// 查看所有成员
 		viewAllMembers() {
 			console.log("查看所有成员");
-			uni.showToast({ title: '功能开发中', icon: 'none' });
+			// 跳转到小组成员列表页面
+			uni.navigateTo({
+				url: '/pages/chatList/groupMembers',
+				success: (res) => {
+					res.eventChannel.emit("chatData", { groupId: this.groupId });
+				}
+			});
 		},
 		
 		// 查看所有任务
@@ -626,8 +648,14 @@ export default {
 		
 		// 编辑小组信息
 		editGroupInfo() {
-			this.editSlogan = this.groupDetail.slogan;
-			this.editRule = this.groupDetail.rule;
+			// 确保数据正确初始化
+			this.editGroupName = this.groupDetail.groupName || '';
+			this.editSlogan = this.groupDetail.slogan || '';
+			this.editRule = this.groupDetail.rule || '';
+			
+			// 清空头像选择
+			this.selectedAvatarFile = null;
+			this.avatarPreview = null;
 			this.showEditModal = true;
 			// 阻止背景滚动
 			this.lockBodyScroll();
@@ -635,36 +663,289 @@ export default {
 		
 		// 编辑头像
 		editAvatar() {
-			uni.showToast({ title: '头像编辑功能开发中', icon: 'none' });
+			uni.chooseImage({
+				count: 1,
+				sizeType: ['compressed'],
+				sourceType: ['album', 'camera'],
+				success: (res) => {
+					const tempFilePath = res.tempFilePaths[0];
+					this.selectedAvatarFile = tempFilePath;
+					this.avatarPreview = tempFilePath;
+				},
+				fail: (err) => {
+					this.$u.toast('选择图片失败');
+				}
+			});
 		},
 		
-		// 编辑标语
-		editSlogan() {
+		// 编辑标语方法（弃用）
+		showSloganPrompt() {
 			uni.showPrompt({
 				title: '编辑小组口号',
 				placeholderText: '请输入小组口号...',
 				text: this.groupDetail.slogan || '',
 				success: (res) => {
 					if (res.confirm) {
-						console.log('新的标语:', res.content);
 						uni.showToast({ title: '功能开发中', icon: 'none' });
 					}
 				}
 			});
 		},
 		
-		// 保存小组信息
-		saveGroupInfo() {
+		// 关闭编辑模态框
+		closeEditModal() {
 			this.showEditModal = false;
+			// 清空编辑数据
+			this.editGroupName = '';
+			this.editSlogan = '';
+			this.editRule = '';
+			this.selectedAvatarFile = null;
+			this.avatarPreview = null;
 			// 恢复背景滚动
 			this.unlockBodyScroll();
-			uni.showToast({ title: '功能开发中', icon: 'none' });
+		},
+
+		// 保存小组信息
+		async saveGroupInfo() {
+			// 验证输入
+			if (!this.editGroupName.trim()) {
+				this.$u.toast('请输入小组名称');
+				return;
+			}
+
+			try {
+				this.saving = true;
+				
+				let updateResult;
+				
+				// 如果有选中的头像文件，使用文件上传方式
+				if (this.selectedAvatarFile) {
+					const formData = {
+						groupId: this.groupDetail.id,
+						groupName: this.editGroupName.trim(),
+						slogan: this.editSlogan.trim(),
+						rule: this.editRule.trim()
+					};
+					
+					// 使用 UploadUtils 上传文件
+					updateResult = await UploadUtils.uploadFile({
+						url: '/group/updateGroup',
+						filePath: this.selectedAvatarFile,
+						name: 'photo',
+						formData: formData
+					});
+				} else {
+					const updateData = {
+						groupId: this.groupDetail.id,
+						groupName: this.editGroupName.trim(),
+						slogan: this.editSlogan.trim(),
+						rule: this.editRule.trim()
+					};
+					
+					// 使用 store 中的 updateGroup 方法
+					updateResult = await this.updateGroup(updateData);
+				}
+				
+				// 检查结果
+				if (updateResult.success !== false && (updateResult.code === 200 || updateResult.data?.code === 200)) {
+					this.$u.toast('保存成功');
+					
+					// 关闭模态框
+					this.closeEditModal();
+					
+					// 如果更新了头像，更新时间戳以强制刷新图片
+					if (this.selectedAvatarFile) {
+						this.avatarTimestamp = Date.now();
+					}
+					
+					// 重新加载数据
+					await this.loadGroupData();
+				} else {
+					const errorMsg = updateResult.message || updateResult.data?.message || '保存失败';
+					this.$u.toast(errorMsg);
+				}
+				
+			} catch (error) {
+				this.$u.toast('网络错误，请稍后重试');
+			} finally {
+				this.saving = false;
+			}
+		},
+		
+		// 更换代理组长
+		async navigateToChangeDeputy() {
+			// 跳转到小组成员页面选择新的代理组长
+			uni.navigateTo({
+				url: '/pages/chatList/groupMembers',
+				success: (res) => {
+					res.eventChannel.emit("chatData", { 
+						groupId: this.groupId,
+						selectMode: 'deputy',
+						fromPage: 'groupInfo'
+					});
+				}
+			});
+		},
+		
+		// 设置新的代理组长（供groupMembers页面调用）
+		async setNewDeputy(memberId) {
+			if (!this.groupId || !memberId) {
+				uni.showToast({
+					title: '缺少必要参数',
+					icon: 'none'
+				});
+				return;
+			}
+			
+			// 检查选中的成员是否已经是代理组长
+			if (this.groupDetail.deputy === memberId) {
+				uni.showToast({
+					title: '该成员已是代理组长',
+					icon: 'none'
+				});
+				return;
+			}
+			
+			uni.showLoading({
+				title: '正在设置...'
+			});
+			
+			try {
+				console.log('准备调用changeDeputy，参数:', {
+					groupId: this.groupId,
+					deputy: memberId
+				});
+				
+				const res = await this.changeDeputy({
+					groupId: this.groupId,
+					deputy: memberId
+				});
+				
+				console.log('changeDeputy返回结果:', res);
+				
+				uni.hideLoading();
+				
+				if (res && res.code === 200) {
+					uni.showToast({
+						title: '设置成功',
+						icon: 'success'
+					});
+					
+					// 更新本地数据
+					this.groupMembers = this.groupMembers.map(member => {
+						// 清除之前的代理组长标识
+						if (member.id === this.groupDetail.deputy) {
+							delete member.role;
+						}
+						// 设置新的代理组长标识
+						if (member.id === memberId) {
+							member.role = 'deputy';
+						}
+						return member;
+					});
+					
+					// 重新加载群组数据以更新界面
+					await this.loadGroupData();
+				} else {
+					uni.showToast({
+						title: (res && res.msg) || '设置失败',
+						icon: 'none'
+					});
+				}
+			} catch (error) {
+				uni.hideLoading();
+				console.error('设置代理组长失败:', error);
+				uni.showToast({
+					title: '设置失败，请重试',
+					icon: 'none'
+				});
+			}
+		},
+		
+		// 转让组长
+		async transferLeader() {
+			// 跳转到小组成员页面选择新的组长
+			uni.navigateTo({
+				url: '/pages/chatList/groupMembers',
+				success: (res) => {
+					res.eventChannel.emit("chatData", { 
+						groupId: this.groupId,
+						selectMode: 'transfer',
+						fromPage: 'groupInfo'
+					});
+				}
+			});
+		},
+		
+		// 设置新的组长（供groupMembers页面调用）
+		async setNewLeader(memberId) {
+			if (!this.groupId || !memberId) {
+				uni.showToast({
+					title: '缺少必要参数',
+					icon: 'none'
+				});
+				return;
+			}
+			
+			// 检查选中的成员是否已经是组长
+			if (this.groupDetail.leader === memberId) {
+				uni.showToast({
+					title: '该成员已是组长',
+					icon: 'none'
+				});
+				return;
+			}
+			
+			uni.showLoading({
+				title: '正在转让...'
+			});
+			
+			try {
+				const res = await this.transferGroup({
+					groupId: this.groupId,
+					newLeader: memberId
+				});
+				
+				uni.hideLoading();
+				
+				if (res && res.code === 200) {
+					uni.showToast({
+						title: '转让成功',
+						icon: 'success'
+					});
+					
+					// 更新本地数据
+					this.groupMembers = this.groupMembers.map(member => {
+						// 清除之前的组长标识
+						if (member.id === this.groupDetail.leader) {
+							delete member.role;
+						}
+						// 设置新的组长标识
+						if (member.id === memberId) {
+							member.role = 'leader';
+						}
+						return member;
+					});
+					
+					// 重新加载群组数据以更新界面
+					await this.loadGroupData();
+				} else {
+					uni.showToast({
+						title: (res && res.msg) || '转让失败',
+						icon: 'none'
+					});
+				}
+			} catch (error) {
+				uni.hideLoading();
+				console.error('转让组长失败:', error);
+				uni.showToast({
+					title: '转让失败，请重试',
+					icon: 'none'
+				});
+			}
 		},
 		
 		// 其他方法（简化处理）
-		changeDeputy() { uni.showToast({ title: '功能开发中', icon: 'none' }); },
-		inviteTeacherOrEnterprise() { uni.showToast({ title: '功能开发中', icon: 'none' }); },
-		transferGroup() { uni.showToast({ title: '功能开发中', icon: 'none' }); },
 		dissolveGroup() {
 			uni.showModal({
 				title: '确认解散',
@@ -693,16 +974,16 @@ export default {
 		// 获取群组头像
 		getGroupAvatar() {
 			if (this.groupDetail.head) {
-				return this.imageUrl + this.groupDetail.head;
+				// 添加时间戳参数来避免缓存问题
+				const timestamp = this.avatarTimestamp || Date.now();
+				return this.imageUrl + this.groupDetail.head + '?t=' + timestamp;
 			}
 			return '';
 		},
 		
 		// 获取任务状态图标
 		getTaskStatusIcon(task) {
-			console.log('获取任务状态图标:', task);
 			if (!task) {
-				console.log('任务为空，返回默认等待状态');
 				return '/static/groupInfo/dengdai.png';
 			}
 			
@@ -713,21 +994,12 @@ export default {
 			
 			// 如果没有时间信息，默认为等待状态
 			if (!startTime) {
-				console.log('缺少开始时间，默认等待状态');
 				return '/static/groupInfo/dengdai.png';
 			}
 			
 			// 将时间字符串转换为 Date 对象
 			const taskStartTime = new Date(startTime);
 			const taskEndTime = endTime ? new Date(endTime) : null;
-			
-			console.log('任务时间判断:', {
-				currentTime,
-				taskStartTime,
-				taskEndTime,
-				isBeforeStart: currentTime < taskStartTime,
-				isAfterEnd: taskEndTime && currentTime > taskEndTime
-			});
 			
 			// 判断任务状态
 			if (currentTime < taskStartTime) {
@@ -851,6 +1123,12 @@ export default {
 		// 关闭模态框
 		closeEditModal() {
 			this.showEditModal = false;
+			// 清空编辑数据
+			this.editGroupName = '';
+			this.editSlogan = '';
+			this.editRule = '';
+			this.selectedAvatarFile = null;
+			this.avatarPreview = null;
 			// 恢复背景滚动
 			this.unlockBodyScroll();
 		}
@@ -1088,6 +1366,14 @@ export default {
 		margin-bottom: 0;
 	}
 	
+	.management-row.single-item {
+		grid-template-columns: 1fr;
+	}
+	
+	.management-row.single-item .management-item {
+		width: 100%;
+	}
+	
 	.management-item {
 		display: flex;
 		align-items: center;
@@ -1134,9 +1420,26 @@ export default {
 		color: var(--warning);
 		border: 1px solid rgba(247, 37, 133, 0.2);
 		background: rgba(247, 37, 133, 0.05);
+		width: 100%;
+		justify-content: center;
 	}
 	
 	.dissolve-action:hover {
+		background: var(--warning);
+		color: white;
+		border-color: var(--warning);
+	}
+	
+	/* 退出小组按钮样式 */
+	.leave-action {
+		color: var(--warning);
+		border: 1px solid rgba(247, 37, 133, 0.2);
+		background: rgba(247, 37, 133, 0.05);
+		width: 100%;
+		justify-content: center;
+	}
+	
+	.leave-action:hover {
 		background: var(--warning);
 		color: white;
 		border-color: var(--warning);
@@ -1873,5 +2176,20 @@ export default {
 			font-size: 1rem;
 			margin-right: 12px;
 		}
+	}
+	
+	/* 退出小组和解散小组按钮样式 */
+	.leave-action {
+		color: var(--warning);
+		border: 1px solid rgba(247, 37, 133, 0.2);
+		background: rgba(247, 37, 133, 0.05);
+		width: 100%;
+		justify-content: center;
+	}
+	
+	.leave-action:hover {
+		background: var(--warning);
+		color: white;
+		border-color: var(--warning);
 	}
 </style>

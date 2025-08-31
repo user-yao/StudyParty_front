@@ -14,7 +14,12 @@
 				</div>
 				<div class="header-actions">
 					<i class="fas fa-search"></i>
-					<i class="fas fa-user" @click="showUserDetail = true"></i>
+					<u-icon 
+						:name="chat.statu === 'group' ? 'grid' : 'account'" 
+						color="#fff" 
+						size="50rpx" 
+						@click="goToDetailPage">
+					</u-icon>
 				</div>
 			</div>
 
@@ -156,7 +161,6 @@
 				headerHeight: 0, // 新增：导航栏高度
 				friend: {},
 				chat: {},
-				showUserDetail: false,
 				messages: [],
 				photo: [],
 				isL: -1,
@@ -465,6 +469,27 @@
 					this.scrollToView = 'bottom-anchor';
 				});
 			},
+			goToDetailPage() {
+				if (this.chat.statu === 'group') {
+					uni.navigateTo({
+						url: `/pages/userInfo/groupInfo`,
+						success: (res) => {
+							res.eventChannel.emit("chatData", {
+								groupId: this.friend.friendId
+							});
+						}
+					});
+				} else {
+					uni.navigateTo({
+						url: '/pages/userInfo/userInfo',
+						success: (res) => {
+							res.eventChannel.emit("chatData", {
+								id: this.friend.friendId
+							});
+						}
+					});
+				}
+			},
 			formatTime(timestamp) {
 			  // 将输入转换为 Date 对象
 			  const date = new Date(timestamp);
@@ -508,6 +533,31 @@
 			      return `${year}-${month}-${day}`;
 			    }
 			  }
+			},
+			
+			// 跳转到详情页面
+			goToDetailPage() {
+				if (this.chat.statu === 'group') {
+					// 小组聊天，跳转到小组详情页面
+					uni.navigateTo({
+						url: '/pages/userInfo/groupInfo',
+						success: (res) => {
+							res.eventChannel.emit("chatData", {
+								groupId: this.friend.friendId
+							});
+						}
+					});
+				} else {
+					// 私聊，跳转到用户详情页面
+					uni.navigateTo({
+						url: '/pages/userInfo/userInfo',
+						success: (res) => {
+							res.eventChannel.emit("chatData", {
+								id: this.friend.friendId
+							});
+						}
+					});
+				}
 			}
 		}
 	}

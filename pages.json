@@ -114,6 +114,13 @@
 			{
 				"navigationBarTitleText" : "创建小组"
 			}
+		},
+		{
+			"path" : "pages/chatList/groupMembers",
+			"style" : 
+			{
+				"navigationBarTitleText" : "小组成员"
+			}
 		}
 	],
 	"globalStyle": {
