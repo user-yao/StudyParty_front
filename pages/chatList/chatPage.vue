@@ -469,27 +469,6 @@
 					this.scrollToView = 'bottom-anchor';
 				});
 			},
-			goToDetailPage() {
-				if (this.chat.statu === 'group') {
-					uni.navigateTo({
-						url: `/pages/userInfo/groupInfo`,
-						success: (res) => {
-							res.eventChannel.emit("chatData", {
-								groupId: this.friend.friendId
-							});
-						}
-					});
-				} else {
-					uni.navigateTo({
-						url: '/pages/userInfo/userInfo',
-						success: (res) => {
-							res.eventChannel.emit("chatData", {
-								id: this.friend.friendId
-							});
-						}
-					});
-				}
-			},
 			formatTime(timestamp) {
 			  // 将输入转换为 Date 对象
 			  const date = new Date(timestamp);

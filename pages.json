@@ -95,6 +95,13 @@
 			}
 		},
 		{
+			"path" : "pages/chatList/groupTaskDetail",
+			"style" : 
+			{
+				"navigationBarTitleText" : "任务详情"
+			}
+		},
+		{
 			"path" : "pages/chatList/searchGroup",
 			"style" : 
 			{

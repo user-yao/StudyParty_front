@@ -1,15 +1,25 @@
 {
-  "hash": "cb34e177",
+  "hash": "de7a1902",
   "configHash": "d030030d",
-  "lockfileHash": "29c77485",
-  "browserHash": "63e53179",
+  "lockfileHash": "71e08810",
+  "browserHash": "dab43717",
   "optimized": {
     "dayjs/esm/index": {
       "src": "../../../../../node_modules/dayjs/esm/index.js",
       "file": "dayjs_esm_index.js",
-      "fileHash": "f4677dcc",
+      "fileHash": "3531fd07",
+      "needsInterop": false
+    },
+    "markdown-it": {
+      "src": "../../../../../node_modules/markdown-it/index.mjs",
+      "file": "markdown-it.js",
+      "fileHash": "ade72934",
       "needsInterop": false
     }
   },
-  "chunks": {}
+  "chunks": {
+    "chunk-CSAU5B4Q": {
+      "file": "chunk-CSAU5B4Q.js"
+    }
+  }
 }

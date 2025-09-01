@@ -8,10 +8,6 @@
 						<u-icon name="arrow-left" @click="goBack" color="#ffffff" size="20"></u-icon>
 						<span>小组详情</span>
 					</div>
-					<div class="header-actions">
-						<u-icon name="chat" @click="goToChat" color="#ffffff" size="18"></u-icon>
-						<u-icon name="more-dot-fill" color="#ffffff" size="18"></u-icon>
-					</div>
 				</div>
 			</header>
 
@@ -83,7 +79,7 @@
 						
 						<!-- 主要功能按钮 -->
 						<div class="main-actions">
-							<u-button type="primary" shape="round" @click="goToChat" :custom-style="{width: '100%'}">
+							<u-button type="primary" shape="round" @click="goToChat" :custom-style="{width: '100%'}" v-if="canViewChatButton">
 								<u-icon name="chat" color="#ffffff" size="16" style="margin-right: 8px;"></u-icon>
 								进入小组聊天
 							</u-button>
@@ -165,12 +161,31 @@
 								</div>
 							</div>
 						</div>
+						
 						<!-- 普通成员操作 -->
-						<div class="management-actions" v-else>
+						<div class="management-actions" v-else-if="isGroupMember">
 							<div class="management-row dangerous-actions single-item">
 								<div class="management-item leave-action" @click="leaveGroup">
 									<u-icon name="close-circle" color="#f72585" size="16"></u-icon>
 									<span>退出小组</span>
+								</div>
+							</div>
+						</div>
+						
+						<!-- 非成员操作 -->
+						<div class="management-actions" v-else-if="!isGroupMember">
+							<!-- 学生显示申请加入 -->
+							<div class="management-row single-item" v-if="!isTeacherOrEnterprise">
+								<div class="management-item apply-action" @click="applyToJoin">
+									<u-icon name="plus-circle" color="#4361ee" size="16"></u-icon>
+									<span>申请加入</span>
+								</div>
+							</div>
+							<!-- 老师或企业显示联系组长 -->
+							<div class="management-row single-item" v-else>
+								<div class="management-item contact-leader-action" @click="contactLeader">
+									<u-icon name="phone" color="#4361ee" size="16"></u-icon>
+									<span>联系组长</span>
 								</div>
 							</div>
 						</div>
@@ -265,6 +280,7 @@
 									<div class="task-info">
 										<!-- 按规范只显示任务题目 -->
 										<div class="task-title">{{ task.groupTask || task.group_task || task.title || '未命名任务' }}</div>
+										<div class="task-status">{{ getTaskStatusText(task) }}</div>
 									</div>
 									<div class="task-actions">
 										<u-icon name="arrow-right" color="#909399" size="14"></u-icon>
@@ -279,7 +295,28 @@
 					</div>
 				</div>
 
-
+				<!-- 申请加入弹窗 -->
+				<u-popup :show="showApplyModal" mode="center" border-radius="10" z-index="10080" @close="closeApplyModal">
+					<div class="apply-modal">
+						<div class="modal-header">
+							<h3>申请加入小组</h3>
+							<p>{{ currentGroup.groupName }}</p>
+						</div>
+						<div class="modal-body">
+							<u-textarea 
+								v-model="applyMessage" 
+								placeholder="请输入申请理由（可选）" 
+								maxlength="200"
+								count
+								height="120">
+							</u-textarea>
+						</div>
+						<div class="modal-footer">
+							<u-button type="info" text="取消" @click="closeApplyModal"></u-button>
+							<u-button type="primary" text="提交申请" @click="submitApplication" :loading="submitting"></u-button>
+						</div>
+					</div>
+				</u-popup>
 			</div>
 
 			<!-- 编辑小组信息模态框 -->
@@ -390,7 +427,13 @@ export default {
 			// 滚动位置保存
 			scrollTop: 0,
 			// 当前用户ID（后续从用户store获取）
-			currentUserId: uni.getStorageSync('id') || 3
+			currentUserId: uni.getStorageSync('id') || 3,
+			
+			// 申请加入相关
+			showApplyModal: false,
+			currentGroup: {},
+			applyMessage: '',
+			submitting: false
 		}
 	},
 	onShow() {
@@ -478,6 +521,60 @@ export default {
 			return this.groupDetail.leader === this.currentUserId;
 		},
 		
+		// 判断当前用户是否是小组成员（排除老师和企业）
+		isGroupMember() {
+			// 老师和企业不视为小组成员
+			if (this.isTeacherOrEnterprise) {
+				return false;
+			}
+			
+			// 检查用户是否是组长或代理组长
+			if (this.groupDetail.leader === this.currentUserId ||
+				this.groupDetail.deputy === this.currentUserId) {
+				return true;
+			}
+			
+			// 检查用户是否在小组成员列表中
+			return this.groupMembers.some(member => member.id === this.currentUserId);
+		},
+		
+		// 判断当前用户是否是老师或企业
+		isTeacherOrEnterprise() {
+			// 从 Vuex store 中获取用户信息
+			const userInfo = this.$store.state.user.userInfo;
+			if (userInfo && userInfo.status) {
+				// 2: 教师, 3: 企业
+				return userInfo.status === 2 || userInfo.status === 3;
+			}
+			return false;
+		},
+		
+		// 判断当前用户是否可以查看聊天按钮
+		canViewChatButton() {
+			// 小组成员（包括组长、代理组长和普通成员）可以看到按钮
+			if (this.isGroupMember) {
+				return true;
+			}
+			
+			// 检查是否是该小组的老师或企业
+			const userInfo = this.$store.state.user.userInfo;
+			if (userInfo && userInfo.status) {
+				// 如果是老师，检查是否是该小组的负责老师
+				if (userInfo.status === 2 && this.groupDetail.teacher && 
+					(this.groupDetail.teacher === userInfo.name || this.groupDetail.teacher === userInfo.id)) {
+					return true;
+				}
+				// 如果是企业，检查是否是该小组的负责企业
+				if (userInfo.status === 3 && this.groupDetail.enterprise && 
+					(this.groupDetail.enterprise === userInfo.name || this.groupDetail.enterprise === userInfo.id)) {
+					return true;
+				}
+			}
+			
+			// 其他情况都不能看到按钮
+			return false;
+		},
+		
 		// 显示前6个成员
 		displayedMembers() {
 			return this.groupMembers.slice(0, 6);
@@ -489,7 +586,8 @@ export default {
 		}
 	},
 	methods: {
-		...mapActions('group', ['selectGroupById', 'updateGroup', 'changeDeputy', 'transferGroup']),
+		...mapActions('group', ['selectGroupById', 'updateGroup', 'changeDeputy', 'transferGroup', 'outGroup']),
+		...mapActions('groupJoin', ['joinGroup']),
 		// 直接引用 selectMyGroupTask
 		// ...mapActions('groupTask', ['selectMyGroupTask']),
 		
@@ -955,12 +1053,48 @@ export default {
 				}
 			});
 		},
-		leaveGroup() {
+		async leaveGroup() {
 			uni.showModal({
 				title: '确认退出',
 				content: '确定要退出小组吗？',
-				success: (res) => {
-					if (res.confirm) uni.showToast({ title: '功能开发中', icon: 'none' });
+				success: async (res) => {
+					if (res.confirm) {
+						uni.showLoading({
+							title: '正在退出...'
+						});
+						
+						try {
+							const res = await this.outGroup({
+								groupId: this.groupId
+							});
+							
+							uni.hideLoading();
+							
+							if (res && res.code === 200) {
+								uni.showToast({
+									title: '退出成功',
+									icon: 'success'
+								});
+								
+								// 延迟返回上一页，让用户看到成功提示
+								setTimeout(() => {
+									uni.navigateBack({ delta: 1 });
+								}, 1000);
+							} else {
+								uni.showToast({
+									title: res.msg || '退出失败',
+									icon: 'none'
+								});
+							}
+						} catch (error) {
+							uni.hideLoading();
+							console.error('退出小组失败:', error);
+							uni.showToast({
+								title: '退出失败，请重试',
+								icon: 'none'
+							});
+						}
+					}
 				}
 			});
 		},
@@ -992,7 +1126,7 @@ export default {
 			const endTime = task.groupTaskLastTime || task.group_task_last_time;
 			const currentTime = new Date();
 			
-			// 如果没有时间信息，默认为等待状态
+			// 如果没有开始时间，默认为等待状态
 			if (!startTime) {
 				return '/static/groupInfo/dengdai.png';
 			}
@@ -1003,15 +1137,47 @@ export default {
 			
 			// 判断任务状态
 			if (currentTime < taskStartTime) {
-				// 当前时间小于开始时间，任务未开始（等待）
+				// 当前时间小于开始时间，任务未开始（等待状态）
 				return '/static/groupInfo/dengdai.png';
 			} else if (taskEndTime && currentTime > taskEndTime) {
 				// 当前时间大于结束时间，任务已结束
 				return '/static/groupInfo/jieshu.png';
 			} else {
-				// 当前时间在开始时间之后，任务进行中
-				// 如果没有结束时间或在结束时间之前，都认为是进行中
+				// 开始时间 <= 当前时间 <= 结束时间，任务进行中
 				return '/static/groupInfo/jinxingzhong.png';
+			}
+		},
+		
+		// 获取任务状态文本
+		getTaskStatusText(task) {
+			if (!task) {
+				return '等待中';
+			}
+			
+			// 获取任务开始时间和结束时间（支持两种格式）
+			const startTime = task.groupTaskStartTime || task.group_task_start_time;
+			const endTime = task.groupTaskLastTime || task.group_task_last_time;
+			const currentTime = new Date();
+			
+			// 如果没有开始时间，默认为等待状态
+			if (!startTime) {
+				return '等待中';
+			}
+			
+			// 将时间字符串转换为 Date 对象
+			const taskStartTime = new Date(startTime);
+			const taskEndTime = endTime ? new Date(endTime) : null;
+			
+			// 判断任务状态
+			if (currentTime < taskStartTime) {
+				// 当前时间小于开始时间，任务未开始（等待状态）
+				return '未开始';
+			} else if (taskEndTime && currentTime > taskEndTime) {
+				// 当前时间大于结束时间，任务已结束
+				return '已结束';
+			} else {
+				// 开始时间 <= 当前时间 <= 结束时间，任务进行中
+				return '进行中';
 			}
 		},
 		
@@ -1072,6 +1238,70 @@ export default {
 			return '暂无';
 		},
 		
+		// 申请加入小组
+		applyToJoin() {
+			// 显示申请加入弹窗
+			this.currentGroup = this.groupDetail;
+			this.applyMessage = '';
+			this.showApplyModal = true;
+			// 锁定背景滚动
+			this.lockBodyScroll();
+		},
+		
+		// 提交申请
+		async submitApplication() {
+			try {
+				this.submitting = true;
+				
+				// 调用store中的joinGroup方法
+				const res = await this.$store.dispatch('groupJoin/joinGroup', {
+					groupId: this.currentGroup.id,
+					context: this.applyMessage || '申请加入小组'
+				});
+				
+				if (res.code === 200) {
+					uni.showToast({
+						title: '申请成功',
+						icon: 'success'
+					});
+					this.showApplyModal = false;
+				} else {
+					uni.showToast({
+						title: res.msg || '申请失败',
+						icon: 'none'
+					});
+				}
+			} catch (error) {
+				uni.showToast({
+					title: '网络错误，请重试',
+					icon: 'none'
+				});
+			} finally {
+				this.submitting = false;
+			}
+		},
+		
+		// 联系组长
+		contactLeader() {
+			// 跳转到组长的用户详情页面
+			if (this.groupDetail.leader) {
+				uni.navigateTo({
+					url: '/pages/userInfo/userInfo',
+					success: (res) => {
+						res.eventChannel.emit('chatData', {
+							id: this.groupDetail.leader
+						});
+					},
+					fail: (err) => {
+						console.error('跳转失败:', err);
+						uni.showToast({ title: '跳转失败', icon: 'none' });
+					}
+				});
+			} else {
+				uni.showToast({ title: '无法获取组长信息', icon: 'none' });
+			}
+		},
+		
 		// 模态框滚动控制方法
 		lockBodyScroll() {
 			// H5环境下的滚动锁定
@@ -1120,7 +1350,7 @@ export default {
 			// #endif
 		},
 		
-		// 关闭模态框
+		// 关闭编辑模态框
 		closeEditModal() {
 			this.showEditModal = false;
 			// 清空编辑数据
@@ -1129,6 +1359,15 @@ export default {
 			this.editRule = '';
 			this.selectedAvatarFile = null;
 			this.avatarPreview = null;
+			// 恢复背景滚动
+			this.unlockBodyScroll();
+		},
+		
+		// 关闭申请加入模态框
+		closeApplyModal() {
+			this.showApplyModal = false;
+			// 清空申请理由
+			this.applyMessage = '';
 			// 恢复背景滚动
 			this.unlockBodyScroll();
 		}
@@ -1844,6 +2083,12 @@ export default {
 		font-size: 0.95rem;
 		line-height: 1.4;
 	}
+	
+	.task-status {
+		font-size: 0.8rem;
+		color: var(--gray);
+		margin-top: 4px;
+	}
 
 	.task-actions {
 		display: flex;
@@ -2104,78 +2349,53 @@ export default {
 		color: var(--secondary);
 	}
 
-	/* 底部导航 */
-	.bottom-nav {
-		position: fixed;
-		bottom: 0;
-		left: 0;
-		right: 0;
+	/* 申请加入模态框样式 */
+	.apply-modal {
+		width: 320px;
 		background: white;
+		border-radius: 12px;
+		padding: 20px;
+		position: relative;
+		z-index: 10081;
+	}
+	
+	.modal-header {
+		text-align: center;
+		margin-bottom: 20px;
+	}
+	
+	.modal-header h3 {
+		font-size: 1.2rem;
+		font-weight: 600;
+		color: #212529;
+		margin-bottom: 5px;
+	}
+	
+	.modal-header p {
+		color: #6c757d;
+		font-size: 0.9rem;
+	}
+	
+	.modal-body {
+		margin-bottom: 20px;
+	}
+	
+	.modal-footer {
 		display: flex;
-		justify-content: space-around;
-		padding: 12px 0;
-		box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
-		z-index: 100;
-		max-width: 500px;
-		margin: 0 auto;
+		gap: 12px;
 	}
-
-	.nav-item {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		color: var(--gray);
-		text-decoration: none;
-		font-size: 0.75rem;
+	
+	.modal-footer .u-button {
+		flex: 1;
 	}
-
-	.nav-item.active {
-		color: var(--primary);
+	
+	/* 联系组长按钮样式 */
+	.management-item.contact-leader-action {
+		color: #4361ee;
 	}
-
-	.nav-item i {
-		font-size: 1.3rem;
-		margin-bottom: 3px;
-	}
-
-	/* 响应式调整 */
-	@media (max-width: 480px) {
-		.content {
-			padding: 15px;
-		}
-
-		.group-avatar {
-			width: 70px;
-			height: 70px;
-			font-size: 1.8rem;
-		}
-
-		.group-stats {
-			grid-template-columns: repeat(3, 1fr);
-			gap: 10px;
-		}
-
-		.members-grid {
-			grid-template-columns: repeat(3, 1fr);
-			gap: 10px;
-		}
-
-		.member-avatar {
-			width: 45px;
-			height: 45px;
-			font-size: 1rem;
-		}
-
-		.option-item {
-			padding: 14px 16px;
-		}
-
-		.option-icon {
-			width: 32px;
-			height: 32px;
-			font-size: 1rem;
-			margin-right: 12px;
-		}
+	
+	.management-item.contact-leader-action u-icon {
+		color: #4361ee;
 	}
 	
 	/* 退出小组和解散小组按钮样式 */
@@ -2191,5 +2411,13 @@ export default {
 		background: var(--warning);
 		color: white;
 		border-color: var(--warning);
+	}
+	
+	.management-item.contact-leader-action {
+		color: #4361ee;
+	}
+	
+	.management-item.contact-leader-action u-icon {
+		color: #4361ee;
 	}
 </style>

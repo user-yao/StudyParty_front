@@ -9,41 +9,51 @@
 						<span>小组任务</span>
 					</div>
 					<div class="header-actions">
-						<i class="u-icon-search" @click="focusSearch"></i>
+						<i class="u-icon-search" @click="toggleSearch"></i>
 					</div>
+				</div>
+				
+				<!-- 搜索框 -->
+				<div class="search-container" v-show="showSearch">
+					<input 
+						class="search-input" 
+						v-model="searchKeyword" 
+						placeholder="搜索任务标题..." 
+						@input="onSearchInput"
+						ref="searchInput"
+					/>
+					<button class="search-btn" @click="clearSearch">
+						<i class="u-icon-close"></i>
+					</button>
 				</div>
 			</header>
 
 			<!-- 内容区域 -->
 			<div class="content">
-				<!-- 搜索框 -->
-				<div class="search-container">
-					<input class="search-input" v-model="searchKeyword" placeholder="搜索任务标题..." />
-					<button class="search-btn" @click="searchTasks">
-						<i class="u-icon-search"></i>
-					</button>
-				</div>
-
 				<!-- 筛选选项卡 -->
 				<div class="filter-tabs">
-					<div class="filter-tab" :class="{active: activeFilter === 'all'}" @click="activeFilter = 'all'">
+					<div class="filter-tab" :class="{active: activeFilter === 'all'}" @click="setFilter('all')">
 						全部任务
 					</div>
-					<div class="filter-tab" :class="{active: activeFilter === 'active'}"
-						@click="activeFilter = 'active'">
+					<div class="filter-tab" :class="{active: activeFilter === 'active'}" @click="setFilter('active')">
 						进行中
 					</div>
-					<div class="filter-tab" :class="{active: activeFilter === 'completed'}"
-						@click="activeFilter = 'completed'">
+					<div class="filter-tab" :class="{active: activeFilter === 'completed'}" @click="setFilter('completed')">
 						已完成
 					</div>
 				</div>
 
+				<!-- 加载状态 -->
+				<div v-if="loading" class="loading-container">
+					<div class="loading-spinner"></div>
+					<p>正在加载任务...</p>
+				</div>
+
 				<!-- 任务列表 -->
-				<div v-if="filteredTasks.length > 0">
+				<div v-else-if="filteredTasks.length > 0">
 					<div class="task-card" v-for="task in filteredTasks" :key="task.id">
 						<div class="task-header">
-							<div class="task-title">{{ task.group_task }}</div>
+							<div class="task-title">{{ task.groupTask }}</div>
 							<div class="task-status" :class="getStatusClass(task)">
 								{{ getStatusText(task) }}
 							</div>
@@ -51,18 +61,18 @@
 						<div class="task-meta">
 							<div class="task-meta-item">
 								<i class="u-icon-calendar"></i>
-								<span>开始: {{ formatDate(task.group_task_start_time) }}</span>
+								<span>开始: {{ formatDate(task.groupTaskStartTime) }}</span>
 							</div>
 							<div class="task-meta-item">
 								<i class="u-icon-clock"></i>
-								<span>截止: {{ formatDate(task.group_task_last_time) }}</span>
+								<span>截止: {{ formatDate(task.groupTaskLastTime) }}</span>
 							</div>
 						</div>
 						<div class="task-progress">
 							<div class="progress-info">
 								<span>完成进度</span>
-								<span>{{ task.group_task_finish }} /
-									{{ task.group_task_finish + task.group_task_unfinished }}</span>
+								<span>{{ task.groupTaskFinish }} /
+									{{ task.groupTaskFinish + task.groupTaskUnfinished }}</span>
 							</div>
 							<div class="progress-bar">
 								<div class="progress-fill" :style="{width: calculateProgress(task) + '%'}"></div>
@@ -70,14 +80,13 @@
 						</div>
 						<div class="task-footer">
 							<div class="task-author">
-								发布者: {{ task.group_task_uploader }}
+								发布者: {{ task.groupTaskUploader }}
 							</div>
 							<div class="task-actions">
 								<button class="task-action-btn btn-primary" @click="viewTaskDetails(task)">
 									<i class="u-icon-eye"></i> 查看
 								</button>
-								<button class="task-action-btn btn-danger" v-if="canEditTask(task)"
-									@click="deleteTask(task)">
+								<button class="task-action-btn btn-danger" v-if="canEditTask(task)" @click="deleteTask(task)">
 									<i class="u-icon-delete"></i> 删除
 								</button>
 							</div>
@@ -103,93 +112,28 @@
 </template>
 
 <script>
+	import {
+		mapState,
+		mapActions
+	} from 'vuex';
+
 	export default {
 		data() {
 			return {
 				searchKeyword: '',
-				activeFilter: 'active', // 默认显示进行中的任务
-				currentUserId: 3, // 当前用户ID
+				activeFilter: 'all', // 默认显示全部任务
+				currentUserId: uni.getStorageSync('id') || 3, // 当前用户ID
 				currentUserRole: 'leader', // 当前用户角色: leader, deputy, teacher, enterprise, member
-				// 模拟任务数据
-				tasks: [{
-						id: 1,
-						group_id: 1,
-						group_task: "完成React项目开发",
-						group_task_uploader: "姚镇涛",
-						group_task_uploader_id: 3,
-						group_task_start_time: "2023-07-10",
-						group_task_last_time: "2023-07-25",
-						group_task_finish: 5,
-						group_task_context: "使用React完成一个电商网站的前端开发，包括商品列表、购物车、订单管理等功能",
-						group_task_unfinished: 3,
-						create_time: "2023-07-10",
-						is_start: 1,
-						is_end: 0
-					},
-					{
-						id: 2,
-						group_id: 1,
-						group_task: "学习Vue3新特性",
-						group_task_uploader: "李明",
-						group_task_uploader_id: 5,
-						group_task_start_time: "2023-07-15",
-						group_task_last_time: "2023-07-30",
-						group_task_finish: 3,
-						group_task_context: "学习Vue3的组合式API和其他新特性，并完成一个小demo",
-						group_task_unfinished: 5,
-						create_time: "2023-07-15",
-						is_start: 1,
-						is_end: 0
-					},
-					{
-						id: 3,
-						group_id: 1,
-						group_task: "JavaScript算法练习",
-						group_task_uploader: "张华",
-						group_task_uploader_id: 7,
-						group_task_start_time: "2023-07-20",
-						group_task_last_time: "2023-08-05",
-						group_task_finish: 2,
-						group_task_context: "完成LeetCode上的JavaScript算法题目，至少完成10道中等难度的题目",
-						group_task_unfinished: 6,
-						create_time: "2023-07-20",
-						is_start: 0,
-						is_end: 0
-					},
-					{
-						id: 4,
-						group_id: 1,
-						group_task: "小组项目文档编写",
-						group_task_uploader: "姚镇涛",
-						group_task_uploader_id: 3,
-						group_task_start_time: "2023-07-05",
-						group_task_last_time: "2023-07-15",
-						group_task_finish: 8,
-						group_task_context: "编写小组项目的详细文档，包括需求分析、设计文档和用户手册",
-						group_task_unfinished: 0,
-						create_time: "2023-07-05",
-						is_start: 1,
-						is_end: 1
-					},
-					{
-						id: 5,
-						group_id: 1,
-						group_task: "UI设计学习",
-						group_task_uploader: "王老师",
-						group_task_uploader_id: 101,
-						group_task_start_time: "2023-07-25",
-						group_task_last_time: "2023-08-10",
-						group_task_finish: 1,
-						group_task_context: "学习基本的UI设计原则和工具使用，完成一个界面设计作业",
-						group_task_unfinished: 7,
-						create_time: "2023-07-25",
-						is_start: 1,
-						is_end: 0
-					}
-				]
+				groupId: null, // 从参数传入的群组ID
+				loading: false, // 加载状态
+				searchTimer: null, // 搜索防抖定时器
+				showSearch: false // 是否显示搜索框
 			}
 		},
 		computed: {
+			// 正确使用命名空间
+			...mapState('groupTask', ['groupTasks']),
+
 			// 判断用户是否有权限发布任务
 			canPublishTask() {
 				return ['leader', 'deputy', 'teacher', 'enterprise'].includes(this.currentUserRole);
@@ -197,80 +141,139 @@
 
 			// 过滤和排序后的任务列表
 			filteredTasks() {
-				let filtered = this.tasks;
+				// 确保groupTasks存在且为数组
+				let filtered = this.groupTasks && Array.isArray(this.groupTasks) ? this.groupTasks : [];
 
 				// 根据搜索关键词过滤
 				if (this.searchKeyword) {
 					const keyword = this.searchKeyword.toLowerCase();
 					filtered = filtered.filter(task =>
-						task.group_task.toLowerCase().includes(keyword)
+						task.groupTask && task.groupTask.toLowerCase().includes(keyword)
 					);
 				}
 
 				// 根据活动筛选器过滤
 				if (this.activeFilter === 'active') {
-					filtered = filtered.filter(task => task.is_start === 1 && task.is_end === 0);
+					filtered = filtered.filter(task => this.getTaskStatus(task) === '进行中');
 				} else if (this.activeFilter === 'completed') {
-					filtered = filtered.filter(task => task.is_end === 1);
+					filtered = filtered.filter(task => this.getTaskStatus(task) === '已结束');
 				}
 
-				// 排序：未完成的任务优先，然后按创建时间倒序
+				// 排序：进行中的任务优先，然后按截止时间排序
 				return filtered.sort((a, b) => {
-					// 优先显示未完成的任务
-					if (a.is_end !== b.is_end) {
-						return a.is_end - b.is_end;
-					}
+					const statusA = this.getTaskStatus(a);
+					const statusB = this.getTaskStatus(b);
 
-					// 然后按创建时间倒序
-					return new Date(b.create_time) - new Date(a.create_time);
+					// 进行中的任务优先
+					if (statusA === '进行中' && statusB !== '进行中') return -1;
+					if (statusB === '进行中' && statusA !== '进行中') return 1;
+
+					// 未开始的任务次之
+					if (statusA === '未开始' && statusB === '已结束') return -1;
+					if (statusB === '未开始' && statusA === '已结束') return 1;
+
+					// 按截止时间排序
+					const timeA = new Date(a.groupTaskLastTime);
+					const timeB = new Date(b.groupTaskLastTime);
+					
+					// 确保日期有效
+					if (isNaN(timeA.getTime())) return 1;
+					if (isNaN(timeB.getTime())) return -1;
+					
+					return timeA - timeB;
 				});
 			}
 		},
 		methods: {
+			// 正确使用命名空间
+			...mapActions('groupTask', ['selectMyGroupTask']),
+			
 			// 返回上一页
 			goBack() {
-				console.log("返回上一页");
-				// 实际应用中可能是路由返回或页面跳转
+				uni.navigateBack({
+					delta: 1
+				});
 			},
 
-			// 聚焦搜索框
-			focusSearch() {
-				document.querySelector('.search-input').focus();
+			// 切换搜索框显示
+			toggleSearch() {
+				this.showSearch = !this.showSearch;
+				if (this.showSearch) {
+					this.$nextTick(() => {
+						this.$refs.searchInput && this.$refs.searchInput.focus();
+					});
+				} else {
+					this.searchKeyword = '';
+				}
 			},
 
-			// 搜索任务
-			searchTasks() {
-				// 搜索逻辑已经在计算属性filteredTasks中实现
-				console.log("搜索任务:", this.searchKeyword);
+			// 清除搜索
+			clearSearch() {
+				this.searchKeyword = '';
+				this.showSearch = false;
+			},
+
+			// 搜索输入处理（防抖）
+			onSearchInput() {
+				clearTimeout(this.searchTimer);
+				this.searchTimer = setTimeout(() => {
+					this.searchTasks();
+				}, 300);
+			},
+
+			// 设置筛选器
+			setFilter(filter) {
+				this.activeFilter = filter;
 			},
 
 			// 查看任务详情
 			viewTaskDetails(task) {
 				console.log("查看任务详情:", task);
-				// 实际应用中可能跳转到任务详情页面，显示完整的Markdown内容
+				// 跳转到任务详情页面
+				uni.navigateTo({
+					url: '/pages/chatList/groupTaskDetail',
+					success: (res) => {
+						res.eventChannel.emit("taskData", {
+							taskId: task.id,
+							groupId: this.groupId,
+							taskDetail: task
+						});
+					}
+				});
 			},
 
 			// 添加新任务
 			addNewTask() {
 				console.log("添加新任务");
 				// 实际应用中可能跳转到添加任务页面
+				uni.showToast({
+					title: '功能开发中',
+					icon: 'none'
+				});
 			},
 
 			// 删除任务
 			deleteTask(task) {
-				if (confirm(`确定要删除任务"${task.group_task}"吗？此操作不可恢复！`)) {
-					const index = this.tasks.findIndex(t => t.id === task.id);
-					if (index !== -1) {
-						this.tasks.splice(index, 1);
-						console.log("任务已删除:", task.group_task);
+				uni.showModal({
+					title: '确认删除',
+					content: `确定要删除任务"${task.groupTask}"吗？此操作不可恢复！`,
+					success: (res) => {
+						if (res.confirm) {
+							// 实际应用中应该调用API删除任务
+							console.log("任务已删除:", task.groupTask);
+							uni.showToast({
+								title: '任务已删除',
+								icon: 'success'
+							});
+						}
 					}
-				}
+				});
 			},
 
 			// 检查用户是否有权限编辑任务
 			canEditTask(task) {
 				// 发布者可以删除自己的任务
-				if (task.group_task_uploader_id === this.currentUserId) {
+				if (task.groupTaskUploaderId === this.currentUserId) {
 					return true;
 				}
 
@@ -280,37 +283,123 @@
 
 			// 获取任务状态文本
 			getStatusText(task) {
-				if (task.is_end === 1) {
-					return "已结束";
-				} else if (task.is_start === 1) {
-					return "进行中";
-				} else {
+				return this.getTaskStatus(task);
+			},
+
+			// 获取任务状态
+			getTaskStatus(task) {
+				// 添加容错处理
+				if (!task || !task.groupTaskStartTime || !task.groupTaskLastTime) {
+					return "未知";
+				}
+				
+				const now = new Date();
+				const startTime = new Date(task.groupTaskStartTime);
+				const endTime = new Date(task.groupTaskLastTime);
+
+				// 检查日期是否有效
+				if (isNaN(startTime.getTime()) || isNaN(endTime.getTime())) {
+					return "未知";
+				}
+
+				if (now < startTime) {
 					return "未开始";
+				} else if (now > endTime) {
+					return "已结束";
+				} else {
+					return "进行中";
 				}
 			},
 
 			// 获取任务状态类名
 			getStatusClass(task) {
-				if (task.is_end === 1) {
+				const status = this.getTaskStatus(task);
+				if (status === "已结束") {
 					return "status-completed";
-				} else if (task.is_start === 1) {
+				} else if (status === "进行中") {
 					return "status-in-progress";
-				} else {
+				} else if (status === "未开始") {
 					return "status-not-started";
+				} else {
+					return "status-expired"; // 未知状态
 				}
 			},
 
 			// 计算任务进度百分比
 			calculateProgress(task) {
-				const total = task.group_task_finish + task.group_task_unfinished;
+				// 添加容错处理
+				if (!task) return 0;
+				
+				const finish = task.groupTaskFinish || 0;
+				const unfinished = task.groupTaskUnfinished || 0;
+				const total = finish + unfinished;
+				
 				if (total === 0) return 0;
-				return (task.group_task_finish / total) * 100;
+				return (finish / total) * 100;
 			},
 
 			// 格式化日期显示
 			formatDate(dateStr) {
 				if (!dateStr) return '未知日期';
-				return dateStr.toString().split(' ')[0];
+				// 处理ISO格式的日期字符串
+				const date = new Date(dateStr);
+				
+				// 检查日期是否有效
+				if (isNaN(date.getTime())) return '无效日期';
+				
+				return date.getFullYear() + '-' +
+					String(date.getMonth() + 1).padStart(2, '0') + '-' +
+					String(date.getDate()).padStart(2, '0');
+			},
+
+			// 加载任务数据
+			async loadTasks() {
+				if (!this.groupId) {
+					console.error('缺少群组ID');
+					return;
+				}
+
+				try {
+					this.loading = true;
+					const res = await this.selectMyGroupTask({
+						groupId: this.groupId,
+						currentPage: 1
+					});
+					
+					if (res.code !== 200) {
+						throw new Error(res.msg || '获取任务列表失败');
+					}
+				} catch (error) {
+					console.error('加载任务失败:', error);
+					uni.showToast({
+						title: '加载任务失败',
+						icon: 'none',
+						duration: 2000
+					});
+				} finally {
+					this.loading = false;
+				}
+			}
+		},
+
+		// 页面加载时获取参数并加载数据
+		onLoad(options) {
+			// 监听从其他页面传来的参数
+			const eventChannel = this.getOpenerEventChannel();
+			if (eventChannel) {
+				eventChannel.on('chatData', (data) => {
+					if (data && data.groupId) {
+						this.groupId = data.groupId;
+						this.loadTasks();
+					}
+				});
+			}
+		},
+
+		// 页面显示时重新加载数据
+		onShow() {
+			if (this.groupId) {
+				this.loadTasks();
 			}
 		}
 	}
@@ -379,6 +468,7 @@
 	.logo i {
 		margin-right: 8px;
 		font-size: 1.6rem;
+		cursor: pointer;
 	}
 
 	.header-actions {
@@ -391,19 +481,11 @@
 		cursor: pointer;
 	}
 
-	/* 内容区域 */
-	.content {
-		flex: 1;
-		padding: 20px;
-		overflow-y: auto;
-		padding-bottom: 70px;
-	}
-
 	/* 搜索框样式 */
 	.search-container {
 		display: flex;
 		gap: 10px;
-		margin-bottom: 20px;
+		margin-top: 10px;
 	}
 
 	.search-input {
@@ -413,6 +495,13 @@
 		border: 1px solid var(--light-gray);
 		border-radius: 8px;
 		font-size: 1rem;
+		transition: all 0.3s;
+	}
+
+	.search-input:focus {
+		border-color: var(--primary);
+		outline: none;
+		box-shadow: 0 0 0 2px rgba(67, 97, 238, 0.2);
 	}
 
 	.search-btn {
@@ -426,6 +515,19 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
+		transition: background 0.3s;
+	}
+
+	.search-btn:hover {
+		background: var(--secondary);
+	}
+
+	/* 内容区域 */
+	.content {
+		flex: 1;
+		padding: 20px;
+		overflow-y: auto;
+		padding-bottom: 70px;
 	}
 
 	/* 筛选选项卡 */
@@ -441,7 +543,7 @@
 	.filter-tab {
 		flex: 1;
 		text-align: center;
-		padding: 10px;
+		padding: 12px;
 		font-weight: 500;
 		cursor: pointer;
 		transition: all 0.3s;
@@ -453,6 +555,36 @@
 		color: white;
 	}
 
+	.filter-tab:not(.active):hover {
+		background: var(--light);
+	}
+
+	/* 加载状态 */
+	.loading-container {
+		text-align: center;
+		padding: 40px 20px;
+	}
+
+	.loading-spinner {
+		width: 40px;
+		height: 40px;
+		border: 4px solid var(--light-gray);
+		border-top: 4px solid var(--primary);
+		border-radius: 50%;
+		animation: spin 1s linear infinite;
+		margin: 0 auto 15px;
+	}
+
+	@keyframes spin {
+		0% {
+			transform: rotate(0deg);
+		}
+
+		100% {
+			transform: rotate(360deg);
+		}
+	}
+
 	/* 任务卡片样式 */
 	.task-card {
 		background: white;
@@ -461,6 +593,12 @@
 		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 		margin-bottom: 15px;
 		position: relative;
+		transition: transform 0.2s, box-shadow 0.2s;
+	}
+
+	.task-card:hover {
+		transform: translateY(-2px);
+		box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
 	}
 
 	.task-header {
@@ -476,6 +614,7 @@
 		margin-right: 15px;
 		flex: 1;
 		line-height: 1.4;
+		color: var(--dark);
 	}
 
 	.task-status {
@@ -508,7 +647,8 @@
 
 	.task-meta {
 		display: flex;
-		justify-content: space-between;
+		flex-direction: column;
+		gap: 8px;
 		margin-bottom: 15px;
 		font-size: 0.85rem;
 		color: var(--gray);
@@ -542,17 +682,22 @@
 		height: 100%;
 		background: linear-gradient(90deg, var(--accent), var(--success));
 		border-radius: 4px;
+		transition: width 0.3s ease;
 	}
 
 	.task-footer {
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
+		flex-wrap: wrap;
+		gap: 10px;
 	}
 
 	.task-author {
 		font-size: 0.85rem;
 		color: var(--gray);
+		flex: 1;
+		min-width: 120px;
 	}
 
 	.task-actions {
@@ -570,6 +715,7 @@
 		display: flex;
 		align-items: center;
 		gap: 5px;
+		transition: all 0.2s;
 	}
 
 	.btn-primary {
@@ -577,9 +723,17 @@
 		color: white;
 	}
 
+	.btn-primary:hover {
+		background: var(--secondary);
+	}
+
 	.btn-danger {
 		background: #f8d7da;
 		color: #721c24;
+	}
+
+	.btn-danger:hover {
+		background: #f5c6cb;
 	}
 
 	/* 空状态 */
@@ -612,6 +766,12 @@
 		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 		cursor: pointer;
 		z-index: 90;
+		transition: all 0.3s;
+	}
+
+	.add-task-btn:hover {
+		background: var(--secondary);
+		transform: scale(1.05);
 	}
 
 	/* 底部导航 */
@@ -665,5 +825,23 @@
 			height: 50px;
 			font-size: 1.3rem;
 		}
+
+		.task-meta {
+			flex-direction: column;
+			gap: 5px;
+		}
+
+		.task-footer {
+			flex-direction: column;
+			align-items: flex-start;
+		}
+
+		.task-actions {
+			align-self: flex-end;
+		}
 	}
 </style>
+
+
+
+

@@ -162,10 +162,10 @@ export const inviteUserToGroup = (data) => {
 	  }
   });
 }
-export const acceptGroupInvitation = (data) => {
+export const outGroup = (data) => {
   console.log(data)
   return request({
-    url: '/group/acceptGroupInvitation',
+    url: '/group/outGroup',
     method: 'POST',
     data:{
         groupId:data.groupId
@@ -175,19 +175,7 @@ export const acceptGroupInvitation = (data) => {
 	  }
   });
 }
-export const rejectGroupInvitation = (data) => {
-  console.log(data)
-  return request({
-    url: '/group/rejectGroupInvitation',
-    method: 'POST',
-    data:{
-        groupId:data.groupId
-    },
-    header: {
-	    'Content-Type': 'application/x-www-form-urlencoded'
-	  }
-  });
-}
+
 
 
 

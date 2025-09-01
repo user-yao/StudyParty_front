@@ -12,8 +12,7 @@ import { searchGroup,
           clearPredecessor, 
           selectGroupById,
           inviteUserToGroup,
-          acceptGroupInvitation,
-          rejectGroupInvitation
+          outGroup
        } from '../../API/group/group.js';
 export default {
   namespaced: true,
@@ -212,12 +211,8 @@ export default {
       const res = await inviteUserToGroup(data); // 调用邀请用户接口
       return res;
     },
-    async acceptGroupInvitation({ commit }, data) {
-      const res = await acceptGroupInvitation(data); // 调用接受邀请接口
-      return res;
-    },
-    async rejectGroupInvitation({ commit }, data) {
-      const res = await rejectGroupInvitation(data); // 调用拒绝邀请接口
+    async outGroup({ commit }, data){
+      const res = await outGroup(data);
       return res;
     },
     async searchGroup({ commit }, data) {
