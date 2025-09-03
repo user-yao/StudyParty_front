@@ -5,11 +5,11 @@
 			<header class="app-header">
 				<div class="header-top">
 					<div class="logo">
-						<i class="u-icon-arrow-left" @click="goBack"></i>
+						<u-icon name="arrow-left" size="24" color="#ffffff" @click="goBack"></u-icon>
 						<span>小组任务</span>
 					</div>
 					<div class="header-actions">
-						<i class="u-icon-search" @click="toggleSearch"></i>
+						<u-icon name="search" size="24" color="#ffffff" @click="toggleSearch"></u-icon>
 					</div>
 				</div>
 				
@@ -23,13 +23,10 @@
 						ref="searchInput"
 					/>
 					<button class="search-btn" @click="clearSearch">
-						<i class="u-icon-close"></i>
+						<u-icon name="close" size="20" color="#ffffff"></u-icon>
 					</button>
 				</div>
-			</header>
-
-			<!-- 内容区域 -->
-			<div class="content">
+				
 				<!-- 筛选选项卡 -->
 				<div class="filter-tabs">
 					<div class="filter-tab" :class="{active: activeFilter === 'all'}" @click="setFilter('all')">
@@ -42,7 +39,10 @@
 						已完成
 					</div>
 				</div>
+			</header>
 
+			<!-- 内容区域 -->
+			<div class="content">
 				<!-- 加载状态 -->
 				<div v-if="loading" class="loading-container">
 					<div class="loading-spinner"></div>
@@ -60,11 +60,11 @@
 						</div>
 						<div class="task-meta">
 							<div class="task-meta-item">
-								<i class="u-icon-calendar"></i>
+								<u-icon name="calendar" size="16" color="#6c757d"></u-icon>
 								<span>开始: {{ formatDate(task.groupTaskStartTime) }}</span>
 							</div>
 							<div class="task-meta-item">
-								<i class="u-icon-clock"></i>
+								<u-icon name="clock" size="16" color="#6c757d"></u-icon>
 								<span>截止: {{ formatDate(task.groupTaskLastTime) }}</span>
 							</div>
 						</div>
@@ -83,12 +83,12 @@
 								发布者: {{ task.groupTaskUploader }}
 							</div>
 							<div class="task-actions">
-								<button class="task-action-btn btn-primary" @click="viewTaskDetails(task)">
-									<i class="u-icon-eye"></i> 查看
-								</button>
-								<button class="task-action-btn btn-danger" v-if="canEditTask(task)" @click="deleteTask(task)">
-									<i class="u-icon-delete"></i> 删除
-								</button>
+								<u-button type="primary" size="small" shape="circle" :plain="false" :border="false" @click="viewTaskDetails(task)">
+									<u-icon name="eye" size="16" color="#ffffff"></u-icon> 查看
+								</u-button>
+								<u-button type="error" size="small" shape="circle" :plain="false" :border="false" v-if="canEditTask(task)" @click="deleteTask(task)">
+									<u-icon name="close-circle" size="16" color="#ffffff"></u-icon> 删除
+								</u-button>
 							</div>
 						</div>
 					</div>
@@ -96,7 +96,7 @@
 
 				<!-- 空状态 -->
 				<div class="empty-state" v-else>
-					<i class="u-icon-file"></i>
+					<u-icon name="file-text" size="48" color="#e9ecef"></u-icon>
 					<h3>暂无任务</h3>
 					<p v-if="searchKeyword">没有找到匹配的任务</p>
 					<p v-else>当前没有任务，请点击右下角按钮添加</p>
@@ -105,7 +105,7 @@
 
 			<!-- 添加任务按钮 -->
 			<div class="add-task-btn" v-if="canPublishTask" @click="addNewTask">
-				<i class="u-icon-plus"></i>
+				<u-icon name="plus" size="24" color="#ffffff"></u-icon>
 			</div>
 		</div>
 	</div>
@@ -444,7 +444,7 @@
 		background: linear-gradient(135deg, var(--primary), var(--secondary));
 		color: white;
 		padding: 15px 20px;
-		padding-top: 30px;
+		padding-top: 5vh;
 		box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 		position: sticky;
 		top: 0;
@@ -533,30 +533,29 @@
 	/* 筛选选项卡 */
 	.filter-tabs {
 		display: flex;
-		background: white;
-		border-radius: 12px;
-		overflow: hidden;
+		background: rgba(255, 255, 255, 0.2);
+		border-radius: 25px;
+		padding: 4px;
 		margin-bottom: 20px;
-		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+		margin-top: 10px;
 	}
 
 	.filter-tab {
 		flex: 1;
 		text-align: center;
-		padding: 12px;
-		font-weight: 500;
+		padding: 8px 12px;
+		border-radius: 20px;
+		position: relative;
 		cursor: pointer;
-		transition: all 0.3s;
+		transition: all 0.3s ease;
 		font-size: 0.9rem;
+		color: rgba(255, 255, 255, 0.8);
 	}
 
 	.filter-tab.active {
-		background: var(--primary);
+		background: rgba(255, 255, 255, 0.3);
+		font-weight: 600;
 		color: white;
-	}
-
-	.filter-tab:not(.active):hover {
-		background: var(--light);
 	}
 
 	/* 加载状态 */
@@ -703,44 +702,56 @@
 	.task-actions {
 		display: flex;
 		gap: 10px;
+		flex: 1;
+		justify-content: space-between;
+		min-width: 120px;
 	}
 
-	.task-action-btn {
-		padding: 6px 12px;
-		border-radius: 8px;
+	/* 覆盖 uView-plus 按钮默认样式 */
+	.task-actions .u-button {
+		flex: 1;
+		justify-content: center;
 		font-size: 0.85rem;
-		font-weight: 500;
-		cursor: pointer;
-		border: none;
-		display: flex;
-		align-items: center;
-		gap: 5px;
-		transition: all 0.2s;
+		padding: 6px 12px;
+		border: none !important;
+		outline: none !important;
+		box-shadow: none !important;
+		background-image: none !important;
+		border-radius: 20px; /* 保持圆角 */
 	}
-
-	.btn-primary {
-		background: var(--primary);
-		color: white;
+	
+	/* 特别处理按钮的hover状态 */
+	.task-actions .u-button::after {
+		border: none !important;
 	}
-
-	.btn-primary:hover {
-		background: var(--secondary);
+	
+	/* 覆盖uView-plus按钮的所有可能边框样式 */
+	.task-actions .u-button.u-button--primary,
+	.task-actions .u-button.u-button--error {
+		border: none !important;
 	}
-
-	.btn-danger {
-		background: #f8d7da;
-		color: #721c24;
+	
+	/* 响应式按钮调整 */
+	@media (max-width: 480px) {
+		.task-actions {
+			min-width: 100px;
+		}
+		
+		.task-actions .u-button {
+			font-size: 0.8rem;
+			padding: 5px 10px;
+		}
 	}
-
-	.btn-danger:hover {
-		background: #f5c6cb;
-	}
-
+	
 	/* 空状态 */
 	.empty-state {
-		text-align: center;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
 		padding: 40px 20px;
 		color: var(--gray);
+		min-height: 300px;
 	}
 
 	.empty-state i {
@@ -841,6 +852,40 @@
 		}
 	}
 </style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

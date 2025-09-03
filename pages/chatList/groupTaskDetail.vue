@@ -4,99 +4,132 @@
 		<header class="app-header">
 			<div class="header-top">
 				<div class="logo">
-					<i class="u-icon-arrow-left" @click="goBack"></i>
+					<u-icon name="arrow-left" size="24" color="#ffffff" @click="goBack"></u-icon>
 					<span>任务详情</span>
+				</div>
+				<div class="header-actions">
+					<u-icon name="info-circle" size="24" color="#ffffff" @click="showTaskInfo"></u-icon>
+				</div>
+			</div>
+			
+			<!-- 选项卡 -->
+			<div class="tabs-container">
+				<div 
+					class="tab-item" 
+					:class="{ active: activeTab === 'question' }" 
+					@click="switchTab('question')">
+					题目
+				</div>
+				<div 
+					class="tab-item" 
+					:class="{ active: activeTab === 'answer' }" 
+					@click="switchTab('answer')">
+					作答
 				</div>
 			</div>
 		</header>
 
-		<!-- 内容区域 -->
-		<div class="content">
-			<!-- 任务基本信息 -->
-			<div class="task-card" v-if="taskDetail">
-				<div class="task-header">
-					<div class="task-title">{{ taskDetail.groupTask }}</div>
-					<div class="task-status" :class="getStatusClass(taskDetail)">
-						{{ getStatusText(taskDetail) }}
+		<!-- 白色背景容器 -->
+		<div class="white-background">
+			<!-- 内容区域 -->
+			<div class="content">
+				<!-- 题目内容 -->
+				<div v-show="activeTab === 'question'" class="tab-content">
+					<!-- 任务描述 -->
+					<div class="task-description-section" v-if="taskDetail">
+						<h3 class="section-title">任务描述</h3>
+						<hr class="section-divider" />
+						<div class="description-content">
+							<up-markdown 
+								:content="taskDetail.groupTaskContext" 
+								:previewImg="true"
+								theme="light"
+								:showLineNumber="false">
+							</up-markdown>
+						</div>
 					</div>
 				</div>
-				<div class="task-meta">
-					<div class="task-meta-item">
-						<i class="u-icon-calendar"></i>
-						<span>开始: {{ formatDate(taskDetail.groupTaskStartTime) }}</span>
+				
+				<!-- 作答内容 -->
+				<div v-show="activeTab === 'answer'" class="tab-content">
+					<!-- 作业提交区域 -->
+					<div class="submission-section" v-if="canSubmitTask && taskDetail">
+						<div class="section-header">
+							<h3 class="section-title">提交作业</h3>
+							<u-button 
+								type="primary" 
+								size="mini"
+								:disabled="isSubmitted || submitting"
+								@click="submitTask"
+								:text="isSubmitted ? '已提交' : (submitting ? '提交中...' : '提交')">
+							</u-button>
+						</div>
+						<hr class="section-divider" />
+						<div class="submission-form">
+							<textarea 
+								class="submission-text" 
+								v-model="submissionContent" 
+								placeholder="请输入你的作业内容..."
+								:disabled="isSubmitted">
+							</textarea>
+						</div>
 					</div>
-					<div class="task-meta-item">
-						<i class="u-icon-clock"></i>
-						<span>截止: {{ formatDate(taskDetail.groupTaskLastTime) }}</span>
-					</div>
-					<div class="task-meta-item">
-						<i class="u-icon-user"></i>
-						<span>发布者: {{ taskDetail.groupTaskUploader }}</span>
-					</div>
-				</div>
-				<div class="task-progress">
-					<div class="progress-info">
-						<span>完成进度</span>
-						<span>{{ taskDetail.groupTaskFinish || 0 }} /
-							{{ (taskDetail.groupTaskFinish || 0) + (taskDetail.groupTaskUnfinished || 0) }}</span>
-					</div>
-					<div class="progress-bar">
-						<div class="progress-fill" :style="{width: calculateProgress(taskDetail) + '%'}"></div>
-					</div>
-				</div>
-			</div>
 
-			<!-- 任务描述 -->
-			<div class="task-description" v-if="taskDetail && renderedTaskContext">
-				<h3>任务描述</h3>
-				<div class="description-content">
-					<!-- 使用u-parse组件渲染Markdown内容 -->
-					<u-parse 
-						:content="renderedTaskContext" 
-						:preview-img="true" 
-						:show-img-menu="true"
-						error-img="/static/groupInfo/dengdai.png"
-						loading-img="/static/groupInfo/dengdai.png"
-						@imgTap="onImageTap"
-						@load="onParserLoad"
-						v-if="parserLoaded"
-					></u-parse>
-					<!-- 加载占位符 -->
-					<view v-else class="loading-placeholder">
-						内容加载中...
-					</view>
-				</div>
-			</div>
-
-			<!-- 作业提交区域 -->
-			<div class="submission-section" v-if="canSubmitTask && taskDetail">
-				<h3>提交作业</h3>
-				<div class="submission-form">
-					<textarea 
-						class="submission-text" 
-						v-model="submissionContent" 
-						placeholder="请输入你的作业内容..."
-						:disabled="isSubmitted">
-					</textarea>
-					<div class="submission-actions">
-						<button 
-							class="submit-btn" 
-							:class="{ 'btn-disabled': isSubmitted || submitting }"
-							@click="submitTask"
-							:disabled="isSubmitted || submitting">
-							{{ isSubmitted ? '已提交' : (submitting ? '提交中...' : '提交作业') }}
-						</button>
+					<!-- 权限提示 -->
+					<div class="permission-prompt" v-if="!canSubmitTask && taskDetail">
+						<u-icon name="lock" size="40" color="#6c757d" v-if="taskDetail"></u-icon>
+						<p v-if="taskDetail">当前无法提交作业</p>
+						<small v-if="taskDetail">{{ permissionMessage }}</small>
 					</div>
 				</div>
-			</div>
-
-			<!-- 权限提示 -->
-			<div class="permission-prompt" v-if="!canSubmitTask && taskDetail">
-				<i class="u-icon-lock" v-if="taskDetail"></i>
-				<p v-if="taskDetail">当前无法提交作业</p>
-				<small v-if="taskDetail">{{ permissionMessage }}</small>
 			</div>
 		</div>
+		
+		<!-- 任务详情模态框 -->
+		<u-popup :show="showTaskInfoModal" mode="center" border-radius="10" width="80%" height="auto" @close="closeTaskInfoModal">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h3>任务详情</h3>
+					<u-icon name="close" size="20" color="#6c757d" @click="closeTaskInfoModal"></u-icon>
+				</div>
+				<div class="modal-body" v-if="taskDetail">
+					<!-- 任务基本信息 -->
+					<div class="task-header">
+						<div class="task-title">{{ taskDetail.groupTask }}</div>
+						<div class="task-status" :class="getStatusClass(taskDetail)">
+							{{ getStatusText(taskDetail) }}
+						</div>
+					</div>
+					<div class="task-meta">
+						<div class="task-meta-item">
+							<u-icon name="calendar" size="16" color="#6c757d"></u-icon>
+							<span>开始: {{ formatDate(taskDetail.groupTaskStartTime) }}</span>
+						</div>
+						<div class="task-meta-item">
+							<u-icon name="clock" size="16" color="#6c757d"></u-icon>
+							<span>截止: {{ formatDate(taskDetail.groupTaskLastTime) }}</span>
+						</div>
+						<div class="task-meta-item">
+							<u-icon name="account" size="16" color="#6c757d"></u-icon>
+							<span>发布者: {{ taskDetail.groupTaskUploader }}</span>
+						</div>
+					</div>
+					<div class="task-progress">
+						<div class="progress-info">
+							<span>完成进度</span>
+							<span>{{ taskDetail.groupTaskFinish || 0 }} /
+								{{ (taskDetail.groupTaskFinish || 0) + (taskDetail.groupTaskUnfinished || 0) }}</span>
+						</div>
+						<div class="progress-bar">
+							<div class="progress-fill" :style="{width: calculateProgress(taskDetail) + '%'}"></div>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<u-button type="primary" size="medium"  @click="closeTaskInfoModal">确定</u-button>
+				</div>
+			</div>
+		</u-popup>
 	</view>
 </template>
 
@@ -105,15 +138,8 @@
 		mapState,
 		mapActions
 	} from 'vuex';
-	
-	// 引入u-parse组件
-	import uParse from '@/uni_modules/uview-plus/components/u-parse/u-parse.vue';
-
+	import { ref } from 'vue'
 	export default {
-		// 注册u-parse组件
-		components: {
-			uParse
-		},
 		data() {
 			return {
 				taskId: null,
@@ -125,43 +151,12 @@
 				loading: false,
 				submitting: false,
 				groupId: null,
-				md: null, // markdown-it实例
-				parserLoaded: false, // 解析器是否加载完成
-				isProcessingHtml: false, // 防止HTML处理过程中的重复执行
-				renderedContent: '' // 缓存渲染后的内容
+				activeTab: 'question', // 默认显示题目
+				showTaskInfoModal: false // 任务详情模态框显示状态
 			}
 		},
 		computed: {
 			...mapState('user', ['userInfo']),
-			
-			// 渲染后的任务描述内容
-			renderedTaskContext() {
-				// 如果已经有缓存的内容，直接返回
-				if (this.renderedContent) {
-					return this.renderedContent;
-				}
-				
-				if (!this.taskDetail || !this.taskDetail.groupTaskContext) {
-					return '<p>暂无任务描述</p>';
-				}
-				
-				// 防止重复处理
-				if (this.isProcessingHtml) {
-					return this.taskDetail.groupTaskContext;
-				}
-				
-				// 如果已经有HTML标签，直接返回
-				if (this.taskDetail.groupTaskContext.includes('<')) {
-					const processedContent = this.processHtmlContent(this.taskDetail.groupTaskContext);
-					this.renderedContent = processedContent;
-					return processedContent;
-				}
-				
-				// 对于纯文本内容，直接返回，避免复杂的处理
-				this.renderedContent = this.taskDetail.groupTaskContext;
-				return this.taskDetail.groupTaskContext;
-			},
-
 			// 判断是否可以提交作业
 			canSubmitTask() {
 				// 需要有任务详情
@@ -256,6 +251,21 @@
 				}
 			},
 
+			// 切换选项卡
+			switchTab(tab) {
+				this.activeTab = tab;
+			},
+
+			// 显示任务详情模态框
+			showTaskInfo() {
+				this.showTaskInfoModal = true;
+			},
+
+			// 关闭任务详情模态框
+			closeTaskInfoModal() {
+				this.showTaskInfoModal = false;
+			},
+
 			// 获取任务状态文本
 			getStatusText(task) {
 				return this.getTaskStatus(task);
@@ -342,61 +352,6 @@
 					String(date.getHours()).padStart(2, '0') + ':' +
 					String(date.getMinutes()).padStart(2, '0');
 			},
-			
-			// 处理HTML内容，确保图片能够正确显示
-			processHtmlContent(htmlContent) {
-				try {
-					// 使用正则表达式查找所有img标签
-					const imgRegex = /<img[^>]*src=["']([^"']*)["'][^>]*>/g;
-					
-					// 替换img标签，添加样式确保图片能够正确显示
-					return htmlContent.replace(imgRegex, (match, src) => {
-						// 处理图片URL，确保协议正确
-						let processedSrc = src;
-						
-						// 如果是相对路径，添加基础URL
-						if (src && src.startsWith('/') && !src.startsWith('//')) {
-							processedSrc = 'http://localhost:8080' + src;
-						}
-						// 如果没有协议，添加http协议
-						else if (src && (src.startsWith('localhost') || src.startsWith('192.168') || src.startsWith('127.0.0.1'))) {
-							// 只有在没有协议的情况下才添加http
-							if (!src.startsWith('http://') && !src.startsWith('https://')) {
-								processedSrc = 'http://' + src;
-							}
-						}
-						
-						// 确保图片标签包含必要的样式属性
-						if (match && !match.includes('style=')) {
-							return match.replace('<img', `<img style="max-width: 100%; height: auto; display: block; margin: 10px 0;" src="${processedSrc}"`);
-						} else {
-							// 替换src属性为处理后的URL
-							return match.replace(/src=(["'])[^"']*["']/, `src=$1${processedSrc}$1`);
-						}
-					});
-				} catch (error) {
-					console.error('HTML内容处理失败:', error);
-					return htmlContent;
-				}
-			},
-			
-			// 图片点击事件
-			onImageTap(img) {
-				console.log('图片被点击:', img);
-				// 可以在这里添加图片预览逻辑
-				if (img && img.src) {
-					uni.previewImage({
-						urls: [img.src],
-						current: img.src
-					});
-				}
-			},
-			
-			// 解析器加载完成事件
-			onParserLoad() {
-				console.log('u-parse解析器加载完成');
-				this.parserLoaded = true;
-			},
 
 			// 提交作业
 			async submitTask() {
@@ -441,8 +396,7 @@
 			loadTaskDetail(taskData) {
 				// 使用传递的任务详情数据
 				this.taskDetail = taskData;
-				// 清除缓存的内容
-				this.renderedContent = '';
+				//this.taskDetail.groupTaskContext是md内容，需要转换成html
 			}
 		},
 
@@ -501,11 +455,17 @@
 		background-color: #f5f7fb;
 	}
 
+	.white-background {
+		background-color: #ffffff; /* 更白的背景色 */
+		min-height: 100vh;
+		padding-bottom: 20px;
+	}
+
 	.app-header {
 		background: linear-gradient(135deg, #4361ee, #3f37c9);
 		color: white;
 		padding: 15px 20px;
-		padding-top: 30px;
+		padding-top: 5vh;
 		box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 		position: sticky;
 		top: 0;
@@ -526,34 +486,192 @@
 		font-size: 1.4rem;
 	}
 
-	.logo i {
+	.logo u-icon {
 		margin-right: 8px;
-		font-size: 1.6rem;
+	}
+
+	.header-actions u-icon {
 		cursor: pointer;
+	}
+
+	/* 选项卡样式 - 与groupApplications.vue保持一致 */
+	.tabs-container {
+		display: flex;
+		background: rgba(255, 255, 255, 0.2);
+		border-radius: 25px;
+		padding: 4px;
+	}
+
+	.tab-item {
+		flex: 1;
+		text-align: center;
+		padding: 8px 12px;
+		border-radius: 20px;
+		position: relative;
+		cursor: pointer;
+		transition: all 0.3s ease;
+	}
+
+	.tab-item.active {
+		background: rgba(255, 255, 255, 0.3);
+		font-weight: 600;
 	}
 
 	.content {
 		padding: 20px;
 	}
 
-	.task-card {
+	.tab-content {
+		animation: fadeIn 0.3s ease-in-out;
+	}
+
+	@keyframes fadeIn {
+		from { opacity: 0; transform: translateY(10px); }
+		to { opacity: 1; transform: translateY(0); }
+	}
+
+	.section-title {
+		font-size: 1.1rem;
+		font-weight: 600;
+		color: #212529;
+		flex: 1;
+		margin-right: 20px;
+		line-height: 1.5;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
+	.section-header {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin-bottom: 10px;
+	}
+
+	/* 调整uview按钮样式 */
+	::v-deep .u-button--mini {
+		height: 30px !important;
+		line-height: 30px !important;
+		padding: 0 10px !important; /* 减小左右内边距 */
+		font-size: 13px !important;
+		width: auto;
+		min-width: 50px; /* 减小最小宽度 */
+	}
+
+	.section-divider {
+		border: none;
+		height: 1px;
+		background-color: #e9ecef;
+		margin: 0 0 15px 0;
+		width: 100%;
+	}
+
+	.submission-form {
+		position: relative;
+	}
+
+	.submission-text {
+		width: 100%;
+		min-height: 150px;
+		padding: 12px;
+		border: none;
+		border-radius: 8px;
+		font-size: 0.95rem;
+		resize: vertical;
+		margin-bottom: 15px;
+		line-height: 1.5;
+		background-color: #f8f9fa;
+	}
+
+	.submission-text:disabled {
+		background-color: #f8f9fa;
+	}
+
+	.permission-prompt {
 		background: white;
 		border-radius: 16px;
-		padding: 15px;
+		padding: 40px 20px;
+		text-align: center;
 		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-		margin-bottom: 20px;
+	}
+
+	.permission-prompt u-icon {
+		font-size: 2.5rem;
+		margin-bottom: 15px;
+		color: #6c757d;
+	}
+
+	.permission-prompt p {
+		font-size: 1.1rem;
+		font-weight: 500;
+		color: #212529;
+		margin-bottom: 8px;
+	}
+
+	.permission-prompt small {
+		font-size: 0.9rem;
+		color: #6c757d;
+	}
+
+	.empty-state {
+		text-align: center;
+		padding: 40px 20px;
+		color: #6c757d;
+	}
+
+	.empty-state u-icon {
+		font-size: 2.5rem;
+		margin-bottom: 15px;
+		color: #adb5bd;
+	}
+
+	/* 模态框样式 */
+	.modal-content {
+		width: calc(100vw - 40px);
+		background: white;
+		border-radius: 10px;
+		overflow: hidden;
+		max-height: 80vh;
+		overflow-y: auto;
+	}
+
+	.modal-header {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		padding: 20px;
+		border-bottom: 1px solid #e9ecef;
+		position: sticky;
+		top: 0;
+		background: white;
+		z-index: 10;
+	}
+
+	.modal-header h3 {
+		margin: 0;
+		font-size: 1.2rem;
+		font-weight: 600;
+	}
+
+	.modal-header u-icon {
+		cursor: pointer;
+	}
+
+	.modal-body {
+		padding: 20px;
 	}
 
 	.task-header {
 		display: flex;
 		justify-content: space-between;
 		align-items: flex-start;
-		margin-bottom: 12px;
+		margin-bottom: 15px;
 	}
 
 	.task-title {
 		font-weight: 600;
-		font-size: 1.1rem;
+		font-size: 1.3rem;
 		margin-right: 15px;
 		flex: 1;
 		line-height: 1.4;
@@ -561,9 +679,9 @@
 	}
 
 	.task-status {
-		padding: 4px 8px;
-		border-radius: 12px;
-		font-size: 0.75rem;
+		padding: 6px 12px;
+		border-radius: 16px;
+		font-size: 0.85rem;
 		font-weight: 500;
 		white-space: nowrap;
 	}
@@ -591,164 +709,76 @@
 	.task-meta {
 		display: flex;
 		flex-direction: column;
-		gap: 8px;
-		margin-bottom: 15px;
-		font-size: 0.85rem;
+		gap: 10px;
+		margin-bottom: 20px;
+		font-size: 0.9rem;
 		color: #6c757d;
 	}
 
 	.task-meta-item {
 		display: flex;
 		align-items: center;
-		gap: 5px;
+		gap: 8px;
 	}
 
 	.task-progress {
-		margin-bottom: 15px;
+		margin-bottom: 20px;
 	}
 
 	.progress-info {
 		display: flex;
 		justify-content: space-between;
-		margin-bottom: 5px;
-		font-size: 0.85rem;
+		margin-bottom: 8px;
+		font-size: 0.9rem;
 	}
 
 	.progress-bar {
-		height: 8px;
+		height: 10px;
 		background: #e9ecef;
-		border-radius: 4px;
+		border-radius: 5px;
 		overflow: hidden;
 	}
 
 	.progress-fill {
 		height: 100%;
 		background: linear-gradient(90deg, #4895ef, #4cc9f0);
-		border-radius: 4px;
+		border-radius: 5px;
 		transition: width 0.3s ease;
 	}
 
-	.task-description {
-		background: white;
-		border-radius: 16px;
-		padding: 15px;
-		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-		margin-bottom: 20px;
+	.info-item {
+		display: flex;
+		justify-content: space-between;
+		margin-bottom: 15px;
+		padding-bottom: 15px;
+		border-bottom: 1px solid #f0f0f0;
 	}
 
-	.task-description h3 {
-		font-size: 1rem;
-		font-weight: 600;
-		margin-bottom: 10px;
-		color: #212529;
+	.info-item:last-child {
+		margin-bottom: 0;
+		border-bottom: none;
 	}
 
-	.description-content {
-		font-size: 0.9rem;
-		line-height: 1.5;
+	.info-item label {
+		font-weight: 500;
 		color: #495057;
 	}
-	
-	/* 添加u-parse组件的样式覆盖 */
-	.description-content ::v-deep .\_img {
-		max-width: 100% !important;
-		height: auto !important;
-		display: block;
-		margin: 10px 0;
-	}
-	
-	/* 加载占位符样式 */
-	.loading-placeholder {
-		text-align: center;
-		padding: 20px;
-		color: #6c757d;
-	}
 
-	.submission-section {
-		background: white;
-		border-radius: 16px;
-		padding: 15px;
-		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-		margin-bottom: 20px;
-	}
-
-	.submission-section h3 {
-		font-size: 1rem;
-		font-weight: 600;
-		margin-bottom: 10px;
+	.info-item span {
 		color: #212529;
 	}
 
-	.submission-text {
-		width: 100%;
-		min-height: 120px;
-		padding: 10px;
-		border: 1px solid #e9ecef;
-		border-radius: 8px;
-		font-size: 0.9rem;
-		resize: vertical;
-		margin-bottom: 15px;
-	}
-
-	.submission-text:disabled {
-		background-color: #f8f9fa;
-	}
-
-	.submit-btn {
-		background: #4361ee;
-		color: white;
-		border: none;
-		border-radius: 8px;
-		padding: 10px 20px;
-		font-size: 0.9rem;
-		font-weight: 500;
-		cursor: pointer;
-		transition: background 0.3s;
-	}
-
-	.submit-btn:hover:not(.btn-disabled) {
-		background: #3f37c9;
-	}
-
-	.btn-disabled {
-		background: #adb5bd;
-		cursor: not-allowed;
-	}
-
-	.permission-prompt {
+	.modal-footer {
+		padding: 0 20px 20px;
+		text-align: center;
+		position: sticky;
+		bottom: 0;
 		background: white;
-		border-radius: 16px;
-		padding: 30px 20px;
-		text-align: center;
-		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+		z-index: 10;
 	}
 
-	.permission-prompt i {
-		font-size: 2rem;
-		color: #6c757d;
-		margin-bottom: 15px;
-	}
-
-	.permission-prompt p {
-		font-size: 1rem;
-		font-weight: 500;
-		color: #212529;
-		margin-bottom: 5px;
-	}
-
-	.permission-prompt small {
-		font-size: 0.85rem;
-		color: #6c757d;
-	}
-
-	.empty-state {
-		text-align: center;
-		padding: 30px 20px;
-		color: #6c757d;
-	}
-
-	.empty-state i {
-		font-size: 2rem;
-		margin-bottom: 10px;
+	.modal-footer u-button {
+		width: 100px;
+		height: 36px;
 	}
 </style>

@@ -95,5 +95,6 @@ export default {
 </script>
 
 <style lang="scss">
-	@import "@/uni_modules/uview-plus/index.scss";
+	// @import "@/uni_modules/uview-plus/index.scss";
+	@import '@/node_modules/uview-plus/theme.scss';
 </style>

@@ -1,4 +1,4 @@
-import { string } from "../uni_modules/uview-plus/libs/function/test";
+import { string } from "uview-plus/libs/function/test";
 
 const dbName = 'studyParty';
 const dbpath = '_doc/studyParty.db';

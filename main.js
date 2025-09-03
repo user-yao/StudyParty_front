@@ -1,9 +1,13 @@
+import 'core-js/stable'; // 引入所有稳定的 polyfill
+import 'regenerator-runtime/runtime'; // 处理 async/await 等 generator 函数
 import App from './App'
 import store from './store/index.js'
-import uviewPlus from '@/uni_modules/uview-plus'
+import uviewPlus from 'uview-plus'
 // #ifndef VUE3
 import Vue from 'vue'
 import './uni.promisify.adaptor'
+
+
 Vue.config.productionTip = false
 App.mpType = 'app'
 const app = new Vue({

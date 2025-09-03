@@ -431,7 +431,6 @@ export default {
 			
 			// 申请加入相关
 			showApplyModal: false,
-			currentGroup: {},
 			applyMessage: '',
 			submitting: false
 		}
@@ -1241,7 +1240,6 @@ export default {
 		// 申请加入小组
 		applyToJoin() {
 			// 显示申请加入弹窗
-			this.currentGroup = this.groupDetail;
 			this.applyMessage = '';
 			this.showApplyModal = true;
 			// 锁定背景滚动

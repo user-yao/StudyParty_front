@@ -1,25 +1,25 @@
 {
-  "hash": "de7a1902",
+  "hash": "c29c2cb0",
   "configHash": "d030030d",
-  "lockfileHash": "71e08810",
-  "browserHash": "dab43717",
+  "lockfileHash": "e2d37847",
+  "browserHash": "9a68a2c6",
   "optimized": {
-    "dayjs/esm/index": {
-      "src": "../../../../../node_modules/dayjs/esm/index.js",
-      "file": "dayjs_esm_index.js",
-      "fileHash": "3531fd07",
+    "uview-plus": {
+      "src": "../../../../../node_modules/uview-plus/index.js",
+      "file": "uview-plus.js",
+      "fileHash": "47dc158c",
       "needsInterop": false
     },
-    "markdown-it": {
-      "src": "../../../../../node_modules/markdown-it/index.mjs",
-      "file": "markdown-it.js",
-      "fileHash": "ade72934",
+    "uview-plus/libs/function/test": {
+      "src": "../../../../../node_modules/uview-plus/libs/function/test.js",
+      "file": "uview-plus_libs_function_test.js",
+      "fileHash": "79b73bb9",
       "needsInterop": false
     }
   },
   "chunks": {
-    "chunk-CSAU5B4Q": {
-      "file": "chunk-CSAU5B4Q.js"
+    "chunk-ZAULTRJF": {
+      "file": "chunk-ZAULTRJF.js"
     }
   }
 }
