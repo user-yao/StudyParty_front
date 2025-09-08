@@ -10,20 +10,20 @@
 						<span>好友请求</span>
 					</div>
 				</div>
+				
+				<!-- 选项卡 -->
+				<div class="filter-tabs">
+					<div class="filter-tab" :class="{active: activeTab === 'requests'}" @click="activeTab = 'requests'">
+						好友请求
+					</div>
+					<div class="filter-tab" :class="{active: activeTab === 'search'}" @click="activeTab = 'search'">
+						添加好友
+					</div>
+				</div>
 			</div>
 
 			<!-- 内容区域 -->
 			<div class="content">
-				<!-- 选项卡 -->
-				<div class="tabs">
-					<div class="tab" :class="{active: activeTab === 'requests'}" @click="activeTab = 'requests'">
-						好友请求
-					</div>
-					<div class="tab" :class="{active: activeTab === 'search'}" @click="activeTab = 'search'">
-						添加好友
-					</div>
-				</div>
-
 				<!-- 搜索框 -->
 				<div class="search-container" v-if="activeTab === 'search'">
 					<up-input
@@ -489,26 +489,30 @@
 	}
 
 	/* 选项卡样式 */
-	.tabs {
+	.filter-tabs {
 		display: flex;
-		background: white;
-		border-radius: 12px;
-		overflow: hidden;
+		background: rgba(255, 255, 255, 0.2);
+		border-radius: 25px;
+		padding: 4px;
 		margin-bottom: 20px;
-		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+		margin-top: 10px;
 	}
 
-	.tab {
+	.filter-tab {
 		flex: 1;
 		text-align: center;
-		padding: 12px;
-		font-weight: 500;
+		padding: 8px 12px;
+		border-radius: 20px;
+		position: relative;
 		cursor: pointer;
-		transition: all 0.3s;
+		transition: all 0.3s ease;
+		font-size: 0.9rem;
+		color: rgba(255, 255, 255, 0.8);
 	}
 
-	.tab.active {
-		background: var(--primary);
+	.filter-tab.active {
+		background: rgba(255, 255, 255, 0.3);
+		font-weight: 600;
 		color: white;
 	}
 

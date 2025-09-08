@@ -32,57 +32,80 @@
 		<!-- 白色背景容器 -->
 		<div class="white-background">
 			<!-- 内容区域 -->
-			<div class="content">
-				<!-- 题目内容 -->
-				<div v-show="activeTab === 'question'" class="tab-content">
-					<!-- 任务描述 -->
-					<div class="task-description-section" v-if="taskDetail">
-						<h3 class="section-title">任务描述</h3>
-						<hr class="section-divider" />
-						<div class="description-content">
-							<up-markdown 
-								:content="taskDetail.groupTaskContext" 
-								:previewImg="true"
-								theme="light"
-								:showLineNumber="false">
-							</up-markdown>
+			<scroll-view 
+				class="content-scroll" 
+				scroll-y="true" 
+				enable-flex="true"
+				@scroll="onScroll"
+				:scroll-top="scrollTop">
+				<div class="content">
+					<!-- 题目内容 -->
+					<div v-show="activeTab === 'question'" class="tab-content">
+						<!-- 任务描述 -->
+						<div class="task-description-section" v-if="taskDetail">
+							<h3 class="section-title">任务描述</h3>
+							<hr class="section-divider" />
+							<div class="description-content">
+								<u-markdown 
+									:content="taskDetail.groupTaskContext" 
+									:previewImg="true"
+									theme="light"
+									:showLineNumber="false">
+								</u-markdown>
+							</div>
 						</div>
 					</div>
-				</div>
-				
-				<!-- 作答内容 -->
-				<div v-show="activeTab === 'answer'" class="tab-content">
-					<!-- 作业提交区域 -->
-					<div class="submission-section" v-if="canSubmitTask && taskDetail">
-						<div class="section-header">
-							<h3 class="section-title">提交作业</h3>
-							<u-button 
-								type="primary" 
-								size="mini"
-								:disabled="isSubmitted || submitting"
-								@click="submitTask"
-								:text="isSubmitted ? '已提交' : (submitting ? '提交中...' : '提交')">
-							</u-button>
+					
+					<!-- 作答内容 -->
+					<div v-show="activeTab === 'answer'" class="tab-content">
+						<!-- 作业提交区域 -->
+						<div class="submission-section" v-if="taskDetail">
+							<div class="section-header">
+								<h3 class="section-title">提交作业</h3>
+								<u-button 
+									type="primary" 
+									size="mini"
+									:disabled="isSubmitted || submitting"
+									@click="submitTask"
+									:text="isSubmitted ? '已提交' : (submitting ? '提交中...' : '提交')">
+								</u-button>
+							</div>
+							<hr class="section-divider" />
+							<div class="submission-form">
+								<div class="editor-container">
+									<textarea 
+										class="submission-text" 
+										v-model="submissionContent" 
+										placeholder="请输入你的作业内容，支持Markdown语法..."
+										:disabled="isSubmitted">
+									</textarea>
+									<div class="preview-container">
+										<div class="preview-header">
+											<u-icon name="eye" size="16" color="#6c757d"></u-icon>
+											<span class="preview-title">实时预览</span>
+										</div>
+										<div class="markdown-preview">
+											<u-markdown 
+												:content="submissionContent" 
+												:previewImg="true"
+												theme="light"
+												:showLineNumber="false">
+											</u-markdown>
+										</div>
+									</div>
+								</div>
+							</div>
 						</div>
-						<hr class="section-divider" />
-						<div class="submission-form">
-							<textarea 
-								class="submission-text" 
-								v-model="submissionContent" 
-								placeholder="请输入你的作业内容..."
-								:disabled="isSubmitted">
-							</textarea>
-						</div>
-					</div>
 
-					<!-- 权限提示 -->
-					<div class="permission-prompt" v-if="!canSubmitTask && taskDetail">
-						<u-icon name="lock" size="40" color="#6c757d" v-if="taskDetail"></u-icon>
-						<p v-if="taskDetail">当前无法提交作业</p>
-						<small v-if="taskDetail">{{ permissionMessage }}</small>
+						<!-- 权限提示 -->
+						<div class="permission-prompt" v-if="!canSubmitTask && taskDetail">
+							<u-icon name="lock" size="40" color="#6c757d" v-if="taskDetail"></u-icon>
+							<p v-if="taskDetail">当前无法提交作业</p>
+							<small v-if="taskDetail">{{ permissionMessage }}</small>
+						</div>
 					</div>
 				</div>
-			</div>
+			</scroll-view>
 		</div>
 		
 		<!-- 任务详情模态框 -->
@@ -144,7 +167,7 @@
 			return {
 				taskId: null,
 				taskDetail: null,
-				submissionContent: '',
+				submissionContent: `# 作业标题`,
 				currentUserId: uni.getStorageSync('id') || 3,
 				currentUserRole: 'member', // member, leader, deputy, teacher, enterprise
 				isSubmitted: false,
@@ -152,7 +175,9 @@
 				submitting: false,
 				groupId: null,
 				activeTab: 'question', // 默认显示题目
-				showTaskInfoModal: false // 任务详情模态框显示状态
+				showTaskInfoModal: false, // 任务详情模态框显示状态
+				scrollTop: 0, // 滚动位置
+				scrollPositions: {} // 各个tab的滚动位置记录
 			}
 		},
 		computed: {
@@ -188,6 +213,27 @@
 		},
 		methods: {
 			...mapActions('groupTaskAnswer', ['submitTaskAnswer']),
+
+			// 滚动事件处理
+			onScroll(e) {
+				// 记录当前tab的滚动位置
+				this.scrollPositions[this.activeTab] = e.detail.scrollTop;
+			},
+
+			// 切换tab
+			switchTab(tab) {
+				// 保存当前tab的滚动位置
+				if (this.$refs.scrollView) {
+					// 这里可以添加额外的滚动位置保存逻辑
+				}
+				
+				this.activeTab = tab;
+				
+				// 恢复目标tab的滚动位置
+				this.$nextTick(() => {
+					this.scrollTop = this.scrollPositions[tab] || 0;
+				});
+			},
 
 			// 返回上一页
 			goBack() {
@@ -249,11 +295,6 @@
 						}
 					});
 				}
-			},
-
-			// 切换选项卡
-			switchTab(tab) {
-				this.activeTab = tab;
 			},
 
 			// 显示任务详情模态框
@@ -456,9 +497,17 @@
 	}
 
 	.white-background {
-		background-color: #ffffff; /* 更白的背景色 */
+		background-color: #ffffff;
 		min-height: 100vh;
 		padding-bottom: 20px;
+	}
+
+	.content-scroll {
+		height: calc(100vh - 200px);
+	}
+
+	.content {
+		padding: 20px;
 	}
 
 	.app-header {
@@ -553,10 +602,10 @@
 	::v-deep .u-button--mini {
 		height: 30px !important;
 		line-height: 30px !important;
-		padding: 0 10px !important; /* 减小左右内边距 */
+		padding: 0 10px !important;
 		font-size: 13px !important;
 		width: auto;
-		min-width: 50px; /* 减小最小宽度 */
+		min-width: 50px;
 	}
 
 	.section-divider {
@@ -567,25 +616,59 @@
 		width: 100%;
 	}
 
-	.submission-form {
-		position: relative;
+	.editor-container {
+		display: flex;
+		flex-direction: column;
+		gap: 15px;
 	}
 
 	.submission-text {
 		width: 100%;
 		min-height: 150px;
 		padding: 12px;
-		border: none;
+		border: 1px solid #e9ecef;
 		border-radius: 8px;
 		font-size: 0.95rem;
 		resize: vertical;
-		margin-bottom: 15px;
 		line-height: 1.5;
-		background-color: #f8f9fa;
+		background-color: #ffffff;
+		transition: border-color 0.2s;
+	}
+
+	.submission-text:focus {
+		border-color: #4361ee;
+		outline: none;
 	}
 
 	.submission-text:disabled {
 		background-color: #f8f9fa;
+	}
+
+	.preview-container {
+		border: 1px solid #e9ecef;
+		border-radius: 8px;
+		overflow: hidden;
+	}
+
+	.preview-header {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		padding: 8px 12px;
+		background-color: #f8f9fa;
+		border-bottom: 1px solid #e9ecef;
+	}
+
+	.preview-title {
+		font-size: 0.9rem;
+		font-weight: 500;
+		color: #495057;
+	}
+
+	.markdown-preview {
+		background-color: #ffffff;
+		padding: 12px;
+		min-height: 100px;
 	}
 
 	.permission-prompt {

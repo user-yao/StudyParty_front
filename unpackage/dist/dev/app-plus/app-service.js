@@ -6298,11 +6298,11 @@ if (uni.restoreGlobal) {
     }
     return module;
   }
-  const baseUrl = "http://192.168.1.13:8080";
+  const baseUrl = "http://192.168.185.136:8080";
   const timeout = 5e3;
-  const webSocketUrl = "ws://192.168.1.13:8080/websocket/ws";
-  const imageUrl = "http://192.168.1.13:8080/";
-  const sourceUrl = "http://192.168.1.13:8080";
+  const webSocketUrl = "ws://192.168.185.136:8080/websocket/ws";
+  const imageUrl = "http://192.168.185.136:8080/";
+  const sourceUrl = "http://192.168.185.136:8080";
   const dbName = "studyParty";
   const dbpath = "_doc/studyParty.db";
   const db = {
@@ -10199,9 +10199,8 @@ if (uni.restoreGlobal) {
     ]);
   }
   const PagesForumForum = /* @__PURE__ */ _export_sfc(_sfc_main$2h, [["render", _sfc_render$2g], ["__scopeId", "data-v-aeadbf01"], ["__file", "D:/uniapp2023/studyParty/pages/forum/forum.vue"]]);
-  const _imports_0$2 = "/static/chat/xinpengyou.png";
-  const _imports_1$1 = "/static/chat/lianxiren.png";
-  const _imports_2$1 = "/static/chat/qunzu.png";
+  const _imports_0$2 = "/static/chat/lianxiren.png";
+  const _imports_1$1 = "/static/chat/qunzu.png";
   const _sfc_main$2g = {
     data() {
       return {
@@ -10224,10 +10223,10 @@ if (uni.restoreGlobal) {
     onLoad() {
       const that2 = this;
       uni.$on("websocket-message", function(data2) {
-        formatAppLog("log", "at pages/chatList/chatList.vue:151", "监听到事件来自 websocket-message ，携带参数 msg 为：");
-        formatAppLog("log", "at pages/chatList/chatList.vue:152", data2);
+        formatAppLog("log", "at pages/chatList/chatList.vue:140", "监听到事件来自 websocket-message ，携带参数 msg 为：");
+        formatAppLog("log", "at pages/chatList/chatList.vue:141", data2);
         that2.getCharList().then((res2) => {
-          formatAppLog("log", "at pages/chatList/chatList.vue:154", res2);
+          formatAppLog("log", "at pages/chatList/chatList.vue:143", res2);
           that2.chatList = res2;
           that2.clearNode(res2);
         });
@@ -10278,25 +10277,25 @@ if (uni.restoreGlobal) {
     methods: {
       clearNode(res2) {
         const hasMessage = res2.some((item) => item.message_count !== 0);
-        formatAppLog("log", "at pages/chatList/chatList.vue:213", hasMessage);
+        formatAppLog("log", "at pages/chatList/chatList.vue:202", hasMessage);
         if (hasMessage) {
           uni.showTabBarRedDot({
             index: 2,
             success: () => {
-              formatAppLog("log", "at pages/chatList/chatList.vue:218", "小红点显示成功");
+              formatAppLog("log", "at pages/chatList/chatList.vue:207", "小红点显示成功");
             },
             fail: (err) => {
-              formatAppLog("error", "at pages/chatList/chatList.vue:221", "小红点显示失败", err);
+              formatAppLog("error", "at pages/chatList/chatList.vue:210", "小红点显示失败", err);
             }
           });
         } else {
           uni.hideTabBarRedDot({
             index: 2,
             success: () => {
-              formatAppLog("log", "at pages/chatList/chatList.vue:228", "小红点隐藏成功");
+              formatAppLog("log", "at pages/chatList/chatList.vue:217", "小红点隐藏成功");
             },
             fail: (err) => {
-              formatAppLog("error", "at pages/chatList/chatList.vue:231", "小红点隐藏失败", err);
+              formatAppLog("error", "at pages/chatList/chatList.vue:220", "小红点隐藏失败", err);
             }
           });
         }
@@ -10327,18 +10326,18 @@ if (uni.restoreGlobal) {
             if (res2.confirm) {
               db.clearMessage(chat.friend, chat.statu);
               this.getCharList().then((res3) => {
-                formatAppLog("log", "at pages/chatList/chatList.vue:263", res3);
+                formatAppLog("log", "at pages/chatList/chatList.vue:252", res3);
                 this.chatList = res3;
                 this.clearNode(res3);
               });
             } else if (res2.cancel) {
-              formatAppLog("log", "at pages/chatList/chatList.vue:268", "用户点击取消");
+              formatAppLog("log", "at pages/chatList/chatList.vue:257", "用户点击取消");
             }
           }
         });
       },
       toChatPage(chat) {
-        formatAppLog("log", "at pages/chatList/chatList.vue:275", chat);
+        formatAppLog("log", "at pages/chatList/chatList.vue:264", chat);
         let friend, chatData;
         if (chat.statu === "group") {
           const groupData = this.getFriend(chat.friend, chat.statu);
@@ -10394,8 +10393,8 @@ if (uni.restoreGlobal) {
             statu: "person"
           };
         }
-        formatAppLog("log", "at pages/chatList/chatList.vue:341", "friend:", friend);
-        formatAppLog("log", "at pages/chatList/chatList.vue:342", "chatData:", chatData);
+        formatAppLog("log", "at pages/chatList/chatList.vue:330", "friend:", friend);
+        formatAppLog("log", "at pages/chatList/chatList.vue:331", "chatData:", chatData);
         uni.navigateTo({
           url: `/pages/chatList/chatPage`,
           success: (res2) => {
@@ -10469,7 +10468,7 @@ if (uni.restoreGlobal) {
       },
       async getCharList() {
         return await db.selectChatList().then((res2) => {
-          formatAppLog("log", "at pages/chatList/chatList.vue:423", res2);
+          formatAppLog("log", "at pages/chatList/chatList.vue:412", res2);
           return res2;
         });
       },
@@ -10507,7 +10506,7 @@ if (uni.restoreGlobal) {
             });
           }
         } catch (error2) {
-          formatAppLog("error", "at pages/chatList/chatList.vue:472", "搜索聊天记录失败:", error2);
+          formatAppLog("error", "at pages/chatList/chatList.vue:461", "搜索聊天记录失败:", error2);
         } finally {
           this.searchLoading = false;
         }
@@ -10542,21 +10541,21 @@ if (uni.restoreGlobal) {
       }
     },
     onShow() {
-      formatAppLog("log", "at pages/chatList/chatList.vue:524", "查询消息列表");
+      formatAppLog("log", "at pages/chatList/chatList.vue:513", "查询消息列表");
       this.avatarTimestamp = Date.now();
       Promise.all([
         this.friendLists(),
         this.getMyGroup()
       ]).then(() => {
         this.getCharList().then((res2) => {
-          formatAppLog("log", "at pages/chatList/chatList.vue:534", res2);
+          formatAppLog("log", "at pages/chatList/chatList.vue:523", res2);
           this.chatList = res2;
           this.clearNode(res2);
         });
       }).catch((error2) => {
-        formatAppLog("error", "at pages/chatList/chatList.vue:539", "加载数据失败:", error2);
+        formatAppLog("error", "at pages/chatList/chatList.vue:528", "加载数据失败:", error2);
         this.getCharList().then((res2) => {
-          formatAppLog("log", "at pages/chatList/chatList.vue:542", res2);
+          formatAppLog("log", "at pages/chatList/chatList.vue:531", res2);
           this.chatList = res2;
           this.clearNode(res2);
         });
@@ -10609,32 +10608,13 @@ if (uni.restoreGlobal) {
           key: 0,
           class: "chat-system",
           onClick: _cache[2] || (_cache[2] = ($event) => uni.navigateTo({
-            url: "/pages/chatList/addFriend"
-          }))
-        }, [
-          vue.createElementVNode("div", null, [
-            vue.createElementVNode("image", {
-              class: "chat-avatar",
-              style: { "padding": "5px" },
-              src: _imports_0$2,
-              mode: "aspectFill"
-            })
-          ]),
-          vue.createElementVNode("div", { class: "chat-header" }, [
-            vue.createElementVNode("div", { class: "chat-name" }, "新朋友")
-          ])
-        ])) : vue.createCommentVNode("v-if", true),
-        $data.activeTab === "messages" ? (vue.openBlock(), vue.createElementBlock("div", {
-          key: 1,
-          class: "chat-system",
-          onClick: _cache[3] || (_cache[3] = ($event) => uni.navigateTo({
             url: "/pages/chatList/friendList"
           }))
         }, [
           vue.createElementVNode("div", null, [
             vue.createElementVNode("image", {
               class: "chat-avatar",
-              src: _imports_1$1,
+              src: _imports_0$2,
               mode: "aspectFill"
             })
           ]),
@@ -10643,16 +10623,16 @@ if (uni.restoreGlobal) {
           ])
         ])) : vue.createCommentVNode("v-if", true),
         $data.activeTab === "messages" ? (vue.openBlock(), vue.createElementBlock("div", {
-          key: 2,
+          key: 1,
           class: "chat-system",
-          onClick: _cache[4] || (_cache[4] = ($event) => uni.navigateTo({
+          onClick: _cache[3] || (_cache[3] = ($event) => uni.navigateTo({
             url: "/pages/chatList/groupList"
           }))
         }, [
           vue.createElementVNode("div", null, [
             vue.createElementVNode("image", {
               class: "chat-avatar",
-              src: _imports_2$1
+              src: _imports_1$1
             })
           ]),
           vue.createElementVNode("div", { class: "chat-header" }, [
@@ -10662,7 +10642,7 @@ if (uni.restoreGlobal) {
         vue.createCommentVNode(" 消息视图 "),
         $data.activeTab === "messages" ? (vue.openBlock(), vue.createElementBlock(
           vue.Fragment,
-          { key: 3 },
+          { key: 2 },
           [
             $options.filteredChats.length === 0 ? (vue.openBlock(), vue.createElementBlock("div", {
               key: 0,
@@ -10683,8 +10663,8 @@ if (uni.restoreGlobal) {
                   }]]),
                   onClick: ($event) => $options.toChatPage(chat),
                   onTouchstart: ($event) => $options.handleTouchStart(chat, $event),
-                  onTouchend: _cache[5] || (_cache[5] = (...args) => $options.handleTouchEnd && $options.handleTouchEnd(...args)),
-                  onTouchcancel: _cache[6] || (_cache[6] = (...args) => $options.handleTouchEnd && $options.handleTouchEnd(...args))
+                  onTouchend: _cache[4] || (_cache[4] = (...args) => $options.handleTouchEnd && $options.handleTouchEnd(...args)),
+                  onTouchcancel: _cache[5] || (_cache[5] = (...args) => $options.handleTouchEnd && $options.handleTouchEnd(...args))
                 }, [
                   vue.createElementVNode("div", null, [
                     vue.createElementVNode("image", {
@@ -35897,6 +35877,12 @@ if (uni.restoreGlobal) {
           uni.navigateBack({ delta: 1 });
         }
       },
+      // 跳转到添加好友页面
+      goToAddFriend() {
+        uni.navigateTo({
+          url: "/pages/chatList/addFriend"
+        });
+      },
       toChatPage(contact) {
         if (this.selectMode)
           return;
@@ -36125,7 +36111,13 @@ if (uni.restoreGlobal) {
               key: 0,
               class: "header-actions"
             }, [
-              vue.createElementVNode("i", { class: "fas fa-plus" }),
+              vue.createVNode(_component_u_icon, {
+                name: "plus",
+                size: "50rpx",
+                color: "#fff",
+                bold: "",
+                onClick: $options.goToAddFriend
+              }, null, 8, ["onClick"]),
               vue.createElementVNode("i", { class: "fas fa-ellipsis-v" })
             ])) : vue.createCommentVNode("v-if", true)
           ]),
@@ -39036,16 +39028,13 @@ if (uni.restoreGlobal) {
               }),
               vue.createElementVNode("span", null, "好友请求")
             ])
-          ])
-        ]),
-        vue.createCommentVNode(" 内容区域 "),
-        vue.createElementVNode("div", { class: "content" }, [
+          ]),
           vue.createCommentVNode(" 选项卡 "),
-          vue.createElementVNode("div", { class: "tabs" }, [
+          vue.createElementVNode("div", { class: "filter-tabs" }, [
             vue.createElementVNode(
               "div",
               {
-                class: vue.normalizeClass(["tab", { active: $data.activeTab === "requests" }]),
+                class: vue.normalizeClass(["filter-tab", { active: $data.activeTab === "requests" }]),
                 onClick: _cache[1] || (_cache[1] = ($event) => $data.activeTab = "requests")
               },
               " 好友请求 ",
@@ -39055,14 +39044,17 @@ if (uni.restoreGlobal) {
             vue.createElementVNode(
               "div",
               {
-                class: vue.normalizeClass(["tab", { active: $data.activeTab === "search" }]),
+                class: vue.normalizeClass(["filter-tab", { active: $data.activeTab === "search" }]),
                 onClick: _cache[2] || (_cache[2] = ($event) => $data.activeTab = "search")
               },
               " 添加好友 ",
               2
               /* CLASS */
             )
-          ]),
+          ])
+        ]),
+        vue.createCommentVNode(" 内容区域 "),
+        vue.createElementVNode("div", { class: "content" }, [
           vue.createCommentVNode(" 搜索框 "),
           $data.activeTab === "search" ? (vue.openBlock(), vue.createElementBlock("div", {
             key: 0,
@@ -40072,8 +40064,8 @@ if (uni.restoreGlobal) {
           if (res2.code === 200 && res2.data) {
             this.myGroups = res2.data[0] || [];
             this.joinedGroups = res2.data[1] || [];
-            formatAppLog("log", "at pages/chatList/groupList.vue:213", "我管理的小组:", this.myGroups);
-            formatAppLog("log", "at pages/chatList/groupList.vue:214", "我加入的小组:", this.joinedGroups);
+            formatAppLog("log", "at pages/chatList/groupList.vue:212", "我管理的小组:", this.myGroups);
+            formatAppLog("log", "at pages/chatList/groupList.vue:213", "我加入的小组:", this.joinedGroups);
             if (this.myGroups.length === 0 && this.joinedGroups.length === 0) {
               this.$u.toast("您还没有加入任何小组");
             }
@@ -40082,7 +40074,7 @@ if (uni.restoreGlobal) {
             this.$u.toast(this.error);
           }
         } catch (error2) {
-          formatAppLog("error", "at pages/chatList/groupList.vue:225", "获取小组列表失败:", error2);
+          formatAppLog("error", "at pages/chatList/groupList.vue:224", "获取小组列表失败:", error2);
           this.error = error2.message || "网络错误";
           this.$u.toast(this.error);
         } finally {
@@ -40098,16 +40090,10 @@ if (uni.restoreGlobal) {
           await this.loadGroupData();
           this.$u.toast("刷新成功");
         } catch (error2) {
-          formatAppLog("error", "at pages/chatList/groupList.vue:243", "刷新失败:", error2);
+          formatAppLog("error", "at pages/chatList/groupList.vue:242", "刷新失败:", error2);
         } finally {
           this.refreshing = false;
         }
-      },
-      // 手动刷新
-      refreshData() {
-        this.myGroups = [];
-        this.joinedGroups = [];
-        this.loadGroupData();
       },
       // 获取小组头像
       getGroupAvatar(group2) {
@@ -40166,7 +40152,7 @@ if (uni.restoreGlobal) {
             });
           },
           fail: (err) => {
-            formatAppLog("error", "at pages/chatList/groupList.vue:318", "跳转聊天页面失败:", err);
+            formatAppLog("error", "at pages/chatList/groupList.vue:311", "跳转聊天页面失败:", err);
             this.$u.toast("跳转失败");
           }
         });
@@ -40210,7 +40196,7 @@ if (uni.restoreGlobal) {
       },
       // 处理小组创建成功事件
       onGroupCreated(newGroup) {
-        formatAppLog("log", "at pages/chatList/groupList.vue:362", "新小组创建成功:", newGroup);
+        formatAppLog("log", "at pages/chatList/groupList.vue:355", "新小组创建成功:", newGroup);
         this.loadGroupData();
         this.$u.toast("欢迎来到新小组！");
       }
@@ -40258,13 +40244,6 @@ if (uni.restoreGlobal) {
                 color: "#fff",
                 onClick: $options.createGroup,
                 title: "创建小组"
-              }, null, 8, ["onClick"]),
-              vue.createVNode(_component_u_icon, {
-                name: "reload",
-                size: "28",
-                color: "#fff",
-                onClick: $options.refreshData,
-                title: "刷新"
               }, null, 8, ["onClick"])
             ])
           ]),
@@ -46065,7 +46044,7 @@ ${e2}</tr>
       return {
         taskId: null,
         taskDetail: null,
-        submissionContent: "",
+        submissionContent: `# 作业标题`,
         currentUserId: uni.getStorageSync("id") || 3,
         currentUserRole: "member",
         // member, leader, deputy, teacher, enterprise
@@ -46075,8 +46054,12 @@ ${e2}</tr>
         groupId: null,
         activeTab: "question",
         // 默认显示题目
-        showTaskInfoModal: false
+        showTaskInfoModal: false,
         // 任务详情模态框显示状态
+        scrollTop: 0,
+        // 滚动位置
+        scrollPositions: {}
+        // 各个tab的滚动位置记录
       };
     },
     computed: {
@@ -46106,13 +46089,26 @@ ${e2}</tr>
     },
     methods: {
       ...mapActions("groupTaskAnswer", ["submitTaskAnswer"]),
+      // 滚动事件处理
+      onScroll(e2) {
+        this.scrollPositions[this.activeTab] = e2.detail.scrollTop;
+      },
+      // 切换tab
+      switchTab(tab) {
+        if (this.$refs.scrollView)
+          ;
+        this.activeTab = tab;
+        this.$nextTick(() => {
+          this.scrollTop = this.scrollPositions[tab] || 0;
+        });
+      },
       // 返回上一页
       goBack() {
-        formatAppLog("log", "at pages/chatList/groupTaskDetail.vue:194", "尝试返回上一页");
+        formatAppLog("log", "at pages/chatList/groupTaskDetail.vue:240", "尝试返回上一页");
         const pages2 = getCurrentPages();
-        formatAppLog("log", "at pages/chatList/groupTaskDetail.vue:197", "当前页面栈长度:", pages2.length);
+        formatAppLog("log", "at pages/chatList/groupTaskDetail.vue:243", "当前页面栈长度:", pages2.length);
         const backTimeout = setTimeout(() => {
-          formatAppLog("warn", "at pages/chatList/groupTaskDetail.vue:201", "页面返回超时，强制跳转到任务列表");
+          formatAppLog("warn", "at pages/chatList/groupTaskDetail.vue:247", "页面返回超时，强制跳转到任务列表");
           uni.redirectTo({
             url: "/pages/chatList/groupTaskList",
             fail: () => {
@@ -46130,15 +46126,15 @@ ${e2}</tr>
             },
             fail: (err) => {
               clearTimeout(backTimeout);
-              formatAppLog("error", "at pages/chatList/groupTaskDetail.vue:220", "navigateBack失败:", err);
+              formatAppLog("error", "at pages/chatList/groupTaskDetail.vue:266", "navigateBack失败:", err);
               uni.redirectTo({
                 url: "/pages/chatList/groupTaskList",
                 fail: (err2) => {
-                  formatAppLog("error", "at pages/chatList/groupTaskDetail.vue:225", "redirectTo失败:", err2);
+                  formatAppLog("error", "at pages/chatList/groupTaskDetail.vue:271", "redirectTo失败:", err2);
                   uni.switchTab({
                     url: "/pages/chatList/groupTaskList",
                     fail: (err3) => {
-                      formatAppLog("error", "at pages/chatList/groupTaskDetail.vue:230", "switchTab失败:", err3);
+                      formatAppLog("error", "at pages/chatList/groupTaskDetail.vue:276", "switchTab失败:", err3);
                       uni.reLaunch({
                         url: "/pages/chatList/groupTaskList"
                       });
@@ -46159,10 +46155,6 @@ ${e2}</tr>
             }
           });
         }
-      },
-      // 切换选项卡
-      switchTab(tab) {
-        this.activeTab = tab;
       },
       // 显示任务详情模态框
       showTaskInfo() {
@@ -46263,7 +46255,7 @@ ${e2}</tr>
             throw new Error(res2.msg || "提交失败");
           }
         } catch (error2) {
-          formatAppLog("error", "at pages/chatList/groupTaskDetail.vue:385", "提交作业失败:", error2);
+          formatAppLog("error", "at pages/chatList/groupTaskDetail.vue:426", "提交作业失败:", error2);
           uni.showToast({
             title: error2.message || "提交失败",
             icon: "none"
@@ -46304,11 +46296,11 @@ ${e2}</tr>
     },
     // 页面显示时的处理
     onShow() {
-      formatAppLog("log", "at pages/chatList/groupTaskDetail.vue:438", "任务详情页面显示");
+      formatAppLog("log", "at pages/chatList/groupTaskDetail.vue:479", "任务详情页面显示");
     },
     // 页面卸载时的处理
     onUnload() {
-      formatAppLog("log", "at pages/chatList/groupTaskDetail.vue:443", "任务详情页面卸载");
+      formatAppLog("log", "at pages/chatList/groupTaskDetail.vue:484", "任务详情页面卸载");
       if (this.backTimeout) {
         clearTimeout(this.backTimeout);
       }
@@ -46316,7 +46308,7 @@ ${e2}</tr>
   };
   function _sfc_render$1T(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_u_icon = resolveEasycom(vue.resolveDynamicComponent("u-icon"), __easycom_0$g);
-    const _component_up_markdown = resolveEasycom(vue.resolveDynamicComponent("up-markdown"), __easycom_1$c);
+    const _component_u_markdown = resolveEasycom(vue.resolveDynamicComponent("u-markdown"), __easycom_1$c);
     const _component_u_button = resolveEasycom(vue.resolveDynamicComponent("u-button"), __easycom_3$3);
     const _component_u_popup = resolveEasycom(vue.resolveDynamicComponent("u-popup"), __easycom_3$2);
     return vue.openBlock(), vue.createElementBlock("view", { class: "container" }, [
@@ -46368,93 +46360,121 @@ ${e2}</tr>
       vue.createCommentVNode(" 白色背景容器 "),
       vue.createElementVNode("div", { class: "white-background" }, [
         vue.createCommentVNode(" 内容区域 "),
-        vue.createElementVNode("div", { class: "content" }, [
-          vue.createCommentVNode(" 题目内容 "),
-          vue.withDirectives(vue.createElementVNode(
-            "div",
-            { class: "tab-content" },
-            [
-              vue.createCommentVNode(" 任务描述 "),
-              $data.taskDetail ? (vue.openBlock(), vue.createElementBlock("div", {
-                key: 0,
-                class: "task-description-section"
-              }, [
-                vue.createElementVNode("h3", { class: "section-title" }, "任务描述"),
-                vue.createElementVNode("hr", { class: "section-divider" }),
-                vue.createElementVNode("div", { class: "description-content" }, [
-                  vue.createVNode(_component_up_markdown, {
-                    content: $data.taskDetail.groupTaskContext,
-                    previewImg: true,
-                    theme: "light",
-                    showLineNumber: false
-                  }, null, 8, ["content"])
-                ])
-              ])) : vue.createCommentVNode("v-if", true)
-            ],
-            512
-            /* NEED_PATCH */
-          ), [
-            [vue.vShow, $data.activeTab === "question"]
-          ]),
-          vue.createCommentVNode(" 作答内容 "),
-          vue.withDirectives(vue.createElementVNode(
-            "div",
-            { class: "tab-content" },
-            [
-              vue.createCommentVNode(" 作业提交区域 "),
-              $options.canSubmitTask && $data.taskDetail ? (vue.openBlock(), vue.createElementBlock("div", {
-                key: 0,
-                class: "submission-section"
-              }, [
-                vue.createElementVNode("div", { class: "section-header" }, [
-                  vue.createElementVNode("h3", { class: "section-title" }, "提交作业"),
-                  vue.createVNode(_component_u_button, {
-                    type: "primary",
-                    size: "mini",
-                    disabled: $data.isSubmitted || $data.submitting,
-                    onClick: $options.submitTask,
-                    text: $data.isSubmitted ? "已提交" : $data.submitting ? "提交中..." : "提交"
-                  }, null, 8, ["disabled", "onClick", "text"])
-                ]),
-                vue.createElementVNode("hr", { class: "section-divider" }),
-                vue.createElementVNode("div", { class: "submission-form" }, [
-                  vue.withDirectives(vue.createElementVNode("textarea", {
-                    class: "submission-text",
-                    "onUpdate:modelValue": _cache[2] || (_cache[2] = ($event) => $data.submissionContent = $event),
-                    placeholder: "请输入你的作业内容...",
-                    disabled: $data.isSubmitted
-                  }, null, 8, ["disabled"]), [
-                    [vue.vModelText, $data.submissionContent]
-                  ])
-                ])
-              ])) : vue.createCommentVNode("v-if", true),
-              vue.createCommentVNode(" 权限提示 "),
-              !$options.canSubmitTask && $data.taskDetail ? (vue.openBlock(), vue.createElementBlock("div", {
-                key: 1,
-                class: "permission-prompt"
-              }, [
-                $data.taskDetail ? (vue.openBlock(), vue.createBlock(_component_u_icon, {
+        vue.createElementVNode("scroll-view", {
+          class: "content-scroll",
+          "scroll-y": "true",
+          "enable-flex": "true",
+          onScroll: _cache[3] || (_cache[3] = (...args) => $options.onScroll && $options.onScroll(...args)),
+          "scroll-top": $data.scrollTop
+        }, [
+          vue.createElementVNode("div", { class: "content" }, [
+            vue.createCommentVNode(" 题目内容 "),
+            vue.withDirectives(vue.createElementVNode(
+              "div",
+              { class: "tab-content" },
+              [
+                vue.createCommentVNode(" 任务描述 "),
+                $data.taskDetail ? (vue.openBlock(), vue.createElementBlock("div", {
                   key: 0,
-                  name: "lock",
-                  size: "40",
-                  color: "#6c757d"
-                })) : vue.createCommentVNode("v-if", true),
-                $data.taskDetail ? (vue.openBlock(), vue.createElementBlock("p", { key: 1 }, "当前无法提交作业")) : vue.createCommentVNode("v-if", true),
-                $data.taskDetail ? (vue.openBlock(), vue.createElementBlock(
-                  "small",
-                  { key: 2 },
-                  vue.toDisplayString($options.permissionMessage),
-                  1
-                  /* TEXT */
-                )) : vue.createCommentVNode("v-if", true)
-              ])) : vue.createCommentVNode("v-if", true)
-            ],
-            512
-            /* NEED_PATCH */
-          ), [
-            [vue.vShow, $data.activeTab === "answer"]
+                  class: "task-description-section"
+                }, [
+                  vue.createElementVNode("h3", { class: "section-title" }, "任务描述"),
+                  vue.createElementVNode("hr", { class: "section-divider" }),
+                  vue.createElementVNode("div", { class: "description-content" }, [
+                    vue.createVNode(_component_u_markdown, {
+                      content: $data.taskDetail.groupTaskContext,
+                      previewImg: true,
+                      theme: "light",
+                      showLineNumber: false
+                    }, null, 8, ["content"])
+                  ])
+                ])) : vue.createCommentVNode("v-if", true)
+              ],
+              512
+              /* NEED_PATCH */
+            ), [
+              [vue.vShow, $data.activeTab === "question"]
+            ]),
+            vue.createCommentVNode(" 作答内容 "),
+            vue.withDirectives(vue.createElementVNode(
+              "div",
+              { class: "tab-content" },
+              [
+                vue.createCommentVNode(" 作业提交区域 "),
+                $data.taskDetail ? (vue.openBlock(), vue.createElementBlock("div", {
+                  key: 0,
+                  class: "submission-section"
+                }, [
+                  vue.createElementVNode("div", { class: "section-header" }, [
+                    vue.createElementVNode("h3", { class: "section-title" }, "提交作业"),
+                    vue.createVNode(_component_u_button, {
+                      type: "primary",
+                      size: "mini",
+                      disabled: $data.isSubmitted || $data.submitting,
+                      onClick: $options.submitTask,
+                      text: $data.isSubmitted ? "已提交" : $data.submitting ? "提交中..." : "提交"
+                    }, null, 8, ["disabled", "onClick", "text"])
+                  ]),
+                  vue.createElementVNode("hr", { class: "section-divider" }),
+                  vue.createElementVNode("div", { class: "submission-form" }, [
+                    vue.createElementVNode("div", { class: "editor-container" }, [
+                      vue.withDirectives(vue.createElementVNode("textarea", {
+                        class: "submission-text",
+                        "onUpdate:modelValue": _cache[2] || (_cache[2] = ($event) => $data.submissionContent = $event),
+                        placeholder: "请输入你的作业内容，支持Markdown语法...",
+                        disabled: $data.isSubmitted
+                      }, null, 8, ["disabled"]), [
+                        [vue.vModelText, $data.submissionContent]
+                      ]),
+                      vue.createElementVNode("div", { class: "preview-container" }, [
+                        vue.createElementVNode("div", { class: "preview-header" }, [
+                          vue.createVNode(_component_u_icon, {
+                            name: "eye",
+                            size: "16",
+                            color: "#6c757d"
+                          }),
+                          vue.createElementVNode("span", { class: "preview-title" }, "实时预览")
+                        ]),
+                        vue.createElementVNode("div", { class: "markdown-preview" }, [
+                          vue.createVNode(_component_u_markdown, {
+                            content: $data.submissionContent,
+                            previewImg: true,
+                            theme: "light",
+                            showLineNumber: false
+                          }, null, 8, ["content"])
+                        ])
+                      ])
+                    ])
+                  ])
+                ])) : vue.createCommentVNode("v-if", true),
+                vue.createCommentVNode(" 权限提示 "),
+                !$options.canSubmitTask && $data.taskDetail ? (vue.openBlock(), vue.createElementBlock("div", {
+                  key: 1,
+                  class: "permission-prompt"
+                }, [
+                  $data.taskDetail ? (vue.openBlock(), vue.createBlock(_component_u_icon, {
+                    key: 0,
+                    name: "lock",
+                    size: "40",
+                    color: "#6c757d"
+                  })) : vue.createCommentVNode("v-if", true),
+                  $data.taskDetail ? (vue.openBlock(), vue.createElementBlock("p", { key: 1 }, "当前无法提交作业")) : vue.createCommentVNode("v-if", true),
+                  $data.taskDetail ? (vue.openBlock(), vue.createElementBlock(
+                    "small",
+                    { key: 2 },
+                    vue.toDisplayString($options.permissionMessage),
+                    1
+                    /* TEXT */
+                  )) : vue.createCommentVNode("v-if", true)
+                ])) : vue.createCommentVNode("v-if", true)
+              ],
+              512
+              /* NEED_PATCH */
+            ), [
+              [vue.vShow, $data.activeTab === "answer"]
+            ])
           ])
-        ])
+        ], 40, ["scroll-top"])
       ]),
       vue.createCommentVNode(" 任务详情模态框 "),
       vue.createVNode(_component_u_popup, {

@@ -9,7 +9,7 @@
 						<span>{{ getHeaderTitle() }}</span>
 					</div>
 					<div class="header-actions" v-if="!selectMode">
-						<i class="fas fa-plus"></i>
+						<u-icon name="plus" size="50rpx" color="#fff" bold @click="goToAddFriend"></u-icon>
 						<i class="fas fa-ellipsis-v"></i>
 					</div>
 				</div>
@@ -226,6 +226,12 @@ export default {
 		  } else {
 			  uni.navigateBack({ delta: 1 });
 		  }
+	  },
+	  // 跳转到添加好友页面
+	  goToAddFriend() {
+		  uni.navigateTo({
+			  url: '/pages/chatList/addFriend'
+		  });
 	  },
 	  toChatPage(contact) {
 		  // 在选择模式下不执行聊天操作

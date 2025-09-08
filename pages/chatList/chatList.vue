@@ -33,18 +33,7 @@
 
 		<!-- 聊天列表 -->
 		<div class="chat-list">
-			<template v-if="activeTab === 'messages'">
-				<div class="chat-system" @click="uni.navigateTo({
-					url:'/pages/chatList/addFriend'
-				})">
-					<div>
-						<image class="chat-avatar" style="padding: 5px;" src="@/static/chat/xinpengyou.png" mode="aspectFill"></image>
-					</div>
-					<div class="chat-header">
-						<div class="chat-name">新朋友</div>
-					</div>
-				</div>
-			</template>
+			
 			<template v-if="activeTab === 'messages'">
 				<div class="chat-system" @click="uni.navigateTo({
 					url:'/pages/chatList/friendList'

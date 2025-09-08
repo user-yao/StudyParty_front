@@ -12,7 +12,6 @@
 						<u-icon name="search" size="28" color="#fff" @click="searchGroups" title="搜索小组"></u-icon>
 						<u-icon name="bell" size="28" color="#fff" @click="manageApplications" title="申请管理"></u-icon>
 						<u-icon name="plus" size="30" color="#fff" @click="createGroup" title="创建小组"></u-icon>
-						<u-icon name="reload" size="28" color="#fff" @click="refreshData" title="刷新"></u-icon>
 					</div>
 				</div>
 				<div class="search-bar">
@@ -244,12 +243,6 @@ export default {
 			} finally {
 				this.refreshing = false;
 			}
-		},
-		// 手动刷新
-		refreshData() {
-			this.myGroups = [];
-			this.joinedGroups = [];
-			this.loadGroupData();
 		},
 		// 获取小组头像
 		getGroupAvatar(group) {
