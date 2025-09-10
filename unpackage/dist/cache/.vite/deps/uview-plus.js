@@ -4,6 +4,7 @@ import {
   number,
   test_default
 } from "./chunk-ZAULTRJF.js";
+import "./chunk-Y2F7D3TJ.js";
 
 // ../../../../uniapp2023/studyParty/node_modules/uview-plus/libs/vue.js
 var defineMixin = (options) => {

@@ -959,6 +959,22 @@ export default {
 			}
 		},
 		
+		// 查看任务详情
+		viewTaskDetails(task) {
+			console.log("查看任务详情:", task);
+			// 跳转到任务详情页面
+			uni.navigateTo({
+				url: '/pages/chatList/groupTaskDetail',
+				success: (res) => {
+					res.eventChannel.emit("taskData", {
+						taskId: task.id,
+						groupId: this.groupId,
+						taskDetail: task
+					});
+				}
+			});
+		},
+		
 		// 转让组长
 		async transferLeader() {
 			// 跳转到小组成员页面选择新的组长
@@ -970,6 +986,86 @@ export default {
 						selectMode: 'transfer',
 						fromPage: 'groupInfo'
 					});
+				}
+			});
+		},
+		
+		// 退出小组
+		async exitGroup() {
+			uni.showModal({
+				title: '提示',
+				content: '确定要退出该小组吗？',
+				success: async (res) => {
+					if (res.confirm) {
+						try {
+							uni.showLoading({
+								title: '正在退出',
+								mask: true
+							});
+							const res = await this.$api.group.exitGroup(this.groupId);
+							if (res && res.code === 0) {
+								uni.showToast({
+									title: '已退出小组',
+									icon: 'success'
+								});
+								setTimeout(() => {
+									uni.navigateBack();
+								}, 1000);
+							} else {
+								uni.showToast({
+									title: (res && res.msg) || '退出失败',
+									icon: 'none'
+								});
+							}
+						} catch (error) {
+							uni.hideLoading();
+							console.error('退出小组失败:', error);
+							uni.showToast({
+								title: '退出失败，请重试',
+								icon: 'none'
+							});
+						}
+					}
+				}
+			});
+		},
+		
+		// 解散小组
+		async dissolveGroup() {
+			uni.showModal({
+				title: '提示',
+				content: '确定要解散该小组吗？',
+				success: async (res) => {
+					if (res.confirm) {
+						try {
+							uni.showLoading({
+								title: '正在解散',
+								mask: true
+							});
+							const res = await this.$api.group.dissolveGroup(this.groupId);
+							if (res && res.code === 0) {
+								uni.showToast({
+									title: '已解散小组',
+									icon: 'success'
+								});
+								setTimeout(() => {
+									uni.navigateBack();
+								}, 1000);
+							} else {
+								uni.showToast({
+									title: (res && res.msg) || '解散失败',
+									icon: 'none'
+								});
+							}
+						} catch (error) {
+							uni.hideLoading();
+							console.error('解散小组失败:', error);
+							uni.showToast({
+								title: '解散失败，请重试',
+								icon: 'none'
+							});
+						}
+					}
 				}
 			});
 		},

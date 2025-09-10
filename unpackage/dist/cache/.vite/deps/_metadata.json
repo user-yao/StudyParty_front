@@ -1,25 +1,40 @@
 {
-  "hash": "c29c2cb0",
+  "hash": "00301d8a",
   "configHash": "d030030d",
-  "lockfileHash": "e2d37847",
-  "browserHash": "9a68a2c6",
+  "lockfileHash": "06f5835e",
+  "browserHash": "63591a85",
   "optimized": {
+    "core-js/stable": {
+      "src": "../../../../../node_modules/core-js/stable/index.js",
+      "file": "core-js_stable.js",
+      "fileHash": "00ce3c55",
+      "needsInterop": true
+    },
+    "regenerator-runtime/runtime": {
+      "src": "../../../../../node_modules/regenerator-runtime/runtime.js",
+      "file": "regenerator-runtime_runtime.js",
+      "fileHash": "d8133b11",
+      "needsInterop": true
+    },
     "uview-plus": {
       "src": "../../../../../node_modules/uview-plus/index.js",
       "file": "uview-plus.js",
-      "fileHash": "47dc158c",
+      "fileHash": "b047b53d",
       "needsInterop": false
     },
     "uview-plus/libs/function/test": {
       "src": "../../../../../node_modules/uview-plus/libs/function/test.js",
       "file": "uview-plus_libs_function_test.js",
-      "fileHash": "79b73bb9",
+      "fileHash": "73b4b9e0",
       "needsInterop": false
     }
   },
   "chunks": {
     "chunk-ZAULTRJF": {
       "file": "chunk-ZAULTRJF.js"
+    },
+    "chunk-Y2F7D3TJ": {
+      "file": "chunk-Y2F7D3TJ.js"
     }
   }
 }

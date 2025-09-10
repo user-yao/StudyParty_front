@@ -29,83 +29,126 @@
 			</div>
 		</header>
 
-		<!-- 白色背景容器 -->
-		<div class="white-background">
-			<!-- 内容区域 -->
-			<scroll-view 
-				class="content-scroll" 
-				scroll-y="true" 
-				enable-flex="true"
-				@scroll="onScroll"
-				:scroll-top="scrollTop">
-				<div class="content">
-					<!-- 题目内容 -->
-					<div v-show="activeTab === 'question'" class="tab-content">
-						<!-- 任务描述 -->
-						<div class="task-description-section" v-if="taskDetail">
-							<h3 class="section-title">任务描述</h3>
-							<hr class="section-divider" />
-							<div class="description-content">
-								<u-markdown 
-									:content="taskDetail.groupTaskContext" 
-									:previewImg="true"
-									theme="light"
-									:showLineNumber="false">
-								</u-markdown>
+		<!-- 内容区域 -->
+		<div class="content-container">
+			<!-- 白色背景容器 -->
+			<div class="white-background">
+				<!-- 内容区域 -->
+				<scroll-view 
+					class="content-scroll" 
+					scroll-y="true" 
+					enable-flex="true"
+					@scroll="onScroll"
+					:scroll-top="scrollTop"
+					@touchstart="onTouchStart"
+					@touchmove="onTouchMove"
+					@touchend="onTouchEnd">
+					<div class="content">
+						<!-- 题目内容 -->
+						<div v-show="activeTab === 'question'" class="tab-content">
+							<!-- 任务描述 -->
+							<div class="task-description-section" v-if="taskDetail">
+								<h3 class="section-title">任务描述</h3>
+								<hr class="section-divider" />
+								<div class="description-content">
+									<u-markdown 
+										:content="taskDetail.groupTaskContext" 
+										:previewImg="true"
+										theme="light"
+										:showLineNumber="false">
+									</u-markdown>
+								</div>
 							</div>
 						</div>
-					</div>
-					
-					<!-- 作答内容 -->
-					<div v-show="activeTab === 'answer'" class="tab-content">
-						<!-- 作业提交区域 -->
-						<div class="submission-section" v-if="taskDetail">
-							<div class="section-header">
-								<h3 class="section-title">提交作业</h3>
-								<u-button 
-									type="primary" 
-									size="mini"
-									:disabled="isSubmitted || submitting"
-									@click="submitTask"
-									:text="isSubmitted ? '已提交' : (submitting ? '提交中...' : '提交')">
-								</u-button>
-							</div>
-							<hr class="section-divider" />
-							<div class="submission-form">
-								<div class="editor-container">
-									<textarea 
-										class="submission-text" 
-										v-model="submissionContent" 
-										placeholder="请输入你的作业内容，支持Markdown语法..."
-										:disabled="isSubmitted">
-									</textarea>
-									<div class="preview-container">
-										<div class="preview-header">
-											<u-icon name="eye" size="16" color="#6c757d"></u-icon>
-											<span class="preview-title">实时预览</span>
+						
+						<!-- 作答内容 -->
+						<div v-show="activeTab === 'answer'" class="tab-content">
+							<!-- 作业提交区域 -->
+							<div class="submission-section" v-if="taskDetail">
+								<div class="section-header">
+									<h3 class="section-title">提交作业</h3>
+									<div class="submission-actions">
+										<u-button 
+											type="primary" 
+											size="mini"
+											:disabled="isSubmitted || submitting"
+											@click="submitTask"
+											:text="isSubmitted ? '已提交' : (submitting ? '提交中...' : '提交')">
+										</u-button>
+									</div>
+								</div>
+								<hr class="section-divider" />
+								<div class="submission-form">
+									<div class="editor-container">
+										<div class="submission-header">
+											<div class="markdown-info">
+												<span class="markdown-text">支持markdown格式</span>
+												<u-icon 
+													name="question-circle" 
+													size="16" 
+													color="#6c757d" 
+													@click="goToMarkdownGuide">
+												</u-icon>
+											</div>
+											<u-button 
+												type="info" 
+												size="mini" 
+												@click="previewMarkdown">
+												预览
+											</u-button>
 										</div>
-										<div class="markdown-preview">
-											<u-markdown 
-												:content="submissionContent" 
-												:previewImg="true"
-												theme="light"
-												:showLineNumber="false">
-											</u-markdown>
+										<!-- 使用scroll-view包装文本框 -->
+										<scroll-view 
+											class="textarea-container"
+											scroll-y="true"
+											:scroll-top="textareaScrollTop"
+											@scroll="onTextareaScroll"
+											:style="textareaContainerStyle"
+											enable-flex="true">
+											<textarea 
+												ref="submissionTextarea"
+												class="submission-text" 
+												v-model="submissionContent" 
+												placeholder="请输入你的作业内容，支持Markdown语法..."
+												:disabled="isSubmitted"
+												:style="textareaStyle"
+												@focus="onTextareaFocus"
+												@blur="onTextareaBlur">
+											</textarea>
+										</scroll-view>
+									</div>
+									
+									<!-- 图片功能栏容器 -->
+									<div class="image-toolbar-container">
+										<!-- 图片功能栏 -->
+										<div 
+											class="image-toolbar" 
+											:class="{ 'keyboard-up': keyboardHeight > 0 }"
+											:style="toolbarStyle"
+											ref="imageToolbar">
+											<u-icon 
+												name="plus-circle" 
+												size="24" 
+												color="#4361ee" 
+												@click="uploadImage"
+												class="toolbar-icon">
+											</u-icon>
+											<span class="toolbar-text">添加图片</span>
 										</div>
 									</div>
 								</div>
 							</div>
-						</div>
 
-						<!-- 权限提示 -->
-						<div class="permission-prompt" v-if="!canSubmitTask && taskDetail">
-							<u-icon name="lock" size="40" color="#6c757d" v-if="taskDetail"></u-icon>
-							<p v-if="taskDetail">当前无法提交作业</p>
-							<small v-if="taskDetail">{{ permissionMessage }}</small>
+							<!-- 权限提示 -->
+							<div class="permission-prompt" v-if="!canSubmitTask && taskDetail">
+								<u-icon name="lock" size="40" color="#6c757d" v-if="taskDetail"></u-icon>
+								<p v-if="taskDetail">当前无法提交作业</p>
+								<small v-if="taskDetail">{{ permissionMessage }}</small>
+							</div>
 						</div>
 					</div>
-				</div>
-			</scroll-view>
+				</scroll-view>
+			</div>
 		</div>
 		
 		<!-- 任务详情模态框 -->
@@ -177,7 +220,25 @@
 				activeTab: 'question', // 默认显示题目
 				showTaskInfoModal: false, // 任务详情模态框显示状态
 				scrollTop: 0, // 滚动位置
-				scrollPositions: {} // 各个tab的滚动位置记录
+				scrollPositions: {}, // 各个tab的滚动位置记录
+				
+				// 手势识别相关数据
+				touchStartX: 0,
+				touchStartY: 0,
+				minSwipeDistance: 50, // 最小滑动距离
+				maxSwipeDeviation: 30, // 最大垂直偏差
+				
+				// 图片上传相关
+				uploading: false,
+				
+				// 键盘相关
+				keyboardHeight: 0,
+				toolbarBottom: 0,
+				
+				// 文本框滚动相关
+				textareaScrollTop: 0,
+				isTextareaFocused: false,
+				previousTextareaHeight: 0,
 			}
 		},
 		computed: {
@@ -209,6 +270,62 @@
 				}
 
 				return '您没有提交作业的权限';
+			},
+			
+			// 图片工具栏样式
+			toolbarStyle() {
+				return {
+					bottom: this.toolbarBottom + 'px'
+				};
+			},
+			
+			// 文本框样式
+			textareaStyle() {
+				if (this.keyboardHeight > 0) {
+					// 键盘弹起时，动态计算文本框高度
+					// 确保文本框底部与图片功能栏顶部之间有足够空间
+					const totalDeduction = this.keyboardHeight + 120; // 键盘高度 + 功能栏高度 + 间距
+					return {
+						height: `calc(300px - ${totalDeduction}px)`,
+						marginBottom: '60px'
+					};
+				} else {
+					// 键盘收起时，使用默认高度
+					return {
+						height: '300px',
+						marginBottom: '12px'
+					};
+				}
+			},
+			
+			// 文本框容器样式
+			textareaContainerStyle() {
+				if (this.keyboardHeight > 0) {
+					// 键盘弹起时，容器高度需要为键盘和功能栏留出空间
+					const totalDeduction = this.keyboardHeight + 200; // 键盘高度 + 功能栏高度 + 间距
+					return {
+						height: `calc(100vh - ${totalDeduction}px)`,
+						flex: '1'
+					};
+				} else {
+					// 键盘收起时，使用默认高度
+					return {
+						height: '300px',
+						flex: '1'
+					};
+				}
+			}
+		},
+		watch: {
+			// 监听文本内容变化
+			submissionContent(newVal, oldVal) {
+				// 如果文本框处于聚焦状态且键盘弹起，自动滚动到底部
+				if (this.isTextareaFocused && this.keyboardHeight > 0) {
+					// 延迟执行，确保DOM已更新
+					this.$nextTick(() => {
+						this.scrollToTextareaBottom();
+					});
+				}
 			}
 		},
 		methods: {
@@ -218,6 +335,53 @@
 			onScroll(e) {
 				// 记录当前tab的滚动位置
 				this.scrollPositions[this.activeTab] = e.detail.scrollTop;
+			},
+
+			// 文本框滚动事件处理
+			onTextareaScroll(e) {
+				// 可以在这里处理文本框的滚动事件
+			},
+
+			// 文本框获得焦点事件
+			onTextareaFocus(e) {
+				this.isTextareaFocused = true;
+				console.log('文本框获得焦点');
+				
+				// 延迟执行滚动到底部，确保DOM已更新
+				this.$nextTick(() => {
+					this.scrollToTextareaBottom();
+				});
+			},
+
+			// 文本框失去焦点事件
+			onTextareaBlur(e) {
+				this.isTextareaFocused = false;
+				console.log('文本框失去焦点');
+			},
+
+			// 滚动到文本框底部
+			scrollToTextareaBottom() {
+				if (!this.isTextareaFocused) return;
+				
+				// 使用更准确的方法计算滚动位置
+				const textarea = this.$refs.submissionTextarea;
+				if (textarea) {
+					// 获取文本框的实际高度
+					this.$nextTick(() => {
+						const textareaElement = textarea.$el || textarea;
+						if (textareaElement) {
+							const scrollHeight = textareaElement.scrollHeight || 0;
+							const clientHeight = textareaElement.clientHeight || 0;
+							
+							// 如果内容高度大于可视高度，则滚动到底部
+							if (scrollHeight > clientHeight) {
+								this.textareaScrollTop = scrollHeight - clientHeight;
+							}
+						}
+					});
+				}
+				
+				console.log('滚动到文本框底部');
 			},
 
 			// 切换tab
@@ -233,6 +397,39 @@
 				this.$nextTick(() => {
 					this.scrollTop = this.scrollPositions[tab] || 0;
 				});
+			},
+
+			// 触摸开始事件
+			onTouchStart(e) {
+				const touch = e.touches[0];
+				this.touchStartX = touch.clientX;
+				this.touchStartY = touch.clientY;
+			},
+
+			// 触摸移动事件
+			onTouchMove(e) {
+				// 阻止默认滚动行为，以便识别手势
+				// 注意：这里要谨慎使用，避免影响正常滚动
+				// 只在水平滑动明显时才阻止默认行为
+			},
+
+			// 触摸结束事件
+			onTouchEnd(e) {
+				const touch = e.changedTouches[0];
+				const deltaX = touch.clientX - this.touchStartX;
+				const deltaY = Math.abs(touch.clientY - this.touchStartY);
+				
+				// 判断是否为有效的水平滑动
+				if (Math.abs(deltaX) > this.minSwipeDistance && deltaY < this.maxSwipeDeviation) {
+					// 左滑：从题目切换到作答
+					if (deltaX < 0 && this.activeTab === 'question') {
+						this.switchTab('answer');
+					}
+					// 右滑：从作答切换到题目
+					else if (deltaX > 0 && this.activeTab === 'answer') {
+						this.switchTab('question');
+					}
+				}
 			},
 
 			// 返回上一页
@@ -433,6 +630,73 @@
 				}
 			},
 
+			// 预览Markdown内容
+			previewMarkdown() {
+				if (!this.submissionContent.trim()) {
+					uni.showToast({
+						title: '请输入内容后再预览',
+						icon: 'none'
+					});
+					return;
+				}
+				
+				// 跳转到预览页面，传递markdown内容
+				uni.navigateTo({
+					url: `/pages/chatList/markdownPreview?content=${encodeURIComponent(this.submissionContent)}`
+				});
+			},
+
+			// 跳转到Markdown语法教程
+			goToMarkdownGuide() {
+				uni.navigateTo({
+					url: '/pages/chatList/markdownGuide'
+				});
+			},
+
+			// 图片上传功能
+			async uploadImage() {
+				if (this.uploading) {
+					return;
+				}
+				
+				try {
+					this.uploading = true;
+					
+					// 选择图片
+					const [chooseErr, chooseRes] = await uni.chooseImage({
+						count: 1,
+						sizeType: ['compressed'],
+						sourceType: ['album', 'camera']
+					});
+					
+					if (chooseErr) {
+						throw new Error('选择图片失败');
+					}
+					
+					const tempFilePath = chooseRes.tempFilePaths[0];
+					
+					// 这里可以添加实际的图片上传逻辑
+					// 模拟上传过程
+					await new Promise(resolve => setTimeout(resolve, 1000));
+					
+					// 上传成功后，将图片链接插入到文本框中
+					const imageMarkdown = `\n![图片描述](${tempFilePath})\n`;
+					this.submissionContent += imageMarkdown;
+					
+					uni.showToast({
+						title: '图片已添加',
+						icon: 'success'
+					});
+				} catch (error) {
+					uni.showToast({
+						title: error.message || '上传失败',
+						icon: 'none'
+					});
+				} finally {
+					this.uploading = false;
+				}
+			},
+
 			// 加载任务详情
 			loadTaskDetail(taskData) {
 				// 使用传递的任务详情数据
@@ -477,6 +741,8 @@
 		// 页面显示时的处理
 		onShow() {
 			console.log('任务详情页面显示');
+			// 监听键盘事件
+			uni.onKeyboardHeightChange(this.onKeyboardHeightChange);
 		},
 		
 		// 页面卸载时的处理
@@ -486,7 +752,37 @@
 			if (this.backTimeout) {
 				clearTimeout(this.backTimeout);
 			}
-		}
+			
+			// 取消监听键盘事件
+			uni.offKeyboardHeightChange(this.onKeyboardHeightChange);
+		},
+		
+		// 键盘高度变化处理
+		onKeyboardHeightChange(res) {
+			this.keyboardHeight = res.height;
+			
+			// 当键盘弹起时，调整图片工具栏的位置
+			if (res.height > 0) {
+				// 键盘弹起，将工具栏定位在键盘上方
+				this.toolbarBottom = res.height;
+				console.log('键盘弹起，高度:', res.height);
+				
+				// 如果文本框处于聚焦状态，滚动到最后一行
+				if (this.isTextareaFocused) {
+					// 延迟执行，确保布局已更新
+					setTimeout(() => {
+						this.scrollToTextareaBottom();
+					}, 100);
+				}
+			} else {
+				// 键盘收起，将工具栏定位在页面底部
+				this.toolbarBottom = 0;
+				console.log('键盘收起');
+			}
+			
+			// 强制重新计算布局
+			this.$forceUpdate();
+		},
 	}
 </script>
 
@@ -494,20 +790,9 @@
 	.container {
 		min-height: 100vh;
 		background-color: #f5f7fb;
-	}
-
-	.white-background {
-		background-color: #ffffff;
-		min-height: 100vh;
-		padding-bottom: 20px;
-	}
-
-	.content-scroll {
-		height: calc(100vh - 200px);
-	}
-
-	.content {
-		padding: 20px;
+		display: flex;
+		flex-direction: column;
+		position: relative;
 	}
 
 	.app-header {
@@ -519,6 +804,7 @@
 		position: sticky;
 		top: 0;
 		z-index: 100;
+		flex-shrink: 0;
 	}
 
 	.header-top {
@@ -566,8 +852,33 @@
 		font-weight: 600;
 	}
 
+	.content-container {
+		flex: 1;
+		overflow: hidden;
+		display: flex;
+		flex-direction: column;
+		min-height: 0; /* 关键：允许flex子项正确收缩 */
+	}
+
+	.white-background {
+		background-color: #ffffff;
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+		overflow: hidden;
+		min-height: 0; /* 关键：允许flex子项正确收缩 */
+	}
+
+	.content-scroll {
+		flex: 1;
+		overflow-y: auto;
+		min-height: calc(100vh - 300rpx); /* 关键：允许flex子项正确收缩 */
+	}
+
 	.content {
 		padding: 20px;
+		min-height: 100%;
+		position: relative;
 	}
 
 	.tab-content {
@@ -598,6 +909,11 @@
 		margin-bottom: 10px;
 	}
 
+	.submission-actions {
+		display: flex;
+		gap: 10px;
+	}
+
 	/* 调整uview按钮样式 */
 	::v-deep .u-button--mini {
 		height: 30px !important;
@@ -619,56 +935,109 @@
 	.editor-container {
 		display: flex;
 		flex-direction: column;
-		gap: 15px;
+		min-height: 300px;
+		height: 100%;
+		flex: 1;
+		position: relative;
+	}
+	
+	/* 文本框容器样式 */
+	.textarea-container {
+		flex: 1;
+		min-height: 200px;
+		border: 1px solid #e9ecef;
+		border-radius: 8px;
+		overflow: hidden;
+		position: relative;
+	}
+	
+	.submission-form {
+		display: flex;
+		flex-direction: column;
+		flex: 1;
+		min-height: 0;
+		position: relative;
+	}
+
+	.submission-header {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin-bottom: 10px;
+		padding: 8px 12px;
+		background-color: #f8f9fa;
+		border-radius: 8px;
+		width: 100%;
+		box-sizing: border-box;
+		flex-shrink: 0;
+	}
+
+	.markdown-info {
+		display: flex;
+		align-items: center;
+		gap: 5px;
+	}
+
+	.markdown-text {
+		font-size: 0.85rem;
+		color: #495057;
+		font-weight: 500;
 	}
 
 	.submission-text {
 		width: 100%;
-		min-height: 150px;
+		min-height: 100%; /* 确保文本框占满scroll-view */
 		padding: 12px;
-		border: 1px solid #e9ecef;
-		border-radius: 8px;
 		font-size: 0.95rem;
-		resize: vertical;
 		line-height: 1.5;
 		background-color: #ffffff;
-		transition: border-color 0.2s;
-	}
-
-	.submission-text:focus {
-		border-color: #4361ee;
+		transition: all 0.3s ease;
+		border: none;
 		outline: none;
-	}
-
-	.submission-text:disabled {
-		background-color: #f8f9fa;
-	}
-
-	.preview-container {
-		border: 1px solid #e9ecef;
+		box-shadow: none;
 		border-radius: 8px;
-		overflow: hidden;
+		box-sizing: border-box;
+		resize: none;
+		overflow-y: visible; /* 允许内容溢出，由scroll-view处理滚动 */
 	}
 
-	.preview-header {
+	/* 图片功能栏样式 */
+	.image-toolbar-container {
+		position: relative;
+		width: 100%;
+		flex-shrink: 0; /* 防止在flex布局中收缩 */
+	}
+	
+	.image-toolbar {
 		display: flex;
 		align-items: center;
-		gap: 8px;
-		padding: 8px 12px;
-		background-color: #f8f9fa;
-		border-bottom: 1px solid #e9ecef;
-	}
-
-	.preview-title {
-		font-size: 0.9rem;
-		font-weight: 500;
-		color: #495057;
-	}
-
-	.markdown-preview {
+		padding: 10px 0;
+		border-top: 1px solid #e9ecef;
+		margin-top: 10px;
+		position: fixed;
+		left: 0;
+		right: 0;
+		bottom: 0;
 		background-color: #ffffff;
-		padding: 12px;
-		min-height: 100px;
+		z-index: 999;
+		transition: bottom 0.3s ease;
+		box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1); /* 添加阴影以更好地分隔 */
+	}
+	
+	.image-toolbar.keyboard-up {
+		/* 当键盘弹起时的样式调整 */
+	}
+	
+	.toolbar-icon {
+		margin-right: 8px;
+		cursor: pointer;
+		padding: 0 20px;
+	}
+
+	.toolbar-text {
+		font-size: 0.9rem;
+		color: #4361ee;
+		cursor: pointer;
 	}
 
 	.permission-prompt {
@@ -677,6 +1046,11 @@
 		padding: 40px 20px;
 		text-align: center;
 		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+		min-height: calc(100vh - 300px); /* 占满剩余空间 */
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
 	}
 
 	.permission-prompt u-icon {

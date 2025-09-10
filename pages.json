@@ -98,7 +98,8 @@
 			"path" : "pages/chatList/groupTaskDetail",
 			"style" : 
 			{
-				"navigationBarTitleText" : "任务详情"
+				"navigationBarTitleText" : "任务详情",
+				"softinputMode": "adjustResize"
 			}
 		},
 		{
@@ -127,6 +128,20 @@
 			"style" : 
 			{
 				"navigationBarTitleText" : "小组成员"
+			}
+		},
+		{
+			"path" : "pages/chatList/markdownPreview",
+			"style" : 
+			{
+				"navigationBarTitleText" : "预览"
+			}
+		},
+		{
+			"path" : "pages/chatList/markdownGuide",
+			"style" : 
+			{
+				"navigationBarTitleText" : "Markdown语法教程"
 			}
 		}
 	],

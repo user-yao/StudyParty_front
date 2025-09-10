@@ -26,19 +26,6 @@
 						<u-icon name="close" size="20" color="#ffffff"></u-icon>
 					</button>
 				</div>
-				
-				<!-- 筛选选项卡 -->
-				<div class="filter-tabs">
-					<div class="filter-tab" :class="{active: activeFilter === 'all'}" @click="setFilter('all')">
-						全部任务
-					</div>
-					<div class="filter-tab" :class="{active: activeFilter === 'active'}" @click="setFilter('active')">
-						进行中
-					</div>
-					<div class="filter-tab" :class="{active: activeFilter === 'completed'}" @click="setFilter('completed')">
-						已完成
-					</div>
-				</div>
 			</header>
 
 			<!-- 内容区域 -->
@@ -97,9 +84,9 @@
 				<!-- 空状态 -->
 				<div class="empty-state" v-else>
 					<u-icon name="file-text" size="48" color="#e9ecef"></u-icon>
-					<h3>暂无任务</h3>
+					<h3>暂无进行中的任务</h3>
 					<p v-if="searchKeyword">没有找到匹配的任务</p>
-					<p v-else>当前没有任务，请点击右下角按钮添加</p>
+					<p v-else>当前没有进行中的任务</p>
 				</div>
 			</div>
 
@@ -121,7 +108,7 @@
 		data() {
 			return {
 				searchKeyword: '',
-				activeFilter: 'all', // 默认显示全部任务
+				activeFilter: 'active', // 默认只显示进行中的任务
 				currentUserId: uni.getStorageSync('id') || 3, // 当前用户ID
 				currentUserRole: 'leader', // 当前用户角色: leader, deputy, teacher, enterprise, member
 				groupId: null, // 从参数传入的群组ID
@@ -152,27 +139,11 @@
 					);
 				}
 
-				// 根据活动筛选器过滤
-				if (this.activeFilter === 'active') {
-					filtered = filtered.filter(task => this.getTaskStatus(task) === '进行中');
-				} else if (this.activeFilter === 'completed') {
-					filtered = filtered.filter(task => this.getTaskStatus(task) === '已结束');
-				}
+				// 只显示进行中的任务
+				filtered = filtered.filter(task => this.getTaskStatus(task) === '进行中');
 
-				// 排序：进行中的任务优先，然后按截止时间排序
+				// 按截止时间排序
 				return filtered.sort((a, b) => {
-					const statusA = this.getTaskStatus(a);
-					const statusB = this.getTaskStatus(b);
-
-					// 进行中的任务优先
-					if (statusA === '进行中' && statusB !== '进行中') return -1;
-					if (statusB === '进行中' && statusA !== '进行中') return 1;
-
-					// 未开始的任务次之
-					if (statusA === '未开始' && statusB === '已结束') return -1;
-					if (statusB === '未开始' && statusA === '已结束') return 1;
-
-					// 按截止时间排序
 					const timeA = new Date(a.groupTaskLastTime);
 					const timeB = new Date(b.groupTaskLastTime);
 					
@@ -852,6 +823,8 @@
 		}
 	}
 </style>
+
+
 
 
 
