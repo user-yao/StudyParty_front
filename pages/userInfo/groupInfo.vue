@@ -446,6 +446,20 @@ export default {
 				}
 			});
 		}
+		if (this.groupId) {
+			this.loadGroupData();
+		} else {
+			this.error = "未指定小组ID";
+		}
+	},
+	watch: {
+		// 监听groupMembers变化，更新当前用户的贡献值
+		groupMembers: {
+			handler(newMembers) {
+				this.updateMemberContribution();
+			},
+			deep: true
+		}
 	},
 	computed: {
 		...mapGetters('group', ['getGroupById', 'groupList']),
@@ -589,7 +603,6 @@ export default {
 		...mapActions('groupJoin', ['joinGroup']),
 		// 直接引用 selectMyGroupTask
 		// ...mapActions('groupTask', ['selectMyGroupTask']),
-		
 		// 加载群组数据
 		async loadGroupData() {
 			if (!this.groupId) {
@@ -622,6 +635,8 @@ export default {
 					const memberRes = await selectGroupUser({ groupId: this.groupId });
 					if (memberRes.code === 200) {
 						this.groupMembers = memberRes.data || [];
+						// 从小组成员信息中获取当前用户的贡献值
+						this.updateMemberContribution();
 					}
 				} catch (e) {
 					// 静默失败
@@ -631,6 +646,17 @@ export default {
 				this.error = '网络错误，请稍后重试';
 			} finally {
 				this.loading = false;
+			}
+		},
+		
+		// 从小组成员信息中获取当前用户的贡献值
+		updateMemberContribution() {
+			// 查找当前用户在小组成员中的信息
+			const currentUser = this.groupMembers.find(member => member.id === this.currentUserId);
+			if (currentUser && currentUser.contribution !== undefined) {
+				this.memberContribution = currentUser.contribution;
+			} else {
+				this.memberContribution = 0;
 			}
 		},
 		

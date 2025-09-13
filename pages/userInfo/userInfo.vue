@@ -154,12 +154,12 @@
 						<button class="btn btn-error" v-if="friendList.get(userInfo.id)" @click="showDeleteModal = true">
 							<u-icon name="person-delete-fill" color="#fff" size="50rpx" style="margin-right: 20rpx;"></u-icon> 删除好友
 						</button>
-						<button class="btn btn-primary"v-if="!friendList.get(userInfo.id)">
+						<button class="btn btn-primary" v-if="!friendList.get(userInfo.id)">
 							<u-icon name="plus-people-fill" color="#fff" size="50rpx" style="margin-right: 20rpx;"></u-icon> 添加好友
 						</button>
 					</div>
 				<!-- 备注编辑弹窗 -->
-				<up-popup round="25" v-model:show="showAliasModal" mode="center">
+				<up-popup round="25" :show="showAliasModal" mode="center">
 				        <div style="padding: 50rpx;">
 							<div class="modal-header">
 							    <h3 class="modal-title">编辑用户备注</h3>

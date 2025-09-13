@@ -6298,11 +6298,11 @@ if (uni.restoreGlobal) {
     }
     return module;
   }
-  const baseUrl = "http://192.168.185.136:8080";
+  const baseUrl = "http://192.168.227.136:8080";
   const timeout = 5e3;
-  const webSocketUrl = "ws://192.168.185.136:8080/websocket/ws";
-  const imageUrl = "http://192.168.185.136:8080/";
-  const sourceUrl = "http://192.168.185.136:8080";
+  const webSocketUrl = "ws://192.168.227.136:8080/websocket/ws";
+  const imageUrl = "http://192.168.227.136:8080/";
+  const sourceUrl = "http://192.168.227.136:8080";
   const dbName = "studyParty";
   const dbpath = "_doc/studyParty.db";
   const db = {
@@ -36413,6 +36413,70 @@ if (uni.restoreGlobal) {
       });
       return Promise.all(promises);
     }
+    static uploadFilesArray({
+      url: url2,
+      filePaths,
+      name: name2 = "file",
+      formData = {},
+      header = {
+        "Authorization": `${uni.getStorageSync("token")}`
+      },
+      onProgress
+    }) {
+      if (!Array.isArray(filePaths) || filePaths.length === 0) {
+        return Promise.reject(new Error("filePaths 必须是非空数组"));
+      }
+      const totalFiles = filePaths.length;
+      let completedFiles = 0;
+      const promises = filePaths.map((filePath, index2) => {
+        return new Promise((resolve, reject) => {
+          uni.uploadFile({
+            url: baseUrl + url2,
+            filePath,
+            name: name2,
+            // 所有文件使用相同的字段名，后端会自动合并为数组
+            formData,
+            header,
+            success: (res2) => {
+              completedFiles++;
+              if (onProgress) {
+                onProgress(completedFiles, totalFiles, res2);
+              }
+              resolve({
+                success: true,
+                data: res2.data,
+                statusCode: res2.statusCode
+              });
+            },
+            fail: (err) => {
+              completedFiles++;
+              if (onProgress) {
+                onProgress(completedFiles, totalFiles, err);
+              }
+              reject({
+                success: false,
+                message: err.errMsg || "上传失败",
+                code: err.errCode || -1
+              });
+            }
+          });
+        });
+      });
+      return Promise.allSettled(promises).then((results) => {
+        return results.map((result) => {
+          if (result.value.statusCode === 200) {
+            formatAppLog("log", "at utils/uploadUtils.js:175", result);
+            return result.value;
+          } else {
+            return {
+              success: false,
+              message: "提交失败",
+              code: result.value.statusCode
+            };
+          }
+        });
+      });
+    }
   }
   const _imports_0$1 = "/static/tool/jianpan.png";
   let recorderManager = null;
@@ -38477,7 +38541,6 @@ if (uni.restoreGlobal) {
           vue.createVNode(_component_up_popup, {
             round: "25",
             show: $data.showAliasModal,
-            "onUpdate:show": _cache[7] || (_cache[7] = ($event) => $data.showAliasModal = $event),
             mode: "center"
           }, {
             default: vue.withCtx(() => [
@@ -38531,7 +38594,7 @@ if (uni.restoreGlobal) {
             confirmColor: "#f72585",
             title: "删除好友",
             content: "是否要删除该好友",
-            onConfirm: _cache[8] || (_cache[8] = ($event) => $options.deleteUser($data.userInfo.id))
+            onConfirm: _cache[7] || (_cache[7] = ($event) => $options.deleteUser($data.userInfo.id))
           }, null, 8, ["show"])
         ])
       ])
@@ -40971,6 +41034,20 @@ if (uni.restoreGlobal) {
           }
         });
       }
+      if (this.groupId) {
+        this.loadGroupData();
+      } else {
+        this.error = "未指定小组ID";
+      }
+    },
+    watch: {
+      // 监听groupMembers变化，更新当前用户的贡献值
+      groupMembers: {
+        handler(newMembers) {
+          this.updateMemberContribution();
+        },
+        deep: true
+      }
     },
     computed: {
       ...mapGetters("group", ["getGroupById", "groupList"]),
@@ -41102,6 +41179,7 @@ if (uni.restoreGlobal) {
             const memberRes = await selectGroupUser({ groupId: this.groupId });
             if (memberRes.code === 200) {
               this.groupMembers = memberRes.data || [];
+              this.updateMemberContribution();
             }
           } catch (e2) {
           }
@@ -41109,6 +41187,15 @@ if (uni.restoreGlobal) {
           this.error = "网络错误，请稍后重试";
         } finally {
           this.loading = false;
+        }
+      },
+      // 从小组成员信息中获取当前用户的贡献值
+      updateMemberContribution() {
+        const currentUser = this.groupMembers.find((member) => member.id === this.currentUserId);
+        if (currentUser && currentUser.contribution !== void 0) {
+          this.memberContribution = currentUser.contribution;
+        } else {
+          this.memberContribution = 0;
         }
       },
       // 格式化群组数据
@@ -41159,7 +41246,7 @@ if (uni.restoreGlobal) {
       },
       // 查看所有成员
       viewAllMembers() {
-        formatAppLog("log", "at pages/userInfo/groupInfo.vue:687", "查看所有成员");
+        formatAppLog("log", "at pages/userInfo/groupInfo.vue:713", "查看所有成员");
         uni.navigateTo({
           url: "/pages/chatList/groupMembers",
           success: (res2) => {
@@ -41178,7 +41265,7 @@ if (uni.restoreGlobal) {
       },
       // 查看任务详情
       viewTaskDetails(task2) {
-        formatAppLog("log", "at pages/userInfo/groupInfo.vue:709", "查看任务详情:", task2);
+        formatAppLog("log", "at pages/userInfo/groupInfo.vue:735", "查看任务详情:", task2);
         uni.showToast({ title: "功能开发中", icon: "none" });
       },
       // 进入聊天页面
@@ -41205,7 +41292,7 @@ if (uni.restoreGlobal) {
             });
           },
           fail: (err) => {
-            formatAppLog("error", "at pages/userInfo/groupInfo.vue:740", "跳转聊天页面失败:", err);
+            formatAppLog("error", "at pages/userInfo/groupInfo.vue:766", "跳转聊天页面失败:", err);
             uni.showToast({ title: "跳转失败", icon: "none" });
           }
         });
@@ -41341,7 +41428,7 @@ if (uni.restoreGlobal) {
           title: "正在设置..."
         });
         try {
-          formatAppLog("log", "at pages/userInfo/groupInfo.vue:911", "准备调用changeDeputy，参数:", {
+          formatAppLog("log", "at pages/userInfo/groupInfo.vue:937", "准备调用changeDeputy，参数:", {
             groupId: this.groupId,
             deputy: memberId
           });
@@ -41349,7 +41436,7 @@ if (uni.restoreGlobal) {
             groupId: this.groupId,
             deputy: memberId
           });
-          formatAppLog("log", "at pages/userInfo/groupInfo.vue:921", "changeDeputy返回结果:", res2);
+          formatAppLog("log", "at pages/userInfo/groupInfo.vue:947", "changeDeputy返回结果:", res2);
           uni.hideLoading();
           if (res2 && res2.code === 200) {
             uni.showToast({
@@ -41374,7 +41461,7 @@ if (uni.restoreGlobal) {
           }
         } catch (error2) {
           uni.hideLoading();
-          formatAppLog("error", "at pages/userInfo/groupInfo.vue:954", "设置代理组长失败:", error2);
+          formatAppLog("error", "at pages/userInfo/groupInfo.vue:980", "设置代理组长失败:", error2);
           uni.showToast({
             title: "设置失败，请重试",
             icon: "none"
@@ -41383,7 +41470,7 @@ if (uni.restoreGlobal) {
       },
       // 查看任务详情
       viewTaskDetails(task2) {
-        formatAppLog("log", "at pages/userInfo/groupInfo.vue:964", "查看任务详情:", task2);
+        formatAppLog("log", "at pages/userInfo/groupInfo.vue:990", "查看任务详情:", task2);
         uni.navigateTo({
           url: "/pages/chatList/groupTaskDetail",
           success: (res2) => {
@@ -41437,7 +41524,7 @@ if (uni.restoreGlobal) {
                 }
               } catch (error2) {
                 uni.hideLoading();
-                formatAppLog("error", "at pages/userInfo/groupInfo.vue:1022", "退出小组失败:", error2);
+                formatAppLog("error", "at pages/userInfo/groupInfo.vue:1048", "退出小组失败:", error2);
                 uni.showToast({
                   title: "退出失败，请重试",
                   icon: "none"
@@ -41476,7 +41563,7 @@ if (uni.restoreGlobal) {
                 }
               } catch (error2) {
                 uni.hideLoading();
-                formatAppLog("error", "at pages/userInfo/groupInfo.vue:1062", "解散小组失败:", error2);
+                formatAppLog("error", "at pages/userInfo/groupInfo.vue:1088", "解散小组失败:", error2);
                 uni.showToast({
                   title: "解散失败，请重试",
                   icon: "none"
@@ -41534,7 +41621,7 @@ if (uni.restoreGlobal) {
           }
         } catch (error2) {
           uni.hideLoading();
-          formatAppLog("error", "at pages/userInfo/groupInfo.vue:1133", "转让组长失败:", error2);
+          formatAppLog("error", "at pages/userInfo/groupInfo.vue:1159", "转让组长失败:", error2);
           uni.showToast({
             title: "转让失败，请重试",
             icon: "none"
@@ -41582,7 +41669,7 @@ if (uni.restoreGlobal) {
                 }
               } catch (error2) {
                 uni.hideLoading();
-                formatAppLog("error", "at pages/userInfo/groupInfo.vue:1186", "退出小组失败:", error2);
+                formatAppLog("error", "at pages/userInfo/groupInfo.vue:1212", "退出小组失败:", error2);
                 uni.showToast({
                   title: "退出失败，请重试",
                   icon: "none"
@@ -41662,7 +41749,7 @@ if (uni.restoreGlobal) {
             });
           },
           fail: (err) => {
-            formatAppLog("error", "at pages/userInfo/groupInfo.vue:1294", "跳转失败:", err);
+            formatAppLog("error", "at pages/userInfo/groupInfo.vue:1320", "跳转失败:", err);
             uni.showToast({ title: "跳转失败", icon: "none" });
           }
         });
@@ -41739,7 +41826,7 @@ if (uni.restoreGlobal) {
               });
             },
             fail: (err) => {
-              formatAppLog("error", "at pages/userInfo/groupInfo.vue:1390", "跳转失败:", err);
+              formatAppLog("error", "at pages/userInfo/groupInfo.vue:1416", "跳转失败:", err);
               uni.showToast({ title: "跳转失败", icon: "none" });
             }
           });
@@ -42663,8 +42750,6 @@ if (uni.restoreGlobal) {
     data() {
       return {
         searchKeyword: "",
-        activeFilter: "active",
-        // 默认只显示进行中的任务
         currentUserId: uni.getStorageSync("id") || 3,
         // 当前用户ID
         currentUserRole: "leader",
@@ -42686,17 +42771,36 @@ if (uni.restoreGlobal) {
       canPublishTask() {
         return ["leader", "deputy", "teacher", "enterprise"].includes(this.currentUserRole);
       },
-      // 过滤和排序后的任务列表
-      filteredTasks() {
-        let filtered = this.groupTasks && Array.isArray(this.groupTasks) ? this.groupTasks : [];
+      // 按状态分组的任务列表
+      groupedTasks() {
+        const tasks = this.groupTasks && Array.isArray(this.groupTasks) ? this.groupTasks : [];
+        let filtered = tasks;
         if (this.searchKeyword) {
           const keyword = this.searchKeyword.toLowerCase();
           filtered = filtered.filter(
             (task2) => task2.groupTask && task2.groupTask.toLowerCase().includes(keyword)
           );
         }
-        filtered = filtered.filter((task2) => this.getTaskStatus(task2) === "进行中");
-        return filtered.sort((a2, b2) => {
+        const active = [];
+        const pending = [];
+        const completed = [];
+        filtered.forEach((task2) => {
+          const status = this.getTaskStatus(task2);
+          switch (status) {
+            case "进行中":
+              active.push(task2);
+              break;
+            case "未开始":
+              pending.push(task2);
+              break;
+            case "已结束":
+              completed.push(task2);
+              break;
+            default:
+              active.push(task2);
+          }
+        });
+        const sortByEndTime = (a2, b2) => {
           const timeA = new Date(a2.groupTaskLastTime);
           const timeB = new Date(b2.groupTaskLastTime);
           if (isNaN(timeA.getTime()))
@@ -42704,7 +42808,15 @@ if (uni.restoreGlobal) {
           if (isNaN(timeB.getTime()))
             return -1;
           return timeA - timeB;
-        });
+        };
+        active.sort(sortByEndTime);
+        pending.sort(sortByEndTime);
+        completed.sort(sortByEndTime);
+        return {
+          active,
+          pending,
+          completed
+        };
       }
     },
     methods: {
@@ -42736,16 +42848,11 @@ if (uni.restoreGlobal) {
       onSearchInput() {
         clearTimeout(this.searchTimer);
         this.searchTimer = setTimeout(() => {
-          this.searchTasks();
         }, 300);
-      },
-      // 设置筛选器
-      setFilter(filter) {
-        this.activeFilter = filter;
       },
       // 查看任务详情
       viewTaskDetails(task2) {
-        formatAppLog("log", "at pages/chatList/groupTaskList.vue:202", "查看任务详情:", task2);
+        formatAppLog("log", "at pages/chatList/groupTaskList.vue:337", "查看任务详情:", task2);
         uni.navigateTo({
           url: "/pages/chatList/groupTaskDetail",
           success: (res2) => {
@@ -42759,7 +42866,7 @@ if (uni.restoreGlobal) {
       },
       // 添加新任务
       addNewTask() {
-        formatAppLog("log", "at pages/chatList/groupTaskList.vue:218", "添加新任务");
+        formatAppLog("log", "at pages/chatList/groupTaskList.vue:353", "添加新任务");
         uni.showToast({
           title: "功能开发中",
           icon: "none"
@@ -42772,7 +42879,7 @@ if (uni.restoreGlobal) {
           content: `确定要删除任务"${task2.groupTask}"吗？此操作不可恢复！`,
           success: (res2) => {
             if (res2.confirm) {
-              formatAppLog("log", "at pages/chatList/groupTaskList.vue:234", "任务已删除:", task2.groupTask);
+              formatAppLog("log", "at pages/chatList/groupTaskList.vue:369", "任务已删除:", task2.groupTask);
               uni.showToast({
                 title: "任务已删除",
                 icon: "success"
@@ -42830,10 +42937,9 @@ if (uni.restoreGlobal) {
           return 0;
         const finish = task2.groupTaskFinish || 0;
         const unfinished = task2.groupTaskUnfinished || 0;
-        const total = finish + unfinished;
-        if (total === 0)
+        if (unfinished === 0)
           return 0;
-        return finish / total * 100;
+        return finish / unfinished * 100;
       },
       // 格式化日期显示
       formatDate(dateStr) {
@@ -42847,7 +42953,7 @@ if (uni.restoreGlobal) {
       // 加载任务数据
       async loadTasks() {
         if (!this.groupId) {
-          formatAppLog("error", "at pages/chatList/groupTaskList.vue:329", "缺少群组ID");
+          formatAppLog("error", "at pages/chatList/groupTaskList.vue:463", "缺少群组ID");
           return;
         }
         try {
@@ -42860,7 +42966,7 @@ if (uni.restoreGlobal) {
             throw new Error(res2.msg || "获取任务列表失败");
           }
         } catch (error2) {
-          formatAppLog("error", "at pages/chatList/groupTaskList.vue:344", "加载任务失败:", error2);
+          formatAppLog("error", "at pages/chatList/groupTaskList.vue:478", "加载任务失败:", error2);
           uni.showToast({
             title: "加载任务失败",
             icon: "none",
@@ -42951,7 +43057,32 @@ if (uni.restoreGlobal) {
             /* NEED_PATCH */
           ), [
             [vue.vShow, $data.showSearch]
-          ])
+          ]),
+          vue.createCommentVNode(" 新增任务按钮 "),
+          $options.canPublishTask ? (vue.openBlock(), vue.createElementBlock("div", {
+            key: 0,
+            class: "add-task-top",
+            onClick: _cache[3] || (_cache[3] = (...args) => $options.addNewTask && $options.addNewTask(...args))
+          }, [
+            vue.createVNode(_component_u_button, {
+              type: "primary",
+              size: "medium",
+              shape: "circle",
+              plain: false,
+              border: false
+            }, {
+              default: vue.withCtx(() => [
+                vue.createVNode(_component_u_icon, {
+                  name: "plus",
+                  size: "20",
+                  color: "#ffffff"
+                }),
+                vue.createTextVNode(" 新增任务 ")
+              ]),
+              _: 1
+              /* STABLE */
+            })
+          ])) : vue.createCommentVNode("v-if", true)
         ]),
         vue.createCommentVNode(" 内容区域 "),
         vue.createElementVNode("div", { class: "content" }, [
@@ -42962,182 +43093,487 @@ if (uni.restoreGlobal) {
           }, [
             vue.createElementVNode("div", { class: "loading-spinner" }),
             vue.createElementVNode("p", null, "正在加载任务...")
-          ])) : $options.filteredTasks.length > 0 ? (vue.openBlock(), vue.createElementBlock(
+          ])) : (vue.openBlock(), vue.createElementBlock(
             vue.Fragment,
             { key: 1 },
             [
-              vue.createCommentVNode(" 任务列表 "),
+              vue.createCommentVNode(" 任务列表分组显示 "),
               vue.createElementVNode("div", null, [
-                (vue.openBlock(true), vue.createElementBlock(
-                  vue.Fragment,
-                  null,
-                  vue.renderList($options.filteredTasks, (task2) => {
-                    return vue.openBlock(), vue.createElementBlock("div", {
-                      class: "task-card",
-                      key: task2.id
-                    }, [
-                      vue.createElementVNode("div", { class: "task-header" }, [
-                        vue.createElementVNode(
-                          "div",
-                          { class: "task-title" },
-                          vue.toDisplayString(task2.groupTask),
-                          1
-                          /* TEXT */
-                        ),
-                        vue.createElementVNode(
-                          "div",
-                          {
-                            class: vue.normalizeClass(["task-status", $options.getStatusClass(task2)])
-                          },
-                          vue.toDisplayString($options.getStatusText(task2)),
-                          3
-                          /* TEXT, CLASS */
-                        )
-                      ]),
-                      vue.createElementVNode("div", { class: "task-meta" }, [
-                        vue.createElementVNode("div", { class: "task-meta-item" }, [
-                          vue.createVNode(_component_u_icon, {
-                            name: "calendar",
-                            size: "16",
-                            color: "#6c757d"
-                          }),
-                          vue.createElementVNode(
-                            "span",
-                            null,
-                            "开始: " + vue.toDisplayString($options.formatDate(task2.groupTaskStartTime)),
-                            1
-                            /* TEXT */
-                          )
-                        ]),
-                        vue.createElementVNode("div", { class: "task-meta-item" }, [
-                          vue.createVNode(_component_u_icon, {
-                            name: "clock",
-                            size: "16",
-                            color: "#6c757d"
-                          }),
-                          vue.createElementVNode(
-                            "span",
-                            null,
-                            "截止: " + vue.toDisplayString($options.formatDate(task2.groupTaskLastTime)),
-                            1
-                            /* TEXT */
-                          )
-                        ])
-                      ]),
-                      vue.createElementVNode("div", { class: "task-progress" }, [
-                        vue.createElementVNode("div", { class: "progress-info" }, [
-                          vue.createElementVNode("span", null, "完成进度"),
-                          vue.createElementVNode(
-                            "span",
-                            null,
-                            vue.toDisplayString(task2.groupTaskFinish) + " / " + vue.toDisplayString(task2.groupTaskFinish + task2.groupTaskUnfinished),
-                            1
-                            /* TEXT */
-                          )
-                        ]),
-                        vue.createElementVNode("div", { class: "progress-bar" }, [
-                          vue.createElementVNode(
-                            "div",
-                            {
-                              class: "progress-fill",
-                              style: vue.normalizeStyle({ width: $options.calculateProgress(task2) + "%" })
-                            },
-                            null,
-                            4
-                            /* STYLE */
-                          )
-                        ])
-                      ]),
-                      vue.createElementVNode("div", { class: "task-footer" }, [
-                        vue.createElementVNode(
-                          "div",
-                          { class: "task-author" },
-                          " 发布者: " + vue.toDisplayString(task2.groupTaskUploader),
-                          1
-                          /* TEXT */
-                        ),
-                        vue.createElementVNode("div", { class: "task-actions" }, [
-                          vue.createVNode(_component_u_button, {
-                            type: "primary",
-                            size: "small",
-                            shape: "circle",
-                            plain: false,
-                            border: false,
-                            onClick: ($event) => $options.viewTaskDetails(task2)
-                          }, {
-                            default: vue.withCtx(() => [
+                vue.createCommentVNode(" 进行中任务 "),
+                $options.groupedTasks.active.length > 0 ? (vue.openBlock(), vue.createElementBlock("div", {
+                  key: 0,
+                  class: "task-section"
+                }, [
+                  vue.createElementVNode("div", { class: "section-header" }, [
+                    vue.createElementVNode(
+                      "h3",
+                      { class: "section-title" },
+                      "进行中 (" + vue.toDisplayString($options.groupedTasks.active.length) + ")",
+                      1
+                      /* TEXT */
+                    )
+                  ]),
+                  vue.createElementVNode("div", { class: "task-list" }, [
+                    (vue.openBlock(true), vue.createElementBlock(
+                      vue.Fragment,
+                      null,
+                      vue.renderList($options.groupedTasks.active, (task2) => {
+                        return vue.openBlock(), vue.createElementBlock("div", {
+                          class: "task-card",
+                          key: task2.id
+                        }, [
+                          vue.createElementVNode("div", { class: "task-header" }, [
+                            vue.createElementVNode(
+                              "div",
+                              { class: "task-title" },
+                              vue.toDisplayString(task2.groupTask),
+                              1
+                              /* TEXT */
+                            ),
+                            vue.createElementVNode(
+                              "div",
+                              {
+                                class: vue.normalizeClass(["task-status", $options.getStatusClass(task2)])
+                              },
+                              vue.toDisplayString($options.getStatusText(task2)),
+                              3
+                              /* TEXT, CLASS */
+                            )
+                          ]),
+                          vue.createElementVNode("div", { class: "task-meta" }, [
+                            vue.createElementVNode("div", { class: "task-meta-item" }, [
                               vue.createVNode(_component_u_icon, {
-                                name: "eye",
+                                name: "calendar",
                                 size: "16",
-                                color: "#ffffff"
+                                color: "#6c757d"
                               }),
-                              vue.createTextVNode(" 查看 ")
+                              vue.createElementVNode(
+                                "span",
+                                null,
+                                "开始: " + vue.toDisplayString($options.formatDate(task2.groupTaskStartTime)),
+                                1
+                                /* TEXT */
+                              )
                             ]),
-                            _: 2
-                            /* DYNAMIC */
-                          }, 1032, ["onClick"]),
-                          $options.canEditTask(task2) ? (vue.openBlock(), vue.createBlock(_component_u_button, {
-                            key: 0,
-                            type: "error",
-                            size: "small",
-                            shape: "circle",
-                            plain: false,
-                            border: false,
-                            onClick: ($event) => $options.deleteTask(task2)
-                          }, {
-                            default: vue.withCtx(() => [
+                            vue.createElementVNode("div", { class: "task-meta-item" }, [
                               vue.createVNode(_component_u_icon, {
-                                name: "close-circle",
+                                name: "clock",
                                 size: "16",
-                                color: "#ffffff"
+                                color: "#6c757d"
                               }),
-                              vue.createTextVNode(" 删除 ")
+                              vue.createElementVNode(
+                                "span",
+                                null,
+                                "截止: " + vue.toDisplayString($options.formatDate(task2.groupTaskLastTime)),
+                                1
+                                /* TEXT */
+                              )
+                            ])
+                          ]),
+                          vue.createElementVNode("div", { class: "task-progress" }, [
+                            vue.createElementVNode("div", { class: "progress-info" }, [
+                              vue.createElementVNode("span", null, "完成进度"),
+                              vue.createElementVNode(
+                                "span",
+                                null,
+                                vue.toDisplayString(task2.groupTaskFinish) + " / " + vue.toDisplayString(task2.groupTaskUnfinished),
+                                1
+                                /* TEXT */
+                              )
                             ]),
-                            _: 2
-                            /* DYNAMIC */
-                          }, 1032, ["onClick"])) : vue.createCommentVNode("v-if", true)
-                        ])
-                      ])
-                    ]);
+                            vue.createElementVNode("div", { class: "progress-bar" }, [
+                              vue.createElementVNode(
+                                "div",
+                                {
+                                  class: "progress-fill",
+                                  style: vue.normalizeStyle({ width: $options.calculateProgress(task2) + "%" })
+                                },
+                                null,
+                                4
+                                /* STYLE */
+                              )
+                            ])
+                          ]),
+                          vue.createElementVNode("div", { class: "task-footer" }, [
+                            vue.createElementVNode(
+                              "div",
+                              { class: "task-author" },
+                              " 发布者: " + vue.toDisplayString(task2.groupTaskUploader),
+                              1
+                              /* TEXT */
+                            ),
+                            vue.createElementVNode("div", { class: "task-actions" }, [
+                              vue.createVNode(_component_u_button, {
+                                type: "primary",
+                                size: "small",
+                                shape: "circle",
+                                plain: false,
+                                border: false,
+                                onClick: ($event) => $options.viewTaskDetails(task2)
+                              }, {
+                                default: vue.withCtx(() => [
+                                  vue.createVNode(_component_u_icon, {
+                                    name: "eye",
+                                    size: "16",
+                                    color: "#ffffff"
+                                  }),
+                                  vue.createTextVNode(" 查看 ")
+                                ]),
+                                _: 2
+                                /* DYNAMIC */
+                              }, 1032, ["onClick"]),
+                              $options.canEditTask(task2) ? (vue.openBlock(), vue.createBlock(_component_u_button, {
+                                key: 0,
+                                type: "error",
+                                size: "small",
+                                shape: "circle",
+                                plain: false,
+                                border: false,
+                                onClick: ($event) => $options.deleteTask(task2)
+                              }, {
+                                default: vue.withCtx(() => [
+                                  vue.createVNode(_component_u_icon, {
+                                    name: "close-circle",
+                                    size: "16",
+                                    color: "#ffffff"
+                                  }),
+                                  vue.createTextVNode(" 删除 ")
+                                ]),
+                                _: 2
+                                /* DYNAMIC */
+                              }, 1032, ["onClick"])) : vue.createCommentVNode("v-if", true)
+                            ])
+                          ])
+                        ]);
+                      }),
+                      128
+                      /* KEYED_FRAGMENT */
+                    ))
+                  ])
+                ])) : vue.createCommentVNode("v-if", true),
+                vue.createCommentVNode(" 未开始任务 "),
+                $options.groupedTasks.pending.length > 0 ? (vue.openBlock(), vue.createElementBlock("div", {
+                  key: 1,
+                  class: "task-section"
+                }, [
+                  vue.createElementVNode("div", { class: "section-header" }, [
+                    vue.createElementVNode(
+                      "h3",
+                      { class: "section-title" },
+                      "未开始 (" + vue.toDisplayString($options.groupedTasks.pending.length) + ")",
+                      1
+                      /* TEXT */
+                    )
+                  ]),
+                  vue.createElementVNode("div", { class: "task-list" }, [
+                    (vue.openBlock(true), vue.createElementBlock(
+                      vue.Fragment,
+                      null,
+                      vue.renderList($options.groupedTasks.pending, (task2) => {
+                        return vue.openBlock(), vue.createElementBlock("div", {
+                          class: "task-card",
+                          key: task2.id
+                        }, [
+                          vue.createElementVNode("div", { class: "task-header" }, [
+                            vue.createElementVNode(
+                              "div",
+                              { class: "task-title" },
+                              vue.toDisplayString(task2.groupTask),
+                              1
+                              /* TEXT */
+                            ),
+                            vue.createElementVNode(
+                              "div",
+                              {
+                                class: vue.normalizeClass(["task-status", $options.getStatusClass(task2)])
+                              },
+                              vue.toDisplayString($options.getStatusText(task2)),
+                              3
+                              /* TEXT, CLASS */
+                            )
+                          ]),
+                          vue.createElementVNode("div", { class: "task-meta" }, [
+                            vue.createElementVNode("div", { class: "task-meta-item" }, [
+                              vue.createVNode(_component_u_icon, {
+                                name: "calendar",
+                                size: "16",
+                                color: "#6c757d"
+                              }),
+                              vue.createElementVNode(
+                                "span",
+                                null,
+                                "开始: " + vue.toDisplayString($options.formatDate(task2.groupTaskStartTime)),
+                                1
+                                /* TEXT */
+                              )
+                            ]),
+                            vue.createElementVNode("div", { class: "task-meta-item" }, [
+                              vue.createVNode(_component_u_icon, {
+                                name: "clock",
+                                size: "16",
+                                color: "#6c757d"
+                              }),
+                              vue.createElementVNode(
+                                "span",
+                                null,
+                                "截止: " + vue.toDisplayString($options.formatDate(task2.groupTaskLastTime)),
+                                1
+                                /* TEXT */
+                              )
+                            ])
+                          ]),
+                          vue.createElementVNode("div", { class: "task-progress" }, [
+                            vue.createElementVNode("div", { class: "progress-info" }, [
+                              vue.createElementVNode("span", null, "完成进度"),
+                              vue.createElementVNode(
+                                "span",
+                                null,
+                                vue.toDisplayString(task2.groupTaskFinish) + " / " + vue.toDisplayString(task2.groupTaskUnfinished),
+                                1
+                                /* TEXT */
+                              )
+                            ]),
+                            vue.createElementVNode("div", { class: "progress-bar" }, [
+                              vue.createElementVNode(
+                                "div",
+                                {
+                                  class: "progress-fill",
+                                  style: vue.normalizeStyle({ width: $options.calculateProgress(task2) + "%" })
+                                },
+                                null,
+                                4
+                                /* STYLE */
+                              )
+                            ])
+                          ]),
+                          vue.createElementVNode("div", { class: "task-footer" }, [
+                            vue.createElementVNode(
+                              "div",
+                              { class: "task-author" },
+                              " 发布者: " + vue.toDisplayString(task2.groupTaskUploader),
+                              1
+                              /* TEXT */
+                            ),
+                            vue.createElementVNode("div", { class: "task-actions" }, [
+                              vue.createVNode(_component_u_button, {
+                                type: "primary",
+                                size: "small",
+                                shape: "circle",
+                                plain: false,
+                                border: false,
+                                onClick: ($event) => $options.viewTaskDetails(task2)
+                              }, {
+                                default: vue.withCtx(() => [
+                                  vue.createVNode(_component_u_icon, {
+                                    name: "eye",
+                                    size: "16",
+                                    color: "#ffffff"
+                                  }),
+                                  vue.createTextVNode(" 查看 ")
+                                ]),
+                                _: 2
+                                /* DYNAMIC */
+                              }, 1032, ["onClick"]),
+                              $options.canEditTask(task2) ? (vue.openBlock(), vue.createBlock(_component_u_button, {
+                                key: 0,
+                                type: "error",
+                                size: "small",
+                                shape: "circle",
+                                plain: false,
+                                border: false,
+                                onClick: ($event) => $options.deleteTask(task2)
+                              }, {
+                                default: vue.withCtx(() => [
+                                  vue.createVNode(_component_u_icon, {
+                                    name: "close-circle",
+                                    size: "16",
+                                    color: "#ffffff"
+                                  }),
+                                  vue.createTextVNode(" 删除 ")
+                                ]),
+                                _: 2
+                                /* DYNAMIC */
+                              }, 1032, ["onClick"])) : vue.createCommentVNode("v-if", true)
+                            ])
+                          ])
+                        ]);
+                      }),
+                      128
+                      /* KEYED_FRAGMENT */
+                    ))
+                  ])
+                ])) : vue.createCommentVNode("v-if", true),
+                vue.createCommentVNode(" 已结束任务 "),
+                $options.groupedTasks.completed.length > 0 ? (vue.openBlock(), vue.createElementBlock("div", {
+                  key: 2,
+                  class: "task-section"
+                }, [
+                  vue.createElementVNode("div", { class: "section-header" }, [
+                    vue.createElementVNode(
+                      "h3",
+                      { class: "section-title" },
+                      "已结束 (" + vue.toDisplayString($options.groupedTasks.completed.length) + ")",
+                      1
+                      /* TEXT */
+                    )
+                  ]),
+                  vue.createElementVNode("div", { class: "task-list" }, [
+                    (vue.openBlock(true), vue.createElementBlock(
+                      vue.Fragment,
+                      null,
+                      vue.renderList($options.groupedTasks.completed, (task2) => {
+                        return vue.openBlock(), vue.createElementBlock("div", {
+                          class: "task-card",
+                          key: task2.id
+                        }, [
+                          vue.createElementVNode("div", { class: "task-header" }, [
+                            vue.createElementVNode(
+                              "div",
+                              { class: "task-title" },
+                              vue.toDisplayString(task2.groupTask),
+                              1
+                              /* TEXT */
+                            ),
+                            vue.createElementVNode(
+                              "div",
+                              {
+                                class: vue.normalizeClass(["task-status", $options.getStatusClass(task2)])
+                              },
+                              vue.toDisplayString($options.getStatusText(task2)),
+                              3
+                              /* TEXT, CLASS */
+                            )
+                          ]),
+                          vue.createElementVNode("div", { class: "task-meta" }, [
+                            vue.createElementVNode("div", { class: "task-meta-item" }, [
+                              vue.createVNode(_component_u_icon, {
+                                name: "calendar",
+                                size: "16",
+                                color: "#6c757d"
+                              }),
+                              vue.createElementVNode(
+                                "span",
+                                null,
+                                "开始: " + vue.toDisplayString($options.formatDate(task2.groupTaskStartTime)),
+                                1
+                                /* TEXT */
+                              )
+                            ]),
+                            vue.createElementVNode("div", { class: "task-meta-item" }, [
+                              vue.createVNode(_component_u_icon, {
+                                name: "clock",
+                                size: "16",
+                                color: "#6c757d"
+                              }),
+                              vue.createElementVNode(
+                                "span",
+                                null,
+                                "截止: " + vue.toDisplayString($options.formatDate(task2.groupTaskLastTime)),
+                                1
+                                /* TEXT */
+                              )
+                            ])
+                          ]),
+                          vue.createElementVNode("div", { class: "task-progress" }, [
+                            vue.createElementVNode("div", { class: "progress-info" }, [
+                              vue.createElementVNode("span", null, "完成进度"),
+                              vue.createElementVNode(
+                                "span",
+                                null,
+                                vue.toDisplayString(task2.groupTaskFinish) + " / " + vue.toDisplayString(task2.groupTaskUnfinished),
+                                1
+                                /* TEXT */
+                              )
+                            ]),
+                            vue.createElementVNode("div", { class: "progress-bar" }, [
+                              vue.createElementVNode(
+                                "div",
+                                {
+                                  class: "progress-fill",
+                                  style: vue.normalizeStyle({ width: $options.calculateProgress(task2) + "%" })
+                                },
+                                null,
+                                4
+                                /* STYLE */
+                              )
+                            ])
+                          ]),
+                          vue.createElementVNode("div", { class: "task-footer" }, [
+                            vue.createElementVNode(
+                              "div",
+                              { class: "task-author" },
+                              " 发布者: " + vue.toDisplayString(task2.groupTaskUploader),
+                              1
+                              /* TEXT */
+                            ),
+                            vue.createElementVNode("div", { class: "task-actions" }, [
+                              vue.createVNode(_component_u_button, {
+                                type: "primary",
+                                size: "small",
+                                shape: "circle",
+                                plain: false,
+                                border: false,
+                                onClick: ($event) => $options.viewTaskDetails(task2)
+                              }, {
+                                default: vue.withCtx(() => [
+                                  vue.createVNode(_component_u_icon, {
+                                    name: "eye",
+                                    size: "16",
+                                    color: "#ffffff"
+                                  }),
+                                  vue.createTextVNode(" 查看 ")
+                                ]),
+                                _: 2
+                                /* DYNAMIC */
+                              }, 1032, ["onClick"]),
+                              $options.canEditTask(task2) ? (vue.openBlock(), vue.createBlock(_component_u_button, {
+                                key: 0,
+                                type: "error",
+                                size: "small",
+                                shape: "circle",
+                                plain: false,
+                                border: false,
+                                onClick: ($event) => $options.deleteTask(task2)
+                              }, {
+                                default: vue.withCtx(() => [
+                                  vue.createVNode(_component_u_icon, {
+                                    name: "close-circle",
+                                    size: "16",
+                                    color: "#ffffff"
+                                  }),
+                                  vue.createTextVNode(" 删除 ")
+                                ]),
+                                _: 2
+                                /* DYNAMIC */
+                              }, 1032, ["onClick"])) : vue.createCommentVNode("v-if", true)
+                            ])
+                          ])
+                        ]);
+                      }),
+                      128
+                      /* KEYED_FRAGMENT */
+                    ))
+                  ])
+                ])) : vue.createCommentVNode("v-if", true),
+                vue.createCommentVNode(" 空状态 "),
+                $options.groupedTasks.active.length === 0 && $options.groupedTasks.pending.length === 0 && $options.groupedTasks.completed.length === 0 ? (vue.openBlock(), vue.createElementBlock("div", {
+                  key: 3,
+                  class: "empty-state"
+                }, [
+                  vue.createVNode(_component_u_icon, {
+                    name: "file-text",
+                    size: "48",
+                    color: "#e9ecef"
                   }),
-                  128
-                  /* KEYED_FRAGMENT */
-                ))
-              ])
-            ],
-            2112
-            /* STABLE_FRAGMENT, DEV_ROOT_FRAGMENT */
-          )) : (vue.openBlock(), vue.createElementBlock(
-            vue.Fragment,
-            { key: 2 },
-            [
-              vue.createCommentVNode(" 空状态 "),
-              vue.createElementVNode("div", { class: "empty-state" }, [
-                vue.createVNode(_component_u_icon, {
-                  name: "file-text",
-                  size: "48",
-                  color: "#e9ecef"
-                }),
-                vue.createElementVNode("h3", null, "暂无进行中的任务"),
-                $data.searchKeyword ? (vue.openBlock(), vue.createElementBlock("p", { key: 0 }, "没有找到匹配的任务")) : (vue.openBlock(), vue.createElementBlock("p", { key: 1 }, "当前没有进行中的任务"))
+                  vue.createElementVNode("h3", null, "暂无任务"),
+                  $data.searchKeyword ? (vue.openBlock(), vue.createElementBlock("p", { key: 0 }, "没有找到匹配的任务")) : (vue.openBlock(), vue.createElementBlock("p", { key: 1 }, "当前没有任务"))
+                ])) : vue.createCommentVNode("v-if", true)
               ])
             ],
             2112
             /* STABLE_FRAGMENT, DEV_ROOT_FRAGMENT */
           ))
-        ]),
-        vue.createCommentVNode(" 添加任务按钮 "),
-        $options.canPublishTask ? (vue.openBlock(), vue.createElementBlock("div", {
-          key: 0,
-          class: "add-task-btn",
-          onClick: _cache[3] || (_cache[3] = (...args) => $options.addNewTask && $options.addNewTask(...args))
-        }, [
-          vue.createVNode(_component_u_icon, {
-            name: "plus",
-            size: "24",
-            color: "#ffffff"
-          })
-        ])) : vue.createCommentVNode("v-if", true)
+        ])
       ])
     ]);
   }
@@ -46090,6 +46526,7 @@ ${e2}</tr>
         taskId: null,
         taskDetail: null,
         submissionContent: `# 作业标题`,
+        displayContent: `# 作业标题`,
         currentUserId: uni.getStorageSync("id") || 3,
         currentUserRole: "member",
         // member, leader, deputy, teacher, enterprise
@@ -46114,13 +46551,22 @@ ${e2}</tr>
         // 最大垂直偏差
         // 图片上传相关
         uploading: false,
+        // 存储图片映射关系：{ placeholder: "[图片1]", markdown: "![图片1](url1)" }
+        imageMap: [],
+        // 图片编号计数器，用于生成唯一的图片编号
+        imageCounter: 0,
         // 键盘相关
         keyboardHeight: 0,
         toolbarBottom: 0,
         // 文本框滚动相关
         textareaScrollTop: 0,
         isTextareaFocused: false,
-        previousTextareaHeight: 0
+        previousTextareaHeight: 0,
+        // 任务答案相关
+        taskAnswer: null,
+        // 存储已提交的任务答案
+        hasSubmitted: false
+        // 是否已提交过任务
       };
     },
     computed: {
@@ -46131,7 +46577,8 @@ ${e2}</tr>
           return false;
         if (this.isSubmitted)
           return false;
-        if (this.getTaskStatus(this.taskDetail) === "已结束")
+        const taskStatus = this.getTaskStatus(this.taskDetail);
+        if (taskStatus === "未开始" || taskStatus === "已结束")
           return false;
         return true;
       },
@@ -46139,8 +46586,12 @@ ${e2}</tr>
       permissionMessage() {
         if (!this.taskDetail)
           return "正在加载任务信息...";
-        if (this.getTaskStatus(this.taskDetail) === "已结束") {
-          return "作业已结束，无法提交";
+        const taskStatus = this.getTaskStatus(this.taskDetail);
+        if (taskStatus === "已结束") {
+          return `作业已结束，截止时间：${this.formatDateTime(this.taskDetail.groupTaskLastTime)}`;
+        }
+        if (taskStatus === "未开始") {
+          return `作业未开始，开始时间：${this.formatDateTime(this.taskDetail.groupTaskStartTime)}`;
         }
         if (this.isSubmitted) {
           return "作业已提交";
@@ -46185,17 +46636,77 @@ ${e2}</tr>
       }
     },
     watch: {
-      // 监听文本内容变化
-      submissionContent(newVal, oldVal) {
-        if (this.isTextareaFocused && this.keyboardHeight > 0) {
-          this.$nextTick(() => {
-            this.scrollToTextareaBottom();
-          });
+      // 监听显示内容变化
+      displayContent(newVal, oldVal) {
+        try {
+          if (this.isTextareaFocused && this.keyboardHeight > 0) {
+            this.$nextTick(() => {
+              this.scrollToTextareaBottom();
+            });
+          }
+          this.syncContentWithDisplay();
+        } catch (error2) {
+          formatAppLog("error", "at pages/chatList/groupTaskDetail.vue:388", "Error in displayContent watcher:", error2);
         }
       }
     },
     methods: {
-      ...mapActions("groupTaskAnswer", ["submitTaskAnswer"]),
+      ...mapActions("groupTaskAnswer", ["submitTaskAnswer", "getMyTaskAnswers"]),
+      // 同步显示内容和实际提交内容
+      syncContentWithDisplay() {
+        try {
+          let content = this.displayContent;
+          const deletedImages = [];
+          this.imageMap.forEach((image2, index2) => {
+            if (!content.includes(image2.placeholder)) {
+              deletedImages.push(index2);
+            }
+          });
+          for (let i2 = deletedImages.length - 1; i2 >= 0; i2--) {
+            this.imageMap.splice(deletedImages[i2], 1);
+          }
+          this.imageMap.forEach((image2) => {
+            const placeholderRegex = new RegExp(image2.placeholder.replace(/[[\]]/g, "\\$&"), "g");
+            content = content.replace(placeholderRegex, image2.markdown);
+          });
+          this.submissionContent = content;
+        } catch (error2) {
+          formatAppLog("error", "at pages/chatList/groupTaskDetail.vue:422", "Error in syncContentWithDisplay:", error2);
+        }
+      },
+      // 从提交内容生成显示内容
+      generateDisplayContent() {
+        try {
+          if (this.imageMap.length === 0) {
+            const imageRegex = /!\[([^\]]*)\]\(([^)]+)\)/g;
+            let match2;
+            let index2 = 1;
+            this.imageMap = [];
+            while ((match2 = imageRegex.exec(this.submissionContent)) !== null) {
+              const altText = match2[1];
+              const imageUrl2 = match2[2];
+              const placeholder = `[图片${index2}]`;
+              const markdown = match2[0];
+              this.imageMap.push({
+                placeholder,
+                markdown
+              });
+              if (index2 > this.imageCounter) {
+                this.imageCounter = index2;
+              }
+              index2++;
+            }
+          }
+          let content = this.submissionContent;
+          this.imageMap.forEach((image2) => {
+            const markdownRegex = new RegExp(image2.markdown.replace(/[[\]()]/g, "\\$&"), "g");
+            content = content.replace(markdownRegex, image2.placeholder);
+          });
+          this.displayContent = content;
+        } catch (error2) {
+          formatAppLog("error", "at pages/chatList/groupTaskDetail.vue:469", "Error in generateDisplayContent:", error2);
+        }
+      },
       // 滚动事件处理
       onScroll(e2) {
         this.scrollPositions[this.activeTab] = e2.detail.scrollTop;
@@ -46205,35 +46716,47 @@ ${e2}</tr>
       },
       // 文本框获得焦点事件
       onTextareaFocus(e2) {
-        this.isTextareaFocused = true;
-        formatAppLog("log", "at pages/chatList/groupTaskDetail.vue:348", "文本框获得焦点");
-        this.$nextTick(() => {
-          this.scrollToTextareaBottom();
-        });
+        try {
+          this.isTextareaFocused = true;
+          formatAppLog("log", "at pages/chatList/groupTaskDetail.vue:488", "文本框获得焦点");
+          this.$nextTick(() => {
+            this.scrollToTextareaBottom();
+          });
+        } catch (error2) {
+          formatAppLog("error", "at pages/chatList/groupTaskDetail.vue:495", "Error in onTextareaFocus:", error2);
+        }
       },
       // 文本框失去焦点事件
       onTextareaBlur(e2) {
-        this.isTextareaFocused = false;
-        formatAppLog("log", "at pages/chatList/groupTaskDetail.vue:359", "文本框失去焦点");
+        try {
+          this.isTextareaFocused = false;
+          formatAppLog("log", "at pages/chatList/groupTaskDetail.vue:503", "文本框失去焦点");
+        } catch (error2) {
+          formatAppLog("error", "at pages/chatList/groupTaskDetail.vue:505", "Error in onTextareaBlur:", error2);
+        }
       },
       // 滚动到文本框底部
       scrollToTextareaBottom() {
-        if (!this.isTextareaFocused)
-          return;
-        const textarea = this.$refs.submissionTextarea;
-        if (textarea) {
-          this.$nextTick(() => {
-            const textareaElement = textarea.$el || textarea;
-            if (textareaElement) {
-              const scrollHeight = textareaElement.scrollHeight || 0;
-              const clientHeight = textareaElement.clientHeight || 0;
-              if (scrollHeight > clientHeight) {
-                this.textareaScrollTop = scrollHeight - clientHeight;
+        try {
+          if (!this.isTextareaFocused)
+            return;
+          const textarea = this.$refs.submissionTextarea;
+          if (textarea) {
+            this.$nextTick(() => {
+              const textareaElement = textarea.$el || textarea;
+              if (textareaElement) {
+                const scrollHeight = textareaElement.scrollHeight || 0;
+                const clientHeight = textareaElement.clientHeight || 0;
+                if (scrollHeight > clientHeight) {
+                  this.textareaScrollTop = scrollHeight - clientHeight;
+                }
               }
-            }
-          });
+            });
+          }
+          formatAppLog("log", "at pages/chatList/groupTaskDetail.vue:532", "滚动到文本框底部");
+        } catch (error2) {
+          formatAppLog("error", "at pages/chatList/groupTaskDetail.vue:534", "Error in scrollToTextareaBottom:", error2);
         }
-        formatAppLog("log", "at pages/chatList/groupTaskDetail.vue:384", "滚动到文本框底部");
       },
       // 切换tab
       switchTab(tab) {
@@ -46268,11 +46791,11 @@ ${e2}</tr>
       },
       // 返回上一页
       goBack() {
-        formatAppLog("log", "at pages/chatList/groupTaskDetail.vue:437", "尝试返回上一页");
+        formatAppLog("log", "at pages/chatList/groupTaskDetail.vue:588", "尝试返回上一页");
         const pages2 = getCurrentPages();
-        formatAppLog("log", "at pages/chatList/groupTaskDetail.vue:440", "当前页面栈长度:", pages2.length);
+        formatAppLog("log", "at pages/chatList/groupTaskDetail.vue:591", "当前页面栈长度:", pages2.length);
         const backTimeout = setTimeout(() => {
-          formatAppLog("warn", "at pages/chatList/groupTaskDetail.vue:444", "页面返回超时，强制跳转到任务列表");
+          formatAppLog("warn", "at pages/chatList/groupTaskDetail.vue:595", "页面返回超时，强制跳转到任务列表");
           uni.redirectTo({
             url: "/pages/chatList/groupTaskList",
             fail: () => {
@@ -46290,15 +46813,15 @@ ${e2}</tr>
             },
             fail: (err) => {
               clearTimeout(backTimeout);
-              formatAppLog("error", "at pages/chatList/groupTaskDetail.vue:463", "navigateBack失败:", err);
+              formatAppLog("error", "at pages/chatList/groupTaskDetail.vue:614", "navigateBack失败:", err);
               uni.redirectTo({
                 url: "/pages/chatList/groupTaskList",
                 fail: (err2) => {
-                  formatAppLog("error", "at pages/chatList/groupTaskDetail.vue:468", "redirectTo失败:", err2);
+                  formatAppLog("error", "at pages/chatList/groupTaskDetail.vue:619", "redirectTo失败:", err2);
                   uni.switchTab({
                     url: "/pages/chatList/groupTaskList",
                     fail: (err3) => {
-                      formatAppLog("error", "at pages/chatList/groupTaskDetail.vue:473", "switchTab失败:", err3);
+                      formatAppLog("error", "at pages/chatList/groupTaskDetail.vue:624", "switchTab失败:", err3);
                       uni.reLaunch({
                         url: "/pages/chatList/groupTaskList"
                       });
@@ -46370,10 +46893,9 @@ ${e2}</tr>
           return 0;
         const finish = task2.groupTaskFinish || 0;
         const unfinished = task2.groupTaskUnfinished || 0;
-        const total = finish + unfinished;
-        if (total === 0)
+        if (unfinished === 0)
           return 0;
-        return finish / total * 100;
+        return finish / unfinished * 100;
       },
       // 格式化日期显示
       formatDate(dateStr) {
@@ -46402,31 +46924,86 @@ ${e2}</tr>
           });
           return;
         }
-        try {
-          this.submitting = true;
-          const res2 = await this.submitTaskAnswer({
-            taskId: this.taskId,
-            answer: this.submissionContent
-          });
-          if (res2.code === 200) {
-            uni.showToast({
-              title: "作业提交成功",
-              icon: "success"
-            });
-            this.isSubmitted = true;
-            this.submissionContent = "";
-          } else {
-            throw new Error(res2.msg || "提交失败");
+        uni.showModal({
+          title: "确认提交",
+          content: "确定要提交作业吗？提交后将无法修改。",
+          success: async (modalRes) => {
+            if (modalRes.confirm) {
+              try {
+                this.submitting = true;
+                const imageFiles = this.imageMap.map((image2) => image2.localPath).filter((path2) => path2);
+                uni.showLoading({
+                  title: "提交作业中..."
+                });
+                if (imageFiles.length > 0) {
+                  const uploadResult = await UploadUtils.uploadFilesArray({
+                    url: "/group/groupTaskAnswer/submit",
+                    filePaths: imageFiles,
+                    name: "file",
+                    // 图片文件使用字段名'sources'
+                    formData: {
+                      groupTaskId: this.taskId,
+                      markdown: this.submissionContent
+                    },
+                    header: {
+                      "Authorization": `${uni.getStorageSync("token")}`
+                    },
+                    onProgress: (completed, total, res2) => {
+                      formatAppLog("log", "at pages/chatList/groupTaskDetail.vue:787", `上传进度: ${completed}/${total}`);
+                    }
+                  });
+                  const success = uploadResult.every((result) => result.success);
+                  if (success) {
+                    uni.showToast({
+                      title: "作业提交成功",
+                      icon: "success"
+                    });
+                    this.isSubmitted = true;
+                    this.submissionContent = "";
+                    this.displayContent = "";
+                    this.imageMap = [];
+                    this.imageCounter = 0;
+                    this.hasSubmitted = true;
+                    await this.loadMyTaskAnswer();
+                  } else {
+                    throw new Error("提交失败");
+                  }
+                } else {
+                  const res2 = await this.submitTaskAnswer({
+                    groupTaskId: this.taskId,
+                    markdown: this.submissionContent
+                  });
+                  if (res2.code === 200) {
+                    uni.showToast({
+                      title: "作业提交成功",
+                      icon: "success"
+                    });
+                    this.isSubmitted = true;
+                    this.submissionContent = "";
+                    this.displayContent = "";
+                    this.imageMap = [];
+                    this.imageCounter = 0;
+                    this.hasSubmitted = true;
+                    await this.loadMyTaskAnswer();
+                  } else {
+                    throw new Error(res2.msg || "提交失败");
+                  }
+                }
+              } catch (error2) {
+                formatAppLog("error", "at pages/chatList/groupTaskDetail.vue:841", "提交作业失败:", error2);
+                uni.showToast({
+                  title: error2.message || "提交失败",
+                  icon: "none"
+                });
+              } finally {
+                uni.hideLoading();
+                this.submitting = false;
+              }
+            } else if (modalRes.cancel) {
+              formatAppLog("log", "at pages/chatList/groupTaskDetail.vue:852", "用户取消提交作业");
+            }
           }
-        } catch (error2) {
-          formatAppLog("error", "at pages/chatList/groupTaskDetail.vue:623", "提交作业失败:", error2);
-          uni.showToast({
-            title: error2.message || "提交失败",
-            icon: "none"
-          });
-        } finally {
-          this.submitting = false;
-        }
+        });
       },
       // 预览Markdown内容
       previewMarkdown() {
@@ -46448,57 +47025,122 @@ ${e2}</tr>
         });
       },
       // 图片上传功能
-      async uploadImage() {
+      uploadImage() {
         if (this.uploading) {
           return;
         }
-        try {
-          this.uploading = true;
-          const [chooseErr, chooseRes] = await uni.chooseImage({
-            count: 1,
-            sizeType: ["compressed"],
-            sourceType: ["album", "camera"]
-          });
-          if (chooseErr) {
-            throw new Error("选择图片失败");
-          }
-          const tempFilePath = chooseRes.tempFilePaths[0];
-          await new Promise((resolve) => setTimeout(resolve, 1e3));
-          const imageMarkdown = `
-![图片描述](${tempFilePath})
+        this.uploading = true;
+        uni.chooseImage({
+          count: 1,
+          sizeType: ["compressed"],
+          sourceType: ["album", "camera"],
+          success: (chooseRes) => {
+            try {
+              const tempFilePath = chooseRes.tempFilePaths[0];
+              this.imageCounter = this.imageCounter || 0;
+              this.imageCounter++;
+              const placeholder = `[图片${this.imageCounter}]`;
+              const imageMarkdown = `![图片${this.imageCounter}](${tempFilePath})`;
+              this.imageMap.push({
+                placeholder,
+                markdown: imageMarkdown,
+                localPath: tempFilePath
+                // 保存本地路径
+              });
+              const textarea = this.$refs.submissionTextarea;
+              let newDisplayContent = this.displayContent;
+              if (textarea && textarea.$el) {
+                const cursorPosition = textarea.$el.selectionStart || newDisplayContent.length;
+                const beforeText = newDisplayContent.substring(0, cursorPosition);
+                const afterText = newDisplayContent.substring(cursorPosition);
+                newDisplayContent = beforeText + `
+${placeholder}
+` + afterText;
+              } else {
+                newDisplayContent += `
+${placeholder}
 `;
-          this.submissionContent += imageMarkdown;
-          uni.showToast({
-            title: "图片已添加",
-            icon: "success"
-          });
-        } catch (error2) {
-          uni.showToast({
-            title: error2.message || "上传失败",
-            icon: "none"
-          });
-        } finally {
-          this.uploading = false;
-        }
+              }
+              this.displayContent = newDisplayContent;
+              this.syncContentWithDisplay();
+              uni.showToast({
+                title: "图片已添加",
+                icon: "success"
+              });
+            } catch (error2) {
+              uni.showToast({
+                title: error2.message || "添加失败",
+                icon: "none"
+              });
+            } finally {
+              this.uploading = false;
+            }
+          },
+          fail: (chooseErr) => {
+            formatAppLog("error", "at pages/chatList/groupTaskDetail.vue:950", "选择图片失败:", chooseErr);
+            uni.showToast({
+              title: "选择图片失败",
+              icon: "none"
+            });
+            this.uploading = false;
+          }
+        });
       },
       // 加载任务详情
       loadTaskDetail(taskData) {
         this.taskDetail = taskData;
+      },
+      // 获取我的任务答案
+      async loadMyTaskAnswer() {
+        if (!this.taskId)
+          return;
+        try {
+          const res2 = await this.getMyTaskAnswers({ groupTaskId: this.taskId });
+          if (res2.code === 200) {
+            if (res2.data === null) {
+              this.hasSubmitted = false;
+              this.taskAnswer = null;
+            } else {
+              this.hasSubmitted = true;
+              this.taskAnswer = res2.data;
+              this.isSubmitted = true;
+              this.submissionContent = res2.data.context || "";
+              this.generateDisplayContent();
+            }
+          } else {
+            formatAppLog("error", "at pages/chatList/groupTaskDetail.vue:991", "获取任务答案失败:", res2.msg);
+          }
+        } catch (error2) {
+          formatAppLog("error", "at pages/chatList/groupTaskDetail.vue:994", "获取任务答案失败:", error2);
+        }
+      },
+      // 重新提交
+      editSubmission() {
+        this.hasSubmitted = false;
+        this.isSubmitted = false;
+        this.$nextTick(() => {
+          this.generateDisplayContent();
+        });
       }
     },
     // 页面加载时获取参数
     onLoad(options2) {
-      const eventChannel = this.getOpenerEventChannel();
-      if (eventChannel) {
-        eventChannel.on("taskData", (data2) => {
-          if (data2 && data2.taskId) {
-            this.taskId = data2.taskId;
-            this.groupId = data2.groupId;
-            if (data2.taskDetail) {
-              this.loadTaskDetail(data2.taskDetail);
+      try {
+        const eventChannel = this.getOpenerEventChannel();
+        if (eventChannel) {
+          eventChannel.on("taskData", (data2) => {
+            if (data2 && data2.taskId) {
+              this.taskId = data2.taskId;
+              this.groupId = data2.groupId;
+              if (data2.taskDetail) {
+                this.loadTaskDetail(data2.taskDetail);
+              }
+              this.loadMyTaskAnswer();
             }
-          }
-        });
+          });
+        }
+      } catch (error2) {
+        formatAppLog("error", "at pages/chatList/groupTaskDetail.vue:1033", "Error in onLoad - eventChannel:", error2);
       }
       const userInfo = uni.getStorageSync("userInfo");
       if (userInfo && userInfo.status) {
@@ -46510,36 +47152,59 @@ ${e2}</tr>
       } else {
         this.currentUserRole = "member";
       }
+      this.$nextTick(() => {
+        this.generateDisplayContent();
+      });
     },
     // 页面显示时的处理
     onShow() {
-      formatAppLog("log", "at pages/chatList/groupTaskDetail.vue:743", "任务详情页面显示");
-      uni.onKeyboardHeightChange(this.onKeyboardHeightChange);
+      formatAppLog("log", "at pages/chatList/groupTaskDetail.vue:1058", "任务详情页面显示");
+      try {
+        if (this.onKeyboardHeightChange && typeof this.onKeyboardHeightChange === "function") {
+          uni.onKeyboardHeightChange(this.onKeyboardHeightChange);
+        } else {
+          formatAppLog("warn", "at pages/chatList/groupTaskDetail.vue:1066", "onKeyboardHeightChange is not a valid function, cannot register keyboard listener");
+        }
+      } catch (error2) {
+        formatAppLog("error", "at pages/chatList/groupTaskDetail.vue:1069", "Error registering keyboard height change listener in onShow:", error2);
+      }
     },
     // 页面卸载时的处理
     onUnload() {
-      formatAppLog("log", "at pages/chatList/groupTaskDetail.vue:750", "任务详情页面卸载");
+      formatAppLog("log", "at pages/chatList/groupTaskDetail.vue:1075", "任务详情页面卸载");
       if (this.backTimeout) {
         clearTimeout(this.backTimeout);
       }
-      uni.offKeyboardHeightChange(this.onKeyboardHeightChange);
+      try {
+        if (this.onKeyboardHeightChange && typeof this.onKeyboardHeightChange === "function") {
+          uni.offKeyboardHeightChange(this.onKeyboardHeightChange);
+        } else {
+          formatAppLog("warn", "at pages/chatList/groupTaskDetail.vue:1088", "onKeyboardHeightChange is not a valid function, cannot unregister keyboard listener");
+        }
+      } catch (error2) {
+        formatAppLog("error", "at pages/chatList/groupTaskDetail.vue:1091", "Error unregistering keyboard height change listener in onUnload:", error2);
+      }
     },
     // 键盘高度变化处理
     onKeyboardHeightChange(res2) {
-      this.keyboardHeight = res2.height;
-      if (res2.height > 0) {
-        this.toolbarBottom = res2.height;
-        formatAppLog("log", "at pages/chatList/groupTaskDetail.vue:768", "键盘弹起，高度:", res2.height);
-        if (this.isTextareaFocused) {
-          setTimeout(() => {
-            this.scrollToTextareaBottom();
-          }, 100);
+      try {
+        this.keyboardHeight = res2.height || 0;
+        if (res2.height > 0) {
+          this.toolbarBottom = res2.height;
+          formatAppLog("log", "at pages/chatList/groupTaskDetail.vue:1104", "键盘弹起，高度:", res2.height);
+          if (this.isTextareaFocused) {
+            setTimeout(() => {
+              this.scrollToTextareaBottom();
+            }, 100);
+          }
+        } else {
+          this.toolbarBottom = 0;
+          formatAppLog("log", "at pages/chatList/groupTaskDetail.vue:1116", "键盘收起");
         }
-      } else {
-        this.toolbarBottom = 0;
-        formatAppLog("log", "at pages/chatList/groupTaskDetail.vue:780", "键盘收起");
+        this.$forceUpdate();
+      } catch (error2) {
+        formatAppLog("error", "at pages/chatList/groupTaskDetail.vue:1122", "Error in onKeyboardHeightChange:", error2);
       }
-      this.$forceUpdate();
     }
   };
   function _sfc_render$1V(_ctx, _cache, $props, $setup, $data, $options) {
@@ -46641,116 +47306,183 @@ ${e2}</tr>
                 "div",
                 { class: "tab-content" },
                 [
-                  vue.createCommentVNode(" 作业提交区域 "),
-                  $data.taskDetail ? (vue.openBlock(), vue.createElementBlock("div", {
+                  vue.createCommentVNode(" 已提交内容显示 "),
+                  $data.hasSubmitted && $data.taskAnswer ? (vue.openBlock(), vue.createElementBlock("div", {
                     key: 0,
-                    class: "submission-section"
+                    class: "submitted-content"
                   }, [
                     vue.createElementVNode("div", { class: "section-header" }, [
-                      vue.createElementVNode("h3", { class: "section-title" }, "提交作业"),
-                      vue.createElementVNode("div", { class: "submission-actions" }, [
+                      vue.createElementVNode("h3", { class: "section-title" }, "已提交的作业"),
+                      $options.getTaskStatus($data.taskDetail) === "进行中" || $options.getTaskStatus($data.taskDetail) === "已结束" ? (vue.openBlock(), vue.createElementBlock("div", {
+                        key: 0,
+                        class: "submission-actions"
+                      }, [
                         vue.createVNode(_component_u_button, {
                           type: "primary",
                           size: "mini",
-                          disabled: $data.isSubmitted || $data.submitting,
-                          onClick: $options.submitTask,
-                          text: $data.isSubmitted ? "已提交" : $data.submitting ? "提交中..." : "提交"
-                        }, null, 8, ["disabled", "onClick", "text"])
-                      ])
+                          onClick: $options.editSubmission,
+                          text: "重新提交"
+                        }, null, 8, ["onClick"])
+                      ])) : vue.createCommentVNode("v-if", true)
                     ]),
                     vue.createElementVNode("hr", { class: "section-divider" }),
-                    vue.createElementVNode("div", { class: "submission-form" }, [
-                      vue.createElementVNode("div", { class: "editor-container" }, [
-                        vue.createElementVNode("div", { class: "submission-header" }, [
-                          vue.createElementVNode("div", { class: "markdown-info" }, [
-                            vue.createElementVNode("span", { class: "markdown-text" }, "支持markdown格式"),
-                            vue.createVNode(_component_u_icon, {
-                              name: "question-circle",
-                              size: "16",
-                              color: "#6c757d",
-                              onClick: $options.goToMarkdownGuide
-                            }, null, 8, ["onClick"])
-                          ]),
-                          vue.createVNode(_component_u_button, {
-                            type: "info",
-                            size: "mini",
-                            onClick: $options.previewMarkdown
-                          }, {
-                            default: vue.withCtx(() => [
-                              vue.createTextVNode(" 预览 ")
-                            ]),
-                            _: 1
-                            /* STABLE */
-                          }, 8, ["onClick"])
-                        ]),
-                        vue.createCommentVNode(" 使用scroll-view包装文本框 "),
-                        vue.createElementVNode("scroll-view", {
-                          class: "textarea-container",
-                          "scroll-y": "true",
-                          "scroll-top": $data.textareaScrollTop,
-                          onScroll: _cache[5] || (_cache[5] = (...args) => $options.onTextareaScroll && $options.onTextareaScroll(...args)),
-                          style: vue.normalizeStyle($options.textareaContainerStyle),
-                          "enable-flex": "true"
-                        }, [
-                          vue.withDirectives(vue.createElementVNode("textarea", {
-                            ref: "submissionTextarea",
-                            class: "submission-text",
-                            "onUpdate:modelValue": _cache[2] || (_cache[2] = ($event) => $data.submissionContent = $event),
-                            placeholder: "请输入你的作业内容，支持Markdown语法...",
-                            disabled: $data.isSubmitted,
-                            style: vue.normalizeStyle($options.textareaStyle),
-                            onFocus: _cache[3] || (_cache[3] = (...args) => $options.onTextareaFocus && $options.onTextareaFocus(...args)),
-                            onBlur: _cache[4] || (_cache[4] = (...args) => $options.onTextareaBlur && $options.onTextareaBlur(...args))
-                          }, null, 44, ["disabled"]), [
-                            [vue.vModelText, $data.submissionContent]
-                          ])
-                        ], 44, ["scroll-top"])
-                      ]),
-                      vue.createCommentVNode(" 图片功能栏容器 "),
-                      vue.createElementVNode("div", { class: "image-toolbar-container" }, [
-                        vue.createCommentVNode(" 图片功能栏 "),
-                        vue.createElementVNode(
-                          "div",
-                          {
-                            class: vue.normalizeClass(["image-toolbar", { "keyboard-up": $data.keyboardHeight > 0 }]),
-                            style: vue.normalizeStyle($options.toolbarStyle),
-                            ref: "imageToolbar"
-                          },
-                          [
-                            vue.createVNode(_component_u_icon, {
-                              name: "plus-circle",
-                              size: "24",
-                              color: "#4361ee",
-                              onClick: $options.uploadImage,
-                              class: "toolbar-icon"
-                            }, null, 8, ["onClick"]),
-                            vue.createElementVNode("span", { class: "toolbar-text" }, "添加图片")
-                          ],
-                          6
-                          /* CLASS, STYLE */
-                        )
-                      ])
-                    ])
-                  ])) : vue.createCommentVNode("v-if", true),
-                  vue.createCommentVNode(" 权限提示 "),
-                  !$options.canSubmitTask && $data.taskDetail ? (vue.openBlock(), vue.createElementBlock("div", {
-                    key: 1,
-                    class: "permission-prompt"
-                  }, [
-                    $data.taskDetail ? (vue.openBlock(), vue.createBlock(_component_u_icon, {
+                    vue.createElementVNode("div", { class: "submitted-content-display" }, [
+                      vue.createVNode(_component_u_markdown, {
+                        content: $data.taskAnswer.context,
+                        previewImg: true,
+                        theme: "light",
+                        showLineNumber: false
+                      }, null, 8, ["content"])
+                    ]),
+                    vue.createCommentVNode(" 权限提示信息（仅在无法再次提交时显示） "),
+                    !$options.canSubmitTask ? (vue.openBlock(), vue.createElementBlock("div", {
                       key: 0,
-                      name: "lock",
+                      class: "permission-note"
+                    }, [
+                      vue.createVNode(_component_u_icon, {
+                        name: "info-circle",
+                        size: "20",
+                        color: "#6c757d"
+                      }),
+                      vue.createElementVNode(
+                        "small",
+                        null,
+                        vue.toDisplayString($options.permissionMessage),
+                        1
+                        /* TEXT */
+                      )
+                    ])) : vue.createCommentVNode("v-if", true)
+                  ])) : $data.taskDetail && $options.canSubmitTask ? (vue.openBlock(), vue.createElementBlock(
+                    vue.Fragment,
+                    { key: 1 },
+                    [
+                      vue.createCommentVNode(" 作业提交区域 "),
+                      vue.createElementVNode("div", { class: "submission-section" }, [
+                        vue.createElementVNode("div", { class: "section-header" }, [
+                          vue.createElementVNode("h3", { class: "section-title" }, "提交作业"),
+                          vue.createElementVNode("div", { class: "submission-actions" }, [
+                            vue.createVNode(_component_u_button, {
+                              type: "primary",
+                              size: "mini",
+                              disabled: $data.isSubmitted || $data.submitting,
+                              onClick: $options.submitTask,
+                              text: $data.isSubmitted ? "已提交" : $data.submitting ? "提交中..." : "提交"
+                            }, null, 8, ["disabled", "onClick", "text"])
+                          ])
+                        ]),
+                        vue.createElementVNode("hr", { class: "section-divider" }),
+                        vue.createElementVNode("div", { class: "submission-form" }, [
+                          vue.createElementVNode("div", { class: "editor-container" }, [
+                            vue.createElementVNode("div", { class: "submission-header" }, [
+                              vue.createElementVNode("div", { class: "markdown-info" }, [
+                                vue.createElementVNode("span", { class: "markdown-text" }, "支持markdown格式"),
+                                vue.createVNode(_component_u_icon, {
+                                  name: "question-circle",
+                                  size: "16",
+                                  color: "#6c757d",
+                                  onClick: $options.goToMarkdownGuide
+                                }, null, 8, ["onClick"])
+                              ]),
+                              vue.createVNode(_component_u_button, {
+                                type: "info",
+                                size: "mini",
+                                onClick: $options.previewMarkdown
+                              }, {
+                                default: vue.withCtx(() => [
+                                  vue.createTextVNode(" 预览 ")
+                                ]),
+                                _: 1
+                                /* STABLE */
+                              }, 8, ["onClick"])
+                            ]),
+                            vue.createCommentVNode(" 使用scroll-view包装文本框 "),
+                            vue.createElementVNode("scroll-view", {
+                              class: "textarea-container",
+                              "scroll-y": "true",
+                              "scroll-top": $data.textareaScrollTop,
+                              onScroll: _cache[5] || (_cache[5] = (...args) => $options.onTextareaScroll && $options.onTextareaScroll(...args)),
+                              style: vue.normalizeStyle($options.textareaContainerStyle),
+                              "enable-flex": "true"
+                            }, [
+                              vue.withDirectives(vue.createElementVNode("textarea", {
+                                ref: "submissionTextarea",
+                                class: "submission-text",
+                                "onUpdate:modelValue": _cache[2] || (_cache[2] = ($event) => $data.displayContent = $event),
+                                placeholder: "请输入你的作业内容，支持Markdown语法...",
+                                disabled: $data.isSubmitted,
+                                style: vue.normalizeStyle($options.textareaStyle),
+                                onFocus: _cache[3] || (_cache[3] = (...args) => $options.onTextareaFocus && $options.onTextareaFocus(...args)),
+                                onBlur: _cache[4] || (_cache[4] = (...args) => $options.onTextareaBlur && $options.onTextareaBlur(...args))
+                              }, null, 44, ["disabled"]), [
+                                [vue.vModelText, $data.displayContent]
+                              ])
+                            ], 44, ["scroll-top"])
+                          ]),
+                          vue.createCommentVNode(" 图片功能栏容器 "),
+                          vue.createElementVNode("div", { class: "image-toolbar-container" }, [
+                            vue.createCommentVNode(" 图片功能栏 "),
+                            vue.createElementVNode(
+                              "div",
+                              {
+                                class: vue.normalizeClass(["image-toolbar", { "keyboard-up": $data.keyboardHeight > 0 }]),
+                                style: vue.normalizeStyle($options.toolbarStyle),
+                                ref: "imageToolbar"
+                              },
+                              [
+                                vue.createVNode(_component_u_icon, {
+                                  name: "plus-circle",
+                                  size: "24",
+                                  color: "#4361ee",
+                                  onClick: $options.uploadImage,
+                                  class: "toolbar-icon"
+                                }, null, 8, ["onClick"]),
+                                vue.createElementVNode("span", { class: "toolbar-text" }, "添加图片")
+                              ],
+                              6
+                              /* CLASS, STYLE */
+                            )
+                          ])
+                        ])
+                      ])
+                    ],
+                    2112
+                    /* STABLE_FRAGMENT, DEV_ROOT_FRAGMENT */
+                  )) : !$options.canSubmitTask && $data.taskDetail && !$data.hasSubmitted ? (vue.openBlock(), vue.createElementBlock(
+                    vue.Fragment,
+                    { key: 2 },
+                    [
+                      vue.createCommentVNode(" 权限提示 "),
+                      vue.createElementVNode("div", { class: "permission-prompt" }, [
+                        $data.taskDetail ? (vue.openBlock(), vue.createBlock(_component_u_icon, {
+                          key: 0,
+                          name: "lock",
+                          size: "40",
+                          color: "#6c757d"
+                        })) : vue.createCommentVNode("v-if", true),
+                        $data.taskDetail ? (vue.openBlock(), vue.createElementBlock("p", { key: 1 }, "当前无法提交作业")) : vue.createCommentVNode("v-if", true),
+                        $data.taskDetail ? (vue.openBlock(), vue.createElementBlock(
+                          "small",
+                          { key: 2 },
+                          vue.toDisplayString($options.permissionMessage),
+                          1
+                          /* TEXT */
+                        )) : vue.createCommentVNode("v-if", true)
+                      ])
+                    ],
+                    2112
+                    /* STABLE_FRAGMENT, DEV_ROOT_FRAGMENT */
+                  )) : vue.createCommentVNode("v-if", true),
+                  vue.createCommentVNode(" 未提交状态提示 "),
+                  !$data.hasSubmitted && !$data.taskDetail ? (vue.openBlock(), vue.createElementBlock("div", {
+                    key: 3,
+                    class: "empty-state"
+                  }, [
+                    vue.createVNode(_component_u_icon, {
+                      name: "file-text",
                       size: "40",
-                      color: "#6c757d"
-                    })) : vue.createCommentVNode("v-if", true),
-                    $data.taskDetail ? (vue.openBlock(), vue.createElementBlock("p", { key: 1 }, "当前无法提交作业")) : vue.createCommentVNode("v-if", true),
-                    $data.taskDetail ? (vue.openBlock(), vue.createElementBlock(
-                      "small",
-                      { key: 2 },
-                      vue.toDisplayString($options.permissionMessage),
-                      1
-                      /* TEXT */
-                    )) : vue.createCommentVNode("v-if", true)
+                      color: "#adb5bd"
+                    }),
+                    vue.createElementVNode("p", null, "暂无任务详情")
                   ])) : vue.createCommentVNode("v-if", true)
                 ],
                 512
@@ -46855,7 +47587,7 @@ ${e2}</tr>
                   vue.createElementVNode(
                     "span",
                     null,
-                    vue.toDisplayString($data.taskDetail.groupTaskFinish || 0) + " / " + vue.toDisplayString(($data.taskDetail.groupTaskFinish || 0) + ($data.taskDetail.groupTaskUnfinished || 0)),
+                    vue.toDisplayString($data.taskDetail.groupTaskFinish || 0) + " / " + vue.toDisplayString($data.taskDetail.groupTaskUnfinished || 0),
                     1
                     /* TEXT */
                   )
@@ -66178,8 +66910,11 @@ __f__('log','at pages/chatList/markdownGuide.vue:129','Hello, World!');
       url: "/group/groupTaskAnswer/submit",
       method: "POST",
       data: {
-        taskId: data2.taskId,
-        answer: data2.answer
+        groupTaskId: data2.groupTaskId,
+        markdown: data2.markdown
+      },
+      header: {
+        "Content-Type": "application/x-www-form-urlencoded"
       }
     });
   };
@@ -66207,8 +66942,10 @@ __f__('log','at pages/chatList/markdownGuide.vue:129','Hello, World!');
       url: "/group/groupTaskAnswer/getMyGroupTaskAnswers",
       method: "POST",
       data: {
-        groupId: data2.groupId,
-        currentPage: data2.currentPage
+        groupTaskId: data2.groupTaskId
+      },
+      header: {
+        "Content-Type": "application/x-www-form-urlencoded"
       }
     });
   };

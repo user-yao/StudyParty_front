@@ -5,9 +5,12 @@ export const submit = (data) => {
         url: '/group/groupTaskAnswer/submit',
         method: 'POST',
         data: {
-            taskId: data.taskId,
-            answer: data.answer
-        }
+            groupTaskId: data.groupTaskId,
+            markdown: data.markdown
+        },
+		header: {
+			'Content-Type': 'application/x-www-form-urlencoded'
+		}
     });
 }
 
@@ -37,8 +40,10 @@ export const getMyGroupTaskAnswers = (data) => {
         url: '/group/groupTaskAnswer/getMyGroupTaskAnswers',
         method: 'POST',
         data: {
-            groupId: data.groupId,
-            currentPage: data.currentPage
-        }
+            groupTaskId: data.groupTaskId
+        },
+		header: {
+			'Content-Type': 'application/x-www-form-urlencoded'
+		}
     });
 }

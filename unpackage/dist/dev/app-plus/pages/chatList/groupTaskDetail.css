@@ -1347,6 +1347,38 @@ to { opacity: 1; transform: translateY(0);
 		color: #adb5bd;
 }
 
+	/* 权限提示信息样式 */
+.permission-note[data-v-dc252075] {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		margin-top: 15px;
+		padding: 10px 15px;
+		background-color: #e9f4ff;
+		border-radius: 8px;
+		border-left: 4px solid #4361ee;
+}
+.permission-note small[data-v-dc252075] {
+		color: #4361ee;
+		font-size: 0.9rem;
+}
+
+	/* 已提交内容显示样式 */
+.submitted-content[data-v-dc252075] {
+		background-color: #ffffff;
+		border-radius: 0;
+		padding: 0;
+		box-shadow: none;
+		margin-bottom: 0;
+}
+.submitted-content-display[data-v-dc252075] {
+		border: none;
+		border-radius: 0;
+		padding: 0;
+		background-color: #ffffff;
+		min-height: 200px;
+}
+
 	/* 模态框样式 */
 .modal-content[data-v-dc252075] {
 		width: calc(100vw - 40px);
