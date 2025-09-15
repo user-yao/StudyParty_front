@@ -38,3 +38,14 @@ export const uploadMarkdown = (data) => {
 		}
 	});
 }
+
+export const createGroupTask = (data) => {
+	return request({
+		url: '/group/groupTask/addGroupTask',
+		method: 'POST',
+		data,
+		header: {
+			'Content-Type': 'application/json'
+		}
+	});
+}

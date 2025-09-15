@@ -469,18 +469,22 @@ body {
 .header-actions {
 		display: flex;
 		gap: 15px;
+		align-items: center;
 }
 .header-actions i {
 		font-size: 1.3rem;
 		cursor: pointer;
 }
 
-	/* 新增任务按钮 */
-.add-task-top {
-		display: flex;
-		justify-content: center;
-		margin-top: 15px;
-		margin-bottom: 10px;
+	/* 新增任务图标样式 */
+.add-task-icon {
+		background: rgba(255, 255, 255, 0.2);
+		border-radius: 50%;
+		padding: 5px;
+		transition: background 0.3s;
+}
+.add-task-icon:hover {
+		background: rgba(255, 255, 255, 0.3);
 }
 
 	/* 搜索框样式 */

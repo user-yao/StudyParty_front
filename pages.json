@@ -143,6 +143,14 @@
 			{
 				"navigationBarTitleText" : "Markdown语法教程"
 			}
+		},
+		{
+			"path" : "pages/chatList/addGroupTask",
+			"style" : 
+			{
+				"navigationBarTitleText" : "添加小组任务",
+				"softinputMode": "adjustResize"
+			}
 		}
 	],
 	"globalStyle": {

@@ -1,4 +1,4 @@
-import { selectMyGroupTask, uploadMarkdown, deleteGroupTask } from '../../API/group/groupTask.js';
+import { selectMyGroupTask, uploadMarkdown, deleteGroupTask, createGroupTask } from '../../API/group/groupTask.js';
 
 export default {
   namespaced: true, // 添加命名空间配置

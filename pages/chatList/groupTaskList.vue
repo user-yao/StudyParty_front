@@ -10,6 +10,15 @@
 					</div>
 					<div class="header-actions">
 						<u-icon name="search" size="24" color="#ffffff" @click="toggleSearch"></u-icon>
+						<!-- 新增任务按钮 -->
+						<u-icon 
+							v-if="canPublishTask" 
+							name="plus" 
+							size="24" 
+							color="#ffffff" 
+							@click="addNewTask"
+							class="add-task-icon"
+						></u-icon>
 					</div>
 				</div>
 				
@@ -25,13 +34,6 @@
 					<button class="search-btn" @click="clearSearch">
 						<u-icon name="close" size="20" color="#ffffff"></u-icon>
 					</button>
-				</div>
-				
-				<!-- 新增任务按钮 -->
-				<div class="add-task-top" v-if="canPublishTask" @click="addNewTask">
-					<u-button type="primary" size="medium" shape="circle" :plain="false" :border="false">
-						<u-icon name="plus" size="20" color="#ffffff"></u-icon> 新增任务
-					</u-button>
 				</div>
 			</header>
 
@@ -218,8 +220,6 @@
 		data() {
 			return {
 				searchKeyword: '',
-				currentUserId: uni.getStorageSync('id') || 3, // 当前用户ID
-				currentUserRole: 'leader', // 当前用户角色: leader, deputy, teacher, enterprise, member
 				groupId: null, // 从参数传入的群组ID
 				loading: false, // 加载状态
 				searchTimer: null, // 搜索防抖定时器
@@ -229,10 +229,32 @@
 		computed: {
 			// 正确使用命名空间
 			...mapState('groupTask', ['groupTasks']),
+			...mapState('user', ['userInfo']),
+			...mapState('groupUser', ['groupUsers']),
+
+			// 获取当前用户ID
+			currentUserId() {
+				return this.userInfo && this.userInfo.id ? this.userInfo.id : null;
+			},
 
 			// 判断用户是否有权限发布任务
 			canPublishTask() {
-				return ['leader', 'deputy', 'teacher', 'enterprise'].includes(this.currentUserRole);
+				// 如果还没有群组用户信息，先返回false
+				if (!this.groupUsers || !Array.isArray(this.groupUsers) || !this.currentUserId) {
+					return false;
+				}
+				
+				// 在群组用户中查找当前用户
+				const currentUser = this.groupUsers.find(user => user.id === this.currentUserId);
+				
+				// 如果没找到当前用户信息，默认没有权限
+				if (!currentUser) {
+					return false;
+				}
+				
+				// 获取当前用户在群组中的角色
+				const userRole = currentUser.role || 'member';
+				return ['leader', 'deputy', 'teacher', 'enterprise'].includes(userRole);
 			},
 
 			// 按状态分组的任务列表
@@ -298,6 +320,7 @@
 		methods: {
 			// 正确使用命名空间
 			...mapActions('groupTask', ['selectMyGroupTask']),
+			...mapActions('groupUser', ['fetchGroupUsers']), // 添加获取群组用户信息的action
 			
 			// 返回上一页
 			goBack() {
@@ -351,10 +374,14 @@
 			// 添加新任务
 			addNewTask() {
 				console.log("添加新任务");
-				// 实际应用中可能跳转到添加任务页面
-				uni.showToast({
-					title: '功能开发中',
-					icon: 'none'
+				// 跳转到添加任务页面
+				uni.navigateTo({
+					url: '/pages/chatList/addGroupTask',
+					success: (res) => {
+						res.eventChannel.emit("groupData", {
+							groupId: this.groupId
+						});
+					}
 				});
 			},
 
@@ -384,7 +411,21 @@
 				}
 
 				// 组长、代理组长、老师和企业可以删除所有任务
-				return ['leader', 'deputy', 'teacher', 'enterprise'].includes(this.currentUserRole);
+				if (!this.groupUsers || !Array.isArray(this.groupUsers) || !this.currentUserId) {
+					return false;
+				}
+				
+				// 在群组用户中查找当前用户
+				const currentUser = this.groupUsers.find(user => user.id === this.currentUserId);
+				
+				// 如果没找到当前用户信息，默认没有权限
+				if (!currentUser) {
+					return false;
+				}
+				
+				// 获取当前用户在群组中的角色
+				const userRole = currentUser.role || 'member';
+				return ['leader', 'deputy', 'teacher', 'enterprise'].includes(userRole);
 			},
 
 			// 获取任务状态文本
@@ -470,6 +511,9 @@
 						groupId: this.groupId,
 						currentPage: 1
 					});
+					
+					// 同时获取群组用户信息
+					await this.fetchGroupUsers({ groupId: this.groupId });
 					
 					if (res.code !== 200) {
 						throw new Error(res.msg || '获取任务列表失败');
@@ -579,6 +623,7 @@
 	.header-actions {
 		display: flex;
 		gap: 15px;
+		align-items: center;
 	}
 
 	.header-actions i {
@@ -586,12 +631,16 @@
 		cursor: pointer;
 	}
 
-	/* 新增任务按钮 */
-	.add-task-top {
-		display: flex;
-		justify-content: center;
-		margin-top: 15px;
-		margin-bottom: 10px;
+	/* 新增任务图标样式 */
+	.add-task-icon {
+		background: rgba(255, 255, 255, 0.2);
+		border-radius: 50%;
+		padding: 5px;
+		transition: background 0.3s;
+	}
+
+	.add-task-icon:hover {
+		background: rgba(255, 255, 255, 0.3);
 	}
 
 	/* 搜索框样式 */
@@ -891,3 +940,17 @@
 		}
 	}
 </style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
