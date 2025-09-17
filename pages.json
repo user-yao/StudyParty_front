@@ -151,6 +151,34 @@
 				"navigationBarTitleText" : "添加小组任务",
 				"softinputMode": "adjustResize"
 			}
+		},
+		{
+			"path" : "pages/profile/settings",
+			"style" : 
+			{
+				"navigationBarTitleText" : "设置"
+			}
+		},
+		{
+			"path" : "pages/profile/changePassword",
+			"style" : 
+			{
+				"navigationBarTitleText" : "修改密码"
+			}
+		},
+		{
+			"path" : "pages/profile/about",
+			"style" : 
+			{
+				"navigationBarTitleText" : "关于我们"
+			}
+		},
+		{
+			"path" : "pages/profile/editProfile",
+			"style" : 
+			{
+				"navigationBarTitleText" : "修改个人信息"
+			}
 		}
 	],
 	"globalStyle": {

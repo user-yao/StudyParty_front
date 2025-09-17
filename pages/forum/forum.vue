@@ -291,7 +291,7 @@
             font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
         }
         
-        :root {
+        :global(:root) {
             --primary: #4361ee;
             --secondary: #3f37c9;
             --accent: #4895ef;

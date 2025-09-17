@@ -1,740 +1,608 @@
 <template>
-  <div>
-    <!-- 头部用户信息 -->
-    <div class="profile-header">
-        <div class="profile-top">
-            <div class="profile-title">个人中心</div>
-            <div class="header-actions">
-                <i class="fas fa-cog"></i>
-                <i class="fas fa-bell"></i>
-            </div>
+  <view class="body">
+    <!-- 顶部导航 -->
+    <header>
+      <div class="header-top">
+        <div class="logo">
+          <i class="fas fa-user"></i>
+          <span>个人中心</span>
         </div>
-        
-        <div class="user-info">
-            <div class="avatar-container">
-                <div class="avatar">张</div>
-                <div class="level-badge">7</div>
-            </div>
-            <div class="user-details">
-                <div class="username">张明轩</div>
-                <div class="user-title">前端开发学习路径 · 第3阶段</div>
-                <button class="edit-btn">
-                    <i class="fas fa-edit"></i> 编辑资料
-                </button>
-            </div>
+        <div class="header-actions">
+          <u-icon name="setting" size="20" color="#ffffff" @click="toSettings"></u-icon>
         </div>
+      </div>
+    </header>
+
+    <!-- 用户信息概览 -->
+    <div class="user-overview">
+      <div class="user-header">
+        <image class="avatar" :src="getUserAvatar()" mode="aspectFill"></image>
+        <div class="user-basic-info">
+          <div class="user-name-row">
+            <h2 class="user-name">{{ userInfo.name || '未设置昵称' }}</h2>
+          </div>
+          <p class="user-school">{{ userInfo.school || '未设置学校' }}</p>
+          <p class="user-major">{{ userInfo.major || '未设置专业' }}</p>
+        </div>
+        <div class="user-status-container">
+          <div class="user-status-tag">
+            <u-tag :text="getUserStatus()" :type="getUserStatusType()" size="mini" />
+          </div>
+        </div>
+      </div>
+      
+      <div class="edit-profile-section">
+        <u-button 
+          type="primary" 
+          size="small" 
+          plain 
+          @click="editProfile"
+          :custom-style="{ 
+            borderColor: '#4361ee', 
+            color: '#4361ee', 
+            backgroundColor: 'transparent',
+            borderRadius: '20px',
+            fontSize: '12px',
+            height: '28px',
+            padding: '0 15px'
+          }"
+        >
+          <u-icon name="edit-pen" size="14" color="#4361ee" style="margin-right: 4px;"></u-icon>
+          编辑资料
+        </u-button>
+      </div>
+      
+      <div class="user-stats">
+        <div class="stat-item">
+          <div class="stat-value">{{ userInfo.finishTask || 0 }}</div>
+          <div class="stat-label">完成任务</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value">{{ articleCount || 0 }}</div>
+          <div class="stat-label">发布帖子</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value">{{ userInfo.starPrestige || 0 }}</div>
+          <div class="stat-label">学术声望</div>
+        </div>
+      </div>
     </div>
-    
-    <!-- 用户数据卡片 -->
-    <div class="profile-card">
-        <div class="stats-grid">
-            <div class="stat-item">
-                <div class="stat-value">1.5h</div>
-                <div class="stat-label">今日学习</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-value">7天</div>
-                <div class="stat-label">连续学习</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-value">350</div>
-                <div class="stat-label">学习积分</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-value">12</div>
-                <div class="stat-label">完成任务</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-value">5</div>
-                <div class="stat-label">学习小组</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-value">28</div>
-                <div class="stat-label">学术声望</div>
-            </div>
+
+    <!-- 学习统计 -->
+    <div class="study-progress-section">
+      <div class="section-title">
+        <h3>学习统计</h3>
+      </div>
+      <div class="study-progress">
+        <!-- 连续打卡卡片 -->
+        <div class="clock-in-card">
+          <div class="clock-in-days">{{ userInfo.clockIn || 0 }}天</div>
+          <div class="motivational-quote">{{ getRandomQuote() }}</div>
+          <div class="clock-in-label">连续打卡</div>
         </div>
-        
-        <div class="divider"></div>
-        
-        <div class="progress-header">
-            <div class="progress-title">学习进度</div>
-            <div class="stat-value">75%</div>
+        <div class="study-hours">
+          <span>注册时间: {{ formatDate(userInfo.createDate) }}</span>
         </div>
-        <div class="progress-subtitle">前端开发学习路径 · 第3阶段</div>
-        <div class="progress-container">
-            <div class="progress-bar">
-                <div class="progress-fill"></div>
-            </div>
-            <div class="progress-info">
-                <span>已学: 24小时</span>
-                <span>剩余: 8小时</span>
-            </div>
-        </div>
+      </div>
     </div>
-    
-    <!-- 成就部分 -->
-    <div class="section-header">
-        <div class="section-title">我的成就</div>
-        <a href="#" class="section-link">查看全部</a>
+
+    <!-- 功能菜单 -->
+    <div class="function-menu">
+      <div class="menu-grid">
+        <div class="menu-item" @click="toGroupList">
+          <div class="menu-icon">
+            <u-icon name="account" size="24" color="#4361ee"></u-icon>
+          </div>
+          <div class="menu-name">我的小组</div>
+        </div>
+        <div class="menu-item" @click="toMyTasks">
+          <div class="menu-icon">
+            <u-icon name="order" size="24" color="#4361ee"></u-icon>
+          </div>
+          <div class="menu-name">我的任务</div>
+        </div>
+        <div class="menu-item" @click="toMyFriends">
+          <div class="menu-icon">
+            <u-icon name="man-add" size="24" color="#4361ee"></u-icon>
+          </div>
+          <div class="menu-name">我的好友</div>
+        </div>
+        <div class="menu-item" @click="toAchievements">
+          <div class="menu-icon">
+            <u-icon name="star" size="24" color="#4361ee"></u-icon>
+          </div>
+          <div class="menu-name">我的成就</div>
+        </div>
+      </div>
     </div>
-    
-    <div class="achievements-grid">
-        <div class="achievement-item">
-            <div class="achievement-icon">
-                <i class="fas fa-medal"></i>
-            </div>
-            <div class="achievement-name">初学乍练</div>
-        </div>
-        <div class="achievement-item">
-            <div class="achievement-icon">
-                <i class="fas fa-rocket"></i>
-            </div>
-            <div class="achievement-name">七日坚持</div>
-        </div>
-        <div class="achievement-item">
-            <div class="achievement-icon">
-                <i class="fas fa-code"></i>
-            </div>
-            <div class="achievement-name">代码达人</div>
-        </div>
-        <div class="achievement-item">
-            <div class="achievement-icon">
-                <i class="fas fa-trophy"></i>
-            </div>
-            <div class="achievement-name">任务大师</div>
-        </div>
-        <div class="achievement-item achievement-locked">
-            <div class="achievement-icon">
-                <i class="fas fa-users"></i>
-            </div>
-            <div class="achievement-name">团队领袖</div>
-        </div>
-        <div class="achievement-item achievement-locked">
-            <div class="achievement-icon">
-                <i class="fas fa-graduation-cap"></i>
-            </div>
-            <div class="achievement-name">学有所成</div>
-        </div>
-        <div class="achievement-item">
-            <div class="achievement-icon">
-                <i class="fas fa-lightbulb"></i>
-            </div>
-            <div class="achievement-name">灵感闪现</div>
-        </div>
-        <div class="achievement-item achievement-locked">
-            <div class="achievement-icon">
-                <i class="fas fa-crown"></i>
-            </div>
-            <div class="achievement-name">学神降临</div>
-        </div>
+
+    <!-- 其他信息占位 -->
+    <div class="placeholder-section">
+      <div class="section-title">
+        <h3>更多信息</h3>
+      </div>
+      <div class="placeholder-content">
+        <u-empty 
+          mode="list" 
+          text="更多功能正在开发中" 
+          icon="http://cdn.uviewui.com/uview/empty/data.png">
+        </u-empty>
+      </div>
     </div>
-    
-    <!-- 任务列表 -->
-    <div class="section-header">
-        <div class="section-title">我的任务</div>
-        <a href="#" class="section-link">查看全部</a>
-    </div>
-    
-    <div class="tasks-container">
-        <div class="task-item">
-            <div class="task-icon">
-                <i class="fas fa-book"></i>
-            </div>
-            <div class="task-details">
-                <div class="task-title">完成Vue.js组件开发课程</div>
-                <div class="task-meta">
-                    <div class="task-time">
-                        <i class="far fa-clock"></i> 今天18:00
-                    </div>
-                    <div class="task-status">进行中</div>
-                </div>
-            </div>
-            <div class="task-progress">
-                <div class="progress-circle">65%</div>
-            </div>
-        </div>
-        <div class="task-item">
-            <div class="task-icon">
-                <i class="fas fa-code"></i>
-            </div>
-            <div class="task-details">
-                <div class="task-title">算法挑战：二叉树遍历</div>
-                <div class="task-meta">
-                    <div class="task-time">
-                        <i class="far fa-clock"></i> 明天10:00
-                    </div>
-                    <div class="task-status">未开始</div>
-                </div>
-            </div>
-            <div class="task-progress">
-                <div class="progress-circle" style="background: radial-gradient(var(--card-bg) 60%, transparent 61%), conic-gradient(var(--accent) 0%, var(--light-gray) 0);">0%</div>
-            </div>
-        </div>
-        <div class="task-item">
-            <div class="task-icon">
-                <i class="fas fa-users"></i>
-            </div>
-            <div class="task-details">
-                <div class="task-title">小组项目：电商网站开发</div>
-                <div class="task-meta">
-                    <div class="task-time">
-                        <i class="far fa-clock"></i> 3天后
-                    </div>
-                    <div class="task-status">未开始</div>
-                </div>
-            </div>
-            <div class="task-progress">
-                <div class="progress-circle">15%</div>
-            </div>
-        </div>
-        <div class="task-item">
-            <div class="task-icon">
-                <i class="fas fa-question-circle"></i>
-            </div>
-            <div class="task-details">
-                <div class="task-title">解答社区问题：React性能优化</div>
-                <div class="task-meta">
-                    <div class="task-time">
-                        <i class="far fa-clock"></i> 5天后
-                    </div>
-                    <div class="task-status">待接受</div>
-                </div>
-            </div>
-            <div class="task-progress">
-                <div class="progress-circle" style="background: radial-gradient(var(--card-bg) 60%, transparent 61%), conic-gradient(var(--warning) 0%, var(--light-gray) 0); color: var(--warning);">0%</div>
-            </div>
-        </div>
-    </div>
-    
-    <!-- 功能列表 -->
-    <div class="section-header">
-        <div class="section-title">学习工具</div>
-        <a href="#" class="section-link">更多</a>
-    </div>
-    
-    <div class="features-container">
-        <div class="feature-grid">
-            <div class="feature-item">
-                <div class="feature-icon">
-                    <i class="fas fa-file-alt"></i>
-                </div>
-                <div class="feature-name">学力报告</div>
-            </div>
-            <div class="feature-item">
-                <div class="feature-icon">
-                    <i class="fas fa-bookmark"></i>
-                </div>
-                <div class="feature-name">我的收藏</div>
-            </div>
-            <div class="feature-item">
-                <div class="feature-icon">
-                    <i class="fas fa-history"></i>
-                </div>
-                <div class="feature-name">学习记录</div>
-            </div>
-            <div class="feature-item">
-                <div class="feature-icon">
-                    <i class="fas fa-certificate"></i>
-                </div>
-                <div class="feature-name">我的证书</div>
-            </div>
-            <div class="feature-item">
-                <div class="feature-icon">
-                    <i class="fas fa-coins"></i>
-                </div>
-                <div class="feature-name">积分兑换</div>
-            </div>
-            <div class="feature-item">
-                <div class="feature-icon">
-                    <i class="fas fa-user-friends"></i>
-                </div>
-                <div class="feature-name">我的小组</div>
-            </div>
-            <div class="feature-item">
-                <div class="feature-icon">
-                    <i class="fas fa-tasks"></i>
-                </div>
-                <div class="feature-name">任务所</div>
-            </div>
-            <div class="feature-item">
-                <div class="feature-icon">
-                    <i class="fas fa-cog"></i>
-                </div>
-                <div class="feature-name">设置</div>
-            </div>
-        </div>
-    </div>
-  </div>
+  </view>
 </template>
 
 <script>
-  export default {
-    data() {
-      return {}
+import { mapState, mapActions } from "vuex";
+import { imageUrl } from "@/config/config.js";
+
+export default {
+  data() {
+    return {
+      imageUrl: imageUrl,
+      articleCount: 0, // 发帖数量，等待后端更新数据
+      motivationalQuotes: [
+        "每一次坚持，都是成功的积累。",
+        "学习如逆水行舟，不进则退。",
+        "今天的努力，是明天的收获。",
+        "知识是通往自由的金钥匙。",
+        "持之以恒，方能成就非凡。",
+        "学而时习之，不亦说乎？",
+        "书山有路勤为径，学海无涯苦作舟。",
+        "不积跬步，无以至千里。",
+        "学习是成长的阶梯。",
+        "勤奋是成功之母。",
+        "学如逆水行舟，不进则退。",
+        "知识改变命运，学习成就未来。",
+        "每天进步一点点，就是成功的开始。",
+        "学习是点亮人生的明灯。",
+        "坚持就是胜利，努力必有回报。"
+      ]
+    };
+  },
+  computed: {
+    ...mapState({
+      userInfo: state => state.user.userInfo
+    })
+  },
+  onLoad() {
+    // 页面加载时可以从store获取最新用户信息
+    console.log("个人中心页面加载");
+    // TODO: 从后端获取用户的发帖数量
+    // this.fetchArticleCount();
+  },
+  methods: {
+    ...mapActions('user', ['selectUser']),
+    
+    // 获取用户头像
+    getUserAvatar() {
+      if (this.userInfo.head) {
+        return this.imageUrl + this.userInfo.head;
+      }
+      // 默认头像
+      return this.imageUrl + '/head/group.png';
+    },
+    
+    // 获取用户状态
+    getUserStatus() {
+      const statusMap = {
+        1: '学生',
+        2: '老师',
+        3: '企业'
+      };
+      return statusMap[this.userInfo.status] || '未知';
+    },
+    
+    // 获取用户状态标签类型
+    getUserStatusType() {
+      const typeMap = {
+        1: 'success',  // 学生 - 绿色
+        2: 'primary',  // 老师 - 蓝色
+        3: 'warning'   // 企业 - 橙色
+      };
+      return typeMap[this.userInfo.status] || 'info';
+    },
+    
+    // 格式化日期
+    formatDate(dateString) {
+      if (!dateString) return '未知';
+      const date = new Date(dateString);
+      return `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`;
+    },
+    
+    // 获取随机励志话语
+    getRandomQuote() {
+      const randomIndex = Math.floor(Math.random() * this.motivationalQuotes.length);
+      return this.motivationalQuotes[randomIndex];
+    },
+    
+    // 编辑资料
+    editProfile() {
+      uni.navigateTo({
+        url: '/pages/userInfo/userInfo'
+      });
+    },
+    
+    // 跳转到设置页面
+    toSettings() {
+      uni.navigateTo({
+        url: '/pages/profile/settings'
+      });
+    },
+    
+    // 跳转到小组列表
+    toGroupList() {
+      uni.navigateTo({
+        url: '/pages/chatList/groupList'
+      });
+    },
+    
+    // 跳转到我的任务
+    toMyTasks() {
+      this.$u.toast('任务功能正在开发中');
+    },
+    
+    // 跳转到我的好友
+    toMyFriends() {
+      uni.navigateTo({
+        url: '/pages/chatList/friendList'
+      });
+    },
+    
+    // 跳转到成就页面
+    toAchievements() {
+      this.$u.toast('成就功能正在开发中');
     }
   }
+};
 </script>
 
 <style scoped>
-  * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
-        }
-        
-        :root {
-            --primary: #4361ee;
-            --secondary: #3f37c9;
-            --accent: #4895ef;
-            --success: #4cc9f0;
-            --warning: #f72585;
-            --light: #f8f9fa;
-            --dark: #212529;
-            --gray: #6c757d;
-            --light-gray: #e9ecef;
-            --card-bg: #ffffff;
-            --section-bg: #f5f7fb;
-        }
-        
-        body {
-            background-color: #f0f2f5;
-            color: var(--dark);
-            padding-bottom: 80px;
-        }
-        
-        /* 头部用户信息 */
-        .profile-header {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            padding: 30px 20px 60px;
-            position: relative;
-        }
-        
-        .profile-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 25px;
-        }
-        
-        .profile-title {
-            font-size: 1.4rem;
-            font-weight: 600;
-        }
-        
-        .header-actions {
-            display: flex;
-            gap: 20px;
-        }
-        
-        .header-actions i {
-            font-size: 1.3rem;
-        }
-        
-        .user-info {
-            display: flex;
-            align-items: center;
-        }
-        
-        .avatar-container {
-            position: relative;
-            margin-right: 20px;
-        }
-        
-        .avatar {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            background: linear-gradient(45deg, #a1c4fd, #c2e9fb);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 2.2rem;
-            font-weight: bold;
-            border: 3px solid white;
-        }
-        
-        .level-badge {
-            position: absolute;
-            bottom: 0;
-            right: 0;
-            background: linear-gradient(45deg, #ff9a9e, #fad0c4);
-            color: white;
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.8rem;
-            font-weight: bold;
-            border: 2px solid white;
-        }
-        
-        .user-details {
-            flex: 1;
-        }
-        
-        .username {
-            font-size: 1.4rem;
-            font-weight: 600;
-            margin-bottom: 5px;
-        }
-        
-        .user-title {
-            font-size: 0.95rem;
-            opacity: 0.9;
-            margin-bottom: 10px;
-        }
-        
-        .edit-btn {
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            border: none;
-            padding: 6px 15px;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-        
-        .edit-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-        }
-        
-        /* 用户数据卡片 */
-        .profile-card {
-            background: var(--card-bg);
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-            margin: -40px 20px 20px;
-            padding: 25px;
-            position: relative;
-            z-index: 10;
-        }
-        
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
-            margin-bottom: 25px;
-        }
-        
-        .stat-item {
-            text-align: center;
-            padding: 15px 0;
-        }
-        
-        .stat-value {
-            font-size: 1.6rem;
-            font-weight: 700;
-            color: var(--primary);
-            margin-bottom: 5px;
-        }
-        
-        .stat-label {
-            font-size: 0.9rem;
-            color: var(--gray);
-        }
-        
-        .divider {
-            height: 1px;
-            background: var(--light-gray);
-            margin: 20px 0;
-        }
-        
-        /* 进度卡片 */
-        .progress-card {
-            background: var(--card-bg);
-            border-radius: 16px;
-            padding: 20px;
-            margin: 0 20px 20px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-        }
-        
-        .progress-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-        
-        .progress-title {
-            font-size: 1.1rem;
-            font-weight: 600;
-        }
-        
-        .progress-subtitle {
-            font-size: 0.9rem;
-            color: var(--gray);
-            margin-bottom: 15px;
-        }
-        
-        .progress-container {
-            margin-bottom: 15px;
-        }
-        
-        .progress-bar {
-            height: 10px;
-            background: var(--light-gray);
-            border-radius: 5px;
-            overflow: hidden;
-            margin-bottom: 10px;
-        }
-        
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--accent), var(--success));
-            border-radius: 5px;
-            width: 75%;
-        }
-        
-        .progress-info {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.85rem;
-            color: var(--gray);
-        }
-        
-        /* 成就部分 */
-        .section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin: 30px 20px 15px;
-        }
-        
-        .section-title {
-            font-size: 1.25rem;
-            font-weight: 600;
-        }
-        
-        .section-link {
-            font-size: 0.95rem;
-            color: var(--primary);
-            text-decoration: none;
-        }
-        
-        .achievements-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 15px;
-            margin: 0 20px;
-        }
-        
-        .achievement-item {
-            background: var(--card-bg);
-            border-radius: 16px;
-            padding: 15px 10px;
-            text-align: center;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-            transition: all 0.3s;
-        }
-        
-        .achievement-item:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
-        }
-        
-        .achievement-icon {
-            width: 50px;
-            height: 50px;
-            background: linear-gradient(135deg, var(--primary), var(--accent));
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 10px;
-            color: white;
-            font-size: 1.4rem;
-        }
-        
-        .achievement-name {
-            font-size: 0.85rem;
-            font-weight: 500;
-        }
-        
-        .achievement-locked {
-            opacity: 0.5;
-        }
-        
-        .achievement-locked .achievement-icon {
-            background: var(--light-gray);
-            color: var(--gray);
-        }
-        
-        /* 任务列表 */
-        .tasks-container {
-            background: var(--card-bg);
-            border-radius: 20px;
-            margin: 20px;
-            padding: 0;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-            overflow: hidden;
-        }
-        
-        .task-item {
-            display: flex;
-            padding: 20px;
-            border-bottom: 1px solid var(--light-gray);
-        }
-        
-        .task-item:last-child {
-            border-bottom: none;
-        }
-        
-        .task-icon {
-            width: 45px;
-            height: 45px;
-            background: var(--light);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 15px;
-            color: var(--primary);
-            font-size: 1.2rem;
-        }
-        
-        .task-details {
-            flex: 1;
-        }
-        
-        .task-title {
-            font-weight: 500;
-            margin-bottom: 5px;
-        }
-        
-        .task-meta {
-            display: flex;
-            font-size: 0.85rem;
-            color: var(--gray);
-        }
-        
-        .task-time {
-            margin-right: 15px;
-        }
-        
-        .task-status {
-            color: var(--warning);
-            font-weight: 500;
-        }
-        
-        .task-progress {
-            width: 70px;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-            justify-content: center;
-        }
-        
-        .progress-circle {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: 
-                radial-gradient(var(--card-bg) 60%, transparent 61%),
-                conic-gradient(var(--accent) 75%, var(--light-gray) 0);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.75rem;
-            font-weight: 600;
-            color: var(--accent);
-        }
-        
-        /* 功能列表 */
-        .features-container {
-            margin: 20px;
-        }
-        
-        .feature-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 20px;
-        }
-        
-        .feature-item {
-            text-align: center;
-        }
-        
-        .feature-icon {
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, var(--primary), var(--accent));
-            border-radius: 18px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 10px;
-            color: white;
-            font-size: 1.6rem;
-        }
-        
-        .feature-name {
-            font-size: 0.9rem;
-            font-weight: 500;
-        }
-        
-        /* 底部导航 */
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: white;
-            display: flex;
-            justify-content: space-around;
-            padding: 12px 0;
-            box-shadow: 0 -2px 15px rgba(0, 0, 0, 0.1);
-            z-index: 100;
-        }
-        
-        .nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            color: var(--gray);
-            text-decoration: none;
-            font-size: 0.75rem;
-        }
-        
-        .nav-item.active {
-            color: var(--primary);
-        }
-        
-        .nav-item i {
-            font-size: 1.3rem;
-            margin-bottom: 3px;
-        }
-        
-        /* 响应式调整 */
-        @media (max-width: 480px) {
-            .achievements-grid {
-                grid-template-columns: repeat(4, 1fr);
-                gap: 10px;
-            }
-            
-            .achievement-icon {
-                width: 40px;
-                height: 40px;
-                font-size: 1.2rem;
-            }
-            
-            .feature-grid {
-                grid-template-columns: repeat(4, 1fr);
-                gap: 10px;
-            }
-            
-            .feature-icon {
-                width: 50px;
-                height: 50px;
-                font-size: 1.4rem;
-            }
-        }
+.body {
+  background-color: #f5f7fb;
+  color: #333;
+  min-height: 100vh;
+}
+
+/* 顶部导航 */
+header {
+  background: linear-gradient(135deg, #4361ee, #3f37c9);
+  color: white;
+  padding: 15px 20px;
+  padding-top: 5vh;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  font-weight: 700;
+  font-size: 1.4rem;
+}
+
+.logo i {
+  margin-right: 8px;
+  font-size: 1.6rem;
+}
+
+.header-actions {
+  display: flex;
+  gap: 20px;
+}
+
+.header-actions i {
+  font-size: 1.3rem;
+  cursor: pointer;
+}
+
+/* 用户概览 */
+.user-overview {
+  background: white;
+  border-radius: 16px;
+  margin: 20px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  position: relative;
+}
+
+.user-header {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 20px;
+}
+
+.avatar {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: linear-gradient(45deg, #4895ef, #4cc9f0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin-right: 15px;
+  flex-shrink: 0;
+}
+
+.user-basic-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.user-name-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.user-name {
+  font-size: 1.4rem;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex: 1;
+}
+
+.user-school,
+.user-major {
+  font-size: 0.95rem;
+  color: #6c757d;
+  margin: 4px 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.user-status-container {
+  position: absolute;
+  top: 20px;
+  right: 70px; /* 避开编辑按钮的位置 */
+}
+
+.edit-profile-section {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
+
+.user-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+  text-align: center;
+  margin-top: 10px;
+}
+
+.stat-item {
+  background: #f8f9fa;
+  border-radius: 12px;
+  padding: 12px;
+}
+
+.stat-value {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #4361ee;
+  margin-bottom: 5px;
+}
+
+.stat-label {
+  font-size: 0.85rem;
+  color: #6c757d;
+}
+
+/* 学习统计 */
+.study-progress-section {
+  margin: 0 20px;
+}
+
+.section-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin: 25px 0 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.study-progress {
+  background: white;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+/* 连续打卡卡片 */
+.clock-in-card {
+  background: linear-gradient(135deg, #4361ee, #3f37c9);
+  border-radius: 16px;
+  padding: 25px 20px;
+  color: white;
+  margin-bottom: 20px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(67, 97, 238, 0.3);
+}
+
+.clock-in-card::before {
+  content: "";
+  position: absolute;
+  top: -50px;
+  right: -50px;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.clock-in-card::after {
+  content: "";
+  position: absolute;
+  bottom: -30px;
+  right: -30px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.clock-in-days {
+  font-size: 2.5rem;
+  font-weight: 700;
+  position: absolute;
+  top: 15px;
+  left: 20px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.motivational-quote {
+  font-size: 1.1rem;
+  text-align: center;
+  margin: 20px 0;
+  font-weight: 500;
+  line-height: 1.5;
+  padding: 0 30px;
+  min-height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.clock-in-label {
+  position: absolute;
+  bottom: 15px;
+  right: 20px;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 5px 15px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.study-hours {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
+  font-size: 0.85rem;
+  color: #6c757d;
+}
+
+/* 功能菜单 */
+.function-menu {
+  margin: 25px 20px;
+}
+
+.menu-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 15px;
+}
+
+.menu-item {
+  background: white;
+  border-radius: 12px;
+  padding: 15px 10px;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s;
+  cursor: pointer;
+}
+
+.menu-item:hover {
+  transform: translateY(-3px);
+}
+
+.menu-icon {
+  width: 50px;
+  height: 50px;
+  background: #f8f9fa;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 10px;
+}
+
+.menu-name {
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+/* 占位区域 */
+.placeholder-section {
+  margin: 25px 20px;
+}
+
+.placeholder-content {
+  background: white;
+  border-radius: 16px;
+  padding: 30px 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  text-align: center;
+}
+
+/* 响应式调整 */
+@media (max-width: 480px) {
+  .menu-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+  }
+  
+  .menu-icon {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .menu-name {
+    font-size: 0.75rem;
+  }
+  
+  .clock-in-days {
+    font-size: 2rem;
+  }
+  
+  .motivational-quote {
+    font-size: 1rem;
+    padding: 0 15px;
+  }
+  
+  .user-header {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+  
+  .avatar {
+    margin-right: 15px;
+  }
+  
+  .user-basic-info {
+    flex: 1;
+  }
+  
+  .user-status-container {
+    position: absolute;
+    top: 20px;
+    right: 70px;
+  }
+  
+  .edit-profile-section {
+    position: static;
+    margin-top: 15px;
+    display: flex;
+    justify-content: center;
+  }
+}
 </style>

@@ -51,8 +51,31 @@ export default {
       uni.setStorageSync('token', info.token);
     },
     CLEAR_USER_INFO(state) {
-      state.userInfo = null;
-      state.isLoggedIn = false;
+      state.userInfo = {
+        id:0,
+		name : '',
+		password : '',
+		head : '',
+		sex : '',
+		major : '',
+		grade : '',
+		status : 0,
+		starCoin : 0,
+		groupCoin : 0,
+		starPrestige : 0,
+		phone : '',
+		school : '',
+		clockIn : 0,
+		email : '',
+		lastLogin : '',
+		createDate : '',
+		finishTask:0,
+		token : ''
+      };
+      // 清除本地存储
+      uni.removeStorageSync('id');
+      uni.removeStorageSync('user');
+      uni.removeStorageSync('token');
     }
   },
   actions: {
@@ -74,5 +97,12 @@ export default {
 		  return res;
 	  }) 
 	},
+    // 退出登录
+    logout({ commit }) {
+      return new Promise((resolve) => {
+        commit('CLEAR_USER_INFO');
+        resolve();
+      });
+    }
   }
 };
