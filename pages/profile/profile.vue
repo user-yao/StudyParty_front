@@ -239,7 +239,9 @@ export default {
     
     // 跳转到我的任务
     toMyTasks() {
-      this.$u.toast('任务功能正在开发中');
+      uni.navigateTo({
+        url: '/pages/completedTasks/completedTasks'
+      });
     },
     
     // 跳转到我的好友

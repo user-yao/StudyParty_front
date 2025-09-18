@@ -1,0 +1,707 @@
+/**
+ * 这里是uni-app内置的常用样式变量
+ *
+ * uni-app 官方扩展插件及插件市场（https://ext.dcloud.net.cn）上很多三方插件均使用了这些样式变量
+ * 如果你是插件开发者，建议你使用scss预处理，并在插件代码中直接使用这些变量（无需 import 这个文件），方便用户通过搭积木的方式开发整体风格一致的App
+ *
+ */
+/**
+ * 如果你是App开发者（插件使用者），你可以通过修改这些变量来定制自己的插件主题，实现自定义主题功能
+ *
+ * 如果你的项目同样使用了scss预处理，你也可以直接在你的 scss 代码中使用如下变量，同时无需 import 这个文件
+ */
+/* 颜色变量 */
+/* 行为相关颜色 */
+/* 文字基本颜色 */
+/* 背景颜色 */
+/* 边框颜色 */
+/* 尺寸变量 */
+/* 文字尺寸 */
+/* 图片尺寸 */
+/* Border Radius */
+/* 水平间距 */
+/* 垂直间距 */
+/* 透明度 */
+/* 文章场景相关 */
+@font-face {
+  font-family: "uicon-iconfont";
+  src: url("https://at.alicdn.com/t/font_2225171_8kdcwk4po24.ttf") format("truetype");
+}
+.u-icon[data-v-1c933a9a] {
+  display: flex;
+  align-items: center;
+}
+.u-icon--left[data-v-1c933a9a] {
+  flex-direction: row-reverse;
+  align-items: center;
+}
+.u-icon--right[data-v-1c933a9a] {
+  flex-direction: row;
+  align-items: center;
+}
+.u-icon--top[data-v-1c933a9a] {
+  flex-direction: column-reverse;
+  justify-content: center;
+}
+.u-icon--bottom[data-v-1c933a9a] {
+  flex-direction: column;
+  justify-content: center;
+}
+.u-icon__icon[data-v-1c933a9a] {
+  font-family: uicon-iconfont;
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.u-icon__icon--primary[data-v-1c933a9a] {
+  color: #3c9cff;
+}
+.u-icon__icon--success[data-v-1c933a9a] {
+  color: #5ac725;
+}
+.u-icon__icon--error[data-v-1c933a9a] {
+  color: #f56c6c;
+}
+.u-icon__icon--warning[data-v-1c933a9a] {
+  color: #f9ae3d;
+}
+.u-icon__icon--info[data-v-1c933a9a] {
+  color: #909399;
+}
+.u-icon__img[data-v-1c933a9a] {
+  height: auto;
+  will-change: transform;
+}
+.u-icon__label[data-v-1c933a9a] {
+  line-height: 1;
+}
+/**
+ * 这里是uni-app内置的常用样式变量
+ *
+ * uni-app 官方扩展插件及插件市场（https://ext.dcloud.net.cn）上很多三方插件均使用了这些样式变量
+ * 如果你是插件开发者，建议你使用scss预处理，并在插件代码中直接使用这些变量（无需 import 这个文件），方便用户通过搭积木的方式开发整体风格一致的App
+ *
+ */
+/**
+ * 如果你是App开发者（插件使用者），你可以通过修改这些变量来定制自己的插件主题，实现自定义主题功能
+ *
+ * 如果你的项目同样使用了scss预处理，你也可以直接在你的 scss 代码中使用如下变量，同时无需 import 这个文件
+ */
+/* 颜色变量 */
+/* 行为相关颜色 */
+/* 文字基本颜色 */
+/* 背景颜色 */
+/* 边框颜色 */
+/* 尺寸变量 */
+/* 文字尺寸 */
+/* 图片尺寸 */
+/* Border Radius */
+/* 水平间距 */
+/* 垂直间距 */
+/* 透明度 */
+/* 文章场景相关 */
+.u-loading-icon[data-v-00752c6d] {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  color: #c8c9cc;
+}
+.u-loading-icon__text[data-v-00752c6d] {
+  margin-left: 4px;
+  color: #606266;
+  font-size: 14px;
+  line-height: 20px;
+}
+.u-loading-icon__spinner[data-v-00752c6d] {
+  width: 30px;
+  height: 30px;
+  position: relative;
+  box-sizing: border-box;
+  max-width: 100%;
+  max-height: 100%;
+  animation: u-rotate-00752c6d 1s linear infinite;
+}
+.u-loading-icon__spinner--semicircle[data-v-00752c6d] {
+  border-width: 2px;
+  border-color: transparent;
+  border-top-right-radius: 100px;
+  border-top-left-radius: 100px;
+  border-bottom-left-radius: 100px;
+  border-bottom-right-radius: 100px;
+  border-style: solid;
+}
+.u-loading-icon__spinner--circle[data-v-00752c6d] {
+  border-top-right-radius: 100px;
+  border-top-left-radius: 100px;
+  border-bottom-left-radius: 100px;
+  border-bottom-right-radius: 100px;
+  border-width: 2px;
+  border-top-color: #e5e5e5;
+  border-right-color: #e5e5e5;
+  border-bottom-color: #e5e5e5;
+  border-left-color: #e5e5e5;
+  border-style: solid;
+}
+.u-loading-icon--vertical[data-v-00752c6d] {
+  flex-direction: column;
+}
+[data-v-00752c6d]:host {
+  font-size: 0px;
+  line-height: 1;
+}
+.u-loading-icon__spinner--spinner[data-v-00752c6d] {
+  animation-timing-function: steps(12);
+}
+.u-loading-icon__text[data-v-00752c6d]:empty {
+  display: none;
+}
+.u-loading-icon--vertical .u-loading-icon__text[data-v-00752c6d] {
+  margin: 6px 0 0;
+  color: #606266;
+}
+.u-loading-icon__dot[data-v-00752c6d] {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+.u-loading-icon__dot[data-v-00752c6d]:before {
+  display: block;
+  width: 2px;
+  height: 25%;
+  margin: 0 auto;
+  background-color: currentColor;
+  border-radius: 40%;
+  content: " ";
+}
+.u-loading-icon__dot[data-v-00752c6d]:nth-of-type(1) {
+  transform: rotate(30deg);
+  opacity: 1;
+}
+.u-loading-icon__dot[data-v-00752c6d]:nth-of-type(2) {
+  transform: rotate(60deg);
+  opacity: 0.9375;
+}
+.u-loading-icon__dot[data-v-00752c6d]:nth-of-type(3) {
+  transform: rotate(90deg);
+  opacity: 0.875;
+}
+.u-loading-icon__dot[data-v-00752c6d]:nth-of-type(4) {
+  transform: rotate(120deg);
+  opacity: 0.8125;
+}
+.u-loading-icon__dot[data-v-00752c6d]:nth-of-type(5) {
+  transform: rotate(150deg);
+  opacity: 0.75;
+}
+.u-loading-icon__dot[data-v-00752c6d]:nth-of-type(6) {
+  transform: rotate(180deg);
+  opacity: 0.6875;
+}
+.u-loading-icon__dot[data-v-00752c6d]:nth-of-type(7) {
+  transform: rotate(210deg);
+  opacity: 0.625;
+}
+.u-loading-icon__dot[data-v-00752c6d]:nth-of-type(8) {
+  transform: rotate(240deg);
+  opacity: 0.5625;
+}
+.u-loading-icon__dot[data-v-00752c6d]:nth-of-type(9) {
+  transform: rotate(270deg);
+  opacity: 0.5;
+}
+.u-loading-icon__dot[data-v-00752c6d]:nth-of-type(10) {
+  transform: rotate(300deg);
+  opacity: 0.4375;
+}
+.u-loading-icon__dot[data-v-00752c6d]:nth-of-type(11) {
+  transform: rotate(330deg);
+  opacity: 0.375;
+}
+.u-loading-icon__dot[data-v-00752c6d]:nth-of-type(12) {
+  transform: rotate(360deg);
+  opacity: 0.3125;
+}
+@keyframes u-rotate-00752c6d {
+0% {
+    transform: rotate(0deg);
+}
+to {
+    transform: rotate(1turn);
+}
+}
+/**
+ * 这里是uni-app内置的常用样式变量
+ *
+ * uni-app 官方扩展插件及插件市场（https://ext.dcloud.net.cn）上很多三方插件均使用了这些样式变量
+ * 如果你是插件开发者，建议你使用scss预处理，并在插件代码中直接使用这些变量（无需 import 这个文件），方便用户通过搭积木的方式开发整体风格一致的App
+ *
+ */
+/**
+ * 如果你是App开发者（插件使用者），你可以通过修改这些变量来定制自己的插件主题，实现自定义主题功能
+ *
+ * 如果你的项目同样使用了scss预处理，你也可以直接在你的 scss 代码中使用如下变量，同时无需 import 这个文件
+ */
+/* 颜色变量 */
+/* 行为相关颜色 */
+/* 文字基本颜色 */
+/* 背景颜色 */
+/* 边框颜色 */
+/* 尺寸变量 */
+/* 文字尺寸 */
+/* 图片尺寸 */
+/* Border Radius */
+/* 水平间距 */
+/* 垂直间距 */
+/* 透明度 */
+/* 文章场景相关 */
+.u-button[data-v-461e713c] {
+  width: 100%;
+  white-space: nowrap;
+}
+.u-button__text[data-v-461e713c] {
+  white-space: nowrap;
+  line-height: 1;
+}
+.u-button[data-v-461e713c]:before {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  border: inherit;
+  border-radius: inherit;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  content: " ";
+  background-color: #000;
+  border-color: #000;
+}
+.u-button--active[data-v-461e713c]:before {
+  opacity: 0.15;
+}
+.u-button__icon + .u-button__text[data-v-461e713c]:not(:empty), .u-button__loading-text[data-v-461e713c] {
+  margin-left: 4px;
+}
+.u-button--plain.u-button--primary[data-v-461e713c] {
+  color: #3c9cff;
+}
+.u-button--plain.u-button--info[data-v-461e713c] {
+  color: #909399;
+}
+.u-button--plain.u-button--success[data-v-461e713c] {
+  color: #5ac725;
+}
+.u-button--plain.u-button--error[data-v-461e713c] {
+  color: #f56c6c;
+}
+.u-button--plain.u-button--warning[data-v-461e713c] {
+  color: #f9ae3d;
+}
+.u-button[data-v-461e713c] {
+  height: 40px;
+  position: relative;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  flex-direction: row;
+  box-sizing: border-box;
+  flex-direction: row;
+}
+.u-button__text[data-v-461e713c] {
+  font-size: 15px;
+}
+.u-button__loading-text[data-v-461e713c] {
+  font-size: 15px;
+  margin-left: 4px;
+}
+.u-button--large[data-v-461e713c] {
+  width: 100%;
+  height: 50px;
+  padding: 0 15px;
+}
+.u-button--normal[data-v-461e713c] {
+  padding: 0 12px;
+  font-size: 14px;
+}
+.u-button--small[data-v-461e713c] {
+  min-width: 60px;
+  height: 30px;
+  padding: 0px 8px;
+  font-size: 12px;
+}
+.u-button--mini[data-v-461e713c] {
+  height: 22px;
+  font-size: 10px;
+  min-width: 50px;
+  padding: 0px 8px;
+}
+.u-button--disabled[data-v-461e713c] {
+  opacity: 0.5;
+}
+.u-button--info[data-v-461e713c] {
+  color: #323233;
+  background-color: #fff;
+  border-color: #ebedf0;
+  border-width: 1px;
+  border-style: solid;
+}
+.u-button--success[data-v-461e713c] {
+  color: #fff;
+  background-color: #5ac725;
+  border-color: #5ac725;
+  border-width: 1px;
+  border-style: solid;
+}
+.u-button--primary[data-v-461e713c] {
+  color: #fff;
+  background-color: #3c9cff;
+  border-color: #3c9cff;
+  border-width: 1px;
+  border-style: solid;
+}
+.u-button--error[data-v-461e713c] {
+  color: #fff;
+  background-color: #f56c6c;
+  border-color: #f56c6c;
+  border-width: 1px;
+  border-style: solid;
+}
+.u-button--warning[data-v-461e713c] {
+  color: #fff;
+  background-color: #f9ae3d;
+  border-color: #f9ae3d;
+  border-width: 1px;
+  border-style: solid;
+}
+.u-button--block[data-v-461e713c] {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+.u-button--circle[data-v-461e713c] {
+  border-top-right-radius: 100px;
+  border-top-left-radius: 100px;
+  border-bottom-left-radius: 100px;
+  border-bottom-right-radius: 100px;
+}
+.u-button--square[data-v-461e713c] {
+  border-bottom-left-radius: 3px;
+  border-bottom-right-radius: 3px;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+}
+.u-button__icon[data-v-461e713c] {
+  min-width: 1em;
+  line-height: inherit !important;
+  vertical-align: top;
+}
+.u-button--plain[data-v-461e713c] {
+  background-color: #fff;
+}
+.u-button--hairline[data-v-461e713c] {
+  border-width: 0.5px !important;
+}
+
+.body[data-v-0ce9743c] {
+  background-color: #f5f7fb;
+  color: #333;
+  min-height: 100vh;
+}
+*[data-v-0ce9743c] {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+}
+:root {
+  --primary: #4361ee;
+  --secondary: #3f37c9;
+  --accent: #4895ef;
+  --success: #4cc9f0;
+  --warning: #f72585;
+  --light: #f8f9fa;
+  --dark: #212529;
+  --gray: #6c757d;
+  --light-gray: #e9ecef;
+  --card-bg: #ffffff;
+  --section-bg: #f5f7fb;
+}
+
+/* 顶部导航 */
+.app-header[data-v-0ce9743c] {
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: white;
+  padding: 15px 20px;
+  padding-top: 5vh;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.header-top[data-v-0ce9743c] {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+.logo[data-v-0ce9743c] {
+  display: flex;
+  align-items: center;
+  font-weight: 700;
+  font-size: 1.4rem;
+}
+.logo i[data-v-0ce9743c] {
+  margin-right: 8px;
+  font-size: 1.6rem;
+  cursor: pointer;
+}
+.header-actions[data-v-0ce9743c] {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+.header-actions i[data-v-0ce9743c] {
+  font-size: 1.3rem;
+  cursor: pointer;
+}
+
+/* 搜索框样式 */
+.search-container[data-v-0ce9743c] {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+.search-input[data-v-0ce9743c] {
+  flex: 1;
+  height: 40px;
+  padding: 0 15px;
+  border: 1px solid var(--light-gray);
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: all 0.3s;
+}
+.search-input[data-v-0ce9743c]:focus {
+  border-color: var(--primary);
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(67, 97, 238, 0.2);
+}
+.search-btn[data-v-0ce9743c] {
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 0 15px;
+  cursor: pointer;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.3s;
+}
+.search-btn[data-v-0ce9743c]:hover {
+  background: var(--secondary);
+}
+
+/* 内容区域 */
+.content[data-v-0ce9743c] {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+  padding-bottom: 70px;
+}
+
+/* 任务分组区域 */
+.task-section[data-v-0ce9743c] {
+  margin-bottom: 30px;
+}
+.section-header[data-v-0ce9743c] {
+  margin-bottom: 15px;
+}
+.section-title[data-v-0ce9743c] {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--dark);
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--light-gray);
+}
+
+/* 加载状态 */
+.loading-container[data-v-0ce9743c] {
+  text-align: center;
+  padding: 40px 20px;
+}
+.loading-spinner[data-v-0ce9743c] {
+  width: 40px;
+  height: 40px;
+  border: 4px solid var(--light-gray);
+  border-top: 4px solid var(--primary);
+  border-radius: 50%;
+  animation: spin-0ce9743c 1s linear infinite;
+  margin: 0 auto 15px;
+}
+@keyframes spin-0ce9743c {
+0% {
+    transform: rotate(0deg);
+}
+100% {
+    transform: rotate(360deg);
+}
+}
+
+/* 任务卡片样式 */
+.task-card[data-v-0ce9743c] {
+  background: white;
+  border-radius: 16px;
+  padding: 15px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  margin-bottom: 15px;
+  position: relative;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.task-card[data-v-0ce9743c]:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+}
+.task-header[data-v-0ce9743c] {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+.task-title[data-v-0ce9743c] {
+  font-weight: 600;
+  font-size: 1.1rem;
+  margin-right: 15px;
+  flex: 1;
+  line-height: 1.4;
+  color: var(--dark);
+}
+.task-status[data-v-0ce9743c] {
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+.status-completed[data-v-0ce9743c] {
+  background: #d1ecf1;
+  color: #0c5460;
+}
+.task-meta[data-v-0ce9743c] {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 15px;
+  font-size: 0.85rem;
+  color: var(--gray);
+}
+.task-meta-item[data-v-0ce9743c] {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.task-description[data-v-0ce9743c] {
+  font-size: 0.9rem;
+  color: var(--gray);
+  margin-bottom: 15px;
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.task-footer[data-v-0ce9743c] {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.task-score[data-v-0ce9743c] {
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+.score-value[data-v-0ce9743c] {
+  color: #4361ee;
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+.task-actions[data-v-0ce9743c] {
+  display: flex;
+  gap: 10px;
+  flex: 1;
+  justify-content: flex-end;
+  min-width: 100px;
+}
+
+/* 覆盖 uView-plus 按钮默认样式 */
+.task-actions .u-button[data-v-0ce9743c] {
+  flex: 1;
+  justify-content: center;
+  font-size: 0.85rem;
+  padding: 6px 12px;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  background-image: none !important;
+  border-radius: 20px;
+}
+
+/* 特别处理按钮的hover状态 */
+.task-actions .u-button[data-v-0ce9743c]::after {
+  border: none !important;
+}
+
+/* 覆盖uView-plus按钮的所有可能边框样式 */
+.task-actions .u-button.u-button--primary[data-v-0ce9743c],
+.task-actions .u-button.u-button--error[data-v-0ce9743c] {
+  border: none !important;
+}
+
+/* 空状态 */
+.empty-state[data-v-0ce9743c] {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  color: var(--gray);
+  min-height: 300px;
+}
+.empty-state i[data-v-0ce9743c] {
+  font-size: 3rem;
+  margin-bottom: 15px;
+  color: var(--light-gray);
+}
+
+/* 响应式调整 */
+@media (max-width: 480px) {
+.content[data-v-0ce9743c] {
+    padding: 15px;
+}
+.task-title[data-v-0ce9743c] {
+    font-size: 1rem;
+}
+.task-meta[data-v-0ce9743c] {
+    flex-direction: column;
+    gap: 5px;
+}
+.task-footer[data-v-0ce9743c] {
+    flex-direction: column;
+    align-items: flex-start;
+}
+.task-actions[data-v-0ce9743c] {
+    align-self: flex-end;
+}
+.section-title[data-v-0ce9743c] {
+    font-size: 1.1rem;
+}
+.task-description[data-v-0ce9743c] {
+    font-size: 0.85rem;
+}
+}

@@ -179,6 +179,13 @@
 			{
 				"navigationBarTitleText" : "修改个人信息"
 			}
+		},
+		{
+			"path" : "pages/completedTasks/completedTasks",
+			"style" : 
+			{
+				"navigationBarTitleText" : "已完成任务"
+			}
 		}
 	],
 	"globalStyle": {
