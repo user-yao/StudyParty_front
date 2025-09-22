@@ -29,7 +29,11 @@ export const createArticle = (data) => {
     return request({
         url: '/article/createArticle',
         method: 'POST',
-        data
+        data:{ 
+            title:data.title,
+            summary:data.summary,
+            markdown:data.markdown
+        }
     });
 }
 export const deleteArticle = (data) => {
@@ -41,6 +45,34 @@ export const deleteArticle = (data) => {
         }
     });
 }
+export const recommend = (data) => {
+    return request({
+        url: '/article/recommend',
+        method: 'GET',
+        data:{
+            page:data.page
+        }
+    });
+}
+export const niceArticle = (data) => {
+    return request({
+        url: '/article/niceArticle',
+        method: 'Post',
+        data:{
+            page:data.page
+        }
+    });
+}
+export const collectArticle = (data) => {
+    return request({
+        url: '/article/collectArticle',
+        method: 'POST',
+        data:{
+            page:data.page
+        }
+    });
+}
+
 
 
 

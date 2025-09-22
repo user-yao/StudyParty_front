@@ -9915,310 +9915,488 @@ if (uni.restoreGlobal) {
   }
   const PagesIndexIndex = /* @__PURE__ */ _export_sfc(_sfc_main$2q, [["render", _sfc_render$2p], ["__scopeId", "data-v-1cf27b2a"], ["__file", "D:/uniapp2023/studyParty/pages/index/index.vue"]]);
   const _sfc_main$2p = {
+    name: "Forum",
     data() {
-      return {};
+      return {
+        loadingMore: false,
+        // 推荐文章数据
+        recommendedArticles: [
+          {
+            "id": 1,
+            "uploader": 3,
+            "title": "测试标题",
+            "summary": "测试概要",
+            "content": null,
+            "nice": 0,
+            "collect": 0,
+            "viewCount": 2,
+            "commentCount": 0,
+            "createTime": "2025-09-21T14:45:15.000+00:00",
+            "isFeatured": 0,
+            "status": 1,
+            "name": "姚镇涛",
+            "head": "static/head/3/userHeadPhoto.png",
+            "school": "天津职业技术师范大学",
+            "starPrestige": 0,
+            "isNice": 0,
+            "isCollect": 0,
+            "isView": 0
+          }
+        ],
+        // 全部使用假数据
+        tasks: [
+          {
+            id: 1,
+            title: "React组件开发挑战",
+            reward: 120,
+            timeLeft: "2天",
+            publisher: "李老师",
+            publisherType: "teacher",
+            tags: ["前端开发", "React", "组件化"],
+            participants: [
+              { name: "张同学" },
+              { name: "王同学" },
+              { name: "李同学" },
+              { name: "赵同学" },
+              { name: "孙同学" }
+            ]
+          },
+          {
+            id: 2,
+            title: "数据结构算法题解",
+            reward: 80,
+            timeLeft: "3天",
+            publisher: "字节跳动",
+            publisherType: "company",
+            tags: ["算法", "数据结构", "面试题"],
+            participants: [
+              { name: "刘同学" },
+              { name: "陈同学" },
+              { name: "杨同学" },
+              { name: "黄同学" }
+            ]
+          }
+        ]
+      };
+    },
+    methods: {
+      goToNotifications() {
+        uni.showToast({
+          title: "查看通知",
+          icon: "none"
+        });
+      },
+      goToSearch() {
+        uni.showToast({
+          title: "搜索功能",
+          icon: "none"
+        });
+      },
+      viewAllTasks() {
+        uni.navigateTo({
+          url: "/pages/chatList/groupTaskList"
+        });
+      },
+      viewTaskDetail(taskId) {
+        uni.showToast({
+          title: `查看任务 ${taskId}`,
+          icon: "none"
+        });
+      },
+      viewArticleDetail(articleId) {
+        uni.showToast({
+          title: `查看文章 ${articleId}`,
+          icon: "none"
+        });
+      },
+      // 格式化时间
+      formatTime(timeStr) {
+        const date3 = new Date(timeStr);
+        const now = /* @__PURE__ */ new Date();
+        const diff = now - date3;
+        const minutes = Math.floor(diff / (1e3 * 60));
+        const hours = Math.floor(diff / (1e3 * 60 * 60));
+        const days = Math.floor(diff / (1e3 * 60 * 60 * 24));
+        if (minutes < 1) {
+          return "刚刚";
+        } else if (minutes < 60) {
+          return `${minutes}分钟前`;
+        } else if (hours < 24) {
+          return `${hours}小时前`;
+        } else if (days < 30) {
+          return `${days}天前`;
+        } else {
+          return `${date3.getFullYear()}-${date3.getMonth() + 1}-${date3.getDate()}`;
+        }
+      },
+      // 切换点赞状态
+      toggleLike(article2) {
+        uni.showToast({
+          title: article2.isNice ? "取消点赞" : "点赞成功",
+          icon: "none"
+        });
+        article2.isNice = !article2.isNice;
+        article2.nice += article2.isNice ? 1 : -1;
+      },
+      // 切换收藏状态
+      toggleCollect(article2) {
+        uni.showToast({
+          title: article2.isCollect ? "取消收藏" : "收藏成功",
+          icon: "none"
+        });
+        article2.isCollect = !article2.isCollect;
+        article2.collect += article2.isCollect ? 1 : -1;
+      },
+      // 加载更多推荐内容
+      loadMore() {
+        if (this.loadingMore)
+          return;
+        this.loadingMore = true;
+        setTimeout(() => {
+          const newArticles = [
+            {
+              "id": 2,
+              "uploader": 4,
+              "title": "新的推荐文章",
+              "summary": "这是另一篇推荐文章的概要内容",
+              "content": null,
+              "nice": 5,
+              "collect": 3,
+              "viewCount": 15,
+              "commentCount": 2,
+              "createTime": "2025-09-22T10:30:00.000+00:00",
+              "isFeatured": 1,
+              "status": 1,
+              "name": "张同学",
+              "head": "static/head/4/userHeadPhoto.png",
+              "school": "清华大学",
+              "starPrestige": 20,
+              "isNice": 0,
+              "isCollect": 0,
+              "isView": 0
+            }
+          ];
+          this.recommendedArticles = [...this.recommendedArticles, ...newArticles];
+          this.loadingMore = false;
+        }, 1e3);
+      }
     }
   };
   function _sfc_render$2o(_ctx, _cache, $props, $setup, $data, $options) {
-    return vue.openBlock(), vue.createElementBlock("div", null, [
-      vue.createCommentVNode(" 头部导航 "),
-      vue.createElementVNode("header", null, [
+    const _component_u_icon = resolveEasycom(vue.resolveDynamicComponent("u-icon"), __easycom_0$g);
+    return vue.openBlock(), vue.createElementBlock("view", { class: "forum-container" }, [
+      vue.createCommentVNode(" 顶部导航 "),
+      vue.createElementVNode("header", { class: "app-header" }, [
         vue.createElementVNode("div", { class: "header-top" }, [
           vue.createElementVNode("div", { class: "logo" }, [
-            vue.createElementVNode("i", { class: "fas fa-users" }),
-            vue.createElementVNode("span", null, "社区中心")
+            vue.createVNode(_component_u_icon, {
+              name: "chat",
+              size: "24",
+              color: "#fff"
+            }),
+            vue.createElementVNode("span", null, "学习社区")
           ]),
           vue.createElementVNode("div", { class: "header-actions" }, [
-            vue.createElementVNode("i", { class: "fas fa-bell" }),
-            vue.createElementVNode("i", { class: "fas fa-search" })
+            vue.createVNode(_component_u_icon, {
+              name: "bell",
+              size: "20",
+              color: "#fff",
+              onClick: $options.goToNotifications
+            }, null, 8, ["onClick"]),
+            vue.createVNode(_component_u_icon, {
+              name: "search",
+              size: "20",
+              color: "#fff",
+              onClick: $options.goToSearch
+            }, null, 8, ["onClick"])
           ])
         ]),
-        vue.createElementVNode("div", { class: "tabs-container" }, [
-          vue.createElementVNode("div", { class: "tab active" }, "全部"),
-          vue.createElementVNode("div", { class: "tab" }, "推荐"),
-          vue.createElementVNode("div", { class: "tab" }, "任务所"),
-          vue.createElementVNode("div", { class: "tab" }, "学习小组"),
-          vue.createElementVNode("div", { class: "tab" }, "问答"),
-          vue.createElementVNode("div", { class: "tab" }, "知识分享"),
-          vue.createElementVNode("div", { class: "tab" }, "热门"),
-          vue.createElementVNode("div", { class: "tab" }, "关注")
+        vue.createElementVNode("div", { class: "search-bar" }, [
+          vue.createVNode(_component_u_icon, {
+            name: "search",
+            size: "16",
+            color: "#ccc"
+          }),
+          vue.createElementVNode(
+            "input",
+            {
+              type: "text",
+              placeholder: "搜索任务、帖子...",
+              onFocus: _cache[0] || (_cache[0] = (...args) => $options.goToSearch && $options.goToSearch(...args))
+            },
+            null,
+            32
+            /* NEED_HYDRATION */
+          )
         ])
       ]),
       vue.createCommentVNode(" 社区内容 "),
-      vue.createElementVNode("div", { class: "community-container" }, [
-        vue.createCommentVNode(" 任务所 "),
-        vue.createElementVNode("div", { class: "section-title" }, [
-          vue.createElementVNode("h2", null, "悬赏任务"),
-          vue.createElementVNode("a", { href: "#" }, [
-            vue.createTextVNode("查看全部 "),
-            vue.createElementVNode("i", { class: "fas fa-chevron-right" })
-          ])
-        ]),
-        vue.createElementVNode("div", { class: "task-card" }, [
-          vue.createElementVNode("div", { class: "task-header" }, [
-            vue.createElementVNode("div", { class: "task-title" }, "React组件开发挑战"),
-            vue.createElementVNode("div", { class: "task-reward" }, "+120积分")
-          ]),
-          vue.createElementVNode("div", { class: "task-meta" }, [
-            vue.createElementVNode("div", null, [
-              vue.createElementVNode("i", { class: "far fa-clock" }),
-              vue.createTextVNode(" 剩余2天")
-            ]),
-            vue.createElementVNode("div", null, [
-              vue.createElementVNode("i", { class: "fas fa-user-graduate" }),
-              vue.createTextVNode(" 李老师发布")
-            ])
-          ]),
-          vue.createElementVNode("div", { class: "task-tags" }, [
-            vue.createElementVNode("div", { class: "task-tag" }, "前端开发"),
-            vue.createElementVNode("div", { class: "task-tag" }, "React"),
-            vue.createElementVNode("div", { class: "task-tag" }, "组件化")
-          ]),
-          vue.createElementVNode("div", { class: "task-footer" }, [
-            vue.createElementVNode("div", { class: "task-participants" }, [
-              vue.createElementVNode("div", { class: "participant-avatar" }, "张"),
-              vue.createElementVNode("div", { class: "participant-avatar" }, "王"),
-              vue.createElementVNode("div", { class: "participant-avatar" }, "李"),
-              vue.createElementVNode("div", { class: "participant-count" }, "12人参与")
-            ]),
-            vue.createElementVNode("button", { class: "task-btn" }, "立即参与")
-          ])
-        ]),
-        vue.createElementVNode("div", { class: "task-card" }, [
-          vue.createElementVNode("div", { class: "task-header" }, [
-            vue.createElementVNode("div", { class: "task-title" }, "数据结构算法题解"),
-            vue.createElementVNode("div", { class: "task-reward" }, "+80积分")
-          ]),
-          vue.createElementVNode("div", { class: "task-meta" }, [
-            vue.createElementVNode("div", null, [
-              vue.createElementVNode("i", { class: "far fa-clock" }),
-              vue.createTextVNode(" 剩余3天")
-            ]),
-            vue.createElementVNode("div", null, [
-              vue.createElementVNode("i", { class: "fas fa-building" }),
-              vue.createTextVNode(" 字节跳动发布")
-            ])
-          ]),
-          vue.createElementVNode("div", { class: "task-tags" }, [
-            vue.createElementVNode("div", { class: "task-tag" }, "算法"),
-            vue.createElementVNode("div", { class: "task-tag" }, "数据结构"),
-            vue.createElementVNode("div", { class: "task-tag" }, "面试题")
-          ]),
-          vue.createElementVNode("div", { class: "task-footer" }, [
-            vue.createElementVNode("div", { class: "task-participants" }, [
-              vue.createElementVNode("div", { class: "participant-avatar" }, "刘"),
-              vue.createElementVNode("div", { class: "participant-avatar" }, "陈"),
-              vue.createElementVNode("div", { class: "participant-count" }, "8人参与")
-            ]),
-            vue.createElementVNode("button", { class: "task-btn" }, "立即参与")
-          ])
-        ]),
-        vue.createCommentVNode(" 热门帖子 "),
-        vue.createElementVNode("div", { class: "section-title" }, [
-          vue.createElementVNode("h2", null, "热门讨论"),
-          vue.createElementVNode("a", { href: "#" }, [
-            vue.createTextVNode("更多 "),
-            vue.createElementVNode("i", { class: "fas fa-chevron-right" })
-          ])
-        ]),
-        vue.createElementVNode("div", { class: "post-card" }, [
-          vue.createElementVNode("div", { class: "post-header" }, [
-            vue.createElementVNode("div", { class: "post-avatar" }, "王"),
-            vue.createElementVNode("div", { class: "post-user" }, [
-              vue.createElementVNode("div", { class: "post-user-name" }, "王同学 · 前端开发"),
-              vue.createElementVNode("div", { class: "post-meta" }, [
-                vue.createElementVNode("div", { class: "post-time" }, "2小时前"),
-                vue.createElementVNode("div", { class: "post-type" }, "知识分享")
-              ])
-            ])
-          ]),
-          vue.createElementVNode("div", { class: "post-content" }, " 刚刚完成了React Hooks实战项目，分享我的学习笔记和代码仓库，包含10个常见场景的最佳实践，欢迎交流讨论！ "),
-          vue.createElementVNode("div", { class: "post-image" }, "React Hooks项目截图"),
-          vue.createElementVNode("div", { class: "post-actions" }, [
-            vue.createElementVNode("div", { class: "post-action" }, [
-              vue.createElementVNode("i", { class: "far fa-heart" }),
-              vue.createTextVNode(" 42 ")
-            ]),
-            vue.createElementVNode("div", { class: "post-action" }, [
-              vue.createElementVNode("i", { class: "far fa-comment" }),
-              vue.createTextVNode(" 8 ")
-            ]),
-            vue.createElementVNode("div", { class: "post-action" }, [
-              vue.createElementVNode("i", { class: "fas fa-share-alt" }),
-              vue.createTextVNode(" 分享 ")
-            ]),
-            vue.createElementVNode("div", { class: "post-action" }, [
-              vue.createElementVNode("i", { class: "fas fa-coin" }),
-              vue.createTextVNode(" 投币 ")
-            ])
-          ])
-        ]),
-        vue.createElementVNode("div", { class: "post-card" }, [
-          vue.createElementVNode("div", { class: "post-header" }, [
-            vue.createElementVNode("div", { class: "post-avatar" }, "李"),
-            vue.createElementVNode("div", { class: "post-user" }, [
-              vue.createElementVNode("div", { class: "post-user-name" }, "李老师 · 全栈工程师"),
-              vue.createElementVNode("div", { class: "post-meta" }, [
-                vue.createElementVNode("div", { class: "post-time" }, "5小时前"),
-                vue.createElementVNode("div", { class: "post-type" }, "问题求助")
-              ])
-            ])
-          ]),
-          vue.createElementVNode("div", { class: "post-content" }, " 在开发电商平台时遇到性能瓶颈，商品列表页在渲染1000+商品时出现明显卡顿，大家有什么优化建议吗？目前使用的是Vue3 + Composition API。 "),
-          vue.createElementVNode("div", { class: "post-actions" }, [
-            vue.createElementVNode("div", { class: "post-action" }, [
-              vue.createElementVNode("i", { class: "far fa-heart" }),
-              vue.createTextVNode(" 28 ")
-            ]),
-            vue.createElementVNode("div", { class: "post-action" }, [
-              vue.createElementVNode("i", { class: "far fa-comment" }),
-              vue.createTextVNode(" 16 ")
-            ]),
-            vue.createElementVNode("div", { class: "post-action" }, [
-              vue.createElementVNode("i", { class: "fas fa-share-alt" }),
-              vue.createTextVNode(" 分享 ")
-            ]),
-            vue.createElementVNode("div", { class: "post-action" }, [
-              vue.createElementVNode("i", { class: "fas fa-coin" }),
-              vue.createTextVNode(" 投币 ")
-            ])
-          ])
-        ]),
-        vue.createCommentVNode(" 学习小组 "),
-        vue.createElementVNode("div", { class: "section-title" }, [
-          vue.createElementVNode("h2", null, "推荐学习小组"),
-          vue.createElementVNode("a", { href: "#" }, [
-            vue.createTextVNode("更多 "),
-            vue.createElementVNode("i", { class: "fas fa-chevron-right" })
-          ])
-        ]),
-        vue.createElementVNode("div", { class: "group-card" }, [
-          vue.createElementVNode("div", { class: "group-header" }, [
-            vue.createElementVNode("div", { class: "group-icon" }, [
-              vue.createElementVNode("i", { class: "fas fa-code" })
-            ]),
-            vue.createElementVNode("div", { class: "group-info" }, [
-              vue.createElementVNode("div", { class: "group-name" }, "前端开发精英组"),
-              vue.createElementVNode("div", { class: "group-members" }, [
-                vue.createElementVNode("i", { class: "fas fa-users" }),
-                vue.createTextVNode(" 24名成员 · 活跃度高 ")
-              ])
-            ])
-          ]),
-          vue.createElementVNode("div", { class: "group-tags" }, [
-            vue.createElementVNode("div", { class: "group-tag" }, "React"),
-            vue.createElementVNode("div", { class: "group-tag" }, "Vue"),
-            vue.createElementVNode("div", { class: "group-tag" }, "TypeScript"),
-            vue.createElementVNode("div", { class: "group-tag" }, "前端工程化")
-          ]),
-          vue.createElementVNode("div", { class: "group-progress" }, [
-            vue.createElementVNode("div", { class: "progress-label" }, [
-              vue.createElementVNode("span", null, "小组活跃度"),
-              vue.createElementVNode("span", null, "65%")
-            ]),
-            vue.createElementVNode("div", { class: "progress-bar" }, [
-              vue.createElementVNode("div", { class: "progress-fill" })
-            ])
-          ]),
-          vue.createElementVNode("button", { class: "group-btn" }, "加入小组")
-        ]),
-        vue.createElementVNode("div", { class: "group-card" }, [
-          vue.createElementVNode("div", { class: "group-header" }, [
-            vue.createElementVNode("div", { class: "group-icon" }, [
-              vue.createElementVNode("i", { class: "fas fa-server" })
-            ]),
-            vue.createElementVNode("div", { class: "group-info" }, [
-              vue.createElementVNode("div", { class: "group-name" }, "后端架构研究组"),
-              vue.createElementVNode("div", { class: "group-members" }, [
-                vue.createElementVNode("i", { class: "fas fa-users" }),
-                vue.createTextVNode(" 18名成员 · 企业导师指导 ")
-              ])
-            ])
-          ]),
-          vue.createElementVNode("div", { class: "group-tags" }, [
-            vue.createElementVNode("div", { class: "group-tag" }, "Node.js"),
-            vue.createElementVNode("div", { class: "group-tag" }, "微服务"),
-            vue.createElementVNode("div", { class: "group-tag" }, "数据库"),
-            vue.createElementVNode("div", { class: "group-tag" }, "高并发")
-          ]),
-          vue.createElementVNode("div", { class: "group-progress" }, [
-            vue.createElementVNode("div", { class: "progress-label" }, [
-              vue.createElementVNode("span", null, "项目完成度"),
-              vue.createElementVNode("span", null, "45%")
-            ]),
-            vue.createElementVNode("div", { class: "progress-bar" }, [
-              vue.createElementVNode("div", {
-                class: "progress-fill",
-                style: { "width": "45%" }
-              })
-            ])
-          ]),
-          vue.createElementVNode("button", { class: "group-btn" }, "加入小组")
-        ]),
-        vue.createCommentVNode(" 热门问题 "),
-        vue.createElementVNode("div", { class: "section-title" }, [
-          vue.createElementVNode("h2", null, "热门问答"),
-          vue.createElementVNode("a", { href: "#" }, [
-            vue.createTextVNode("更多 "),
-            vue.createElementVNode("i", { class: "fas fa-chevron-right" })
-          ])
-        ]),
-        vue.createElementVNode("div", { class: "question-card" }, [
-          vue.createElementVNode("div", { class: "question-header" }, [
-            vue.createElementVNode("div", { class: "question-avatar" }, "张"),
-            vue.createElementVNode("div", null, [
-              vue.createElementVNode("div", { class: "post-user-name" }, "张同学"),
-              vue.createElementVNode("div", { class: "post-time" }, "3小时前")
-            ])
-          ]),
-          vue.createElementVNode("div", { class: "question-title" }, " TypeScript中interface和type的区别是什么？在实际项目中如何选择？ "),
-          vue.createElementVNode("div", { class: "question-footer" }, [
-            vue.createElementVNode("div", { class: "question-stats" }, [
-              vue.createElementVNode("div", { class: "question-stat" }, [
-                vue.createElementVNode("i", { class: "far fa-eye" }),
-                vue.createTextVNode(" 328 ")
-              ]),
-              vue.createElementVNode("div", { class: "question-stat" }, [
-                vue.createElementVNode("i", { class: "far fa-comment" }),
-                vue.createTextVNode(" 12 ")
-              ])
-            ]),
-            vue.createElementVNode("div", { class: "question-stat" }, [
-              vue.createElementVNode("i", {
-                class: "fas fa-coins",
-                style: { "color": "gold" }
+      vue.createElementVNode("view", { class: "community-container" }, [
+        vue.createCommentVNode(" 任务模块 "),
+        vue.createElementVNode("view", { class: "section" }, [
+          vue.createElementVNode("view", { class: "section-header" }, [
+            vue.createElementVNode("view", { class: "section-title" }, [
+              vue.createVNode(_component_u_icon, {
+                name: "order",
+                size: "18",
+                color: "#333"
               }),
-              vue.createTextVNode(" 悬赏50积分 ")
+              vue.createElementVNode("text", null, "任务列表")
+            ]),
+            vue.createElementVNode("view", {
+              class: "section-action",
+              onClick: _cache[1] || (_cache[1] = (...args) => $options.viewAllTasks && $options.viewAllTasks(...args))
+            }, [
+              vue.createElementVNode("text", null, "更多")
+            ])
+          ]),
+          vue.createCommentVNode(" 横向任务列表 "),
+          vue.createElementVNode("scroll-view", {
+            "scroll-x": "",
+            class: "task-scroll"
+          }, [
+            vue.createElementVNode("view", { class: "task-list-horizontal" }, [
+              (vue.openBlock(true), vue.createElementBlock(
+                vue.Fragment,
+                null,
+                vue.renderList($data.tasks.slice(0, 5), (task2) => {
+                  return vue.openBlock(), vue.createElementBlock("view", {
+                    key: task2.id,
+                    class: "task-card-horizontal",
+                    onClick: ($event) => $options.viewTaskDetail(task2.id)
+                  }, [
+                    vue.createElementVNode(
+                      "view",
+                      { class: "task-reward-badge" },
+                      "+" + vue.toDisplayString(task2.reward) + "积分",
+                      1
+                      /* TEXT */
+                    ),
+                    vue.createElementVNode(
+                      "view",
+                      { class: "task-title" },
+                      vue.toDisplayString(task2.title),
+                      1
+                      /* TEXT */
+                    ),
+                    vue.createElementVNode("view", { class: "task-meta" }, [
+                      vue.createElementVNode("view", { class: "meta-item" }, [
+                        vue.createVNode(_component_u_icon, {
+                          name: "clock",
+                          size: "12",
+                          color: "#999"
+                        }),
+                        vue.createElementVNode(
+                          "text",
+                          null,
+                          "剩余" + vue.toDisplayString(task2.timeLeft),
+                          1
+                          /* TEXT */
+                        )
+                      ]),
+                      vue.createElementVNode("view", { class: "meta-item" }, [
+                        vue.createVNode(_component_u_icon, {
+                          name: task2.publisherType === "teacher" ? "man" : "home",
+                          size: "12",
+                          color: "#999"
+                        }, null, 8, ["name"]),
+                        vue.createElementVNode(
+                          "text",
+                          null,
+                          vue.toDisplayString(task2.publisher),
+                          1
+                          /* TEXT */
+                        )
+                      ])
+                    ]),
+                    vue.createElementVNode("view", { class: "task-tags" }, [
+                      (vue.openBlock(true), vue.createElementBlock(
+                        vue.Fragment,
+                        null,
+                        vue.renderList(task2.tags.slice(0, 2), (tag, index2) => {
+                          return vue.openBlock(), vue.createElementBlock(
+                            "view",
+                            {
+                              key: index2,
+                              class: "task-tag"
+                            },
+                            vue.toDisplayString(tag),
+                            1
+                            /* TEXT */
+                          );
+                        }),
+                        128
+                        /* KEYED_FRAGMENT */
+                      ))
+                    ]),
+                    vue.createElementVNode("view", { class: "task-action" }, [
+                      vue.createElementVNode("button", { class: "join-btn" }, "立即参与")
+                    ])
+                  ], 8, ["onClick"]);
+                }),
+                128
+                /* KEYED_FRAGMENT */
+              ))
             ])
           ])
         ]),
-        vue.createElementVNode("div", { class: "question-card" }, [
-          vue.createElementVNode("div", { class: "question-header" }, [
-            vue.createElementVNode("div", { class: "question-avatar" }, "刘"),
-            vue.createElementVNode("div", null, [
-              vue.createElementVNode("div", { class: "post-user-name" }, "刘同学"),
-              vue.createElementVNode("div", { class: "post-time" }, "7小时前")
+        vue.createCommentVNode(" 论坛推荐模块 "),
+        vue.createElementVNode("view", { class: "section" }, [
+          vue.createElementVNode("view", { class: "section-header" }, [
+            vue.createElementVNode("view", { class: "section-title" }, [
+              vue.createVNode(_component_u_icon, {
+                name: "star",
+                size: "18",
+                color: "#333"
+              }),
+              vue.createElementVNode("text", null, "推荐内容")
             ])
           ]),
-          vue.createElementVNode("div", { class: "question-title" }, " 如何设计一个高并发的秒杀系统？需要重点考虑哪些技术点？ "),
-          vue.createElementVNode("div", { class: "question-footer" }, [
-            vue.createElementVNode("div", { class: "question-stats" }, [
-              vue.createElementVNode("div", { class: "question-stat" }, [
-                vue.createElementVNode("i", { class: "far fa-eye" }),
-                vue.createTextVNode(" 456 ")
-              ]),
-              vue.createElementVNode("div", { class: "question-stat" }, [
-                vue.createElementVNode("i", { class: "far fa-comment" }),
-                vue.createTextVNode(" 18 ")
-              ])
-            ]),
-            vue.createElementVNode("div", { class: "question-stat" }, [
-              vue.createElementVNode("i", {
-                class: "fas fa-coins",
-                style: { "color": "gold" }
+          vue.createElementVNode("view", { class: "article-list" }, [
+            (vue.openBlock(true), vue.createElementBlock(
+              vue.Fragment,
+              null,
+              vue.renderList($data.recommendedArticles, (article2) => {
+                return vue.openBlock(), vue.createElementBlock("view", {
+                  key: article2.id,
+                  class: "article-card",
+                  onClick: ($event) => $options.viewArticleDetail(article2.id)
+                }, [
+                  vue.createElementVNode("view", { class: "article-header" }, [
+                    vue.createElementVNode("view", { class: "article-user" }, [
+                      vue.createElementVNode("view", { class: "user-avatar" }, [
+                        article2.head ? (vue.openBlock(), vue.createElementBlock("image", {
+                          key: 0,
+                          src: article2.head,
+                          mode: "aspectFill"
+                        }, null, 8, ["src"])) : (vue.openBlock(), vue.createElementBlock(
+                          "view",
+                          {
+                            key: 1,
+                            class: "avatar-placeholder"
+                          },
+                          vue.toDisplayString(article2.name ? article2.name.substring(0, 1) : "U"),
+                          1
+                          /* TEXT */
+                        ))
+                      ]),
+                      vue.createElementVNode("view", { class: "user-info" }, [
+                        vue.createElementVNode(
+                          "view",
+                          { class: "user-name" },
+                          vue.toDisplayString(article2.name),
+                          1
+                          /* TEXT */
+                        ),
+                        vue.createElementVNode(
+                          "view",
+                          { class: "user-school" },
+                          vue.toDisplayString(article2.school),
+                          1
+                          /* TEXT */
+                        )
+                      ])
+                    ]),
+                    vue.createElementVNode(
+                      "view",
+                      { class: "article-time" },
+                      vue.toDisplayString($options.formatTime(article2.createTime)),
+                      1
+                      /* TEXT */
+                    )
+                  ]),
+                  vue.createElementVNode("view", { class: "article-content" }, [
+                    vue.createElementVNode(
+                      "view",
+                      { class: "article-title" },
+                      vue.toDisplayString(article2.title),
+                      1
+                      /* TEXT */
+                    ),
+                    vue.createElementVNode(
+                      "view",
+                      { class: "article-summary" },
+                      vue.toDisplayString(article2.summary),
+                      1
+                      /* TEXT */
+                    )
+                  ]),
+                  vue.createElementVNode("view", { class: "article-meta" }, [
+                    vue.createElementVNode("view", { class: "meta-item" }, [
+                      vue.createVNode(_component_u_icon, {
+                        name: "eye",
+                        size: "14",
+                        color: "#999"
+                      }),
+                      vue.createElementVNode(
+                        "text",
+                        null,
+                        vue.toDisplayString(article2.viewCount),
+                        1
+                        /* TEXT */
+                      )
+                    ]),
+                    vue.createElementVNode("view", { class: "meta-item" }, [
+                      vue.createVNode(_component_u_icon, {
+                        name: "chat",
+                        size: "14",
+                        color: "#999"
+                      }),
+                      vue.createElementVNode(
+                        "text",
+                        null,
+                        vue.toDisplayString(article2.commentCount),
+                        1
+                        /* TEXT */
+                      )
+                    ]),
+                    vue.createElementVNode("view", {
+                      class: "meta-item",
+                      onClick: vue.withModifiers(($event) => $options.toggleLike(article2), ["stop"])
+                    }, [
+                      vue.createVNode(_component_u_icon, {
+                        name: article2.isNice ? "heart-fill" : "heart",
+                        color: article2.isNice ? "#f00" : "#999",
+                        size: "14"
+                      }, null, 8, ["name", "color"]),
+                      vue.createElementVNode(
+                        "text",
+                        null,
+                        vue.toDisplayString(article2.nice),
+                        1
+                        /* TEXT */
+                      )
+                    ], 8, ["onClick"]),
+                    vue.createElementVNode("view", {
+                      class: "meta-item",
+                      onClick: vue.withModifiers(($event) => $options.toggleCollect(article2), ["stop"])
+                    }, [
+                      vue.createVNode(_component_u_icon, {
+                        name: article2.isCollect ? "bookmark-fill" : "bookmark",
+                        color: article2.isCollect ? "#4361ee" : "#999",
+                        size: "14"
+                      }, null, 8, ["name", "color"]),
+                      vue.createElementVNode(
+                        "text",
+                        null,
+                        vue.toDisplayString(article2.collect),
+                        1
+                        /* TEXT */
+                      )
+                    ], 8, ["onClick"])
+                  ])
+                ], 8, ["onClick"]);
               }),
-              vue.createTextVNode(" 悬赏80积分 ")
-            ])
+              128
+              /* KEYED_FRAGMENT */
+            ))
+          ]),
+          vue.createCommentVNode(" 加载更多提示 "),
+          vue.createElementVNode("view", {
+            class: "load-more",
+            onClick: _cache[2] || (_cache[2] = (...args) => $options.loadMore && $options.loadMore(...args))
+          }, [
+            !$data.loadingMore ? (vue.openBlock(), vue.createElementBlock("text", { key: 0 }, "点击加载更多")) : (vue.openBlock(), vue.createElementBlock("text", { key: 1 }, "加载中..."))
           ])
         ])
       ])
@@ -69680,7 +69858,11 @@ ${placeholder}
     return request({
       url: "/article/createArticle",
       method: "POST",
-      data: data2
+      data: {
+        title: data2.title,
+        summary: data2.summary,
+        markdown: data2.markdown
+      }
     });
   };
   const deleteArticle = (data2) => {
@@ -69692,12 +69874,42 @@ ${placeholder}
       }
     });
   };
+  const recommend = (data2) => {
+    return request({
+      url: "/article/recommend",
+      method: "GET",
+      data: {
+        page: data2.page
+      }
+    });
+  };
+  const niceArticle = (data2) => {
+    return request({
+      url: "/article/niceArticle",
+      method: "Post",
+      data: {
+        page: data2.page
+      }
+    });
+  };
+  const collectArticle = (data2) => {
+    return request({
+      url: "/article/collectArticle",
+      method: "POST",
+      data: {
+        page: data2.page
+      }
+    });
+  };
   const article = {
     namespaced: true,
     state: () => ({
       articleList: [],
       currentArticle: null,
-      hotArticles: []
+      hotArticles: [],
+      recommendArticles: [],
+      niceArticles: [],
+      collectedArticles: []
     }),
     mutations: {
       SET_ARTICLE_LIST(state2, list) {
@@ -69708,6 +69920,15 @@ ${placeholder}
       },
       SET_HOT_ARTICLES(state2, list) {
         state2.hotArticles = list;
+      },
+      SET_RECOMMEND_ARTICLES(state2, list) {
+        state2.recommendArticles = list;
+      },
+      SET_NICE_ARTICLES(state2, list) {
+        state2.niceArticles = list;
+      },
+      SET_COLLECTED_ARTICLES(state2, list) {
+        state2.collectedArticles = list;
       }
     },
     actions: {
@@ -69736,19 +69957,40 @@ ${placeholder}
       async myArticle({ commit }, data2) {
         const res2 = await myArticle(data2);
         return res2;
+      },
+      async recommend({ commit }, params2) {
+        const res2 = await recommend(params2);
+        if (res2.code === 200) {
+          commit("SET_RECOMMEND_ARTICLES", res2.data.list);
+        }
+        return res2;
+      },
+      async niceArticle({ commit }, params2) {
+        const res2 = await niceArticle(params2);
+        if (res2.code === 200) {
+          commit("SET_NICE_ARTICLES", res2.data.list);
+        }
+        return res2;
+      },
+      async collectArticle({ commit }, params2) {
+        const res2 = await collectArticle(params2);
+        if (res2.code === 200) {
+          commit("SET_COLLECTED_ARTICLES", res2.data.list);
+        }
+        return res2;
       }
     }
   };
   const addArticleComment = (data2) => {
     return request({
-      url: "/article/addArticleComment",
+      url: "/article/articleComment/addArticleComment",
       method: "POST",
       data: data2
     });
   };
   const deleteArticleComment = (data2) => {
     return request({
-      url: "/article/deleteArticleComment",
+      url: "/article/articleComment/deleteArticleComment",
       method: "POST",
       data: {
         articleCommentId: data2.articleCommentId
@@ -69757,11 +69999,20 @@ ${placeholder}
   };
   const getArticleComment = (data2) => {
     return request({
-      url: "/article/getArticleComment",
+      url: "/article/articleComment/getArticleComment",
       method: "POST",
       data: {
         articleId: data2.articleId,
         currentPage: data2.currentPage
+      }
+    });
+  };
+  const niceArticleComment = (data2) => {
+    return request({
+      url: "/article/articleComment/niceArticleComment",
+      method: "POST",
+      data: {
+        articleCommentId: data2.articleCommentId
       }
     });
   };
@@ -69783,6 +70034,18 @@ ${placeholder}
     },
     REMOVE_COMMENT(state2, commentId) {
       state2.comments = state2.comments.filter((cmt) => cmt.id !== commentId);
+    },
+    SET_COMMENT_LIKE(state2, { commentId, isLike }) {
+      const index2 = state2.comments.findIndex((cmt) => cmt.id === commentId);
+      if (index2 !== -1) {
+        if (isLike) {
+          state2.comments[index2].likeCount++;
+          state2.comments[index2].isLiked = true;
+        } else {
+          state2.comments[index2].likeCount--;
+          state2.comments[index2].isLiked = false;
+        }
+      }
     }
   };
   const actions$3 = {
@@ -69792,7 +70055,7 @@ ${placeholder}
         commit("SET_COMMENTS", res2.data);
         return res2;
       } catch (error2) {
-        formatAppLog("error", "at store/article/articleComment.js:32", "获取文章评论失败:", error2);
+        formatAppLog("error", "at store/article/articleComment.js:44", "获取文章评论失败:", error2);
         throw error2;
       }
     },
@@ -69802,7 +70065,7 @@ ${placeholder}
         commit("ADD_COMMENT", res2.data);
         return res2;
       } catch (error2) {
-        formatAppLog("error", "at store/article/articleComment.js:42", "提交评论失败:", error2);
+        formatAppLog("error", "at store/article/articleComment.js:54", "提交评论失败:", error2);
         throw error2;
       }
     },
@@ -69812,7 +70075,16 @@ ${placeholder}
         commit("REMOVE_COMMENT", commentId);
         return res2;
       } catch (error2) {
-        formatAppLog("error", "at store/article/articleComment.js:52", "删除评论失败:", error2);
+        formatAppLog("error", "at store/article/articleComment.js:64", "删除评论失败:", error2);
+        throw error2;
+      }
+    },
+    async niceArticleComment({ commit }, commentId) {
+      try {
+        const res2 = await niceArticleComment(commentId);
+        return res2;
+      } catch (error2) {
+        formatAppLog("error", "at store/article/articleComment.js:74", "设置精华评论失败:", error2);
         throw error2;
       }
     }

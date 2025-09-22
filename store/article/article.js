@@ -1,10 +1,13 @@
-import { myArticle, articleById, searchArticle, createArticle, deleteArticle } from '../../API/article/article.js';
+import { myArticle, articleById, searchArticle, createArticle, deleteArticle,recommend,niceArticle,collectArticle } from '../../API/article/article.js';
 export default {
   namespaced: true,
   state: () => ({ 
     articleList: [], 
     currentArticle: null, 
-    hotArticles: [] 
+    hotArticles: [],
+    recommendArticles: [],
+    niceArticles: [],
+    collectedArticles: []
   }),
   mutations: {
     SET_ARTICLE_LIST(state, list) {
@@ -15,6 +18,15 @@ export default {
     },
     SET_HOT_ARTICLES(state, list) {
       state.hotArticles = list;
+    },
+    SET_RECOMMEND_ARTICLES(state, list) {
+      state.recommendArticles = list;
+    },
+    SET_NICE_ARTICLES(state, list) {
+      state.niceArticles = list;
+    },
+    SET_COLLECTED_ARTICLES(state, list) {
+      state.collectedArticles = list;
     }
   },
   actions: {
@@ -44,5 +56,26 @@ export default {
       const res = await myArticle(data); // 调用更新文章接口
       return res;
     },
+    async recommend({ commit }, params) {
+      const res = await recommend(params); // 调用推荐文章接口
+      if (res.code === 200) {
+        commit('SET_RECOMMEND_ARTICLES', res.data.list);
+      }
+      return res;
+    },
+    async niceArticle({ commit }, params) {
+      const res = await niceArticle(params); // 调用精品文章接口
+      if (res.code === 200) {
+        commit('SET_NICE_ARTICLES', res.data.list);
+      }
+      return res;
+    },
+    async collectArticle({ commit }, params) {
+      const res = await collectArticle(params); // 调用收藏文章接口
+      if (res.code === 200) {
+        commit('SET_COLLECTED_ARTICLES', res.data.list);
+      }
+      return res;
+    }
   }
 };

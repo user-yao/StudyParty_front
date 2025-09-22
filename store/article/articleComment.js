@@ -1,4 +1,4 @@
-import { getArticleComment, addArticleComment, deleteArticleComment } from '../../API/article/articleComment.js';
+import { getArticleComment, addArticleComment, deleteArticleComment, niceArticleComment } from '../../API/article/articleComment.js';
 
 const state = {
   comments: []
@@ -19,6 +19,18 @@ const mutations = {
   },
   REMOVE_COMMENT(state, commentId) {
     state.comments = state.comments.filter(cmt => cmt.id !== commentId);
+  },
+  SET_COMMENT_LIKE(state, { commentId, isLike }) {
+    const index = state.comments.findIndex(cmt => cmt.id === commentId);
+    if (index !== -1) {
+      if (isLike) {
+        state.comments[index].likeCount++;
+        state.comments[index].isLiked = true;
+      } else {
+        state.comments[index].likeCount--;
+        state.comments[index].isLiked = false;
+      }
+    }
   }
 };
 
@@ -50,6 +62,16 @@ const actions = {
       return res;
     } catch (error) {
       console.error('删除评论失败:', error);
+      throw error;
+    }
+  },
+  async niceArticleComment({ commit }, commentId) {
+    try {
+      const res = await niceArticleComment(commentId);
+      // 可以根据需要更新状态，例如标记评论为精华等
+      return res;
+    } catch (error) {
+      console.error('设置精华评论失败:', error);
       throw error;
     }
   }

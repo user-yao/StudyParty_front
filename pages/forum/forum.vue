@@ -1,860 +1,662 @@
 <template>
-  <div>
-     <!-- 头部导航 -->
-    <header>
-        <div class="header-top">
-            <div class="logo">
-                <i class="fas fa-users"></i>
-                <span>社区中心</span>
-            </div>
-            <div class="header-actions">
-                <i class="fas fa-bell"></i>
-                <i class="fas fa-search"></i>
-            </div>
+  <view class="forum-container">
+    <!-- 顶部导航 -->
+    <header class="app-header">
+      <div class="header-top">
+        <div class="logo">
+          <u-icon name="chat" size="24" color="#fff"></u-icon>
+          <span>学习社区</span>
         </div>
-        <div class="tabs-container">
-            <div class="tab active">全部</div>
-            <div class="tab">推荐</div>
-            <div class="tab">任务所</div>
-            <div class="tab">学习小组</div>
-            <div class="tab">问答</div>
-            <div class="tab">知识分享</div>
-            <div class="tab">热门</div>
-            <div class="tab">关注</div>
+        <div class="header-actions">
+          <u-icon name="bell" size="20" color="#fff" @click="goToNotifications"></u-icon>
+          <u-icon name="search" size="20" color="#fff" @click="goToSearch"></u-icon>
         </div>
+      </div>
+      
+      <div class="search-bar">
+        <u-icon name="search" size="16" color="#ccc"></u-icon>
+        <input type="text" placeholder="搜索任务、帖子..." @focus="goToSearch">
+      </div>
     </header>
     
     <!-- 社区内容 -->
-    <div class="community-container">
-        <!-- 任务所 -->
-        <div class="section-title">
-            <h2>悬赏任务</h2>
-            <a href="#">查看全部 <i class="fas fa-chevron-right"></i></a>
-        </div>
+    <view class="community-container">
+      <!-- 任务模块 -->
+      <view class="section">
+        <view class="section-header">
+          <view class="section-title">
+            <u-icon name="order" size="18" color="#333"></u-icon>
+            <text>任务列表</text>
+          </view>
+          <view class="section-action" @click="viewAllTasks">
+            <text>更多</text>
+          </view>
+        </view>
         
-        <div class="task-card">
-            <div class="task-header">
-                <div class="task-title">React组件开发挑战</div>
-                <div class="task-reward">+120积分</div>
-            </div>
-            <div class="task-meta">
-                <div><i class="far fa-clock"></i> 剩余2天</div>
-                <div><i class="fas fa-user-graduate"></i> 李老师发布</div>
-            </div>
-            <div class="task-tags">
-                <div class="task-tag">前端开发</div>
-                <div class="task-tag">React</div>
-                <div class="task-tag">组件化</div>
-            </div>
-            <div class="task-footer">
-                <div class="task-participants">
-                    <div class="participant-avatar">张</div>
-                    <div class="participant-avatar">王</div>
-                    <div class="participant-avatar">李</div>
-                    <div class="participant-count">12人参与</div>
-                </div>
-                <button class="task-btn">立即参与</button>
-            </div>
-        </div>
+        <!-- 横向任务列表 -->
+        <scroll-view scroll-x class="task-scroll">
+          <view class="task-list-horizontal">
+            <view 
+              v-for="task in tasks.slice(0, 5)" 
+              :key="task.id"
+              class="task-card-horizontal"
+              @click="viewTaskDetail(task.id)"
+            >
+              <view class="task-reward-badge">+{{ task.reward }}积分</view>
+              <view class="task-title">{{ task.title }}</view>
+              <view class="task-meta">
+                <view class="meta-item">
+                  <u-icon name="clock" size="12" color="#999"></u-icon>
+                  <text>剩余{{ task.timeLeft }}</text>
+                </view>
+                <view class="meta-item">
+                  <u-icon :name="task.publisherType === 'teacher' ? 'man' : 'home'" size="12" color="#999"></u-icon>
+                  <text>{{ task.publisher }}</text>
+                </view>
+              </view>
+              <view class="task-tags">
+                <view 
+                  v-for="(tag, index) in task.tags.slice(0, 2)" 
+                  :key="index"
+                  class="task-tag"
+                >
+                  {{ tag }}
+                </view>
+              </view>
+              <view class="task-action">
+                <button class="join-btn">立即参与</button>
+              </view>
+            </view>
+          </view>
+        </scroll-view>
+      </view>
+      
+      <!-- 论坛推荐模块 -->
+      <view class="section">
+        <view class="section-header">
+          <view class="section-title">
+            <u-icon name="star" size="18" color="#333"></u-icon>
+            <text>推荐内容</text>
+          </view>
+        </view>
         
-        <div class="task-card">
-            <div class="task-header">
-                <div class="task-title">数据结构算法题解</div>
-                <div class="task-reward">+80积分</div>
-            </div>
-            <div class="task-meta">
-                <div><i class="far fa-clock"></i> 剩余3天</div>
-                <div><i class="fas fa-building"></i> 字节跳动发布</div>
-            </div>
-            <div class="task-tags">
-                <div class="task-tag">算法</div>
-                <div class="task-tag">数据结构</div>
-                <div class="task-tag">面试题</div>
-            </div>
-            <div class="task-footer">
-                <div class="task-participants">
-                    <div class="participant-avatar">刘</div>
-                    <div class="participant-avatar">陈</div>
-                    <div class="participant-count">8人参与</div>
-                </div>
-                <button class="task-btn">立即参与</button>
-            </div>
-        </div>
+        <view class="article-list">
+          <view 
+            v-for="article in recommendedArticles" 
+            :key="article.id"
+            class="article-card"
+            @click="viewArticleDetail(article.id)"
+          >
+            <view class="article-header">
+              <view class="article-user">
+                <view class="user-avatar">
+                  <image 
+                    v-if="article.head" 
+                    :src="article.head" 
+                    mode="aspectFill"
+                  ></image>
+                  <view v-else class="avatar-placeholder">
+                    {{ article.name ? article.name.substring(0, 1) : 'U' }}
+                  </view>
+                </view>
+                <view class="user-info">
+                  <view class="user-name">{{ article.name }}</view>
+                  <view class="user-school">{{ article.school }}</view>
+                </view>
+              </view>
+              <view class="article-time">
+                {{ formatTime(article.createTime) }}
+              </view>
+            </view>
+            
+            <view class="article-content">
+              <view class="article-title">{{ article.title }}</view>
+              <view class="article-summary">{{ article.summary }}</view>
+            </view>
+            
+            <view class="article-meta">
+              <view class="meta-item">
+                <u-icon name="eye" size="14" color="#999"></u-icon>
+                <text>{{ article.viewCount }}</text>
+              </view>
+              <view class="meta-item">
+                <u-icon name="chat" size="14" color="#999"></u-icon>
+                <text>{{ article.commentCount }}</text>
+              </view>
+              <view class="meta-item" @click.stop="toggleLike(article)">
+                <u-icon 
+                  :name="article.isNice ? 'heart-fill' : 'heart'" 
+                  :color="article.isNice ? '#f00' : '#999'"
+                  size="14"
+                ></u-icon>
+                <text>{{ article.nice }}</text>
+              </view>
+              <view class="meta-item" @click.stop="toggleCollect(article)">
+                <u-icon 
+                  :name="article.isCollect ? 'bookmark-fill' : 'bookmark'" 
+                  :color="article.isCollect ? '#4361ee' : '#999'"
+                  size="14"
+                ></u-icon>
+                <text>{{ article.collect }}</text>
+              </view>
+            </view>
+          </view>
+        </view>
         
-        <!-- 热门帖子 -->
-        <div class="section-title">
-            <h2>热门讨论</h2>
-            <a href="#">更多 <i class="fas fa-chevron-right"></i></a>
-        </div>
-        
-        <div class="post-card">
-            <div class="post-header">
-                <div class="post-avatar">王</div>
-                <div class="post-user">
-                    <div class="post-user-name">王同学 · 前端开发</div>
-                    <div class="post-meta">
-                        <div class="post-time">2小时前</div>
-                        <div class="post-type">知识分享</div>
-                    </div>
-                </div>
-            </div>
-            <div class="post-content">
-                刚刚完成了React Hooks实战项目，分享我的学习笔记和代码仓库，包含10个常见场景的最佳实践，欢迎交流讨论！
-            </div>
-            <div class="post-image">React Hooks项目截图</div>
-            <div class="post-actions">
-                <div class="post-action">
-                    <i class="far fa-heart"></i> 42
-                </div>
-                <div class="post-action">
-                    <i class="far fa-comment"></i> 8
-                </div>
-                <div class="post-action">
-                    <i class="fas fa-share-alt"></i> 分享
-                </div>
-                <div class="post-action">
-                    <i class="fas fa-coin"></i> 投币
-                </div>
-            </div>
-        </div>
-        
-        <div class="post-card">
-            <div class="post-header">
-                <div class="post-avatar">李</div>
-                <div class="post-user">
-                    <div class="post-user-name">李老师 · 全栈工程师</div>
-                    <div class="post-meta">
-                        <div class="post-time">5小时前</div>
-                        <div class="post-type">问题求助</div>
-                    </div>
-                </div>
-            </div>
-            <div class="post-content">
-                在开发电商平台时遇到性能瓶颈，商品列表页在渲染1000+商品时出现明显卡顿，大家有什么优化建议吗？目前使用的是Vue3 + Composition API。
-            </div>
-            <div class="post-actions">
-                <div class="post-action">
-                    <i class="far fa-heart"></i> 28
-                </div>
-                <div class="post-action">
-                    <i class="far fa-comment"></i> 16
-                </div>
-                <div class="post-action">
-                    <i class="fas fa-share-alt"></i> 分享
-                </div>
-                <div class="post-action">
-                    <i class="fas fa-coin"></i> 投币
-                </div>
-            </div>
-        </div>
-        
-        <!-- 学习小组 -->
-        <div class="section-title">
-            <h2>推荐学习小组</h2>
-            <a href="#">更多 <i class="fas fa-chevron-right"></i></a>
-        </div>
-        
-        <div class="group-card">
-            <div class="group-header">
-                <div class="group-icon">
-                    <i class="fas fa-code"></i>
-                </div>
-                <div class="group-info">
-                    <div class="group-name">前端开发精英组</div>
-                    <div class="group-members">
-                        <i class="fas fa-users"></i> 24名成员 · 活跃度高
-                    </div>
-                </div>
-            </div>
-            <div class="group-tags">
-                <div class="group-tag">React</div>
-                <div class="group-tag">Vue</div>
-                <div class="group-tag">TypeScript</div>
-                <div class="group-tag">前端工程化</div>
-            </div>
-            <div class="group-progress">
-                <div class="progress-label">
-                    <span>小组活跃度</span>
-                    <span>65%</span>
-                </div>
-                <div class="progress-bar">
-                    <div class="progress-fill"></div>
-                </div>
-            </div>
-            <button class="group-btn">加入小组</button>
-        </div>
-        
-        <div class="group-card">
-            <div class="group-header">
-                <div class="group-icon">
-                    <i class="fas fa-server"></i>
-                </div>
-                <div class="group-info">
-                    <div class="group-name">后端架构研究组</div>
-                    <div class="group-members">
-                        <i class="fas fa-users"></i> 18名成员 · 企业导师指导
-                    </div>
-                </div>
-            </div>
-            <div class="group-tags">
-                <div class="group-tag">Node.js</div>
-                <div class="group-tag">微服务</div>
-                <div class="group-tag">数据库</div>
-                <div class="group-tag">高并发</div>
-            </div>
-            <div class="group-progress">
-                <div class="progress-label">
-                    <span>项目完成度</span>
-                    <span>45%</span>
-                </div>
-                <div class="progress-bar">
-                    <div class="progress-fill" style="width: 45%"></div>
-                </div>
-            </div>
-            <button class="group-btn">加入小组</button>
-        </div>
-        
-        <!-- 热门问题 -->
-        <div class="section-title">
-            <h2>热门问答</h2>
-            <a href="#">更多 <i class="fas fa-chevron-right"></i></a>
-        </div>
-        
-        <div class="question-card">
-            <div class="question-header">
-                <div class="question-avatar">张</div>
-                <div>
-                    <div class="post-user-name">张同学</div>
-                    <div class="post-time">3小时前</div>
-                </div>
-            </div>
-            <div class="question-title">
-                TypeScript中interface和type的区别是什么？在实际项目中如何选择？
-            </div>
-            <div class="question-footer">
-                <div class="question-stats">
-                    <div class="question-stat">
-                        <i class="far fa-eye"></i> 328
-                    </div>
-                    <div class="question-stat">
-                        <i class="far fa-comment"></i> 12
-                    </div>
-                </div>
-                <div class="question-stat">
-                    <i class="fas fa-coins" style="color: gold;"></i> 悬赏50积分
-                </div>
-            </div>
-        </div>
-        
-        <div class="question-card">
-            <div class="question-header">
-                <div class="question-avatar">刘</div>
-                <div>
-                    <div class="post-user-name">刘同学</div>
-                    <div class="post-time">7小时前</div>
-                </div>
-            </div>
-            <div class="question-title">
-                如何设计一个高并发的秒杀系统？需要重点考虑哪些技术点？
-            </div>
-            <div class="question-footer">
-                <div class="question-stats">
-                    <div class="question-stat">
-                        <i class="far fa-eye"></i> 456
-                    </div>
-                    <div class="question-stat">
-                        <i class="far fa-comment"></i> 18
-                    </div>
-                </div>
-                <div class="question-stat">
-                    <i class="fas fa-coins" style="color: gold;"></i> 悬赏80积分
-                </div>
-            </div>
-        </div>
-    </div>
-  </div>
+        <!-- 加载更多提示 -->
+        <view class="load-more" @click="loadMore">
+          <text v-if="!loadingMore">点击加载更多</text>
+          <text v-else>加载中...</text>
+        </view>
+      </view>
+    </view>
+  </view>
 </template>
 
 <script>
-  export default {
-    data() {
-      return {}
+export default {
+  name: 'Forum',
+  data() {
+    return {
+      loadingMore: false,
+      // 推荐文章数据
+      recommendedArticles: [
+        {
+          "id": 1,
+          "uploader": 3,
+          "title": "测试标题",
+          "summary": "测试概要",
+          "content": null,
+          "nice": 0,
+          "collect": 0,
+          "viewCount": 2,
+          "commentCount": 0,
+          "createTime": "2025-09-21T14:45:15.000+00:00",
+          "isFeatured": 0,
+          "status": 1,
+          "name": "姚镇涛",
+          "head": "static/head/3/userHeadPhoto.png",
+          "school": "天津职业技术师范大学",
+          "starPrestige": 0,
+          "isNice": 0,
+          "isCollect": 0,
+          "isView": 0
+        }
+      ],
+      // 全部使用假数据
+      tasks: [
+        {
+          id: 1,
+          title: 'React组件开发挑战',
+          reward: 120,
+          timeLeft: '2天',
+          publisher: '李老师',
+          publisherType: 'teacher',
+          tags: ['前端开发', 'React', '组件化'],
+          participants: [
+            { name: '张同学' },
+            { name: '王同学' },
+            { name: '李同学' },
+            { name: '赵同学' },
+            { name: '孙同学' }
+          ]
+        },
+        {
+          id: 2,
+          title: '数据结构算法题解',
+          reward: 80,
+          timeLeft: '3天',
+          publisher: '字节跳动',
+          publisherType: 'company',
+          tags: ['算法', '数据结构', '面试题'],
+          participants: [
+            { name: '刘同学' },
+            { name: '陈同学' },
+            { name: '杨同学' },
+            { name: '黄同学' }
+          ]
+        }
+      ]
+    }
+  },
+  methods: {
+    goToNotifications() {
+      uni.showToast({
+        title: '查看通知',
+        icon: 'none'
+      });
+    },
+    goToSearch() {
+      uni.showToast({
+        title: '搜索功能',
+        icon: 'none'
+      });
+    },
+    viewAllTasks() {
+      // 跳转到任务列表页面
+      uni.navigateTo({
+        url: '/pages/chatList/groupTaskList'
+      });
+    },
+    viewTaskDetail(taskId) {
+      uni.showToast({
+        title: `查看任务 ${taskId}`,
+        icon: 'none'
+      });
+    },
+    viewArticleDetail(articleId) {
+      uni.showToast({
+        title: `查看文章 ${articleId}`,
+        icon: 'none'
+      });
+    },
+    // 格式化时间
+    formatTime(timeStr) {
+      const date = new Date(timeStr);
+      const now = new Date();
+      const diff = now - date;
+      const minutes = Math.floor(diff / (1000 * 60));
+      const hours = Math.floor(diff / (1000 * 60 * 60));
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      
+      if (minutes < 1) {
+        return '刚刚';
+      } else if (minutes < 60) {
+        return `${minutes}分钟前`;
+      } else if (hours < 24) {
+        return `${hours}小时前`;
+      } else if (days < 30) {
+        return `${days}天前`;
+      } else {
+        return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+      }
+    },
+    // 切换点赞状态
+    toggleLike(article) {
+      uni.showToast({
+        title: article.isNice ? '取消点赞' : '点赞成功',
+        icon: 'none'
+      });
+      // 这里应该调用API更新点赞状态
+      article.isNice = !article.isNice;
+      article.nice += article.isNice ? 1 : -1;
+    },
+    // 切换收藏状态
+    toggleCollect(article) {
+      uni.showToast({
+        title: article.isCollect ? '取消收藏' : '收藏成功',
+        icon: 'none'
+      });
+      // 这里应该调用API更新收藏状态
+      article.isCollect = !article.isCollect;
+      article.collect += article.isCollect ? 1 : -1;
+    },
+    // 加载更多推荐内容
+    loadMore() {
+      if (this.loadingMore) return;
+      
+      this.loadingMore = true;
+      
+      // 模拟加载更多数据
+      setTimeout(() => {
+        // 这里应该调用API获取更多数据
+        const newArticles = [
+          {
+            "id": 2,
+            "uploader": 4,
+            "title": "新的推荐文章",
+            "summary": "这是另一篇推荐文章的概要内容",
+            "content": null,
+            "nice": 5,
+            "collect": 3,
+            "viewCount": 15,
+            "commentCount": 2,
+            "createTime": "2025-09-22T10:30:00.000+00:00",
+            "isFeatured": 1,
+            "status": 1,
+            "name": "张同学",
+            "head": "static/head/4/userHeadPhoto.png",
+            "school": "清华大学",
+            "starPrestige": 20,
+            "isNice": 0,
+            "isCollect": 0,
+            "isView": 0
+          }
+        ];
+        
+        // 添加新数据到列表中
+        this.recommendedArticles = [...this.recommendedArticles, ...newArticles];
+        this.loadingMore = false;
+      }, 1000);
     }
   }
+}
 </script>
 
 <style scoped>
-  * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
-        }
-        
-        :global(:root) {
-            --primary: #4361ee;
-            --secondary: #3f37c9;
-            --accent: #4895ef;
-            --success: #4cc9f0;
-            --warning: #f72585;
-            --light: #f8f9fa;
-            --dark: #212529;
-            --gray: #6c757d;
-            --light-gray: #e9ecef;
-            --card-bg: #ffffff;
-            --tag-bg: #eef7ff;
-        }
-        
-        body {
-            background-color: #f5f7fb;
-            color: var(--dark);
-            padding-bottom: 80px;
-        }
-        
-        /* 头部导航 */
-        header {
-            position: sticky;
-            top: 0;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            padding: 15px 20px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            z-index: 100;
-        }
-        
-        .header-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-        
-        .logo {
-            display: flex;
-            align-items: center;
-            font-weight: 700;
-            font-size: 1.4rem;
-        }
-        
-        .logo i {
-            margin-right: 8px;
-            font-size: 1.6rem;
-        }
-        
-        .header-actions {
-            display: flex;
-            gap: 20px;
-        }
-        
-        .header-actions i {
-            font-size: 1.3rem;
-        }
-        
-        .tabs-container {
-            display: flex;
-            overflow-x: auto;
-            padding-bottom: 5px;
-            -ms-overflow-style: none;  /* IE and Edge */
-            scrollbar-width: none;  /* Firefox */
-        }
-        
-        .tabs-container::-webkit-scrollbar {
-            display: none;  /* Chrome, Safari, Opera */
-        }
-        
-        .tab {
-            padding: 8px 15px;
-            margin-right: 8px;
-            border-radius: 20px;
-            background: rgba(255, 255, 255, 0.15);
-            font-size: 0.9rem;
-            white-space: nowrap;
-            transition: all 0.3s;
-        }
-        
-        .tab.active {
-            background: white;
-            color: var(--primary);
-            font-weight: 500;
-        }
-        
-        /* 社区内容区域 */
-        .community-container {
-            padding: 15px;
-        }
-        
-        .section-title {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin: 20px 0 15px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid var(--light-gray);
-        }
-        
-        .section-title h2 {
-            font-size: 1.25rem;
-            font-weight: 600;
-            color: var(--dark);
-        }
-        
-        .section-title a {
-            font-size: 0.9rem;
-            color: var(--primary);
-            font-weight: 500;
-            text-decoration: none;
-        }
-        
-        /* 任务卡片 */
-        .task-card {
-            background: var(--card-bg);
-            border-radius: 16px;
-            padding: 20px;
-            margin-bottom: 15px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .task-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 5px;
-            height: 100%;
-            background: linear-gradient(to bottom, var(--accent), var(--success));
-        }
-        
-        .task-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-        
-        .task-title {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: var(--dark);
-        }
-        
-        .task-reward {
-            background: linear-gradient(135deg, #ff9a9e, #fad0c4);
-            color: white;
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            font-weight: 500;
-        }
-        
-        .task-meta {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 15px;
-            font-size: 0.85rem;
-            color: var(--gray);
-        }
-        
-        .task-tags {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 15px;
-            flex-wrap: wrap;
-        }
-        
-        .task-tag {
-            background: var(--tag-bg);
-            color: var(--primary);
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-        }
-        
-        .task-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .task-participants {
-            display: flex;
-            align-items: center;
-        }
-        
-        .participant-avatar {
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            background: linear-gradient(45deg, #a1c4fd, #c2e9fb);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-            font-size: 0.9rem;
-            margin-right: -10px;
-            border: 2px solid white;
-        }
-        
-        .participant-avatar:nth-child(2) {
-            background: linear-gradient(45deg, #ffecd2, #fcb69f);
-        }
-        
-        .participant-avatar:nth-child(3) {
-            background: linear-gradient(45deg, #84fab0, #8fd3f4);
-        }
-        
-        .participant-count {
-            margin-left: 15px;
-            font-size: 0.85rem;
-            color: var(--gray);
-        }
-        
-        .task-btn {
-            padding: 8px 20px;
-            background: var(--primary);
-            color: white;
-            border: none;
-            border-radius: 20px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .task-btn:hover {
-            background: var(--secondary);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(67, 97, 238, 0.3);
-        }
-        
-        /* 帖子卡片 */
-        .post-card {
-            background: var(--card-bg);
-            border-radius: 16px;
-            padding: 20px;
-            margin-bottom: 15px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-        }
-        
-        .post-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-        
-        .post-avatar {
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            background: linear-gradient(45deg, #ff9a9e, #fad0c4);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-            font-size: 1.2rem;
-            margin-right: 15px;
-        }
-        
-        .post-user {
-            flex: 1;
-        }
-        
-        .post-user-name {
-            font-weight: 600;
-            margin-bottom: 3px;
-        }
-        
-        .post-meta {
-            display: flex;
-            align-items: center;
-            font-size: 0.8rem;
-            color: var(--gray);
-        }
-        
-        .post-time {
-            margin-right: 10px;
-        }
-        
-        .post-type {
-            background: var(--tag-bg);
-            color: var(--primary);
-            padding: 3px 8px;
-            border-radius: 12px;
-            font-size: 0.75rem;
-        }
-        
-        .post-content {
-            margin-bottom: 15px;
-            line-height: 1.6;
-        }
-        
-        .post-image {
-            width: 100%;
-            border-radius: 12px;
-            margin-bottom: 15px;
-            height: 180px;
-            background: linear-gradient(135deg, #6a11cb, #2575fc);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: 500;
-        }
-        
-        .post-actions {
-            display: flex;
-            gap: 25px;
-            font-size: 0.9rem;
-            color: var(--gray);
-            padding-top: 15px;
-            border-top: 1px solid var(--light-gray);
-        }
-        
-        .post-action {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        
-        .post-action:hover {
-            color: var(--primary);
-        }
-        
-        /* 小组卡片 */
-        .group-card {
-            background: var(--card-bg);
-            border-radius: 16px;
-            padding: 20px;
-            margin-bottom: 15px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .group-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-        
-        .group-icon {
-            width: 60px;
-            height: 60px;
-            border-radius: 16px;
-            background: linear-gradient(135deg, #6a11cb, #2575fc);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 1.5rem;
-            margin-right: 15px;
-        }
-        
-        .group-info {
-            flex: 1;
-        }
-        
-        .group-name {
-            font-weight: 600;
-            font-size: 1.1rem;
-            margin-bottom: 5px;
-        }
-        
-        .group-members {
-            font-size: 0.85rem;
-            color: var(--gray);
-            display: flex;
-            align-items: center;
-        }
-        
-        .group-members i {
-            margin-right: 5px;
-        }
-        
-        .group-tags {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 15px;
-            flex-wrap: wrap;
-        }
-        
-        .group-tag {
-            background: var(--tag-bg);
-            color: var(--primary);
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-        }
-        
-        .group-progress {
-            margin-bottom: 15px;
-        }
-        
-        .progress-label {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 5px;
-            font-size: 0.85rem;
-            color: var(--gray);
-        }
-        
-        .progress-bar {
-            height: 8px;
-            background: var(--light-gray);
-            border-radius: 4px;
-            overflow: hidden;
-        }
-        
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--accent), var(--success));
-            width: 65%;
-            border-radius: 4px;
-        }
-        
-        .group-btn {
-            padding: 8px 20px;
-            background: white;
-            color: var(--primary);
-            border: 1px solid var(--primary);
-            border-radius: 20px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-align: center;
-            margin-top: 10px;
-        }
-        
-        .group-btn:hover {
-            background: var(--primary);
-            color: white;
-        }
-        
-        /* 热门问题 */
-        .question-card {
-            background: var(--card-bg);
-            border-radius: 16px;
-            padding: 20px;
-            margin-bottom: 15px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-        }
-        
-        .question-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-        
-        .question-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: linear-gradient(45deg, #a1c4fd, #c2e9fb);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-            font-size: 1rem;
-            margin-right: 15px;
-        }
-        
-        .question-title {
-            font-weight: 600;
-            font-size: 1.05rem;
-            margin-bottom: 10px;
-        }
-        
-        .question-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 15px;
-        }
-        
-        .question-stats {
-            display: flex;
-            gap: 15px;
-            font-size: 0.85rem;
-            color: var(--gray);
-        }
-        
-        .question-stat {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-        
-        /* 底部操作栏 */
-        .bottom-actions {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: white;
-            display: flex;
-            justify-content: space-around;
-            padding: 15px;
-            box-shadow: 0 -2px 15px rgba(0, 0, 0, 0.1);
-            z-index: 100;
-        }
-        
-        .action-btn {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            color: var(--gray);
-            text-decoration: none;
-            font-size: 0.75rem;
-        }
-        
-        .action-btn i {
-            font-size: 1.3rem;
-            margin-bottom: 5px;
-        }
-        
-        .action-btn.active {
-            color: var(--primary);
-        }
-        
-        .publish-btn {
-            background: linear-gradient(135deg, var(--primary), var(--accent));
-            color: white;
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.8rem;
-            margin-top: -30px;
-            box-shadow: 0 4px 15px rgba(67, 97, 238, 0.4);
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .publish-btn:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 6px 20px rgba(67, 97, 238, 0.5);
-        }
-        
-        /* 响应式调整 */
-        @media (max-width: 480px) {
-            .tabs-container {
-                gap: 5px;
-            }
-            
-            .tab {
-                padding: 6px 12px;
-                font-size: 0.8rem;
-            }
-            
-            .post-image {
-                height: 150px;
-            }
-        }
+.forum-container {
+  min-height: 100vh;
+  background-color: #f5f5f5;
+  position: relative;
+  padding-bottom: 20px;
+  color: #333;
+}
+
+/* 顶部导航 */
+.app-header {
+  background: linear-gradient(135deg, #4361ee, #3f37c9);
+  color: white;
+  padding: 10px 15px;
+  padding-top: calc(var(--status-bar-height, 0px) + 10px);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+  font-size: 1.2rem;
+}
+
+.logo i {
+  margin-right: 8px;
+  font-size: 1.4rem;
+}
+
+.header-actions {
+  display: flex;
+  gap: 15px;
+}
+
+.header-actions i {
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+
+.search-bar {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  padding: 6px 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.search-bar input {
+  background: transparent;
+  border: none;
+  color: #fff;
+  width: 100%;
+  padding: 0 8px;
+  outline: none;
+  font-size: 0.9rem;
+}
+
+.search-bar input::placeholder {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* 社区内容区域 */
+.community-container {
+  padding: 10px;
+}
+
+.section {
+  background: white;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 15px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+  font-size: 1rem;
+  color: #333;
+}
+
+.section-title i {
+  margin-right: 8px;
+}
+
+.section-action {
+  display: flex;
+  align-items: center;
+  color: #4361ee;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+/* 横向任务列表 */
+.task-scroll {
+  width: 100%;
+  white-space: nowrap;
+}
+
+.task-list-horizontal {
+  display: inline-block;
+  padding: 5px 0;
+}
+
+.task-card-horizontal {
+  display: inline-block;
+  width: 200px;
+  background: #fafafa;
+  border-radius: 8px;
+  padding: 15px;
+  margin-right: 12px;
+  cursor: pointer;
+  vertical-align: top;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  border: 1px solid #eee;
+}
+
+.task-card-horizontal:last-child {
+  margin-right: 0;
+}
+
+.task-reward-badge {
+  background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+  color: white;
+  padding: 4px 10px;
+  border-radius: 15px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  display: inline-block;
+  margin-bottom: 10px;
+}
+
+.task-title {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: #333;
+  margin-bottom: 12px;
+  line-height: 1.4;
+  min-height: 40px;
+}
+
+.task-meta {
+  margin-bottom: 12px;
+}
+
+.meta-item {
+  display: flex;
+  align-items: center;
+  font-size: 0.8rem;
+  color: #999;
+  margin-bottom: 5px;
+}
+
+.meta-item:last-child {
+  margin-bottom: 0;
+}
+
+.meta-item i {
+  margin-right: 4px;
+  font-size: 0.75rem;
+}
+
+.task-tags {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 15px;
+}
+
+.task-tag {
+  background: #eef7ff;
+  color: #4361ee;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+}
+
+.task-action {
+  text-align: center;
+}
+
+.join-btn {
+  background: #4361ee;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  padding: 6px 15px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  width: 100%;
+}
+
+/* 推荐文章卡片 */
+.article-card {
+  background: #fafafa;
+  border-radius: 6px;
+  padding: 12px;
+  margin-bottom: 12px;
+  cursor: pointer;
+}
+
+.article-card:last-child {
+  margin-bottom: 0;
+}
+
+.article-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.article-user {
+  display: flex;
+  align-items: center;
+}
+
+.user-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  margin-right: 8px;
+  overflow: hidden;
+  background: #eee;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.user-avatar image {
+  width: 100%;
+  height: 100%;
+}
+
+.avatar-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #666;
+  font-weight: bold;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.user-name {
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 2px;
+}
+
+.user-school {
+  font-size: 0.75rem;
+  color: #999;
+}
+
+.article-time {
+  font-size: 0.75rem;
+  color: #999;
+}
+
+.article-content {
+  margin-bottom: 12px;
+}
+
+.article-title {
+  font-weight: 600;
+  font-size: 1rem;
+  margin-bottom: 6px;
+  line-height: 1.4;
+}
+
+.article-summary {
+  font-size: 0.85rem;
+  color: #666;
+  line-height: 1.5;
+}
+
+.article-meta {
+  display: flex;
+  gap: 15px;
+  padding-top: 10px;
+  border-top: 1px solid #eee;
+}
+
+.meta-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.8rem;
+  color: #999;
+  cursor: pointer;
+}
+
+/* 加载更多 */
+.load-more {
+  text-align: center;
+  padding: 15px;
+  color: #4361ee;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
 </style>
