@@ -19,14 +19,41 @@ export default {
     SET_HOT_ARTICLES(state, list) {
       state.hotArticles = list;
     },
-    SET_RECOMMEND_ARTICLES(state, list) {
-      state.recommendArticles = list;
+    SET_RECOMMEND_ARTICLES(state, data) {
+      // 根据API返回格式处理数据
+      if (data && data.records) {
+        state.recommendArticles = data.records;
+      } else if (Array.isArray(data)) {
+        state.recommendArticles = data;
+      } else {
+        state.recommendArticles = [];
+      }
     },
     SET_NICE_ARTICLES(state, list) {
       state.niceArticles = list;
     },
     SET_COLLECTED_ARTICLES(state, list) {
       state.collectedArticles = list;
+    },
+    // 更新文章的点赞状态
+    UPDATE_ARTICLE_LIKE(state, { articleId, isNice }) {
+      // 更新推荐文章中的点赞状态
+      const recommendArticle = state.recommendArticles.find(article => article.id === articleId);
+      if (recommendArticle) {
+        recommendArticle.isNice = isNice;
+        // 根据操作类型增减点赞数
+        recommendArticle.nice += isNice ? 1 : -1;
+      }
+    },
+    // 更新文章的收藏状态
+    UPDATE_ARTICLE_FAVORITE(state, { articleId, isCollect }) {
+      // 更新推荐文章中的收藏状态
+      const recommendArticle = state.recommendArticles.find(article => article.id === articleId);
+      if (recommendArticle) {
+        recommendArticle.isCollect = isCollect;
+        // 根据操作类型增减收藏数
+        recommendArticle.collect += isCollect ? 1 : -1;
+      }
     }
   },
   actions: {
@@ -59,21 +86,26 @@ export default {
     async recommend({ commit }, params) {
       const res = await recommend(params); // 调用推荐文章接口
       if (res.code === 200) {
-        commit('SET_RECOMMEND_ARTICLES', res.data.list);
+        commit('SET_RECOMMEND_ARTICLES', res.data);
       }
       return res;
     },
-    async niceArticle({ commit }, params) {
-      const res = await niceArticle(params); // 调用精品文章接口
+    async niceArticle({ commit }, articleId) {
+      const res = await niceArticle({ articleId }); // 调用点赞文章接口
       if (res.code === 200) {
-        commit('SET_NICE_ARTICLES', res.data.list);
+        // 根据返回的数据判断是点赞还是取消点赞
+        const isNice = res.data === "取消点赞" ? false : true;
+        commit('UPDATE_ARTICLE_LIKE', { articleId, isNice });
       }
       return res;
     },
-    async collectArticle({ commit }, params) {
-      const res = await collectArticle(params); // 调用收藏文章接口
+    // 收藏文章
+    async collectArticle({ commit }, articleId) {
+      const res = await collectArticle({ articleId }); // 调用收藏文章接口
       if (res.code === 200) {
-        commit('SET_COLLECTED_ARTICLES', res.data.list);
+        // 根据返回的数据判断是收藏还是取消收藏
+        const isCollect = res.data === "取消收藏" ? false : true;
+        commit('UPDATE_ARTICLE_FAVORITE', { articleId, isCollect });
       }
       return res;
     }

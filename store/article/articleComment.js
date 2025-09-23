@@ -35,9 +35,9 @@ const mutations = {
 };
 
 const actions = {
-  async getArticleComment({ commit }, articleId) {
+  async getArticleComment({ commit }, { articleId, currentPage = 1 }) {
     try {
-      const res = await getArticleComment(articleId);
+      const res = await getArticleComment({ articleId, currentPage });
       commit('SET_COMMENTS', res.data);
       return res;
     } catch (error) {
@@ -47,8 +47,11 @@ const actions = {
   },
   async addArticleComment({ commit }, { articleId, content }) {
     try {
-      const res = await addArticleComment(articleId, content);
-      commit('ADD_COMMENT', res.data);
+      const res = await addArticleComment({ articleId, content });
+      // 确保返回的数据格式正确
+      if (res && res.code === 200 && res.data) {
+        commit('ADD_COMMENT', res.data);
+      }
       return res;
     } catch (error) {
       console.error('提交评论失败:', error);
@@ -57,7 +60,7 @@ const actions = {
   },
   async deleteArticleComment({ commit }, commentId) {
     try {
-      const res = await deleteArticleComment(commentId);
+      const res = await deleteArticleComment({ commentId });
       commit('REMOVE_COMMENT', commentId);
       return res;
     } catch (error) {
@@ -67,7 +70,7 @@ const actions = {
   },
   async niceArticleComment({ commit }, commentId) {
     try {
-      const res = await niceArticleComment(commentId);
+      const res = await niceArticleComment({ commentId });
       // 可以根据需要更新状态，例如标记评论为精华等
       return res;
     } catch (error) {

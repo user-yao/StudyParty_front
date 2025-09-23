@@ -91,6 +91,7 @@
               <view class="article-user">
                 <view class="user-avatar">
                   <image 
+                  
                     v-if="article.head" 
                     :src="article.head" 
                     mode="aspectFill"
@@ -100,8 +101,16 @@
                   </view>
                 </view>
                 <view class="user-info">
-                  <view class="user-name">{{ article.name }}</view>
+                  <view class="user-name">
+                    {{ article.name }}
+                    <text class="identity-tag" :class="article.isAuthority ? 'authority' : ''">
+                      {{ article.identity }}
+                    </text>
+                  </view>
                   <view class="user-school">{{ article.school }}</view>
+                  <view class="user-prestige" v-if="article.starPrestige > 0">
+                    声望值: {{ article.starPrestige }}
+                  </view>
                 </view>
               </view>
               <view class="article-time">
@@ -154,35 +163,14 @@
 </template>
 
 <script>
+import { mapState, mapActions } from 'vuex';
+import { imageUrl } from '../../config/config.js';
+
 export default {
   name: 'Forum',
   data() {
     return {
       loadingMore: false,
-      // 推荐文章数据
-      recommendedArticles: [
-        {
-          "id": 1,
-          "uploader": 3,
-          "title": "测试标题",
-          "summary": "测试概要",
-          "content": null,
-          "nice": 0,
-          "collect": 0,
-          "viewCount": 2,
-          "commentCount": 0,
-          "createTime": "2025-09-21T14:45:15.000+00:00",
-          "isFeatured": 0,
-          "status": 1,
-          "name": "姚镇涛",
-          "head": "static/head/3/userHeadPhoto.png",
-          "school": "天津职业技术师范大学",
-          "starPrestige": 0,
-          "isNice": 0,
-          "isCollect": 0,
-          "isView": 0
-        }
-      ],
       // 全部使用假数据
       tasks: [
         {
@@ -215,11 +203,96 @@ export default {
             { name: '杨同学' },
             { name: '黄同学' }
           ]
+        },
+        // 新增假数据
+        {
+          id: 3,
+          title: 'Vue 3项目实战',
+          reward: 150,
+          timeLeft: '5天',
+          publisher: '王教授',
+          publisherType: 'teacher',
+          tags: ['Vue', '前端框架', '项目实战'],
+          participants: [
+            { name: '陈同学' },
+            { name: '林同学' },
+            { name: '郑同学' }
+          ]
+        },
+        {
+          id: 4,
+          title: '机器学习入门',
+          reward: 200,
+          timeLeft: '7天',
+          publisher: '阿里云',
+          publisherType: 'company',
+          tags: ['机器学习', 'Python', 'AI'],
+          participants: [
+            { name: '周同学' },
+            { name: '吴同学' },
+            { name: '徐同学' },
+            { name: '孙同学' },
+            { name: '马同学' }
+          ]
+        },
+        {
+          id: 5,
+          title: '移动端UI设计',
+          reward: 90,
+          timeLeft: '4天',
+          publisher: '设计学院',
+          publisherType: 'school',
+          tags: ['UI设计', '移动端', '用户体验'],
+          participants: [
+            { name: '何同学' },
+            { name: '邓同学' },
+            { name: '冯同学' },
+            { name: '韩同学' }
+          ]
         }
       ]
     }
   },
+  computed: {
+    ...mapState('article', ['recommendArticles']),
+    // 处理推荐文章数据，添加完整的头像URL和身份标识
+    recommendedArticles() {
+      return this.recommendArticles.map(article => {
+        return {
+          ...article,
+          // 拼接完整的头像URL
+          head: article.head ? imageUrl + article.head : null,
+          // 根据status确定身份标识
+          identity: this.getIdentityText(article.status),
+          // 是否为权威用户（声望值大于100）
+          isAuthority: article.starPrestige > 100
+        };
+      });
+    }
+  },
   methods: {
+    ...mapActions('article', ['recommend', 'niceArticle', 'collectArticle']),
+    // 获取身份文本
+    getIdentityText(status) {
+      switch(status) {
+        case 1: return '学生';
+        case 2: return '老师';
+        case 3: return '企业';
+        default: return '用户';
+      }
+    },
+    // 获取推荐文章
+    async getRecommendArticles() {
+      try {
+        await this.recommend({ page: 1 });
+      } catch (error) {
+        console.error('获取推荐文章失败:', error);
+        uni.showToast({
+          title: '获取推荐文章失败',
+          icon: 'none'
+        });
+      }
+    },
     goToNotifications() {
       uni.showToast({
         title: '查看通知',
@@ -245,9 +318,8 @@ export default {
       });
     },
     viewArticleDetail(articleId) {
-      uni.showToast({
-        title: `查看文章 ${articleId}`,
-        icon: 'none'
+      uni.navigateTo({
+        url: `/pages/forum/articleDetail?id=${articleId}`
       });
     },
     // 格式化时间
@@ -272,63 +344,70 @@ export default {
       }
     },
     // 切换点赞状态
-    toggleLike(article) {
-      uni.showToast({
-        title: article.isNice ? '取消点赞' : '点赞成功',
-        icon: 'none'
-      });
-      // 这里应该调用API更新点赞状态
-      article.isNice = !article.isNice;
-      article.nice += article.isNice ? 1 : -1;
+    async toggleLike(article) {
+      try {
+        const res = await this.niceArticle(article.id);
+        if (res.code === 200) {
+          console.log(res)
+          
+          // 更新文章的点赞状态和数量
+          if (res.data === "取消点赞") {
+            article.isNice = false;
+            article.nice -= 1;
+          } else if (res.data === "点赞成功") {
+            article.isNice = true;
+            article.nice += 1;
+          }
+        }
+      } catch (error) {
+        console.error('点赞操作失败:', error);
+        uni.$u.toast('操作失败');
+      }
     },
     // 切换收藏状态
-    toggleCollect(article) {
-      uni.showToast({
-        title: article.isCollect ? '取消收藏' : '收藏成功',
-        icon: 'none'
-      });
-      // 这里应该调用API更新收藏状态
-      article.isCollect = !article.isCollect;
-      article.collect += article.isCollect ? 1 : -1;
+    async toggleCollect(article) {
+      try {
+        const res = await this.collectArticle(article.id);
+        if (res.code === 200) {
+          
+          // 更新文章的收藏状态和数量
+          if (res.data === "取消收藏") {
+            article.isCollect = false;
+            article.collect -= 1;
+          } else if (res.data === "收藏成功") {
+            article.isCollect = true;
+            article.collect += 1;
+          }
+        }
+      } catch (error) {
+        console.error('收藏操作失败:', error);
+        uni.$u.toast('操作失败');
+      }
     },
     // 加载更多推荐内容
-    loadMore() {
+    async loadMore() {
       if (this.loadingMore) return;
       
       this.loadingMore = true;
       
-      // 模拟加载更多数据
-      setTimeout(() => {
-        // 这里应该调用API获取更多数据
-        const newArticles = [
-          {
-            "id": 2,
-            "uploader": 4,
-            "title": "新的推荐文章",
-            "summary": "这是另一篇推荐文章的概要内容",
-            "content": null,
-            "nice": 5,
-            "collect": 3,
-            "viewCount": 15,
-            "commentCount": 2,
-            "createTime": "2025-09-22T10:30:00.000+00:00",
-            "isFeatured": 1,
-            "status": 1,
-            "name": "张同学",
-            "head": "static/head/4/userHeadPhoto.png",
-            "school": "清华大学",
-            "starPrestige": 20,
-            "isNice": 0,
-            "isCollect": 0,
-            "isView": 0
-          }
-        ];
-        
-        // 添加新数据到列表中
-        this.recommendedArticles = [...this.recommendedArticles, ...newArticles];
+      try {
+        // 调用API获取更多数据，修复分页计算
+        const nextPage = Math.floor(this.recommendArticles.length / 10) + 1;
+        await this.recommend({ page: nextPage });
         this.loadingMore = false;
-      }, 1000);
+      } catch (error) {
+        console.error('加载更多推荐文章失败:', error);
+        uni.showToast({
+          title: '加载更多失败',
+          icon: 'none'
+        });
+        this.loadingMore = false;
+      }
     }
+  },
+  async mounted() {
+    // 页面加载时获取推荐文章
+    await this.getRecommendArticles();
   }
 }
 </script>
@@ -606,11 +685,34 @@ export default {
   font-weight: 600;
   font-size: 0.9rem;
   margin-bottom: 2px;
+  display: flex;
+  align-items: center;
+}
+
+.identity-tag {
+  background: #e0e0e0;
+  color: #666;
+  padding: 2px 6px;
+  border-radius: 10px;
+  font-size: 0.7rem;
+  margin-left: 8px;
+  white-space: nowrap;
+}
+
+.identity-tag.authority {
+  background: linear-gradient(135deg, #ffd700, #ffa500);
+  color: #fff;
 }
 
 .user-school {
   font-size: 0.75rem;
   color: #999;
+}
+
+.user-prestige {
+  font-size: 0.7rem;
+  color: #ff9800;
+  margin-top: 2px;
 }
 
 .article-time {

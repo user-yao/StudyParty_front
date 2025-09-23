@@ -33,15 +33,15 @@
 			}
 		},
 		{
-			"path": "pages/chatList/chatList",
+			"path": "pages/forum/articleDetail",
 			"style": {
-				"navigationBarTitleText": "小组"
+				"navigationBarTitleText": "文章详情"
 			}
 		},
 		{
-			"path": "pages/profile/profile",
+			"path": "pages/chatList/chatList",
 			"style": {
-				"navigationBarTitleText": "个人中心"
+				"navigationBarTitleText": "小组"
 			}
 		},
 		{
@@ -150,6 +150,13 @@
 			{
 				"navigationBarTitleText" : "添加小组任务",
 				"softinputMode": "adjustResize"
+			}
+		},
+		{
+			"path" : "pages/profile/profile",
+			"style" : 
+			{
+				"navigationBarTitleText" : "个人中心"
 			}
 		},
 		{

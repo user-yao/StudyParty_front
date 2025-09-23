@@ -4510,7 +4510,7 @@ if (uni.restoreGlobal) {
     }
     return target;
   };
-  const _sfc_main$2B = {
+  const _sfc_main$2C = {
     name: "u-icon",
     beforeCreate() {
       if (!fontUtil.params.loaded) {
@@ -4578,7 +4578,7 @@ if (uni.restoreGlobal) {
       }
     }
   };
-  function _sfc_render$2A(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$2B(_ctx, _cache, $props, $setup, $data, $options) {
     return vue.openBlock(), vue.createElementBlock(
       "view",
       {
@@ -4622,7 +4622,7 @@ if (uni.restoreGlobal) {
       /* CLASS */
     );
   }
-  const __easycom_0$g = /* @__PURE__ */ _export_sfc(_sfc_main$2B, [["render", _sfc_render$2A], ["__scopeId", "data-v-1c933a9a"], ["__file", "D:/uniapp2023/studyParty/node_modules/uview-plus/components/u-icon/u-icon.vue"]]);
+  const __easycom_0$g = /* @__PURE__ */ _export_sfc(_sfc_main$2C, [["render", _sfc_render$2B], ["__scopeId", "data-v-1c933a9a"], ["__file", "D:/uniapp2023/studyParty/node_modules/uview-plus/components/u-icon/u-icon.vue"]]);
   const __vite_glob_0_49 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
     __proto__: null,
     default: __easycom_0$g
@@ -4845,7 +4845,7 @@ if (uni.restoreGlobal) {
       }, wait);
     }
   }
-  const _sfc_main$2A = {
+  const _sfc_main$2B = {
     name: "u-input",
     mixins: [mpMixin, mixin, props$1w],
     data() {
@@ -5038,7 +5038,7 @@ if (uni.restoreGlobal) {
       }
     }
   };
-  function _sfc_render$2z(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$2A(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_up_icon = resolveEasycom(vue.resolveDynamicComponent("up-icon"), __easycom_0$g);
     return vue.openBlock(), vue.createElementBlock(
       "view",
@@ -5137,7 +5137,7 @@ if (uni.restoreGlobal) {
       /* CLASS, STYLE */
     );
   }
-  const __easycom_0$f = /* @__PURE__ */ _export_sfc(_sfc_main$2A, [["render", _sfc_render$2z], ["__scopeId", "data-v-5904192e"], ["__file", "D:/uniapp2023/studyParty/node_modules/uview-plus/components/u-input/u-input.vue"]]);
+  const __easycom_0$f = /* @__PURE__ */ _export_sfc(_sfc_main$2B, [["render", _sfc_render$2A], ["__scopeId", "data-v-5904192e"], ["__file", "D:/uniapp2023/studyParty/node_modules/uview-plus/components/u-input/u-input.vue"]]);
   const __vite_glob_0_54 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
     __proto__: null,
     default: __easycom_0$f
@@ -6751,7 +6751,7 @@ if (uni.restoreGlobal) {
       webSocketService.connect();
     }
   });
-  const _sfc_main$2z = {
+  const _sfc_main$2A = {
     data() {
       return {
         form: {
@@ -6779,7 +6779,7 @@ if (uni.restoreGlobal) {
       }
     }
   };
-  function _sfc_render$2y(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$2z(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_u_input = resolveEasycom(vue.resolveDynamicComponent("u-input"), __easycom_0$f);
     return vue.openBlock(), vue.createElementBlock("div", { class: "body" }, [
       vue.createElementVNode("div", { class: "bg-shapes" }, [
@@ -6867,7 +6867,7 @@ if (uni.restoreGlobal) {
       ])
     ]);
   }
-  const PagesLoginLogin = /* @__PURE__ */ _export_sfc(_sfc_main$2z, [["render", _sfc_render$2y], ["__scopeId", "data-v-e4e4508d"], ["__file", "D:/uniapp2023/studyParty/pages/login/login.vue"]]);
+  const PagesLoginLogin = /* @__PURE__ */ _export_sfc(_sfc_main$2A, [["render", _sfc_render$2z], ["__scopeId", "data-v-e4e4508d"], ["__file", "D:/uniapp2023/studyParty/pages/login/login.vue"]]);
   const props$1v = defineMixin({
     props: {
       bgColor: {
@@ -6881,7 +6881,7 @@ if (uni.restoreGlobal) {
       }
     }
   });
-  const _sfc_main$2y = {
+  const _sfc_main$2z = {
     name: "u-status-bar",
     mixins: [mpMixin, mixin, props$1v],
     data() {
@@ -6907,7 +6907,7 @@ if (uni.restoreGlobal) {
       }
     }
   };
-  function _sfc_render$2x(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$2y(_ctx, _cache, $props, $setup, $data, $options) {
     return vue.openBlock(), vue.createElementBlock(
       "view",
       {
@@ -6921,7 +6921,7 @@ if (uni.restoreGlobal) {
       /* CLASS, STYLE */
     );
   }
-  const __easycom_0$e = /* @__PURE__ */ _export_sfc(_sfc_main$2y, [["render", _sfc_render$2x], ["__scopeId", "data-v-c0b45a48"], ["__file", "D:/uniapp2023/studyParty/node_modules/uview-plus/components/u-status-bar/u-status-bar.vue"]]);
+  const __easycom_0$e = /* @__PURE__ */ _export_sfc(_sfc_main$2z, [["render", _sfc_render$2y], ["__scopeId", "data-v-c0b45a48"], ["__file", "D:/uniapp2023/studyParty/node_modules/uview-plus/components/u-status-bar/u-status-bar.vue"]]);
   const __vite_glob_0_102 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
     __proto__: null,
     default: __easycom_0$e
@@ -7020,7 +7020,7 @@ if (uni.restoreGlobal) {
       }
     }
   });
-  const _sfc_main$2x = {
+  const _sfc_main$2y = {
     name: "u-navbar",
     mixins: [mpMixin, mixin, props$1u],
     data() {
@@ -7049,7 +7049,7 @@ if (uni.restoreGlobal) {
       }
     }
   };
-  function _sfc_render$2w(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$2x(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_u_status_bar = resolveEasycom(vue.resolveDynamicComponent("u-status-bar"), __easycom_0$e);
     const _component_up_icon = resolveEasycom(vue.resolveDynamicComponent("up-icon"), __easycom_0$g);
     return vue.openBlock(), vue.createElementBlock(
@@ -7170,7 +7170,7 @@ if (uni.restoreGlobal) {
       /* CLASS */
     );
   }
-  const __easycom_0$d = /* @__PURE__ */ _export_sfc(_sfc_main$2x, [["render", _sfc_render$2w], ["__scopeId", "data-v-9d9e7ee2"], ["__file", "D:/uniapp2023/studyParty/node_modules/uview-plus/components/u-navbar/u-navbar.vue"]]);
+  const __easycom_0$d = /* @__PURE__ */ _export_sfc(_sfc_main$2y, [["render", _sfc_render$2x], ["__scopeId", "data-v-9d9e7ee2"], ["__file", "D:/uniapp2023/studyParty/node_modules/uview-plus/components/u-navbar/u-navbar.vue"]]);
   const __vite_glob_0_69 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
     __proto__: null,
     default: __easycom_0$d
@@ -7208,7 +7208,7 @@ if (uni.restoreGlobal) {
       }
     }
   });
-  const _sfc_main$2w = {
+  const _sfc_main$2x = {
     name: "u-line",
     mixins: [mpMixin, mixin, props$1t],
     computed: {
@@ -7233,7 +7233,7 @@ if (uni.restoreGlobal) {
       }
     }
   };
-  function _sfc_render$2v(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$2w(_ctx, _cache, $props, $setup, $data, $options) {
     return vue.openBlock(), vue.createElementBlock(
       "view",
       {
@@ -7245,7 +7245,7 @@ if (uni.restoreGlobal) {
       /* STYLE */
     );
   }
-  const __easycom_1$h = /* @__PURE__ */ _export_sfc(_sfc_main$2w, [["render", _sfc_render$2v], ["__scopeId", "data-v-bbd9963c"], ["__file", "D:/uniapp2023/studyParty/node_modules/uview-plus/components/u-line/u-line.vue"]]);
+  const __easycom_1$h = /* @__PURE__ */ _export_sfc(_sfc_main$2x, [["render", _sfc_render$2w], ["__scopeId", "data-v-bbd9963c"], ["__file", "D:/uniapp2023/studyParty/node_modules/uview-plus/components/u-line/u-line.vue"]]);
   const __vite_glob_0_58 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
     __proto__: null,
     default: __easycom_1$h
@@ -7303,7 +7303,7 @@ if (uni.restoreGlobal) {
       }
     }
   });
-  const _sfc_main$2v = {
+  const _sfc_main$2w = {
     name: "u-form-item",
     mixins: [mpMixin, mixin, props$1s],
     data() {
@@ -7382,7 +7382,7 @@ if (uni.restoreGlobal) {
       }
     }
   };
-  function _sfc_render$2u(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$2v(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_up_icon = resolveEasycom(vue.resolveDynamicComponent("up-icon"), __easycom_0$g);
     const _component_u_line = resolveEasycom(vue.resolveDynamicComponent("u-line"), __easycom_1$h);
     return vue.openBlock(), vue.createElementBlock(
@@ -7491,7 +7491,7 @@ if (uni.restoreGlobal) {
       /* CLASS */
     );
   }
-  const __easycom_2$5 = /* @__PURE__ */ _export_sfc(_sfc_main$2v, [["render", _sfc_render$2u], ["__scopeId", "data-v-b4fd400b"], ["__file", "D:/uniapp2023/studyParty/node_modules/uview-plus/components/u-form-item/u-form-item.vue"]]);
+  const __easycom_2$5 = /* @__PURE__ */ _export_sfc(_sfc_main$2w, [["render", _sfc_render$2v], ["__scopeId", "data-v-b4fd400b"], ["__file", "D:/uniapp2023/studyParty/node_modules/uview-plus/components/u-form-item/u-form-item.vue"]]);
   const __vite_glob_0_43 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
     __proto__: null,
     default: __easycom_2$5
@@ -8435,7 +8435,7 @@ if (uni.restoreGlobal) {
   Schema.messages = messages;
   Schema.warning = function() {
   };
-  const _sfc_main$2u = {
+  const _sfc_main$2v = {
     name: "u-form",
     mixins: [mpMixin, mixin, props$1r],
     provide() {
@@ -8628,15 +8628,15 @@ if (uni.restoreGlobal) {
       }
     }
   };
-  function _sfc_render$2t(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$2u(_ctx, _cache, $props, $setup, $data, $options) {
     return vue.openBlock(), vue.createElementBlock("view", { class: "u-form" }, [
       vue.renderSlot(_ctx.$slots, "default")
     ]);
   }
-  const __easycom_3$5 = /* @__PURE__ */ _export_sfc(_sfc_main$2u, [["render", _sfc_render$2t], ["__file", "D:/uniapp2023/studyParty/node_modules/uview-plus/components/u-form/u-form.vue"]]);
+  const __easycom_3$6 = /* @__PURE__ */ _export_sfc(_sfc_main$2v, [["render", _sfc_render$2u], ["__file", "D:/uniapp2023/studyParty/node_modules/uview-plus/components/u-form/u-form.vue"]]);
   const __vite_glob_0_44 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
     __proto__: null,
-    default: __easycom_3$5
+    default: __easycom_3$6
   }, Symbol.toStringTag, { value: "Module" }));
   const props$1q = defineMixin({
     props: {
@@ -8807,7 +8807,7 @@ if (uni.restoreGlobal) {
     rgbToHex,
     colorToRgba
   };
-  const _sfc_main$2t = {
+  const _sfc_main$2u = {
     name: "u-loading-icon",
     mixins: [mpMixin, mixin, props$1q],
     data() {
@@ -8869,7 +8869,7 @@ if (uni.restoreGlobal) {
       }
     }
   };
-  function _sfc_render$2s(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$2t(_ctx, _cache, $props, $setup, $data, $options) {
     return _ctx.show ? (vue.openBlock(), vue.createElementBlock(
       "view",
       {
@@ -8932,7 +8932,7 @@ if (uni.restoreGlobal) {
       /* CLASS, STYLE */
     )) : vue.createCommentVNode("v-if", true);
   }
-  const __easycom_1$g = /* @__PURE__ */ _export_sfc(_sfc_main$2t, [["render", _sfc_render$2s], ["__scopeId", "data-v-00752c6d"], ["__file", "D:/uniapp2023/studyParty/node_modules/uview-plus/components/u-loading-icon/u-loading-icon.vue"]]);
+  const __easycom_1$g = /* @__PURE__ */ _export_sfc(_sfc_main$2u, [["render", _sfc_render$2t], ["__scopeId", "data-v-00752c6d"], ["__file", "D:/uniapp2023/studyParty/node_modules/uview-plus/components/u-loading-icon/u-loading-icon.vue"]]);
   const __vite_glob_0_62 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
     __proto__: null,
     default: __easycom_1$g
@@ -9112,7 +9112,7 @@ if (uni.restoreGlobal) {
       }, wait);
     }
   }
-  const _sfc_main$2s = {
+  const _sfc_main$2t = {
     name: "u-button",
     mixins: [mpMixin, mixin, props$1p],
     data() {
@@ -9242,7 +9242,7 @@ if (uni.restoreGlobal) {
       }
     }
   };
-  function _sfc_render$2r(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$2s(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_u_loading_icon = resolveEasycom(vue.resolveDynamicComponent("u-loading-icon"), __easycom_1$g);
     const _component_up_icon = resolveEasycom(vue.resolveDynamicComponent("up-icon"), __easycom_0$g);
     return vue.openBlock(), vue.createElementBlock("button", {
@@ -9321,10 +9321,10 @@ if (uni.restoreGlobal) {
       ))
     ], 46, ["hover-start-time", "hover-stay-time", "form-type", "open-type", "app-parameter", "hover-stop-propagation", "send-message-title", "send-message-path", "lang", "data-name", "session-from", "send-message-img", "show-message-card", "hover-class"]);
   }
-  const __easycom_3$4 = /* @__PURE__ */ _export_sfc(_sfc_main$2s, [["render", _sfc_render$2r], ["__scopeId", "data-v-461e713c"], ["__file", "D:/uniapp2023/studyParty/node_modules/uview-plus/components/u-button/u-button.vue"]]);
+  const __easycom_3$5 = /* @__PURE__ */ _export_sfc(_sfc_main$2t, [["render", _sfc_render$2s], ["__scopeId", "data-v-461e713c"], ["__file", "D:/uniapp2023/studyParty/node_modules/uview-plus/components/u-button/u-button.vue"]]);
   const __vite_glob_0_11 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
     __proto__: null,
-    default: __easycom_3$4
+    default: __easycom_3$5
   }, Symbol.toStringTag, { value: "Module" }));
   const request = (options2) => {
     return new Promise((resolve, reject) => {
@@ -9477,7 +9477,7 @@ if (uni.restoreGlobal) {
       }
     });
   };
-  const _sfc_main$2r = {
+  const _sfc_main$2s = {
     data() {
       return {
         form: {
@@ -9537,12 +9537,12 @@ if (uni.restoreGlobal) {
       }
     }
   };
-  function _sfc_render$2q(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$2r(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_u_navbar = resolveEasycom(vue.resolveDynamicComponent("u-navbar"), __easycom_0$d);
     const _component_u_input = resolveEasycom(vue.resolveDynamicComponent("u-input"), __easycom_0$f);
     const _component_u_form_item = resolveEasycom(vue.resolveDynamicComponent("u-form-item"), __easycom_2$5);
-    const _component_u_form = resolveEasycom(vue.resolveDynamicComponent("u-form"), __easycom_3$5);
-    const _component_u_button = resolveEasycom(vue.resolveDynamicComponent("u-button"), __easycom_3$4);
+    const _component_u_form = resolveEasycom(vue.resolveDynamicComponent("u-form"), __easycom_3$6);
+    const _component_u_button = resolveEasycom(vue.resolveDynamicComponent("u-button"), __easycom_3$5);
     return vue.openBlock(), vue.createElementBlock("view", { class: "container" }, [
       vue.createVNode(_component_u_navbar, { title: "注册" }),
       vue.createVNode(_component_u_form, {
@@ -9613,8 +9613,8 @@ if (uni.restoreGlobal) {
       }, 8, ["onClick"])
     ]);
   }
-  const PagesRegisterRegister = /* @__PURE__ */ _export_sfc(_sfc_main$2r, [["render", _sfc_render$2q], ["__scopeId", "data-v-bac4a35d"], ["__file", "D:/uniapp2023/studyParty/pages/register/register.vue"]]);
-  const _sfc_main$2q = {
+  const PagesRegisterRegister = /* @__PURE__ */ _export_sfc(_sfc_main$2s, [["render", _sfc_render$2r], ["__scopeId", "data-v-bac4a35d"], ["__file", "D:/uniapp2023/studyParty/pages/register/register.vue"]]);
+  const _sfc_main$2r = {
     data() {
       return {
         userPlan: [],
@@ -9658,7 +9658,7 @@ if (uni.restoreGlobal) {
       });
     }
   };
-  function _sfc_render$2p(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$2q(_ctx, _cache, $props, $setup, $data, $options) {
     return vue.openBlock(), vue.createElementBlock("div", { class: "body" }, [
       vue.createCommentVNode(" 头部导航 "),
       vue.createElementVNode("header", null, [
@@ -9913,36 +9913,12 @@ if (uni.restoreGlobal) {
       ])
     ]);
   }
-  const PagesIndexIndex = /* @__PURE__ */ _export_sfc(_sfc_main$2q, [["render", _sfc_render$2p], ["__scopeId", "data-v-1cf27b2a"], ["__file", "D:/uniapp2023/studyParty/pages/index/index.vue"]]);
-  const _sfc_main$2p = {
+  const PagesIndexIndex = /* @__PURE__ */ _export_sfc(_sfc_main$2r, [["render", _sfc_render$2q], ["__scopeId", "data-v-1cf27b2a"], ["__file", "D:/uniapp2023/studyParty/pages/index/index.vue"]]);
+  const _sfc_main$2q = {
     name: "Forum",
     data() {
       return {
         loadingMore: false,
-        // 推荐文章数据
-        recommendedArticles: [
-          {
-            "id": 1,
-            "uploader": 3,
-            "title": "测试标题",
-            "summary": "测试概要",
-            "content": null,
-            "nice": 0,
-            "collect": 0,
-            "viewCount": 2,
-            "commentCount": 0,
-            "createTime": "2025-09-21T14:45:15.000+00:00",
-            "isFeatured": 0,
-            "status": 1,
-            "name": "姚镇涛",
-            "head": "static/head/3/userHeadPhoto.png",
-            "school": "天津职业技术师范大学",
-            "starPrestige": 0,
-            "isNice": 0,
-            "isCollect": 0,
-            "isView": 0
-          }
-        ],
         // 全部使用假数据
         tasks: [
           {
@@ -9975,11 +9951,100 @@ if (uni.restoreGlobal) {
               { name: "杨同学" },
               { name: "黄同学" }
             ]
+          },
+          // 新增假数据
+          {
+            id: 3,
+            title: "Vue 3项目实战",
+            reward: 150,
+            timeLeft: "5天",
+            publisher: "王教授",
+            publisherType: "teacher",
+            tags: ["Vue", "前端框架", "项目实战"],
+            participants: [
+              { name: "陈同学" },
+              { name: "林同学" },
+              { name: "郑同学" }
+            ]
+          },
+          {
+            id: 4,
+            title: "机器学习入门",
+            reward: 200,
+            timeLeft: "7天",
+            publisher: "阿里云",
+            publisherType: "company",
+            tags: ["机器学习", "Python", "AI"],
+            participants: [
+              { name: "周同学" },
+              { name: "吴同学" },
+              { name: "徐同学" },
+              { name: "孙同学" },
+              { name: "马同学" }
+            ]
+          },
+          {
+            id: 5,
+            title: "移动端UI设计",
+            reward: 90,
+            timeLeft: "4天",
+            publisher: "设计学院",
+            publisherType: "school",
+            tags: ["UI设计", "移动端", "用户体验"],
+            participants: [
+              { name: "何同学" },
+              { name: "邓同学" },
+              { name: "冯同学" },
+              { name: "韩同学" }
+            ]
           }
         ]
       };
     },
+    computed: {
+      ...mapState("article", ["recommendArticles"]),
+      // 处理推荐文章数据，添加完整的头像URL和身份标识
+      recommendedArticles() {
+        return this.recommendArticles.map((article2) => {
+          return {
+            ...article2,
+            // 拼接完整的头像URL
+            head: article2.head ? imageUrl + article2.head : null,
+            // 根据status确定身份标识
+            identity: this.getIdentityText(article2.status),
+            // 是否为权威用户（声望值大于100）
+            isAuthority: article2.starPrestige > 100
+          };
+        });
+      }
+    },
     methods: {
+      ...mapActions("article", ["recommend", "niceArticle", "collectArticle"]),
+      // 获取身份文本
+      getIdentityText(status) {
+        switch (status) {
+          case 1:
+            return "学生";
+          case 2:
+            return "老师";
+          case 3:
+            return "企业";
+          default:
+            return "用户";
+        }
+      },
+      // 获取推荐文章
+      async getRecommendArticles() {
+        try {
+          await this.recommend({ page: 1 });
+        } catch (error2) {
+          formatAppLog("error", "at pages/forum/forum.vue:289", "获取推荐文章失败:", error2);
+          uni.showToast({
+            title: "获取推荐文章失败",
+            icon: "none"
+          });
+        }
+      },
       goToNotifications() {
         uni.showToast({
           title: "查看通知",
@@ -10004,9 +10069,8 @@ if (uni.restoreGlobal) {
         });
       },
       viewArticleDetail(articleId) {
-        uni.showToast({
-          title: `查看文章 ${articleId}`,
-          icon: "none"
+        uni.navigateTo({
+          url: `/pages/forum/articleDetail?id=${articleId}`
         });
       },
       // 格式化时间
@@ -10030,59 +10094,66 @@ if (uni.restoreGlobal) {
         }
       },
       // 切换点赞状态
-      toggleLike(article2) {
-        uni.showToast({
-          title: article2.isNice ? "取消点赞" : "点赞成功",
-          icon: "none"
-        });
-        article2.isNice = !article2.isNice;
-        article2.nice += article2.isNice ? 1 : -1;
+      async toggleLike(article2) {
+        try {
+          const res2 = await this.niceArticle(article2.id);
+          if (res2.code === 200) {
+            formatAppLog("log", "at pages/forum/forum.vue:351", res2);
+            if (res2.data === "取消点赞") {
+              article2.isNice = false;
+              article2.nice -= 1;
+            } else if (res2.data === "点赞成功") {
+              article2.isNice = true;
+              article2.nice += 1;
+            }
+          }
+        } catch (error2) {
+          formatAppLog("error", "at pages/forum/forum.vue:363", "点赞操作失败:", error2);
+          uni.$u.toast("操作失败");
+        }
       },
       // 切换收藏状态
-      toggleCollect(article2) {
-        uni.showToast({
-          title: article2.isCollect ? "取消收藏" : "收藏成功",
-          icon: "none"
-        });
-        article2.isCollect = !article2.isCollect;
-        article2.collect += article2.isCollect ? 1 : -1;
+      async toggleCollect(article2) {
+        try {
+          const res2 = await this.collectArticle(article2.id);
+          if (res2.code === 200) {
+            if (res2.data === "取消收藏") {
+              article2.isCollect = false;
+              article2.collect -= 1;
+            } else if (res2.data === "收藏成功") {
+              article2.isCollect = true;
+              article2.collect += 1;
+            }
+          }
+        } catch (error2) {
+          formatAppLog("error", "at pages/forum/forum.vue:383", "收藏操作失败:", error2);
+          uni.$u.toast("操作失败");
+        }
       },
       // 加载更多推荐内容
-      loadMore() {
+      async loadMore() {
         if (this.loadingMore)
           return;
         this.loadingMore = true;
-        setTimeout(() => {
-          const newArticles = [
-            {
-              "id": 2,
-              "uploader": 4,
-              "title": "新的推荐文章",
-              "summary": "这是另一篇推荐文章的概要内容",
-              "content": null,
-              "nice": 5,
-              "collect": 3,
-              "viewCount": 15,
-              "commentCount": 2,
-              "createTime": "2025-09-22T10:30:00.000+00:00",
-              "isFeatured": 1,
-              "status": 1,
-              "name": "张同学",
-              "head": "static/head/4/userHeadPhoto.png",
-              "school": "清华大学",
-              "starPrestige": 20,
-              "isNice": 0,
-              "isCollect": 0,
-              "isView": 0
-            }
-          ];
-          this.recommendedArticles = [...this.recommendedArticles, ...newArticles];
+        try {
+          const nextPage = Math.floor(this.recommendArticles.length / 10) + 1;
+          await this.recommend({ page: nextPage });
           this.loadingMore = false;
-        }, 1e3);
+        } catch (error2) {
+          formatAppLog("error", "at pages/forum/forum.vue:399", "加载更多推荐文章失败:", error2);
+          uni.showToast({
+            title: "加载更多失败",
+            icon: "none"
+          });
+          this.loadingMore = false;
+        }
       }
+    },
+    async mounted() {
+      await this.getRecommendArticles();
     }
   };
-  function _sfc_render$2o(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$2p(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_u_icon = resolveEasycom(vue.resolveDynamicComponent("u-icon"), __easycom_0$g);
     return vue.openBlock(), vue.createElementBlock("view", { class: "forum-container" }, [
       vue.createCommentVNode(" 顶部导航 "),
@@ -10256,7 +10327,7 @@ if (uni.restoreGlobal) {
             (vue.openBlock(true), vue.createElementBlock(
               vue.Fragment,
               null,
-              vue.renderList($data.recommendedArticles, (article2) => {
+              vue.renderList($options.recommendedArticles, (article2) => {
                 return vue.openBlock(), vue.createElementBlock("view", {
                   key: article2.id,
                   class: "article-card",
@@ -10281,20 +10352,39 @@ if (uni.restoreGlobal) {
                         ))
                       ]),
                       vue.createElementVNode("view", { class: "user-info" }, [
-                        vue.createElementVNode(
-                          "view",
-                          { class: "user-name" },
-                          vue.toDisplayString(article2.name),
-                          1
-                          /* TEXT */
-                        ),
+                        vue.createElementVNode("view", { class: "user-name" }, [
+                          vue.createTextVNode(
+                            vue.toDisplayString(article2.name) + " ",
+                            1
+                            /* TEXT */
+                          ),
+                          vue.createElementVNode(
+                            "text",
+                            {
+                              class: vue.normalizeClass(["identity-tag", article2.isAuthority ? "authority" : ""])
+                            },
+                            vue.toDisplayString(article2.identity),
+                            3
+                            /* TEXT, CLASS */
+                          )
+                        ]),
                         vue.createElementVNode(
                           "view",
                           { class: "user-school" },
                           vue.toDisplayString(article2.school),
                           1
                           /* TEXT */
-                        )
+                        ),
+                        article2.starPrestige > 0 ? (vue.openBlock(), vue.createElementBlock(
+                          "view",
+                          {
+                            key: 0,
+                            class: "user-prestige"
+                          },
+                          " 声望值: " + vue.toDisplayString(article2.starPrestige),
+                          1
+                          /* TEXT */
+                        )) : vue.createCommentVNode("v-if", true)
                       ])
                     ]),
                     vue.createElementVNode(
@@ -10402,10 +10492,3652 @@ if (uni.restoreGlobal) {
       ])
     ]);
   }
-  const PagesForumForum = /* @__PURE__ */ _export_sfc(_sfc_main$2p, [["render", _sfc_render$2o], ["__scopeId", "data-v-aeadbf01"], ["__file", "D:/uniapp2023/studyParty/pages/forum/forum.vue"]]);
+  const PagesForumForum = /* @__PURE__ */ _export_sfc(_sfc_main$2q, [["render", _sfc_render$2p], ["__scopeId", "data-v-aeadbf01"], ["__file", "D:/uniapp2023/studyParty/pages/forum/forum.vue"]]);
+  const block0$2 = (Comp) => {
+    (Comp.$wxs || (Comp.$wxs = [])).push("handler");
+    (Comp.$wxsModules || (Comp.$wxsModules = {}))["handler"] = "6006ff9a";
+  };
+  const _sfc_main$2p = {
+    name: "node",
+    options: {},
+    data() {
+      return {
+        ctrl: {}
+      };
+    },
+    props: {
+      name: String,
+      attrs: {
+        type: Object,
+        default() {
+          return {};
+        }
+      },
+      childs: Array,
+      opts: Array
+    },
+    components: {},
+    mounted() {
+      this.$nextTick(() => {
+        var _a2, _b;
+        for (this.root = this == null ? void 0 : this.$parent; this.root && ((_a2 = this.root) == null ? void 0 : _a2.$options.name) !== "mp-html"; this.root = (_b = this.root) == null ? void 0 : _b.$parent)
+          ;
+      });
+      if (this.opts[0]) {
+        let i2;
+        for (i2 = this.childs.length; i2--; ) {
+          if (this.childs[i2].name === "img")
+            break;
+        }
+        if (i2 !== -1) {
+          this.observer = uni.createIntersectionObserver(this).relativeToViewport({
+            top: 500,
+            bottom: 500
+          });
+          this.observer.observe("._img", (res2) => {
+            if (res2.intersectionRatio) {
+              this.$set(this.ctrl, "load", 1);
+              this.observer.disconnect();
+            }
+          });
+        }
+      }
+    },
+    beforeDestroy() {
+      if (this.observer) {
+        this.observer.disconnect();
+      }
+    },
+    methods: {
+      /**
+       * @description 播放视频事件
+       * @param {Event} e
+       */
+      play(e2) {
+        const i2 = e2.currentTarget.dataset.i;
+        const node2 = this.childs[i2];
+        this.root.$emit("play", {
+          source: node2.name,
+          attrs: {
+            ...node2.attrs,
+            src: node2.src[this.ctrl[i2] || 0]
+          }
+        });
+      },
+      /**
+       * @description 图片点击事件
+       * @param {Event} e
+       */
+      imgTap(e2) {
+        const node2 = this.childs[e2.currentTarget.dataset.i];
+        if (node2.a) {
+          this.linkTap(node2.a);
+          return;
+        }
+        if (node2.attrs.ignore)
+          return;
+        node2.attrs.src = node2.attrs.src || node2.attrs["data-src"];
+        this.root.$emit("imgtap", node2.attrs);
+        if (this.root.previewImg) {
+          uni.previewImage({
+            current: parseInt(node2.attrs.i),
+            urls: this.root.imgList
+          });
+        }
+      },
+      /**
+       * @description 图片长按
+       */
+      imgLongTap(e2) {
+        const attrs = this.childs[e2.currentTarget.dataset.i].attrs;
+        if (this.opts[3] && !attrs.ignore) {
+          uni.showActionSheet({
+            itemList: ["保存图片"],
+            success: () => {
+              const save = (path2) => {
+                uni.saveImageToPhotosAlbum({
+                  filePath: path2,
+                  success() {
+                    uni.showToast({
+                      title: "保存成功"
+                    });
+                  }
+                });
+              };
+              if (this.root.imgList[attrs.i].startsWith("http")) {
+                uni.downloadFile({
+                  url: this.root.imgList[attrs.i],
+                  success: (res2) => save(res2.tempFilePath)
+                });
+              } else {
+                save(this.root.imgList[attrs.i]);
+              }
+            }
+          });
+        }
+      },
+      /**
+       * @description 图片加载完成事件
+       * @param {Event} e
+       */
+      imgLoad(e2) {
+        const i2 = e2.currentTarget.dataset.i;
+        if (!this.childs[i2].w) {
+          this.$set(this.ctrl, i2, e2.detail.width);
+        } else if (this.opts[1] && !this.ctrl[i2] || this.ctrl[i2] === -1) {
+          this.$set(this.ctrl, i2, 1);
+        }
+        this.checkReady();
+      },
+      /**
+       * @description 检查是否所有图片加载完毕
+       */
+      checkReady() {
+        if (this.root && !this.root.lazyLoad) {
+          this.root._unloadimgs -= 1;
+          if (!this.root._unloadimgs) {
+            setTimeout(() => {
+              this.root.getRect().then((rect) => {
+                this.root.$emit("ready", rect);
+              }).catch(() => {
+                this.root.$emit("ready", {});
+              });
+            }, 350);
+          }
+        }
+      },
+      /**
+       * @description 链接点击事件
+       * @param {Event} e
+       */
+      linkTap(e2) {
+        const node2 = e2.currentTarget ? this.childs[e2.currentTarget.dataset.i] : {};
+        const attrs = node2.attrs || e2;
+        const href = attrs.href;
+        this.root.$emit("linktap", Object.assign({
+          innerText: this.root.getText(node2.children || [])
+          // 链接内的文本内容
+        }, attrs));
+        if (href) {
+          if (href[0] === "#") {
+            this.root.navigateTo(href.substring(1)).catch(() => {
+            });
+          } else if (href.split("?")[0].includes("://")) {
+            if (this.root.copyLink) {
+              plus.runtime.openWeb(href);
+            }
+          } else {
+            uni.navigateTo({
+              url: href,
+              fail() {
+                uni.switchTab({
+                  url: href,
+                  fail() {
+                  }
+                });
+              }
+            });
+          }
+        }
+      },
+      /**
+       * @description 错误事件
+       * @param {Event} e
+       */
+      mediaError(e2) {
+        const i2 = e2.currentTarget.dataset.i;
+        const node2 = this.childs[i2];
+        if (node2.name === "video" || node2.name === "audio") {
+          let index2 = (this.ctrl[i2] || 0) + 1;
+          if (index2 > node2.src.length) {
+            index2 = 0;
+          }
+          if (index2 < node2.src.length) {
+            this.$set(this.ctrl, i2, index2);
+            return;
+          }
+        } else if (node2.name === "img") {
+          if (this.opts[2]) {
+            this.$set(this.ctrl, i2, -1);
+          }
+          this.checkReady();
+        }
+        if (this.root) {
+          this.root.$emit("error", {
+            source: node2.name,
+            attrs: node2.attrs,
+            errMsg: e2.detail.errMsg
+          });
+        }
+      }
+    }
+  };
+  function _sfc_render$2o(_ctx, _cache, $props, $setup, $data, $options) {
+    const _component_node = vue.resolveComponent("node", true);
+    return vue.openBlock(), vue.createElementBlock("view", {
+      id: $props.attrs.id,
+      class: vue.normalizeClass("_block _" + $props.name + " " + $props.attrs.class),
+      style: vue.normalizeStyle($props.attrs.style)
+    }, [
+      (vue.openBlock(true), vue.createElementBlock(
+        vue.Fragment,
+        null,
+        vue.renderList($props.childs, (n2, i2) => {
+          return vue.openBlock(), vue.createElementBlock(
+            vue.Fragment,
+            { key: i2 },
+            [
+              vue.createCommentVNode(" 图片 "),
+              vue.createCommentVNode(" 占位图 "),
+              n2.name === "img" && !n2.t && ($props.opts[1] && !$data.ctrl[i2] || $data.ctrl[i2] < 0) ? (vue.openBlock(), vue.createElementBlock("image", {
+                key: 0,
+                class: "_img",
+                style: vue.normalizeStyle(n2.attrs.style),
+                src: $data.ctrl[i2] < 0 ? $props.opts[2] : $props.opts[1],
+                mode: "widthFix"
+              }, null, 12, ["src"])) : vue.createCommentVNode("v-if", true),
+              vue.createCommentVNode(" 显示图片 "),
+              vue.createCommentVNode(" 表格中的图片，使用 rich-text 防止大小不正确 "),
+              n2.name === "img" && n2.t ? (vue.openBlock(), vue.createElementBlock("rich-text", {
+                key: 1,
+                style: vue.normalizeStyle("display:" + n2.t),
+                nodes: [{ attrs: { style: n2.attrs.style || "", src: n2.attrs.src }, name: "img" }],
+                "data-i": i2,
+                onClick: _cache[0] || (_cache[0] = vue.withModifiers((...args) => $options.imgTap && $options.imgTap(...args), ["stop"]))
+              }, null, 12, ["nodes", "data-i"])) : n2.name === "img" ? (vue.openBlock(), vue.createElementBlock("image", {
+                key: 2,
+                id: n2.attrs.id,
+                class: vue.normalizeClass("_img " + n2.attrs.class),
+                style: vue.normalizeStyle(($data.ctrl[i2] === -1 ? "display:none;" : "") + "width:" + ($data.ctrl[i2] || 1) + "px;" + n2.attrs.style),
+                src: n2.attrs.src || ($data.ctrl.load ? n2.attrs["data-src"] : ""),
+                mode: !n2.h ? "widthFix" : !n2.w ? "heightFix" : n2.m || "",
+                "data-i": i2,
+                onLoad: _cache[1] || (_cache[1] = (...args) => $options.imgLoad && $options.imgLoad(...args)),
+                onError: _cache[2] || (_cache[2] = (...args) => $options.mediaError && $options.mediaError(...args)),
+                onClick: _cache[3] || (_cache[3] = vue.withModifiers((...args) => $options.imgTap && $options.imgTap(...args), ["stop"])),
+                onLongpress: _cache[4] || (_cache[4] = (...args) => $options.imgLongTap && $options.imgLongTap(...args))
+              }, null, 46, ["id", "src", "mode", "data-i"])) : n2.text ? (vue.openBlock(), vue.createElementBlock(
+                vue.Fragment,
+                { key: 3 },
+                [
+                  vue.createCommentVNode(" 文本 "),
+                  vue.createElementVNode(
+                    "text",
+                    { decode: "" },
+                    vue.toDisplayString(n2.text),
+                    1
+                    /* TEXT */
+                  )
+                ],
+                2112
+                /* STABLE_FRAGMENT, DEV_ROOT_FRAGMENT */
+              )) : n2.name === "br" ? (vue.openBlock(), vue.createElementBlock("text", { key: 4 }, vue.toDisplayString("\n"))) : n2.name === "a" ? (vue.openBlock(), vue.createElementBlock(
+                vue.Fragment,
+                { key: 5 },
+                [
+                  vue.createCommentVNode(" 链接 "),
+                  vue.createElementVNode("view", {
+                    id: n2.attrs.id,
+                    class: vue.normalizeClass((n2.attrs.href ? "_a " : "") + n2.attrs.class),
+                    "hover-class": "_hover",
+                    style: vue.normalizeStyle("display:inline;" + n2.attrs.style),
+                    "data-i": i2,
+                    onClick: _cache[5] || (_cache[5] = vue.withModifiers((...args) => $options.linkTap && $options.linkTap(...args), ["stop"]))
+                  }, [
+                    vue.createVNode(_component_node, {
+                      name: "span",
+                      childs: n2.children,
+                      opts: $props.opts,
+                      style: { "display": "inherit" }
+                    }, null, 8, ["childs", "opts"])
+                  ], 14, ["id", "data-i"])
+                ],
+                2112
+                /* STABLE_FRAGMENT, DEV_ROOT_FRAGMENT */
+              )) : n2.html ? (vue.openBlock(), vue.createElementBlock(
+                vue.Fragment,
+                { key: 6 },
+                [
+                  vue.createCommentVNode(" 视频 "),
+                  vue.createElementVNode("view", {
+                    id: n2.attrs.id,
+                    class: vue.normalizeClass("_video " + n2.attrs.class),
+                    style: vue.normalizeStyle(n2.attrs.style),
+                    innerHTML: n2.html,
+                    "data-i": i2,
+                    onVplay: _cache[6] || (_cache[6] = vue.withModifiers((...args) => $options.play && $options.play(...args), ["stop"]))
+                  }, null, 46, ["id", "innerHTML", "data-i"])
+                ],
+                2112
+                /* STABLE_FRAGMENT, DEV_ROOT_FRAGMENT */
+              )) : n2.name === "iframe" ? (vue.openBlock(), vue.createElementBlock("iframe", {
+                key: 7,
+                style: vue.normalizeStyle(n2.attrs.style),
+                allowfullscreen: n2.attrs.allowfullscreen,
+                frameborder: n2.attrs.frameborder,
+                src: n2.attrs.src
+              }, null, 12, ["allowfullscreen", "frameborder", "src"])) : n2.name === "embed" ? (vue.openBlock(), vue.createElementBlock("embed", {
+                key: 8,
+                style: vue.normalizeStyle(n2.attrs.style),
+                src: n2.attrs.src
+              }, null, 12, ["src"])) : n2.name === "table" && n2.c || n2.name === "li" ? (vue.openBlock(), vue.createElementBlock("view", {
+                key: 9,
+                id: n2.attrs.id,
+                class: vue.normalizeClass("_" + n2.name + " " + n2.attrs.class),
+                style: vue.normalizeStyle(n2.attrs.style)
+              }, [
+                n2.name === "li" ? (vue.openBlock(), vue.createBlock(_component_node, {
+                  key: 0,
+                  childs: n2.children,
+                  opts: $props.opts
+                }, null, 8, ["childs", "opts"])) : (vue.openBlock(true), vue.createElementBlock(
+                  vue.Fragment,
+                  { key: 1 },
+                  vue.renderList(n2.children, (tbody, x2) => {
+                    return vue.openBlock(), vue.createElementBlock(
+                      "view",
+                      {
+                        key: x2,
+                        class: vue.normalizeClass("_" + tbody.name + " " + tbody.attrs.class),
+                        style: vue.normalizeStyle(tbody.attrs.style)
+                      },
+                      [
+                        tbody.name === "td" || tbody.name === "th" ? (vue.openBlock(), vue.createBlock(_component_node, {
+                          key: 0,
+                          childs: tbody.children,
+                          opts: $props.opts
+                        }, null, 8, ["childs", "opts"])) : (vue.openBlock(true), vue.createElementBlock(
+                          vue.Fragment,
+                          { key: 1 },
+                          vue.renderList(tbody.children, (tr, y2) => {
+                            return vue.openBlock(), vue.createElementBlock(
+                              vue.Fragment,
+                              { key: y2 },
+                              [
+                                tr.name === "td" || tr.name === "th" ? (vue.openBlock(), vue.createElementBlock(
+                                  "view",
+                                  {
+                                    key: 0,
+                                    class: vue.normalizeClass("_" + tr.name + " " + tr.attrs.class),
+                                    style: vue.normalizeStyle(tr.attrs.style)
+                                  },
+                                  [
+                                    vue.createVNode(_component_node, {
+                                      childs: tr.children,
+                                      opts: $props.opts
+                                    }, null, 8, ["childs", "opts"])
+                                  ],
+                                  6
+                                  /* CLASS, STYLE */
+                                )) : (vue.openBlock(), vue.createElementBlock(
+                                  "view",
+                                  {
+                                    key: 1,
+                                    class: vue.normalizeClass("_" + tr.name + " " + tr.attrs.class),
+                                    style: vue.normalizeStyle(tr.attrs.style)
+                                  },
+                                  [
+                                    (vue.openBlock(true), vue.createElementBlock(
+                                      vue.Fragment,
+                                      null,
+                                      vue.renderList(tr.children, (td, z2) => {
+                                        return vue.openBlock(), vue.createElementBlock(
+                                          "view",
+                                          {
+                                            key: z2,
+                                            class: vue.normalizeClass("_" + td.name + " " + td.attrs.class),
+                                            style: vue.normalizeStyle(td.attrs.style)
+                                          },
+                                          [
+                                            vue.createVNode(_component_node, {
+                                              childs: td.children,
+                                              opts: $props.opts
+                                            }, null, 8, ["childs", "opts"])
+                                          ],
+                                          6
+                                          /* CLASS, STYLE */
+                                        );
+                                      }),
+                                      128
+                                      /* KEYED_FRAGMENT */
+                                    ))
+                                  ],
+                                  6
+                                  /* CLASS, STYLE */
+                                ))
+                              ],
+                              64
+                              /* STABLE_FRAGMENT */
+                            );
+                          }),
+                          128
+                          /* KEYED_FRAGMENT */
+                        ))
+                      ],
+                      6
+                      /* CLASS, STYLE */
+                    );
+                  }),
+                  128
+                  /* KEYED_FRAGMENT */
+                ))
+              ], 14, ["id"])) : !n2.c ? (vue.openBlock(), vue.createElementBlock(
+                vue.Fragment,
+                { key: 10 },
+                [
+                  vue.createCommentVNode(" insert "),
+                  vue.createCommentVNode(" 富文本 "),
+                  vue.createElementVNode("rich-text", {
+                    id: n2.attrs.id,
+                    style: vue.normalizeStyle("display:inline;" + n2.f),
+                    preview: false,
+                    selectable: $props.opts[4],
+                    "user-select": $props.opts[4],
+                    nodes: [n2]
+                  }, null, 12, ["id", "selectable", "user-select", "nodes"])
+                ],
+                2112
+                /* STABLE_FRAGMENT, DEV_ROOT_FRAGMENT */
+              )) : n2.c === 2 ? (vue.openBlock(), vue.createElementBlock(
+                vue.Fragment,
+                { key: 11 },
+                [
+                  vue.createCommentVNode(" 继续递归 "),
+                  vue.createElementVNode("view", {
+                    id: n2.attrs.id,
+                    class: vue.normalizeClass("_block _" + n2.name + " " + n2.attrs.class),
+                    style: vue.normalizeStyle(n2.f + ";" + n2.attrs.style)
+                  }, [
+                    (vue.openBlock(true), vue.createElementBlock(
+                      vue.Fragment,
+                      null,
+                      vue.renderList(n2.children, (n22, j2) => {
+                        return vue.openBlock(), vue.createBlock(_component_node, {
+                          key: j2,
+                          style: vue.normalizeStyle(n22.f),
+                          name: n22.name,
+                          attrs: n22.attrs,
+                          childs: n22.children,
+                          opts: $props.opts
+                        }, null, 8, ["style", "name", "attrs", "childs", "opts"]);
+                      }),
+                      128
+                      /* KEYED_FRAGMENT */
+                    ))
+                  ], 14, ["id"])
+                ],
+                2112
+                /* STABLE_FRAGMENT, DEV_ROOT_FRAGMENT */
+              )) : (vue.openBlock(), vue.createBlock(_component_node, {
+                key: 12,
+                style: vue.normalizeStyle(n2.f),
+                name: n2.name,
+                attrs: n2.attrs,
+                childs: n2.children,
+                opts: $props.opts
+              }, null, 8, ["style", "name", "attrs", "childs", "opts"]))
+            ],
+            64
+            /* STABLE_FRAGMENT */
+          );
+        }),
+        128
+        /* KEYED_FRAGMENT */
+      ))
+    ], 14, ["id"]);
+  }
+  if (typeof block0$2 === "function")
+    block0$2(_sfc_main$2p);
+  const node$1 = /* @__PURE__ */ _export_sfc(_sfc_main$2p, [["render", _sfc_render$2o], ["__scopeId", "data-v-f3dc3055"], ["__file", "D:/uniapp2023/studyParty/node_modules/uview-plus/components/u-parse/node/node.vue"]]);
+  const config = {
+    // 信任的标签（保持标签名不变）
+    trustTags: makeMap("a,abbr,ad,audio,b,blockquote,br,code,col,colgroup,dd,del,dl,dt,div,em,fieldset,h1,h2,h3,h4,h5,h6,hr,i,img,ins,label,legend,li,ol,p,q,ruby,rt,source,span,strong,sub,sup,table,tbody,td,tfoot,th,thead,tr,title,ul,video"),
+    // 块级标签（转为 div，其他的非信任标签转为 span）
+    blockTags: makeMap("address,article,aside,body,caption,center,cite,footer,header,html,nav,pre,section"),
+    // 行内标签
+    inlineTags: makeMap("abbr,b,big,code,del,em,i,ins,label,q,small,span,strong,sub,sup"),
+    // 要移除的标签
+    ignoreTags: makeMap("area,base,canvas,embed,frame,head,iframe,input,link,map,meta,param,rp,script,source,style,textarea,title,track,wbr"),
+    // 自闭合的标签
+    voidTags: makeMap("area,base,br,col,circle,ellipse,embed,frame,hr,img,input,line,link,meta,param,path,polygon,rect,source,track,use,wbr"),
+    // html 实体
+    entities: {
+      lt: "<",
+      gt: ">",
+      quot: '"',
+      apos: "'",
+      ensp: " ",
+      emsp: " ",
+      nbsp: " ",
+      semi: ";",
+      ndash: "–",
+      mdash: "—",
+      middot: "·",
+      lsquo: "‘",
+      rsquo: "’",
+      ldquo: "“",
+      rdquo: "”",
+      bull: "•",
+      hellip: "…",
+      larr: "←",
+      uarr: "↑",
+      rarr: "→",
+      darr: "↓"
+    },
+    // 默认的标签样式
+    tagStyle: {
+      address: "font-style:italic",
+      big: "display:inline;font-size:1.2em",
+      caption: "display:table-caption;text-align:center",
+      center: "text-align:center",
+      cite: "font-style:italic",
+      dd: "margin-left:40px",
+      mark: "background-color:yellow",
+      pre: "font-family:monospace;white-space:pre",
+      s: "text-decoration:line-through",
+      small: "display:inline;font-size:0.8em",
+      strike: "text-decoration:line-through",
+      u: "text-decoration:underline"
+    },
+    // svg 大小写对照表
+    svgDict: {
+      animatetransform: "animateTransform",
+      lineargradient: "linearGradient",
+      viewbox: "viewBox",
+      attributename: "attributeName",
+      repeatcount: "repeatCount",
+      repeatdur: "repeatDur",
+      foreignobject: "foreignObject"
+    }
+  };
+  const tagSelector = {};
+  let windowWidth;
+  const systemInfo = uni.getSystemInfoSync();
+  windowWidth = systemInfo.windowWidth;
+  const blankChar = makeMap(" ,\r,\n,	,\f");
+  let idIndex = 0;
+  config.ignoreTags.iframe = void 0;
+  config.trustTags.iframe = true;
+  config.ignoreTags.embed = void 0;
+  config.trustTags.embed = true;
+  function makeMap(str) {
+    const map2 = /* @__PURE__ */ Object.create(null);
+    const list = str.split(",");
+    for (let i2 = list.length; i2--; ) {
+      map2[list[i2]] = true;
+    }
+    return map2;
+  }
+  function decodeEntity(str, amp) {
+    let i2 = str.indexOf("&");
+    while (i2 !== -1) {
+      const j2 = str.indexOf(";", i2 + 3);
+      let code2;
+      if (j2 === -1)
+        break;
+      if (str[i2 + 1] === "#") {
+        code2 = parseInt((str[i2 + 2] === "x" ? "0" : "") + str.substring(i2 + 2, j2));
+        if (!isNaN(code2)) {
+          str = str.substr(0, i2) + String.fromCharCode(code2) + str.substr(j2 + 1);
+        }
+      } else {
+        code2 = str.substring(i2 + 1, j2);
+        if (config.entities[code2] || code2 === "amp" && amp) {
+          str = str.substr(0, i2) + (config.entities[code2] || "&") + str.substr(j2 + 1);
+        }
+      }
+      i2 = str.indexOf("&", i2 + 1);
+    }
+    return str;
+  }
+  function mergeNodes(nodes) {
+    let i2 = nodes.length - 1;
+    for (let j2 = i2; j2 >= -1; j2--) {
+      if (j2 === -1 || nodes[j2].c || !nodes[j2].name || nodes[j2].name !== "div" && nodes[j2].name !== "p" && nodes[j2].name[0] !== "h" || (nodes[j2].attrs.style || "").includes("inline")) {
+        if (i2 - j2 >= 5) {
+          nodes.splice(j2 + 1, i2 - j2, {
+            name: "div",
+            attrs: {},
+            children: nodes.slice(j2 + 1, i2 + 1)
+          });
+        }
+        i2 = j2 - 1;
+      }
+    }
+  }
+  function Parser(vm) {
+    this.options = vm || {};
+    this.tagStyle = Object.assign({}, config.tagStyle, this.options.tagStyle);
+    this.imgList = vm.imgList || [];
+    this.imgList._unloadimgs = 0;
+    this.plugins = vm.plugins || [];
+    this.attrs = /* @__PURE__ */ Object.create(null);
+    this.stack = [];
+    this.nodes = [];
+    this.pre = (this.options.containerStyle || "").includes("white-space") && this.options.containerStyle.includes("pre") ? 2 : 0;
+  }
+  Parser.prototype.parse = function(content) {
+    for (let i2 = this.plugins.length; i2--; ) {
+      if (this.plugins[i2].onUpdate) {
+        content = this.plugins[i2].onUpdate(content, config) || content;
+      }
+    }
+    new Lexer(this).parse(content);
+    while (this.stack.length) {
+      this.popNode();
+    }
+    if (this.nodes.length > 50) {
+      mergeNodes(this.nodes);
+    }
+    return this.nodes;
+  };
+  Parser.prototype.expose = function() {
+    for (let i2 = this.stack.length; i2--; ) {
+      const item = this.stack[i2];
+      if (item.c || item.name === "a" || item.name === "video" || item.name === "audio")
+        return;
+      item.c = 1;
+    }
+  };
+  Parser.prototype.hook = function(node2) {
+    for (let i2 = this.plugins.length; i2--; ) {
+      if (this.plugins[i2].onParse && this.plugins[i2].onParse(node2, this) === false) {
+        return false;
+      }
+    }
+    return true;
+  };
+  Parser.prototype.getUrl = function(url2) {
+    const domain = this.options.domain;
+    if (url2[0] === "/") {
+      if (url2[1] === "/") {
+        url2 = (domain ? domain.split("://")[0] : "http") + ":" + url2;
+      } else if (domain) {
+        url2 = domain + url2;
+      } else {
+        url2 = plus.io.convertLocalFileSystemURL(url2);
+      }
+    } else if (!url2.includes("data:") && !url2.includes("://")) {
+      if (domain) {
+        url2 = domain + "/" + url2;
+      } else {
+        url2 = plus.io.convertLocalFileSystemURL(url2);
+      }
+    }
+    return url2;
+  };
+  Parser.prototype.parseStyle = function(node2) {
+    const attrs = node2.attrs;
+    const list = (this.tagStyle[node2.name] || "").split(";").concat((attrs.style || "").split(";"));
+    const styleObj = {};
+    let tmp = "";
+    if (attrs.id && !this.xml) {
+      if (this.options.useAnchor) {
+        this.expose();
+      } else if (node2.name !== "img" && node2.name !== "a" && node2.name !== "video" && node2.name !== "audio") {
+        attrs.id = void 0;
+      }
+    }
+    if (attrs.width) {
+      styleObj.width = parseFloat(attrs.width) + (attrs.width.includes("%") ? "%" : "px");
+      attrs.width = void 0;
+    }
+    if (attrs.height) {
+      styleObj.height = parseFloat(attrs.height) + (attrs.height.includes("%") ? "%" : "px");
+      attrs.height = void 0;
+    }
+    for (let i2 = 0, len = list.length; i2 < len; i2++) {
+      const info = list[i2].split(":");
+      if (info.length < 2)
+        continue;
+      const key2 = info.shift().trim().toLowerCase();
+      let value2 = info.join(":").trim();
+      if (value2[0] === "-" && value2.lastIndexOf("-") > 0 || value2.includes("safe")) {
+        tmp += `;${key2}:${value2}`;
+      } else if (!styleObj[key2] || value2.includes("import") || !styleObj[key2].includes("import")) {
+        if (value2.includes("url")) {
+          let j2 = value2.indexOf("(") + 1;
+          if (j2) {
+            while (value2[j2] === '"' || value2[j2] === "'" || blankChar[value2[j2]]) {
+              j2++;
+            }
+            value2 = value2.substr(0, j2) + this.getUrl(value2.substr(j2));
+          }
+        } else if (value2.includes("rpx")) {
+          value2 = value2.replace(/[0-9.]+\s*rpx/g, ($2) => parseFloat($2) * windowWidth / 750 + "px");
+        }
+        styleObj[key2] = value2;
+      }
+    }
+    node2.attrs.style = tmp;
+    return styleObj;
+  };
+  Parser.prototype.onTagName = function(name2) {
+    this.tagName = this.xml ? name2 : name2.toLowerCase();
+    if (this.tagName === "svg") {
+      this.xml = (this.xml || 0) + 1;
+      config.ignoreTags.style = void 0;
+    }
+  };
+  Parser.prototype.onAttrName = function(name2) {
+    name2 = this.xml ? name2 : name2.toLowerCase();
+    if (name2.includes("?") || name2.includes(";")) {
+      this.attrName = void 0;
+      return;
+    }
+    if (name2.substr(0, 5) === "data-") {
+      if (name2 === "data-src" && !this.attrs.src) {
+        this.attrName = "src";
+      } else if (this.tagName === "img" || this.tagName === "a") {
+        this.attrName = name2;
+      } else {
+        this.attrName = void 0;
+      }
+    } else {
+      this.attrName = name2;
+      this.attrs[name2] = "T";
+    }
+  };
+  Parser.prototype.onAttrVal = function(val) {
+    const name2 = this.attrName || "";
+    if (name2 === "style" || name2 === "href") {
+      this.attrs[name2] = decodeEntity(val, true);
+    } else if (name2.includes("src")) {
+      this.attrs[name2] = this.getUrl(decodeEntity(val, true));
+    } else if (name2) {
+      this.attrs[name2] = val;
+    }
+  };
+  Parser.prototype.onOpenTag = function(selfClose) {
+    const node2 = /* @__PURE__ */ Object.create(null);
+    node2.name = this.tagName;
+    node2.attrs = this.attrs;
+    if (this.options.nodes.length) {
+      node2.type = "node";
+    }
+    this.attrs = /* @__PURE__ */ Object.create(null);
+    const attrs = node2.attrs;
+    const parent = this.stack[this.stack.length - 1];
+    const siblings = parent ? parent.children : this.nodes;
+    const close = this.xml ? selfClose : config.voidTags[node2.name];
+    if (tagSelector[node2.name]) {
+      attrs.class = tagSelector[node2.name] + (attrs.class ? " " + attrs.class : "");
+    }
+    if (node2.name === "embed") {
+      this.expose();
+    }
+    if (node2.name === "video" || node2.name === "audio") {
+      if (node2.name === "video" && !attrs.id) {
+        attrs.id = "v" + idIndex++;
+      }
+      if (!attrs.controls && !attrs.autoplay) {
+        attrs.controls = "T";
+      }
+      node2.src = [];
+      if (attrs.src) {
+        node2.src.push(attrs.src);
+        attrs.src = void 0;
+      }
+      this.expose();
+    }
+    if (close) {
+      if (!this.hook(node2) || config.ignoreTags[node2.name]) {
+        if (node2.name === "base" && !this.options.domain) {
+          this.options.domain = attrs.href;
+        } else if (node2.name === "source" && parent && (parent.name === "video" || parent.name === "audio") && attrs.src) {
+          parent.src.push(attrs.src);
+        }
+        return;
+      }
+      const styleObj = this.parseStyle(node2);
+      if (node2.name === "img") {
+        if (attrs.src) {
+          if (attrs.src.includes("webp")) {
+            node2.webp = "T";
+          }
+          if (attrs.src.includes("data:") && this.options.previewImg !== "all" && !attrs["original-src"]) {
+            attrs.ignore = "T";
+          }
+          if (!attrs.ignore || node2.webp || attrs.src.includes("cloud://")) {
+            for (let i2 = this.stack.length; i2--; ) {
+              const item = this.stack[i2];
+              if (item.name === "a") {
+                node2.a = item.attrs;
+              }
+              if (item.name === "table" && !node2.webp && !attrs.src.includes("cloud://")) {
+                if (!styleObj.display || styleObj.display.includes("inline")) {
+                  node2.t = "inline-block";
+                } else {
+                  node2.t = styleObj.display;
+                }
+                styleObj.display = void 0;
+              }
+              item.c = 1;
+            }
+            attrs.i = this.imgList.length.toString();
+            let src = attrs["original-src"] || attrs.src;
+            this.imgList.push(src);
+            if (!node2.t) {
+              this.imgList._unloadimgs += 1;
+            }
+            if (this.options.lazyLoad) {
+              attrs["data-src"] = attrs.src;
+              attrs.src = void 0;
+            }
+          }
+        }
+        if (styleObj.display === "inline") {
+          styleObj.display = "";
+        }
+        if (attrs.ignore) {
+          styleObj["max-width"] = styleObj["max-width"] || "100%";
+          attrs.style += ";-webkit-touch-callout:none";
+        }
+        if (parseInt(styleObj.width) > windowWidth) {
+          styleObj.height = void 0;
+        }
+        if (!isNaN(parseInt(styleObj.width))) {
+          node2.w = "T";
+        }
+        if (!isNaN(parseInt(styleObj.height)) && (!styleObj.height.includes("%") || parent && (parent.attrs.style || "").includes("height"))) {
+          node2.h = "T";
+        }
+        if (node2.w && node2.h && styleObj["object-fit"]) {
+          if (styleObj["object-fit"] === "contain") {
+            node2.m = "aspectFit";
+          } else if (styleObj["object-fit"] === "cover") {
+            node2.m = "aspectFill";
+          }
+        }
+      } else if (node2.name === "svg") {
+        siblings.push(node2);
+        this.stack.push(node2);
+        this.popNode();
+        return;
+      }
+      for (const key2 in styleObj) {
+        if (styleObj[key2]) {
+          attrs.style += `;${key2}:${styleObj[key2].replace(" !important", "")}`;
+        }
+      }
+      attrs.style = attrs.style.substr(1) || void 0;
+    } else {
+      if ((node2.name === "pre" || (attrs.style || "").includes("white-space") && attrs.style.includes("pre")) && this.pre !== 2) {
+        this.pre = node2.pre = 1;
+      }
+      node2.children = [];
+      this.stack.push(node2);
+    }
+    siblings.push(node2);
+  };
+  Parser.prototype.onCloseTag = function(name2) {
+    name2 = this.xml ? name2 : name2.toLowerCase();
+    let i2;
+    for (i2 = this.stack.length; i2--; ) {
+      if (this.stack[i2].name === name2)
+        break;
+    }
+    if (i2 !== -1) {
+      while (this.stack.length > i2) {
+        this.popNode();
+      }
+    } else if (name2 === "p" || name2 === "br") {
+      const siblings = this.stack.length ? this.stack[this.stack.length - 1].children : this.nodes;
+      siblings.push({
+        name: name2,
+        attrs: {
+          class: tagSelector[name2] || "",
+          style: this.tagStyle[name2] || ""
+        }
+      });
+    }
+  };
+  Parser.prototype.popNode = function() {
+    const node2 = this.stack.pop();
+    let attrs = node2.attrs;
+    const children = node2.children;
+    const parent = this.stack[this.stack.length - 1];
+    const siblings = parent ? parent.children : this.nodes;
+    if (!this.hook(node2) || config.ignoreTags[node2.name]) {
+      if (node2.name === "title" && children.length && children[0].type === "text" && this.options.setTitle) {
+        uni.setNavigationBarTitle({
+          title: children[0].text
+        });
+      }
+      siblings.pop();
+      return;
+    }
+    if (node2.pre && this.pre !== 2) {
+      this.pre = node2.pre = void 0;
+      for (let i2 = this.stack.length; i2--; ) {
+        if (this.stack[i2].pre) {
+          this.pre = 1;
+        }
+      }
+    }
+    const styleObj = {};
+    if (node2.name === "svg") {
+      if (this.xml > 1) {
+        this.xml--;
+        return;
+      }
+      let src = "";
+      const style = attrs.style;
+      attrs.style = "";
+      attrs.xmlns = "http://www.w3.org/2000/svg";
+      (function traversal(node3) {
+        if (node3.type === "text") {
+          src += node3.text;
+          return;
+        }
+        const name2 = config.svgDict[node3.name] || node3.name;
+        if (name2 === "foreignObject") {
+          for (const child of node3.children || []) {
+            if (child.attrs && !child.attrs.xmlns) {
+              child.attrs.xmlns = "http://www.w3.org/1999/xhtml";
+              break;
+            }
+          }
+        }
+        src += "<" + name2;
+        for (const item in node3.attrs) {
+          const val = node3.attrs[item];
+          if (val) {
+            src += ` ${config.svgDict[item] || item}="${val.replace(/"/g, "")}"`;
+          }
+        }
+        if (!node3.children) {
+          src += "/>";
+        } else {
+          src += ">";
+          for (let i2 = 0; i2 < node3.children.length; i2++) {
+            traversal(node3.children[i2]);
+          }
+          src += "</" + name2 + ">";
+        }
+      })(node2);
+      node2.name = "img";
+      node2.attrs = {
+        src: "data:image/svg+xml;utf8," + src.replace(/#/g, "%23"),
+        style,
+        ignore: "T"
+      };
+      node2.children = void 0;
+      this.xml = false;
+      config.ignoreTags.style = true;
+      return;
+    }
+    if (attrs.align) {
+      if (node2.name === "table") {
+        if (attrs.align === "center") {
+          styleObj["margin-inline-start"] = styleObj["margin-inline-end"] = "auto";
+        } else {
+          styleObj.float = attrs.align;
+        }
+      } else {
+        styleObj["text-align"] = attrs.align;
+      }
+      attrs.align = void 0;
+    }
+    if (attrs.dir) {
+      styleObj.direction = attrs.dir;
+      attrs.dir = void 0;
+    }
+    if (node2.name === "font") {
+      if (attrs.color) {
+        styleObj.color = attrs.color;
+        attrs.color = void 0;
+      }
+      if (attrs.face) {
+        styleObj["font-family"] = attrs.face;
+        attrs.face = void 0;
+      }
+      if (attrs.size) {
+        let size2 = parseInt(attrs.size);
+        if (!isNaN(size2)) {
+          if (size2 < 1) {
+            size2 = 1;
+          } else if (size2 > 7) {
+            size2 = 7;
+          }
+          styleObj["font-size"] = ["x-small", "small", "medium", "large", "x-large", "xx-large", "xxx-large"][size2 - 1];
+        }
+        attrs.size = void 0;
+      }
+    }
+    if ((attrs.class || "").includes("align-center")) {
+      styleObj["text-align"] = "center";
+    }
+    Object.assign(styleObj, this.parseStyle(node2));
+    if (node2.name !== "table" && parseInt(styleObj.width) > windowWidth) {
+      styleObj["max-width"] = "100%";
+      styleObj["box-sizing"] = "border-box";
+    }
+    if (config.blockTags[node2.name]) {
+      node2.name = "div";
+    } else if (!config.trustTags[node2.name] && !this.xml) {
+      node2.name = "span";
+    }
+    if (node2.name === "a" || node2.name === "ad" || node2.name === "iframe") {
+      this.expose();
+    } else if (node2.name === "video") {
+      if ((styleObj.height || "").includes("auto")) {
+        styleObj.height = void 0;
+      }
+      let str = '<video style="width:100%;height:100%"';
+      for (const item in attrs) {
+        if (attrs[item]) {
+          str += " " + item + '="' + attrs[item] + '"';
+        }
+      }
+      if (this.options.pauseVideo) {
+        str += ` onplay="this.dispatchEvent(new CustomEvent('vplay',{bubbles:!0}));for(var e=document.getElementsByTagName('video'),t=0;t<e.length;t++)e[t]!=this&&e[t].pause()"`;
+      }
+      str += ">";
+      for (let i2 = 0; i2 < node2.src.length; i2++) {
+        str += '<source src="' + node2.src[i2] + '">';
+      }
+      str += "</video>";
+      node2.html = str;
+    } else if ((node2.name === "ul" || node2.name === "ol") && node2.c) {
+      const types2 = {
+        a: "lower-alpha",
+        A: "upper-alpha",
+        i: "lower-roman",
+        I: "upper-roman"
+      };
+      if (types2[attrs.type]) {
+        attrs.style += ";list-style-type:" + types2[attrs.type];
+        attrs.type = void 0;
+      }
+      for (let i2 = children.length; i2--; ) {
+        if (children[i2].name === "li") {
+          children[i2].c = 1;
+        }
+      }
+    } else if (node2.name === "table") {
+      let padding = parseFloat(attrs.cellpadding);
+      let spacing = parseFloat(attrs.cellspacing);
+      const border = parseFloat(attrs.border);
+      const bordercolor = styleObj["border-color"];
+      const borderstyle = styleObj["border-style"];
+      if (node2.c) {
+        if (isNaN(padding)) {
+          padding = 2;
+        }
+        if (isNaN(spacing)) {
+          spacing = 2;
+        }
+      }
+      if (border) {
+        attrs.style += `;border:${border}px ${borderstyle || "solid"} ${bordercolor || "gray"}`;
+      }
+      if (node2.flag && node2.c) {
+        styleObj.display = "grid";
+        if (styleObj["border-collapse"] === "collapse") {
+          styleObj["border-collapse"] = void 0;
+          spacing = 0;
+        }
+        if (spacing) {
+          styleObj["grid-gap"] = spacing + "px";
+          styleObj.padding = spacing + "px";
+        } else if (border) {
+          attrs.style += ";border-left:0;border-top:0";
+        }
+        const width = [];
+        const trList = [];
+        const cells = [];
+        const map2 = {};
+        (function traversal(nodes) {
+          for (let i2 = 0; i2 < nodes.length; i2++) {
+            if (nodes[i2].name === "tr") {
+              trList.push(nodes[i2]);
+            } else if (nodes[i2].name === "colgroup") {
+              let colI = 1;
+              for (const col of nodes[i2].children || []) {
+                if (col.name === "col") {
+                  const style = col.attrs.style || "";
+                  const start = style.indexOf("width") ? style.indexOf(";width") : 0;
+                  if (start !== -1) {
+                    let end = style.indexOf(";", start + 6);
+                    if (end === -1) {
+                      end = style.length;
+                    }
+                    width[colI] = style.substring(start ? start + 7 : 6, end);
+                  }
+                  colI += 1;
+                }
+              }
+            } else {
+              traversal(nodes[i2].children || []);
+            }
+          }
+        })(children);
+        for (let row = 1; row <= trList.length; row++) {
+          let col = 1;
+          for (let j2 = 0; j2 < trList[row - 1].children.length; j2++) {
+            const td = trList[row - 1].children[j2];
+            if (td.name === "td" || td.name === "th") {
+              while (map2[row + "." + col]) {
+                col++;
+              }
+              let style = td.attrs.style || "";
+              let start = style.indexOf("width") ? style.indexOf(";width") : 0;
+              if (start !== -1) {
+                let end = style.indexOf(";", start + 6);
+                if (end === -1) {
+                  end = style.length;
+                }
+                if (!td.attrs.colspan) {
+                  width[col] = style.substring(start ? start + 7 : 6, end);
+                }
+                style = style.substr(0, start) + style.substr(end);
+              }
+              style += ";display:flex";
+              start = style.indexOf("vertical-align");
+              if (start !== -1) {
+                const val = style.substr(start + 15, 10);
+                if (val.includes("middle")) {
+                  style += ";align-items:center";
+                } else if (val.includes("bottom")) {
+                  style += ";align-items:flex-end";
+                }
+              } else {
+                style += ";align-items:center";
+              }
+              start = style.indexOf("text-align");
+              if (start !== -1) {
+                const val = style.substr(start + 11, 10);
+                if (val.includes("center")) {
+                  style += ";justify-content: center";
+                } else if (val.includes("right")) {
+                  style += ";justify-content: right";
+                }
+              }
+              style = (border ? `;border:${border}px ${borderstyle || "solid"} ${bordercolor || "gray"}` + (spacing ? "" : ";border-right:0;border-bottom:0") : "") + (padding ? `;padding:${padding}px` : "") + ";" + style;
+              if (td.attrs.colspan) {
+                style += `;grid-column-start:${col};grid-column-end:${col + parseInt(td.attrs.colspan)}`;
+                if (!td.attrs.rowspan) {
+                  style += `;grid-row-start:${row};grid-row-end:${row + 1}`;
+                }
+                col += parseInt(td.attrs.colspan) - 1;
+              }
+              if (td.attrs.rowspan) {
+                style += `;grid-row-start:${row};grid-row-end:${row + parseInt(td.attrs.rowspan)}`;
+                if (!td.attrs.colspan) {
+                  style += `;grid-column-start:${col};grid-column-end:${col + 1}`;
+                }
+                for (let rowspan = 1; rowspan < td.attrs.rowspan; rowspan++) {
+                  for (let colspan = 0; colspan < (td.attrs.colspan || 1); colspan++) {
+                    map2[row + rowspan + "." + (col - colspan)] = 1;
+                  }
+                }
+              }
+              if (style) {
+                td.attrs.style = style;
+              }
+              cells.push(td);
+              col++;
+            }
+          }
+          if (row === 1) {
+            let temp = "";
+            for (let i2 = 1; i2 < col; i2++) {
+              temp += (width[i2] ? width[i2] : "auto") + " ";
+            }
+            styleObj["grid-template-columns"] = temp;
+          }
+        }
+        node2.children = cells;
+      } else {
+        if (node2.c) {
+          styleObj.display = "table";
+        }
+        if (!isNaN(spacing)) {
+          styleObj["border-spacing"] = spacing + "px";
+        }
+        if (border || padding) {
+          (function traversal(nodes) {
+            for (let i2 = 0; i2 < nodes.length; i2++) {
+              const td = nodes[i2];
+              if (td.name === "th" || td.name === "td") {
+                if (border) {
+                  td.attrs.style = `border:${border}px ${borderstyle || "solid"} ${bordercolor || "gray"};${td.attrs.style || ""}`;
+                }
+                if (padding) {
+                  td.attrs.style = `padding:${padding}px;${td.attrs.style || ""}`;
+                }
+              } else if (td.children) {
+                traversal(td.children);
+              }
+            }
+          })(children);
+        }
+      }
+      if (this.options.scrollTable && !(attrs.style || "").includes("inline")) {
+        const table = Object.assign({}, node2);
+        node2.name = "div";
+        node2.attrs = {
+          style: "overflow:auto"
+        };
+        node2.children = [table];
+        attrs = table.attrs;
+      }
+    } else if ((node2.name === "tbody" || node2.name === "tr") && node2.flag && node2.c) {
+      node2.flag = void 0;
+      (function traversal(nodes) {
+        for (let i2 = 0; i2 < nodes.length; i2++) {
+          if (nodes[i2].name === "td") {
+            for (const style of ["color", "background", "background-color"]) {
+              if (styleObj[style]) {
+                nodes[i2].attrs.style = style + ":" + styleObj[style] + ";" + (nodes[i2].attrs.style || "");
+              }
+            }
+          } else {
+            traversal(nodes[i2].children || []);
+          }
+        }
+      })(children);
+    } else if ((node2.name === "td" || node2.name === "th") && (attrs.colspan || attrs.rowspan)) {
+      for (let i2 = this.stack.length; i2--; ) {
+        if (this.stack[i2].name === "table" || this.stack[i2].name === "tbody" || this.stack[i2].name === "tr") {
+          this.stack[i2].flag = 1;
+        }
+      }
+    } else if (node2.name === "ruby") {
+      node2.name = "span";
+      for (let i2 = 0; i2 < children.length - 1; i2++) {
+        if (children[i2].type === "text" && children[i2 + 1].name === "rt") {
+          children[i2] = {
+            name: "div",
+            attrs: {
+              style: "display:inline-block;text-align:center"
+            },
+            children: [{
+              name: "div",
+              attrs: {
+                style: "font-size:50%;" + (children[i2 + 1].attrs.style || "")
+              },
+              children: children[i2 + 1].children
+            }, children[i2]]
+          };
+          children.splice(i2 + 1, 1);
+        }
+      }
+    } else if (node2.c) {
+      (function traversal(node3) {
+        node3.c = 2;
+        for (let i2 = node3.children.length; i2--; ) {
+          const child = node3.children[i2];
+          if (child.name && (config.inlineTags[child.name] || (child.attrs.style || "").includes("inline") && child.children) && !child.c) {
+            traversal(child);
+          }
+          if (!child.c || child.name === "table") {
+            node3.c = 1;
+          }
+        }
+      })(node2);
+    }
+    if ((styleObj.display || "").includes("flex") && !node2.c) {
+      for (let i2 = children.length; i2--; ) {
+        const item = children[i2];
+        if (item.f) {
+          item.attrs.style = (item.attrs.style || "") + item.f;
+          item.f = void 0;
+        }
+      }
+    }
+    const flex = parent && ((parent.attrs.style || "").includes("flex") || (parent.attrs.style || "").includes("grid")) && !node2.c;
+    if (flex) {
+      node2.f = ";max-width:100%";
+    }
+    if (children.length >= 50 && node2.c && !(styleObj.display || "").includes("flex")) {
+      mergeNodes(children);
+    }
+    for (const key2 in styleObj) {
+      if (styleObj[key2]) {
+        const val = `;${key2}:${styleObj[key2].replace(" !important", "")}`;
+        if (flex && (key2.includes("flex") && key2 !== "flex-direction" || key2 === "align-self" || key2.includes("grid") || styleObj[key2][0] === "-" || key2.includes("width") && val.includes("%"))) {
+          node2.f += val;
+          if (key2 === "width") {
+            attrs.style += ";width:100%";
+          }
+        } else {
+          attrs.style += val;
+        }
+      }
+    }
+    attrs.style = attrs.style.substr(1) || void 0;
+  };
+  Parser.prototype.onText = function(text) {
+    if (!this.pre) {
+      let trim2 = "";
+      let flag2;
+      for (let i2 = 0, len = text.length; i2 < len; i2++) {
+        if (!blankChar[text[i2]]) {
+          trim2 += text[i2];
+        } else {
+          if (trim2[trim2.length - 1] !== " ") {
+            trim2 += " ";
+          }
+          if (text[i2] === "\n" && !flag2) {
+            flag2 = true;
+          }
+        }
+      }
+      if (trim2 === " ") {
+        if (flag2)
+          return;
+        else {
+          const parent = this.stack[this.stack.length - 1];
+          if (parent && parent.name[0] === "t")
+            return;
+        }
+      }
+      text = trim2;
+    }
+    const node2 = /* @__PURE__ */ Object.create(null);
+    node2.type = "text";
+    node2.text = decodeEntity(text);
+    if (this.hook(node2)) {
+      const siblings = this.stack.length ? this.stack[this.stack.length - 1].children : this.nodes;
+      siblings.push(node2);
+    }
+  };
+  function Lexer(handler) {
+    this.handler = handler;
+  }
+  Lexer.prototype.parse = function(content) {
+    this.content = content || "";
+    this.i = 0;
+    this.start = 0;
+    this.state = this.text;
+    for (let len = this.content.length; this.i !== -1 && this.i < len; ) {
+      this.state();
+    }
+  };
+  Lexer.prototype.checkClose = function(method3) {
+    const selfClose = this.content[this.i] === "/";
+    if (this.content[this.i] === ">" || selfClose && this.content[this.i + 1] === ">") {
+      if (method3) {
+        this.handler[method3](this.content.substring(this.start, this.i));
+      }
+      this.i += selfClose ? 2 : 1;
+      this.start = this.i;
+      this.handler.onOpenTag(selfClose);
+      if (this.handler.tagName === "script") {
+        this.i = this.content.indexOf("</", this.i);
+        if (this.i !== -1) {
+          this.i += 2;
+          this.start = this.i;
+        }
+        this.state = this.endTag;
+      } else {
+        this.state = this.text;
+      }
+      return true;
+    }
+    return false;
+  };
+  Lexer.prototype.text = function() {
+    this.i = this.content.indexOf("<", this.i);
+    if (this.i === -1) {
+      if (this.start < this.content.length) {
+        this.handler.onText(this.content.substring(this.start, this.content.length));
+      }
+      return;
+    }
+    const c2 = this.content[this.i + 1];
+    if (c2 >= "a" && c2 <= "z" || c2 >= "A" && c2 <= "Z") {
+      if (this.start !== this.i) {
+        this.handler.onText(this.content.substring(this.start, this.i));
+      }
+      this.start = ++this.i;
+      this.state = this.tagName;
+    } else if (c2 === "/" || c2 === "!" || c2 === "?") {
+      if (this.start !== this.i) {
+        this.handler.onText(this.content.substring(this.start, this.i));
+      }
+      const next2 = this.content[this.i + 2];
+      if (c2 === "/" && (next2 >= "a" && next2 <= "z" || next2 >= "A" && next2 <= "Z")) {
+        this.i += 2;
+        this.start = this.i;
+        this.state = this.endTag;
+        return;
+      }
+      let end = "-->";
+      if (c2 !== "!" || this.content[this.i + 2] !== "-" || this.content[this.i + 3] !== "-") {
+        end = ">";
+      }
+      this.i = this.content.indexOf(end, this.i);
+      if (this.i !== -1) {
+        this.i += end.length;
+        this.start = this.i;
+      }
+    } else {
+      this.i++;
+    }
+  };
+  Lexer.prototype.tagName = function() {
+    if (blankChar[this.content[this.i]]) {
+      this.handler.onTagName(this.content.substring(this.start, this.i));
+      while (blankChar[this.content[++this.i]])
+        ;
+      if (this.i < this.content.length && !this.checkClose()) {
+        this.start = this.i;
+        this.state = this.attrName;
+      }
+    } else if (!this.checkClose("onTagName")) {
+      this.i++;
+    }
+  };
+  Lexer.prototype.attrName = function() {
+    let c2 = this.content[this.i];
+    if (blankChar[c2] || c2 === "=") {
+      this.handler.onAttrName(this.content.substring(this.start, this.i));
+      let needVal = c2 === "=";
+      const len = this.content.length;
+      while (++this.i < len) {
+        c2 = this.content[this.i];
+        if (!blankChar[c2]) {
+          if (this.checkClose())
+            return;
+          if (needVal) {
+            this.start = this.i;
+            this.state = this.attrVal;
+            return;
+          }
+          if (this.content[this.i] === "=") {
+            needVal = true;
+          } else {
+            this.start = this.i;
+            this.state = this.attrName;
+            return;
+          }
+        }
+      }
+    } else if (!this.checkClose("onAttrName")) {
+      this.i++;
+    }
+  };
+  Lexer.prototype.attrVal = function() {
+    const c2 = this.content[this.i];
+    const len = this.content.length;
+    if (c2 === '"' || c2 === "'") {
+      this.start = ++this.i;
+      this.i = this.content.indexOf(c2, this.i);
+      if (this.i === -1)
+        return;
+      this.handler.onAttrVal(this.content.substring(this.start, this.i));
+    } else {
+      for (; this.i < len; this.i++) {
+        if (blankChar[this.content[this.i]]) {
+          this.handler.onAttrVal(this.content.substring(this.start, this.i));
+          break;
+        } else if (this.checkClose("onAttrVal"))
+          return;
+      }
+    }
+    while (blankChar[this.content[++this.i]])
+      ;
+    if (this.i < len && !this.checkClose()) {
+      this.start = this.i;
+      this.state = this.attrName;
+    }
+  };
+  Lexer.prototype.endTag = function() {
+    const c2 = this.content[this.i];
+    if (blankChar[c2] || c2 === ">" || c2 === "/") {
+      this.handler.onCloseTag(this.content.substring(this.start, this.i));
+      if (c2 !== ">") {
+        this.i = this.content.indexOf(">", this.i);
+        if (this.i === -1)
+          return;
+      }
+      this.start = ++this.i;
+      this.state = this.text;
+    } else {
+      this.i++;
+    }
+  };
+  const plugins = [];
+  const _sfc_main$2o = {
+    name: "u-parse",
+    data() {
+      return {
+        nodes: []
+      };
+    },
+    props: {
+      containerStyle: {
+        type: String,
+        default: ""
+      },
+      content: {
+        type: String,
+        default: ""
+      },
+      copyLink: {
+        type: [Boolean, String],
+        default: true
+      },
+      domain: String,
+      errorImg: {
+        type: String,
+        default: ""
+      },
+      lazyLoad: {
+        type: [Boolean, String],
+        default: false
+      },
+      loadingImg: {
+        type: String,
+        default: ""
+      },
+      pauseVideo: {
+        type: [Boolean, String],
+        default: true
+      },
+      previewImg: {
+        type: [Boolean, String],
+        default: true
+      },
+      scrollTable: [Boolean, String],
+      selectable: [Boolean, String],
+      setTitle: {
+        type: [Boolean, String],
+        default: true
+      },
+      showImgMenu: {
+        type: [Boolean, String],
+        default: true
+      },
+      tagStyle: Object,
+      useAnchor: [Boolean, Number]
+    },
+    emits: ["load", "ready", "imgTap", "linkTap", "play", "error"],
+    components: {
+      node: node$1
+    },
+    watch: {
+      content(content) {
+        this.setContent(content);
+      }
+    },
+    created() {
+      this.plugins = [];
+      for (let i2 = plugins.length; i2--; ) {
+        this.plugins.push(new plugins[i2](this));
+      }
+    },
+    mounted() {
+      if (this.content && !this.nodes.length) {
+        this.setContent(this.content);
+      }
+    },
+    beforeUnmount() {
+      this._hook("onDetached");
+    },
+    methods: {
+      /**
+       * @description 将锚点跳转的范围限定在一个 scroll-view 内
+       * @param {Object} page scroll-view 所在页面的示例
+       * @param {String} selector scroll-view 的选择器
+       * @param {String} scrollTop scroll-view scroll-top 属性绑定的变量名
+       */
+      in(page2, selector, scrollTop) {
+        if (page2 && selector && scrollTop) {
+          this._in = {
+            page: page2,
+            selector,
+            scrollTop
+          };
+        }
+      },
+      /**
+       * @description 锚点跳转
+       * @param {String} id 要跳转的锚点 id
+       * @param {Number} offset 跳转位置的偏移量
+       * @returns {Promise}
+       */
+      navigateTo(id2, offset) {
+        return new Promise((resolve, reject) => {
+          if (!this.useAnchor) {
+            reject(Error("Anchor is disabled"));
+            return;
+          }
+          offset = offset || parseInt(this.useAnchor) || 0;
+          let deep = " ";
+          const selector = uni.createSelectorQuery().in(this._in ? this._in.page : this).select((this._in ? this._in.selector : "._root") + (id2 ? `${deep}#${id2}` : "")).boundingClientRect();
+          if (this._in) {
+            selector.select(this._in.selector).scrollOffset().select(this._in.selector).boundingClientRect();
+          } else {
+            selector.selectViewport().scrollOffset();
+          }
+          selector.exec((res2) => {
+            if (!res2[0]) {
+              reject(Error("Label not found"));
+              return;
+            }
+            const scrollTop = res2[1].scrollTop + res2[0].top - (res2[2] ? res2[2].top : 0) + offset;
+            if (this._in) {
+              this._in.page[this._in.scrollTop] = scrollTop;
+            } else {
+              uni.pageScrollTo({
+                scrollTop,
+                duration: 300
+              });
+            }
+            resolve();
+          });
+        });
+      },
+      /**
+       * @description 获取文本内容
+       * @return {String}
+       */
+      getText(nodes) {
+        let text = "";
+        (function traversal(nodes2) {
+          for (let i2 = 0; i2 < nodes2.length; i2++) {
+            const node2 = nodes2[i2];
+            if (node2.type === "text") {
+              text += node2.text.replace(/&amp;/g, "&");
+            } else if (node2.name === "br") {
+              text += "\n";
+            } else {
+              const isBlock = node2.name === "p" || node2.name === "div" || node2.name === "tr" || node2.name === "li" || node2.name[0] === "h" && node2.name[1] > "0" && node2.name[1] < "7";
+              if (isBlock && text && text[text.length - 1] !== "\n") {
+                text += "\n";
+              }
+              if (node2.children) {
+                traversal(node2.children);
+              }
+              if (isBlock && text[text.length - 1] !== "\n") {
+                text += "\n";
+              } else if (node2.name === "td" || node2.name === "th") {
+                text += "	";
+              }
+            }
+          }
+        })(nodes || this.nodes);
+        return text;
+      },
+      /**
+       * @description 获取内容大小和位置
+       * @return {Promise}
+       */
+      getRect() {
+        return new Promise((resolve, reject) => {
+          uni.createSelectorQuery().in(this).select("#_root").boundingClientRect().exec((res2) => res2[0] ? resolve(res2[0]) : reject(Error("Root label not found")));
+        });
+      },
+      /**
+       * @description 暂停播放媒体
+       */
+      pauseMedia() {
+        for (let i2 = (this._videos || []).length; i2--; ) {
+          this._videos[i2].pause();
+        }
+        const command = 'for(var e=document.getElementsByTagName("video"),i=e.length;i--;)e[i].pause()';
+        let page2 = this.$parent;
+        while (!page2.$scope)
+          page2 = page2.$parent;
+        page2.$scope.$getAppWebview().evalJS(command);
+      },
+      /**
+       * @description 设置媒体播放速率
+       * @param {Number} rate 播放速率
+       */
+      setPlaybackRate(rate) {
+        this.playbackRate = rate;
+        for (let i2 = (this._videos || []).length; i2--; ) {
+          this._videos[i2].playbackRate(rate);
+        }
+        const command = 'for(var e=document.getElementsByTagName("video"),i=e.length;i--;)e[i].playbackRate=' + rate;
+        let page2 = this.$parent;
+        while (!page2.$scope)
+          page2 = page2.$parent;
+        page2.$scope.$getAppWebview().evalJS(command);
+      },
+      /**
+       * @description 设置内容
+       * @param {String} content html 内容
+       * @param {Boolean} append 是否在尾部追加
+       */
+      setContent(content, append2) {
+        if (!append2 || !this.imgList) {
+          this.imgList = [];
+        }
+        const nodes = new Parser(this).parse(content);
+        this.$set(this, "nodes", append2 ? (this.nodes || []).concat(nodes) : nodes);
+        this._videos = [];
+        this.$nextTick(() => {
+          this._hook("onLoad");
+          this.$emit("load");
+        });
+        if (this.lazyLoad || this.imgList._unloadimgs < this.imgList.length / 2) {
+          let height = 0;
+          const callback = (rect) => {
+            if (!rect || !rect.height)
+              rect = {};
+            if (rect.height === height) {
+              this.$emit("ready", rect);
+            } else {
+              height = rect.height;
+              setTimeout(() => {
+                this.getRect().then(callback).catch(callback);
+              }, 350);
+            }
+          };
+          this.getRect().then(callback).catch(callback);
+        } else {
+          if (!this.imgList._unloadimgs) {
+            this.getRect().then((rect) => {
+              this.$emit("ready", rect);
+            }).catch(() => {
+              this.$emit("ready", {});
+            });
+          }
+        }
+      },
+      /**
+       * @description 调用插件钩子函数
+       */
+      _hook(name2) {
+        for (let i2 = plugins.length; i2--; ) {
+          if (this.plugins[i2][name2]) {
+            this.plugins[i2][name2]();
+          }
+        }
+      }
+    }
+  };
+  function _sfc_render$2n(_ctx, _cache, $props, $setup, $data, $options) {
+    const _component_node = vue.resolveComponent("node");
+    return vue.openBlock(), vue.createElementBlock(
+      "view",
+      {
+        id: "_root",
+        class: vue.normalizeClass(($props.selectable ? "_select " : "") + "_root"),
+        style: vue.normalizeStyle($props.containerStyle)
+      },
+      [
+        !$data.nodes[0] ? vue.renderSlot(_ctx.$slots, "default", { key: 0 }, void 0, true) : (vue.openBlock(), vue.createBlock(_component_node, {
+          key: 1,
+          childs: $data.nodes,
+          opts: [$props.lazyLoad, $props.loadingImg, $props.errorImg, $props.showImgMenu, $props.selectable],
+          name: "span"
+        }, null, 8, ["childs", "opts"]))
+      ],
+      6
+      /* CLASS, STYLE */
+    );
+  }
+  const __easycom_0$c = /* @__PURE__ */ _export_sfc(_sfc_main$2o, [["render", _sfc_render$2n], ["__scopeId", "data-v-c147f742"], ["__file", "D:/uniapp2023/studyParty/node_modules/uview-plus/components/u-parse/u-parse.vue"]]);
+  const __vite_glob_0_77 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+    __proto__: null,
+    default: __easycom_0$c
+  }, Symbol.toStringTag, { value: "Module" }));
+  function e$1() {
+    return { async: false, breaks: false, extensions: null, gfm: true, hooks: null, pedantic: false, renderer: null, silent: false, tokenizer: null, walkTokens: null };
+  }
+  var t = { async: false, breaks: false, extensions: null, gfm: true, hooks: null, pedantic: false, renderer: null, silent: false, tokenizer: null, walkTokens: null };
+  function n(e2) {
+    t = e2;
+  }
+  var r = { exec: () => null };
+  function s(e2, t2 = "") {
+    let n2 = "string" == typeof e2 ? e2 : e2.source, r2 = { replace: (e3, t3) => {
+      let s2 = "string" == typeof t3 ? t3 : t3.source;
+      return s2 = s2.replace(l.caret, "$1"), n2 = n2.replace(e3, s2), r2;
+    }, getRegex: () => new RegExp(n2, t2) };
+    return r2;
+  }
+  var l = { codeRemoveIndent: /^(?: {1,4}| {0,3}\t)/gm, outputLinkReplace: /\\([\[\]])/g, indentCodeCompensation: /^(\s+)(?:```)/, beginningSpace: /^\s+/, endingHash: /#$/, startingSpaceChar: /^ /, endingSpaceChar: / $/, nonSpaceChar: /[^ ]/, newLineCharGlobal: /\n/g, tabCharGlobal: /\t/g, multipleSpaceGlobal: /\s+/g, blankLine: /^[ \t]*$/, doubleBlankLine: /\n[ \t]*\n[ \t]*$/, blockquoteStart: /^ {0,3}>/, blockquoteSetextReplace: /\n {0,3}((?:=+|-+) *)(?=\n|$)/g, blockquoteSetextReplace2: /^ {0,3}>[ \t]?/gm, listReplaceTabs: /^\t+/, listReplaceNesting: /^ {1,4}(?=( {4})*[^ ])/g, listIsTask: /^\[[ xX]\] /, listReplaceTask: /^\[[ xX]\] +/, anyLine: /\n.*\n/, hrefBrackets: /^<(.*)>$/, tableDelimiter: /[:|]/, tableAlignChars: /^\||\| *$/g, tableRowBlankLine: /\n[ \t]*$/, tableAlignRight: /^ *-+: *$/, tableAlignCenter: /^ *:-+: *$/, tableAlignLeft: /^ *:-+ *$/, startATag: /^<a /i, endATag: /^<\/a>/i, startPreScriptTag: /^<(pre|code|kbd|script)(\s|>)/i, endPreScriptTag: /^<\/(pre|code|kbd|script)(\s|>)/i, startAngleBracket: /^</, endAngleBracket: />$/, pedanticHrefTitle: /^([^'"]*[^\s])\s+(['"])(.*)\2/, unicodeAlphaNumeric: /[a-zA-Z0-9\u00C0-\u02AF\u0300-\u036F\u0400-\u04FF\u0500-\u052F\u1E00-\u1EFF]/u, escapeTest: /[&<>"']/, escapeReplace: /[&<>"']/g, escapeTestNoEncode: /[<>"']|&(?!(#\d{1,7}|#[Xx][a-fA-F0-9]{1,6}|\w+);)/, escapeReplaceNoEncode: /[<>"']|&(?!(#\d{1,7}|#[Xx][a-fA-F0-9]{1,6}|\w+);)/g, unescapeTest: /&(#(?:\d+)|(?:#x[0-9A-Fa-f]+)|(?:\w+));?/gi, caret: /(^|[^\[])\^/g, percentDecode: /%25/g, findPipe: /\|/g, splitPipe: / \|/, slashPipe: /\\\|/g, carriageReturn: /\r\n|\r/g, spaceLine: /^ +$/gm, notSpaceStart: /^\S*/, endingNewline: /\n$/, listItemRegex: (e2) => new RegExp(`^( {0,3}${e2})((?:[	 ][^\\n]*)?(?:\\n|$))`), nextBulletRegex: (e2) => new RegExp(`^ {0,${Math.min(3, e2 - 1)}}(?:[*+-]|\\d{1,9}[.)])((?:[ 	][^\\n]*)?(?:\\n|$))`), hrRegex: (e2) => new RegExp(`^ {0,${Math.min(3, e2 - 1)}}((?:- *){3,}|(?:_ *){3,}|(?:\\* *){3,})(?:\\n+|$)`), fencesBeginRegex: (e2) => new RegExp(`^ {0,${Math.min(3, e2 - 1)}}(?:\`\`\`|~~~)`), headingBeginRegex: (e2) => new RegExp(`^ {0,${Math.min(3, e2 - 1)}}#`), htmlBeginRegex: (e2) => new RegExp(`^ {0,${Math.min(3, e2 - 1)}}<(?:[a-z].*>|!--)`, "i") }, i = /^ {0,3}((?:-[\t ]*){3,}|(?:_[ \t]*){3,}|(?:\*[ \t]*){3,})(?:\n+|$)/, a = /(?:[*+-]|\d{1,9}[.)])/, o = /^(?!bull |blockCode|fences|blockquote|heading|html|table)((?:.|\n(?!\s*?\n|bull |blockCode|fences|blockquote|heading|html|table))+?)\n {0,3}(=+|-+) *(?:\n+|$)/, c = s(o).replace(/bull/g, a).replace(/blockCode/g, /(?: {4}| {0,3}\t)/).replace(/fences/g, / {0,3}(?:`{3,}|~{3,})/).replace(/blockquote/g, / {0,3}>/).replace(/heading/g, / {0,3}#{1,6}/).replace(/html/g, / {0,3}<[^\n>]+>\n/).replace(/\|table/g, "").getRegex(), h = s(o).replace(/bull/g, a).replace(/blockCode/g, /(?: {4}| {0,3}\t)/).replace(/fences/g, / {0,3}(?:`{3,}|~{3,})/).replace(/blockquote/g, / {0,3}>/).replace(/heading/g, / {0,3}#{1,6}/).replace(/html/g, / {0,3}<[^\n>]+>\n/).replace(/table/g, / {0,3}\|?(?:[:\- ]*\|)+[\:\- ]*\n/).getRegex(), p = /^([^\n]+(?:\n(?!hr|heading|lheading|blockquote|fences|list|html|table| +\n)[^\n]+)*)/, u = /(?!\s*\])(?:\\.|[^\[\]\\])+/, g = s(/^ {0,3}\[(label)\]: *(?:\n[ \t]*)?([^<\s][^\s]*|<.*?>)(?:(?: +(?:\n[ \t]*)?| *\n[ \t]*)(title))? *(?:\n+|$)/).replace("label", u).replace("title", /(?:"(?:\\"?|[^"\\])*"|'[^'\n]*(?:\n[^'\n]+)*\n?'|\([^()]*\))/).getRegex(), k = s(/^( {0,3}bull)([ \t][^\n]+?)?(?:\n|$)/).replace(/bull/g, a).getRegex(), d = "address|article|aside|base|basefont|blockquote|body|caption|center|col|colgroup|dd|details|dialog|dir|div|dl|dt|fieldset|figcaption|figure|footer|form|frame|frameset|h[1-6]|head|header|hr|html|iframe|legend|li|link|main|menu|menuitem|meta|nav|noframes|ol|optgroup|option|p|param|search|section|summary|table|tbody|td|tfoot|th|thead|title|tr|track|ul", f = /<!--(?:-?>|[\s\S]*?(?:-->|$))/, x = s("^ {0,3}(?:<(script|pre|style|textarea)[\\s>][\\s\\S]*?(?:</\\1>[^\\n]*\\n+|$)|comment[^\\n]*(\\n+|$)|<\\?[\\s\\S]*?(?:\\?>\\n*|$)|<![A-Z][\\s\\S]*?(?:>\\n*|$)|<!\\[CDATA\\[[\\s\\S]*?(?:\\]\\]>\\n*|$)|</?(tag)(?: +|\\n|/?>)[\\s\\S]*?(?:(?:\\n[ 	]*)+\\n|$)|<(?!script|pre|style|textarea)([a-z][\\w-]*)(?:attribute)*? */?>(?=[ \\t]*(?:\\n|$))[\\s\\S]*?(?:(?:\\n[ 	]*)+\\n|$)|</(?!script|pre|style|textarea)[a-z][\\w-]*\\s*>(?=[ \\t]*(?:\\n|$))[\\s\\S]*?(?:(?:\\n[ 	]*)+\\n|$))", "i").replace("comment", f).replace("tag", d).replace("attribute", / +[a-zA-Z:_][\w.:-]*(?: *= *"[^"\n]*"| *= *'[^'\n]*'| *= *[^\s"'=<>`]+)?/).getRegex(), b = s(p).replace("hr", i).replace("heading", " {0,3}#{1,6}(?:\\s|$)").replace("|lheading", "").replace("|table", "").replace("blockquote", " {0,3}>").replace("fences", " {0,3}(?:`{3,}(?=[^`\\n]*\\n)|~{3,})[^\\n]*\\n").replace("list", " {0,3}(?:[*+-]|1[.)]) ").replace("html", "</?(?:tag)(?: +|\\n|/?>)|<(?:script|pre|style|textarea|!--)").replace("tag", d).getRegex(), w = { blockquote: s(/^( {0,3}> ?(paragraph|[^\n]*)(?:\n|$))+/).replace("paragraph", b).getRegex(), code: /^((?: {4}| {0,3}\t)[^\n]+(?:\n(?:[ \t]*(?:\n|$))*)?)+/, def: g, fences: /^ {0,3}(`{3,}(?=[^`\n]*(?:\n|$))|~{3,})([^\n]*)(?:\n|$)(?:|([\s\S]*?)(?:\n|$))(?: {0,3}\1[~`]* *(?=\n|$)|$)/, heading: /^ {0,3}(#{1,6})(?=\s|$)(.*)(?:\n+|$)/, hr: i, html: x, lheading: c, list: k, newline: /^(?:[ \t]*(?:\n|$))+/, paragraph: b, table: r, text: /^[^\n]+/ }, m = s("^ *([^\\n ].*)\\n {0,3}((?:\\| *)?:?-+:? *(?:\\| *:?-+:? *)*(?:\\| *)?)(?:\\n((?:(?! *\\n|hr|heading|blockquote|code|fences|list|html).*(?:\\n|$))*)\\n*|$)").replace("hr", i).replace("heading", " {0,3}#{1,6}(?:\\s|$)").replace("blockquote", " {0,3}>").replace("code", "(?: {4}| {0,3}	)[^\\n]").replace("fences", " {0,3}(?:`{3,}(?=[^`\\n]*\\n)|~{3,})[^\\n]*\\n").replace("list", " {0,3}(?:[*+-]|1[.)]) ").replace("html", "</?(?:tag)(?: +|\\n|/?>)|<(?:script|pre|style|textarea|!--)").replace("tag", d).getRegex(), y = { ...w, lheading: h, table: m, paragraph: s(p).replace("hr", i).replace("heading", " {0,3}#{1,6}(?:\\s|$)").replace("|lheading", "").replace("table", m).replace("blockquote", " {0,3}>").replace("fences", " {0,3}(?:`{3,}(?=[^`\\n]*\\n)|~{3,})[^\\n]*\\n").replace("list", " {0,3}(?:[*+-]|1[.)]) ").replace("html", "</?(?:tag)(?: +|\\n|/?>)|<(?:script|pre|style|textarea|!--)").replace("tag", d).getRegex() }, $$3G = { ...w, html: s(`^ *(?:comment *(?:\\n|\\s*$)|<(tag)[\\s\\S]+?</\\1> *(?:\\n{2,}|\\s*$)|<tag(?:"[^"]*"|'[^']*'|\\s[^'"/>\\s]*)*?/?> *(?:\\n{2,}|\\s*$))`).replace("comment", f).replace(/tag/g, "(?!(?:a|em|strong|small|s|cite|q|dfn|abbr|data|time|code|var|samp|kbd|sub|sup|i|b|u|mark|ruby|rt|rp|bdi|bdo|span|br|wbr|ins|del|img)\\b)\\w+(?!:|[^\\w\\s@]*@)\\b").getRegex(), def: /^ *\[([^\]]+)\]: *<?([^\s>]+)>?(?: +(["(][^\n]+[")]))? *(?:\n+|$)/, heading: /^(#{1,6})(.*)(?:\n+|$)/, fences: r, lheading: /^(.+?)\n {0,3}(=+|-+) *(?:\n+|$)/, paragraph: s(p).replace("hr", i).replace("heading", " *#{1,6} *[^\n]").replace("lheading", c).replace("|table", "").replace("blockquote", " {0,3}>").replace("|fences", "").replace("|list", "").replace("|html", "").replace("|tag", "").getRegex() }, R = /^( {2,}|\\)\n(?!\s*$)/, S = /[!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~·！￥……（）——《》「」『』【】、；：‘’“”，。、]/u, T = /[\s!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~·！￥……（）——《》「」『』【】、；：‘’“”，。、]/, z = /[^a-zA-Z0-9\u4e00-\u9fa5\s!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~·！￥……（）——《》「」『』【】、；：‘’“”，。、]/, A = s(/^((?![*_])punctSpace)/, "u").replace(/punctSpace/g, T).getRegex(), _ = /[!"#$%&'()*+,-./:;<=>?@[\]^_`{|}·！￥……（）——《》「」『』【】、；：‘’“”，。、]/, P = /^(?:\*+(?:((?!\*)punct)|[^\s*]))|^_+(?:((?!_)punct)|([^\s_]))/, I = s(P, "u").replace(/punct/g, S).getRegex(), L = s(P, "u").replace(/punct/g, _).getRegex(), B = "^[^_*]*?__[^_*]*?\\*[^_*]*?(?=__)|[^*]+(?=[^*])|(?!\\*)punct(\\*+)(?=[\\s]|$)|notPunctSpace(\\*+)(?!\\*)(?=punctSpace|$)|(?!\\*)punctSpace(\\*+)(?=notPunctSpace)|[\\s](\\*+)(?!\\*)(?=punct)|(?!\\*)punct(\\*+)(?!\\*)(?=punct)|notPunctSpace(\\*+)(?=notPunctSpace)", C = s(B, "gu").replace(/notPunctSpace/g, z).replace(/punctSpace/g, T).replace(/punct/g, S).getRegex(), q = s(B, "gu").replace(/notPunctSpace/g, /[a-zA-Z0-9\u4e00-\u9fa5~]/).replace(/punctSpace/g, /[\s!"#$%&'()*+,-./:;<=>?@[\]^_`{|}·！￥……（）——《》「」『』【】、；：‘’“”，。、]/).replace(/punct/g, _).getRegex(), E$2 = s("^[^_*]*?\\*\\*[^_*]*?_[^_*]*?(?=\\*\\*)|[^_]+(?=[^_])|(?!_)punct(_+)(?=[\\s]|$)|notPunctSpace(_+)(?!_)(?=punctSpace|$)|(?!_)punctSpace(_+)(?=notPunctSpace)|[\\s](_+)(?!_)(?=punct)|(?!_)punct(_+)(?!_)(?=punct)", "gu").replace(/notPunctSpace/g, z).replace(/punctSpace/g, T).replace(/punct/g, S).getRegex(), v = s(/\\(punct)/, "gu").replace(/punct/g, S).getRegex(), Z = s(/^<(scheme:[^\s\x00-\x1f<>]*|email)>/).replace("scheme", /[a-zA-Z][a-zA-Z0-9+.-]{1,31}/).replace("email", /[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+(@)[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+(?![-_])/).getRegex(), D = s(f).replace("(?:-->|$)", "-->").getRegex(), M = s("^comment|^</[a-zA-Z][\\w:-]*\\s*>|^<[a-zA-Z][\\w-]*(?:attribute)*?\\s*/?>|^<\\?[\\s\\S]*?\\?>|^<![a-zA-Z]+\\s[\\s\\S]*?>|^<!\\[CDATA\\[[\\s\\S]*?\\]\\]>").replace("comment", D).replace("attribute", /\s+[a-zA-Z:_][\w.:-]*(?:\s*=\s*"[^"]*"|\s*=\s*'[^']*'|\s*=\s*[^\s"'=<>`]+)?/).getRegex(), O = /(?:\[(?:\\.|[^\[\]\\])*\]|\\.|`[^`]*`|[^\[\]\\`])*?/, Q = s(/^!?\[(label)\]\(\s*(href)(?:(?:[ \t]*(?:\n[ \t]*)?)(title))?\s*\)/).replace("label", O).replace("href", /<(?:\\.|[^\n<>\\])+>|[^ \t\n\x00-\x1f]*/).replace("title", /"(?:\\"?|[^"\\])*"|'(?:\\'?|[^'\\])*'|\((?:\\\)?|[^)\\])*\)/).getRegex(), N = s(/^!?\[(label)\]\[(ref)\]/).replace("label", O).replace("ref", u).getRegex(), j = s(/^!?\[(ref)\](?:\[\])?/).replace("ref", u).getRegex(), G = { _backpedal: r, anyPunctuation: v, autolink: Z, blockSkip: /\[[^[\]]*?\]\((?:\\.|[^\\\(\)]|\((?:\\.|[^\\\(\)])*\))*\)|`[^`]*?`|<(?! )[^<>]*?>/g, br: R, code: /^(`+)([^`]|[^`][\s\S]*?[^`])\1(?!`)/, del: r, emStrongLDelim: I, emStrongRDelimAst: C, emStrongRDelimUnd: E$2, escape: /^\\([!"#$%&'()*+,\-./:;<=>?@\[\]\\^_`{|}~])/, link: Q, nolink: j, punctuation: A, reflink: N, reflinkSearch: s("reflink|nolink(?!\\()", "g").replace("reflink", N).replace("nolink", j).getRegex(), tag: M, text: /^(`+|[^`])(?:(?= {2,}\n)|[\s\S]*?(?:(?=[\\<!\[`*_]|\b_|$)|[^ ](?= {2,}\n)))/, url: r }, H = { ...G, link: s(/^!?\[(label)\]\((.*?)\)/).replace("label", O).getRegex(), reflink: s(/^!?\[(label)\]\s*\[([^\]]*)\]/).replace("label", O).getRegex() }, W = { ...G, emStrongRDelimAst: q, emStrongLDelim: L, url: s(/^((?:ftp|https?):\/\/|www\.)(?:[a-zA-Z0-9\-]+\.?)+[^\s<]*|^email/, "i").replace("email", /[A-Za-z0-9._+-]+(@)[a-zA-Z0-9-_]+(?:\.[a-zA-Z0-9-_]*[a-zA-Z0-9])+(?![-_])/).getRegex(), _backpedal: /(?:[^?!.,:;*_'"~()&]+|\([^)]*\)|&(?![a-zA-Z0-9]+;$)|[?!.,:;*_'"~)]+(?!$))+/, del: /^(~~?)(?=[^\s~])((?:\\.|[^\\])*?(?:\\.|[^\s~\\]))\1(?=[^~]|$)/, text: /^([`~]+|[^`~])(?:(?= {2,}\n)|(?=[a-zA-Z0-9.!#$%&'*+\/=?_`{\|}~-]+@)|[\s\S]*?(?:(?=[\\<!\[`*~_]|\b_|https?:\/\/|ftp:\/\/|www\.|$)|[^ ](?= {2,}\n)|[^a-zA-Z0-9.!#$%&'*+\/=?_`{\|}~-](?=[a-zA-Z0-9.!#$%&'*+\/=?_`{\|}~-]+@)))/ }, X = { ...W, br: s(R).replace("{2,}", "*").getRegex(), text: s(W.text).replace("\\b_", "\\b_| {2,}\\n").replace(/\{2,\}/g, "*").getRegex() }, F = { normal: w, gfm: y, pedantic: $$3G }, U = { normal: G, gfm: W, breaks: X, pedantic: H }, J = { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }, K = (e2) => J[e2];
+  function V(e2, t2) {
+    if (t2) {
+      if (l.escapeTest.test(e2))
+        return e2.replace(l.escapeReplace, K);
+    } else if (l.escapeTestNoEncode.test(e2))
+      return e2.replace(l.escapeReplaceNoEncode, K);
+    return e2;
+  }
+  function Y(e2) {
+    try {
+      e2 = encodeURI(e2).replace(l.percentDecode, "%");
+    } catch {
+      return null;
+    }
+    return e2;
+  }
+  function ee(e2, t2) {
+    var _a2;
+    let n2 = e2.replace(l.findPipe, (e3, t3, n3) => {
+      let r3 = false, s2 = t3;
+      for (; --s2 >= 0 && "\\" === n3[s2]; )
+        r3 = !r3;
+      return r3 ? "|" : " |";
+    }).split(l.splitPipe), r2 = 0;
+    if (n2[0].trim() || n2.shift(), n2.length > 0 && !((_a2 = n2.at(-1)) == null ? void 0 : _a2.trim()) && n2.pop(), t2)
+      if (n2.length > t2)
+        n2.splice(t2);
+      else
+        for (; n2.length < t2; )
+          n2.push("");
+    for (; r2 < n2.length; r2++)
+      n2[r2] = n2[r2].trim().replace(l.slashPipe, "|");
+    return n2;
+  }
+  function te(e2, t2, n2) {
+    let r2 = e2.length;
+    if (0 === r2)
+      return "";
+    let s2 = 0;
+    for (; s2 < r2; ) {
+      let l2 = e2.charAt(r2 - s2 - 1);
+      if (l2 !== t2 || n2) {
+        if (l2 === t2 || !n2)
+          break;
+        s2++;
+      } else
+        s2++;
+    }
+    return e2.slice(0, r2 - s2);
+  }
+  function ne(e2, t2, n2, r2, s2) {
+    let l2 = t2.href, i2 = t2.title || null, a2 = e2[1].replace(s2.other.outputLinkReplace, "$1");
+    r2.state.inLink = true;
+    let o2 = { type: "!" === e2[0].charAt(0) ? "image" : "link", raw: n2, href: l2, title: i2, text: a2, tokens: r2.inlineTokens(a2) };
+    return r2.state.inLink = false, o2;
+  }
+  var re = class {
+    constructor(e2) {
+      __publicField(this, "options");
+      __publicField(this, "rules");
+      __publicField(this, "lexer");
+      this.options = e2 || t;
+    }
+    space(e2) {
+      let t2 = this.rules.block.newline.exec(e2);
+      if (t2 && t2[0].length > 0)
+        return { type: "space", raw: t2[0] };
+    }
+    code(e2) {
+      let t2 = this.rules.block.code.exec(e2);
+      if (t2) {
+        let e3 = t2[0].replace(this.rules.other.codeRemoveIndent, "");
+        return { type: "code", raw: t2[0], codeBlockStyle: "indented", text: this.options.pedantic ? e3 : te(e3, "\n") };
+      }
+    }
+    fences(e2) {
+      let t2 = this.rules.block.fences.exec(e2);
+      if (t2) {
+        let e3 = t2[0], n2 = function(e4, t3, n3) {
+          let r2 = e4.match(n3.other.indentCodeCompensation);
+          if (null === r2)
+            return t3;
+          let s2 = r2[1];
+          return t3.split("\n").map((e5) => {
+            let t4 = e5.match(n3.other.beginningSpace);
+            if (null === t4)
+              return e5;
+            let [r3] = t4;
+            return r3.length >= s2.length ? e5.slice(s2.length) : e5;
+          }).join("\n");
+        }(e3, t2[3] || "", this.rules);
+        return { type: "code", raw: e3, lang: t2[2] ? t2[2].trim().replace(this.rules.inline.anyPunctuation, "$1") : t2[2], text: n2 };
+      }
+    }
+    heading(e2) {
+      let t2 = this.rules.block.heading.exec(e2);
+      if (t2) {
+        let e3 = t2[2].trim();
+        if (this.rules.other.endingHash.test(e3)) {
+          let t3 = te(e3, "#");
+          (this.options.pedantic || !t3 || this.rules.other.endingSpaceChar.test(t3)) && (e3 = t3.trim());
+        }
+        return { type: "heading", raw: t2[0], depth: t2[1].length, text: e3, tokens: this.lexer.inline(e3) };
+      }
+    }
+    hr(e2) {
+      let t2 = this.rules.block.hr.exec(e2);
+      if (t2)
+        return { type: "hr", raw: te(t2[0], "\n") };
+    }
+    blockquote(e2) {
+      let t2 = this.rules.block.blockquote.exec(e2);
+      if (t2) {
+        let e3 = te(t2[0], "\n").split("\n"), n2 = "", r2 = "", s2 = [];
+        for (; e3.length > 0; ) {
+          let t3, l2 = false, i2 = [];
+          for (t3 = 0; t3 < e3.length; t3++)
+            if (this.rules.other.blockquoteStart.test(e3[t3]))
+              i2.push(e3[t3]), l2 = true;
+            else {
+              if (l2)
+                break;
+              i2.push(e3[t3]);
+            }
+          e3 = e3.slice(t3);
+          let a2 = i2.join("\n"), o2 = a2.replace(this.rules.other.blockquoteSetextReplace, "\n    $1").replace(this.rules.other.blockquoteSetextReplace2, "");
+          n2 = n2 ? `${n2}
+${a2}` : a2, r2 = r2 ? `${r2}
+${o2}` : o2;
+          let c2 = this.lexer.state.top;
+          if (this.lexer.state.top = true, this.lexer.blockTokens(o2, s2, true), this.lexer.state.top = c2, 0 === e3.length)
+            break;
+          let h2 = s2.at(-1);
+          if ("code" === (h2 == null ? void 0 : h2.type))
+            break;
+          if ("blockquote" === (h2 == null ? void 0 : h2.type)) {
+            let t4 = h2, l3 = t4.raw + "\n" + e3.join("\n"), i3 = this.blockquote(l3);
+            s2[s2.length - 1] = i3, n2 = n2.substring(0, n2.length - t4.raw.length) + i3.raw, r2 = r2.substring(0, r2.length - t4.text.length) + i3.text;
+            break;
+          }
+          if ("list" !== (h2 == null ? void 0 : h2.type))
+            ;
+          else {
+            let t4 = h2, l3 = t4.raw + "\n" + e3.join("\n"), i3 = this.list(l3);
+            s2[s2.length - 1] = i3, n2 = n2.substring(0, n2.length - h2.raw.length) + i3.raw, r2 = r2.substring(0, r2.length - t4.raw.length) + i3.raw, e3 = l3.substring(s2.at(-1).raw.length).split("\n");
+          }
+        }
+        return { type: "blockquote", raw: n2, tokens: s2, text: r2 };
+      }
+    }
+    list(e2) {
+      let t2 = this.rules.block.list.exec(e2);
+      if (t2) {
+        let n2 = t2[1].trim(), r2 = n2.length > 1, s2 = { type: "list", raw: "", ordered: r2, start: r2 ? +n2.slice(0, -1) : "", loose: false, items: [] };
+        n2 = r2 ? `\\d{1,9}\\${n2.slice(-1)}` : `\\${n2}`, this.options.pedantic && (n2 = r2 ? n2 : "[*+-]");
+        let l2 = this.rules.other.listItemRegex(n2), i2 = false;
+        for (; e2; ) {
+          let n3 = false, r3 = "", a3 = "";
+          if (!(t2 = l2.exec(e2)) || this.rules.block.hr.test(e2))
+            break;
+          r3 = t2[0], e2 = e2.substring(r3.length);
+          let o2 = t2[2].split("\n", 1)[0].replace(this.rules.other.listReplaceTabs, (e3) => " ".repeat(3 * e3.length)), c2 = e2.split("\n", 1)[0], h2 = !o2.trim(), p2 = 0;
+          if (this.options.pedantic ? (p2 = 2, a3 = o2.trimStart()) : h2 ? p2 = t2[1].length + 1 : (p2 = t2[2].search(this.rules.other.nonSpaceChar), p2 = p2 > 4 ? 1 : p2, a3 = o2.slice(p2), p2 += t2[1].length), h2 && this.rules.other.blankLine.test(c2) && (r3 += c2 + "\n", e2 = e2.substring(c2.length + 1), n3 = true), !n3) {
+            let t3 = this.rules.other.nextBulletRegex(p2), n4 = this.rules.other.hrRegex(p2), s3 = this.rules.other.fencesBeginRegex(p2), l3 = this.rules.other.headingBeginRegex(p2), i3 = this.rules.other.htmlBeginRegex(p2);
+            for (; e2; ) {
+              let u3, g3 = e2.split("\n", 1)[0];
+              if (c2 = g3, this.options.pedantic ? (c2 = c2.replace(this.rules.other.listReplaceNesting, "  "), u3 = c2) : u3 = c2.replace(this.rules.other.tabCharGlobal, "    "), s3.test(c2) || l3.test(c2) || i3.test(c2) || t3.test(c2) || n4.test(c2))
+                break;
+              if (u3.search(this.rules.other.nonSpaceChar) >= p2 || !c2.trim())
+                a3 += "\n" + u3.slice(p2);
+              else {
+                if (h2 || o2.replace(this.rules.other.tabCharGlobal, "    ").search(this.rules.other.nonSpaceChar) >= 4 || s3.test(o2) || l3.test(o2) || n4.test(o2))
+                  break;
+                a3 += "\n" + c2;
+              }
+              !h2 && !c2.trim() && (h2 = true), r3 += g3 + "\n", e2 = e2.substring(g3.length + 1), o2 = u3.slice(p2);
+            }
+          }
+          s2.loose || (i2 ? s2.loose = true : this.rules.other.doubleBlankLine.test(r3) && (i2 = true));
+          let u2, g2 = null;
+          this.options.gfm && (g2 = this.rules.other.listIsTask.exec(a3), g2 && (u2 = "[ ] " !== g2[0], a3 = a3.replace(this.rules.other.listReplaceTask, ""))), s2.items.push({ type: "list_item", raw: r3, task: !!g2, checked: u2, loose: false, text: a3, tokens: [] }), s2.raw += r3;
+        }
+        let a2 = s2.items.at(-1);
+        if (!a2)
+          return;
+        a2.raw = a2.raw.trimEnd(), a2.text = a2.text.trimEnd(), s2.raw = s2.raw.trimEnd();
+        for (let e3 = 0; e3 < s2.items.length; e3++)
+          if (this.lexer.state.top = false, s2.items[e3].tokens = this.lexer.blockTokens(s2.items[e3].text, []), !s2.loose) {
+            let t3 = s2.items[e3].tokens.filter((e4) => "space" === e4.type), n3 = t3.length > 0 && t3.some((e4) => this.rules.other.anyLine.test(e4.raw));
+            s2.loose = n3;
+          }
+        if (s2.loose)
+          for (let e3 = 0; e3 < s2.items.length; e3++)
+            s2.items[e3].loose = true;
+        return s2;
+      }
+    }
+    html(e2) {
+      let t2 = this.rules.block.html.exec(e2);
+      if (t2)
+        return { type: "html", block: true, raw: t2[0], pre: "pre" === t2[1] || "script" === t2[1] || "style" === t2[1], text: t2[0] };
+    }
+    def(e2) {
+      let t2 = this.rules.block.def.exec(e2);
+      if (t2) {
+        let e3 = t2[1].toLowerCase().replace(this.rules.other.multipleSpaceGlobal, " "), n2 = t2[2] ? t2[2].replace(this.rules.other.hrefBrackets, "$1").replace(this.rules.inline.anyPunctuation, "$1") : "", r2 = t2[3] ? t2[3].substring(1, t2[3].length - 1).replace(this.rules.inline.anyPunctuation, "$1") : t2[3];
+        return { type: "def", tag: e3, raw: t2[0], href: n2, title: r2 };
+      }
+    }
+    table(e2) {
+      var _a2;
+      let t2 = this.rules.block.table.exec(e2);
+      if (!t2 || !this.rules.other.tableDelimiter.test(t2[2]))
+        return;
+      let n2 = ee(t2[1]), r2 = t2[2].replace(this.rules.other.tableAlignChars, "").split("|"), s2 = ((_a2 = t2[3]) == null ? void 0 : _a2.trim()) ? t2[3].replace(this.rules.other.tableRowBlankLine, "").split("\n") : [], l2 = { type: "table", raw: t2[0], header: [], align: [], rows: [] };
+      if (n2.length === r2.length) {
+        for (let e3 of r2)
+          this.rules.other.tableAlignRight.test(e3) ? l2.align.push("right") : this.rules.other.tableAlignCenter.test(e3) ? l2.align.push("center") : this.rules.other.tableAlignLeft.test(e3) ? l2.align.push("left") : l2.align.push(null);
+        for (let e3 = 0; e3 < n2.length; e3++)
+          l2.header.push({ text: n2[e3], tokens: this.lexer.inline(n2[e3]), header: true, align: l2.align[e3] });
+        for (let e3 of s2)
+          l2.rows.push(ee(e3, l2.header.length).map((e4, t3) => ({ text: e4, tokens: this.lexer.inline(e4), header: false, align: l2.align[t3] })));
+        return l2;
+      }
+    }
+    lheading(e2) {
+      let t2 = this.rules.block.lheading.exec(e2);
+      if (t2)
+        return { type: "heading", raw: t2[0], depth: "=" === t2[2].charAt(0) ? 1 : 2, text: t2[1], tokens: this.lexer.inline(t2[1]) };
+    }
+    paragraph(e2) {
+      let t2 = this.rules.block.paragraph.exec(e2);
+      if (t2) {
+        let e3 = "\n" === t2[1].charAt(t2[1].length - 1) ? t2[1].slice(0, -1) : t2[1];
+        return { type: "paragraph", raw: t2[0], text: e3, tokens: this.lexer.inline(e3) };
+      }
+    }
+    text(e2) {
+      let t2 = this.rules.block.text.exec(e2);
+      if (t2)
+        return { type: "text", raw: t2[0], text: t2[0], tokens: this.lexer.inline(t2[0]) };
+    }
+    escape(e2) {
+      let t2 = this.rules.inline.escape.exec(e2);
+      if (t2)
+        return { type: "escape", raw: t2[0], text: t2[1] };
+    }
+    tag(e2) {
+      let t2 = this.rules.inline.tag.exec(e2);
+      if (t2)
+        return !this.lexer.state.inLink && this.rules.other.startATag.test(t2[0]) ? this.lexer.state.inLink = true : this.lexer.state.inLink && this.rules.other.endATag.test(t2[0]) && (this.lexer.state.inLink = false), !this.lexer.state.inRawBlock && this.rules.other.startPreScriptTag.test(t2[0]) ? this.lexer.state.inRawBlock = true : this.lexer.state.inRawBlock && this.rules.other.endPreScriptTag.test(t2[0]) && (this.lexer.state.inRawBlock = false), { type: "html", raw: t2[0], inLink: this.lexer.state.inLink, inRawBlock: this.lexer.state.inRawBlock, block: false, text: t2[0] };
+    }
+    link(e2) {
+      let t2 = this.rules.inline.link.exec(e2);
+      if (t2) {
+        let e3 = t2[2].trim();
+        if (!this.options.pedantic && this.rules.other.startAngleBracket.test(e3)) {
+          if (!this.rules.other.endAngleBracket.test(e3))
+            return;
+          let t3 = te(e3.slice(0, -1), "\\");
+          if ((e3.length - t3.length) % 2 == 0)
+            return;
+        } else {
+          let e4 = function(e5, t3) {
+            if (-1 === e5.indexOf(t3[1]))
+              return -1;
+            let n3 = 0;
+            for (let r3 = 0; r3 < e5.length; r3++)
+              if ("\\" === e5[r3])
+                r3++;
+              else if (e5[r3] === t3[0])
+                n3++;
+              else if (e5[r3] === t3[1] && (n3--, n3 < 0))
+                return r3;
+            return n3 > 0 ? -2 : -1;
+          }(t2[2], "()");
+          if (-2 === e4)
+            return;
+          if (e4 > -1) {
+            let n3 = (0 === t2[0].indexOf("!") ? 5 : 4) + t2[1].length + e4;
+            t2[2] = t2[2].substring(0, e4), t2[0] = t2[0].substring(0, n3).trim(), t2[3] = "";
+          }
+        }
+        let n2 = t2[2], r2 = "";
+        if (this.options.pedantic) {
+          let e4 = this.rules.other.pedanticHrefTitle.exec(n2);
+          e4 && (n2 = e4[1], r2 = e4[3]);
+        } else
+          r2 = t2[3] ? t2[3].slice(1, -1) : "";
+        return n2 = n2.trim(), this.rules.other.startAngleBracket.test(n2) && (n2 = this.options.pedantic && !this.rules.other.endAngleBracket.test(e3) ? n2.slice(1) : n2.slice(1, -1)), ne(t2, { href: n2 && n2.replace(this.rules.inline.anyPunctuation, "$1"), title: r2 && r2.replace(this.rules.inline.anyPunctuation, "$1") }, t2[0], this.lexer, this.rules);
+      }
+    }
+    reflink(e2, t2) {
+      let n2;
+      if ((n2 = this.rules.inline.reflink.exec(e2)) || (n2 = this.rules.inline.nolink.exec(e2))) {
+        let e3 = t2[(n2[2] || n2[1]).replace(this.rules.other.multipleSpaceGlobal, " ").toLowerCase()];
+        if (!e3) {
+          let e4 = n2[0].charAt(0);
+          return { type: "text", raw: e4, text: e4 };
+        }
+        return ne(n2, e3, n2[0], this.lexer, this.rules);
+      }
+    }
+    emStrong(e2, t2, n2 = "") {
+      let r2 = this.rules.inline.emStrongLDelim.exec(e2);
+      if (!(!r2 || r2[3] && n2.match(this.rules.other.unicodeAlphaNumeric)) && (!r2[1] && !r2[2] || !n2 || this.rules.inline.punctuation.exec(n2))) {
+        let n3, s2, l2 = [...r2[0]].length - 1, i2 = l2, a2 = 0, o2 = "*" === r2[0][0] ? this.rules.inline.emStrongRDelimAst : this.rules.inline.emStrongRDelimUnd;
+        for (o2.lastIndex = 0, t2 = t2.slice(-1 * e2.length + l2); null != (r2 = o2.exec(t2)); ) {
+          if (n3 = r2[1] || r2[2] || r2[3] || r2[4] || r2[5] || r2[6], !n3)
+            continue;
+          if (s2 = [...n3].length, r2[3] || r2[4]) {
+            i2 += s2;
+            continue;
+          }
+          if ((r2[5] || r2[6]) && l2 % 3 && !((l2 + s2) % 3)) {
+            a2 += s2;
+            continue;
+          }
+          if (i2 -= s2, i2 > 0)
+            continue;
+          s2 = Math.min(s2, s2 + i2 + a2);
+          let t3 = [...r2[0]][0].length, o3 = e2.slice(0, l2 + r2.index + t3 + s2);
+          if (Math.min(l2, s2) % 2) {
+            let e3 = o3.slice(1, -1);
+            return { type: "em", raw: o3, text: e3, tokens: this.lexer.inlineTokens(e3) };
+          }
+          let c2 = o3.slice(2, -2);
+          return { type: "strong", raw: o3, text: c2, tokens: this.lexer.inlineTokens(c2) };
+        }
+      }
+    }
+    codespan(e2) {
+      let t2 = this.rules.inline.code.exec(e2);
+      if (t2) {
+        let e3 = t2[2].replace(this.rules.other.newLineCharGlobal, " "), n2 = this.rules.other.nonSpaceChar.test(e3), r2 = this.rules.other.startingSpaceChar.test(e3) && this.rules.other.endingSpaceChar.test(e3);
+        return n2 && r2 && (e3 = e3.substring(1, e3.length - 1)), { type: "codespan", raw: t2[0], text: e3 };
+      }
+    }
+    br(e2) {
+      let t2 = this.rules.inline.br.exec(e2);
+      if (t2)
+        return { type: "br", raw: t2[0] };
+    }
+    del(e2) {
+      let t2 = this.rules.inline.del.exec(e2);
+      if (t2)
+        return { type: "del", raw: t2[0], text: t2[2], tokens: this.lexer.inlineTokens(t2[2]) };
+    }
+    autolink(e2) {
+      let t2 = this.rules.inline.autolink.exec(e2);
+      if (t2) {
+        let e3, n2;
+        return "@" === t2[2] ? (e3 = t2[1], n2 = "mailto:" + e3) : (e3 = t2[1], n2 = e3), { type: "link", raw: t2[0], text: e3, href: n2, tokens: [{ type: "text", raw: e3, text: e3 }] };
+      }
+    }
+    url(e2) {
+      var _a2;
+      let t2;
+      if (t2 = this.rules.inline.url.exec(e2)) {
+        let e3, n2;
+        if ("@" === t2[2])
+          e3 = t2[0], n2 = "mailto:" + e3;
+        else {
+          let r2;
+          do {
+            r2 = t2[0], t2[0] = ((_a2 = this.rules.inline._backpedal.exec(t2[0])) == null ? void 0 : _a2[0]) ?? "";
+          } while (r2 !== t2[0]);
+          e3 = t2[0], n2 = "www." === t2[1] ? "http://" + t2[0] : t2[0];
+        }
+        return { type: "link", raw: t2[0], text: e3, href: n2, tokens: [{ type: "text", raw: e3, text: e3 }] };
+      }
+    }
+    inlineText(e2) {
+      let t2 = this.rules.inline.text.exec(e2);
+      if (t2) {
+        let e3 = this.lexer.state.inRawBlock;
+        return { type: "text", raw: t2[0], text: t2[0], escaped: e3 };
+      }
+    }
+  }, se = class e2 {
+    constructor(e3) {
+      __publicField(this, "tokens");
+      __publicField(this, "options");
+      __publicField(this, "state");
+      __publicField(this, "tokenizer");
+      __publicField(this, "inlineQueue");
+      this.tokens = [], this.tokens.links = /* @__PURE__ */ Object.create(null), this.options = e3 || t, this.options.tokenizer = this.options.tokenizer || new re(), this.tokenizer = this.options.tokenizer, this.tokenizer.options = this.options, this.tokenizer.lexer = this, this.inlineQueue = [], this.state = { inLink: false, inRawBlock: false, top: true };
+      let n2 = { other: l, block: F.normal, inline: U.normal };
+      this.options.pedantic ? (n2.block = F.pedantic, n2.inline = U.pedantic) : this.options.gfm && (n2.block = F.gfm, this.options.breaks ? n2.inline = U.breaks : n2.inline = U.gfm), this.tokenizer.rules = n2;
+    }
+    static get rules() {
+      return { block: F, inline: U };
+    }
+    static lex(t2, n2) {
+      return new e2(n2).lex(t2);
+    }
+    static lexInline(t2, n2) {
+      return new e2(n2).inlineTokens(t2);
+    }
+    lex(e3) {
+      e3 = e3.replace(l.carriageReturn, "\n"), this.blockTokens(e3, this.tokens);
+      for (let e4 = 0; e4 < this.inlineQueue.length; e4++) {
+        let t2 = this.inlineQueue[e4];
+        this.inlineTokens(t2.src, t2.tokens);
+      }
+      return this.inlineQueue = [], this.tokens;
+    }
+    blockTokens(e3, t2 = [], n2 = false) {
+      var _a2, _b, _c;
+      for (this.options.pedantic && (e3 = e3.replace(l.tabCharGlobal, "    ").replace(l.spaceLine, "")); e3; ) {
+        let r2;
+        if ((_b = (_a2 = this.options.extensions) == null ? void 0 : _a2.block) == null ? void 0 : _b.some((n3) => !!(r2 = n3.call({ lexer: this }, e3, t2)) && (e3 = e3.substring(r2.raw.length), t2.push(r2), true)))
+          continue;
+        if (r2 = this.tokenizer.space(e3)) {
+          e3 = e3.substring(r2.raw.length);
+          let n3 = t2.at(-1);
+          1 === r2.raw.length && void 0 !== n3 ? n3.raw += "\n" : t2.push(r2);
+          continue;
+        }
+        if (r2 = this.tokenizer.code(e3)) {
+          e3 = e3.substring(r2.raw.length);
+          let n3 = t2.at(-1);
+          "paragraph" === (n3 == null ? void 0 : n3.type) || "text" === (n3 == null ? void 0 : n3.type) ? (n3.raw += (n3.raw.endsWith("\n") ? "" : "\n") + r2.raw, n3.text += "\n" + r2.text, this.inlineQueue.at(-1).src = n3.text) : t2.push(r2);
+          continue;
+        }
+        if (r2 = this.tokenizer.fences(e3)) {
+          e3 = e3.substring(r2.raw.length), t2.push(r2);
+          continue;
+        }
+        if (r2 = this.tokenizer.heading(e3)) {
+          e3 = e3.substring(r2.raw.length), t2.push(r2);
+          continue;
+        }
+        if (r2 = this.tokenizer.hr(e3)) {
+          e3 = e3.substring(r2.raw.length), t2.push(r2);
+          continue;
+        }
+        if (r2 = this.tokenizer.blockquote(e3)) {
+          e3 = e3.substring(r2.raw.length), t2.push(r2);
+          continue;
+        }
+        if (r2 = this.tokenizer.list(e3)) {
+          e3 = e3.substring(r2.raw.length), t2.push(r2);
+          continue;
+        }
+        if (r2 = this.tokenizer.html(e3)) {
+          e3 = e3.substring(r2.raw.length), t2.push(r2);
+          continue;
+        }
+        if (r2 = this.tokenizer.def(e3)) {
+          e3 = e3.substring(r2.raw.length);
+          let n3 = t2.at(-1);
+          "paragraph" === (n3 == null ? void 0 : n3.type) || "text" === (n3 == null ? void 0 : n3.type) ? (n3.raw += (n3.raw.endsWith("\n") ? "" : "\n") + r2.raw, n3.text += "\n" + r2.raw, this.inlineQueue.at(-1).src = n3.text) : this.tokens.links[r2.tag] || (this.tokens.links[r2.tag] = { href: r2.href, title: r2.title });
+          continue;
+        }
+        if (r2 = this.tokenizer.table(e3)) {
+          e3 = e3.substring(r2.raw.length), t2.push(r2);
+          continue;
+        }
+        if (r2 = this.tokenizer.lheading(e3)) {
+          e3 = e3.substring(r2.raw.length), t2.push(r2);
+          continue;
+        }
+        let s2 = e3;
+        if ((_c = this.options.extensions) == null ? void 0 : _c.startBlock) {
+          let t3, n3 = 1 / 0, r3 = e3.slice(1);
+          this.options.extensions.startBlock.forEach((e4) => {
+            t3 = e4.call({ lexer: this }, r3), "number" == typeof t3 && t3 >= 0 && (n3 = Math.min(n3, t3));
+          }), n3 < 1 / 0 && n3 >= 0 && (s2 = e3.substring(0, n3 + 1));
+        }
+        if (this.state.top && (r2 = this.tokenizer.paragraph(s2))) {
+          let l2 = t2.at(-1);
+          n2 && "paragraph" === (l2 == null ? void 0 : l2.type) ? (l2.raw += (l2.raw.endsWith("\n") ? "" : "\n") + r2.raw, l2.text += "\n" + r2.text, this.inlineQueue.pop(), this.inlineQueue.at(-1).src = l2.text) : t2.push(r2), n2 = s2.length !== e3.length, e3 = e3.substring(r2.raw.length);
+        } else if (r2 = this.tokenizer.text(e3)) {
+          e3 = e3.substring(r2.raw.length);
+          let n3 = t2.at(-1);
+          "text" === (n3 == null ? void 0 : n3.type) ? (n3.raw += (n3.raw.endsWith("\n") ? "" : "\n") + r2.raw, n3.text += "\n" + r2.text, this.inlineQueue.pop(), this.inlineQueue.at(-1).src = n3.text) : t2.push(r2);
+        } else if (e3) {
+          let t3 = "Infinite loop on byte: " + e3.charCodeAt(0);
+          if (this.options.silent) {
+            formatAppLog("error", "at node_modules/uview-plus/components/u-markdown/marked.esm.js:7", t3);
+            break;
+          }
+          throw new Error(t3);
+        }
+      }
+      return this.state.top = true, t2;
+    }
+    inline(e3, t2 = []) {
+      return this.inlineQueue.push({ src: e3, tokens: t2 }), t2;
+    }
+    inlineTokens(e3, t2 = []) {
+      var _a2, _b, _c;
+      let n2 = e3, r2 = null;
+      if (this.tokens.links) {
+        let e4 = Object.keys(this.tokens.links);
+        if (e4.length > 0)
+          for (; null != (r2 = this.tokenizer.rules.inline.reflinkSearch.exec(n2)); )
+            e4.includes(r2[0].slice(r2[0].lastIndexOf("[") + 1, -1)) && (n2 = n2.slice(0, r2.index) + "[" + "a".repeat(r2[0].length - 2) + "]" + n2.slice(this.tokenizer.rules.inline.reflinkSearch.lastIndex));
+      }
+      for (; null != (r2 = this.tokenizer.rules.inline.anyPunctuation.exec(n2)); )
+        n2 = n2.slice(0, r2.index) + "++" + n2.slice(this.tokenizer.rules.inline.anyPunctuation.lastIndex);
+      for (; null != (r2 = this.tokenizer.rules.inline.blockSkip.exec(n2)); )
+        n2 = n2.slice(0, r2.index) + "[" + "a".repeat(r2[0].length - 2) + "]" + n2.slice(this.tokenizer.rules.inline.blockSkip.lastIndex);
+      let s2 = false, l2 = "";
+      for (; e3; ) {
+        let r3;
+        if (s2 || (l2 = ""), s2 = false, (_b = (_a2 = this.options.extensions) == null ? void 0 : _a2.inline) == null ? void 0 : _b.some((n3) => !!(r3 = n3.call({ lexer: this }, e3, t2)) && (e3 = e3.substring(r3.raw.length), t2.push(r3), true)))
+          continue;
+        if (r3 = this.tokenizer.escape(e3)) {
+          e3 = e3.substring(r3.raw.length), t2.push(r3);
+          continue;
+        }
+        if (r3 = this.tokenizer.tag(e3)) {
+          e3 = e3.substring(r3.raw.length), t2.push(r3);
+          continue;
+        }
+        if (r3 = this.tokenizer.link(e3)) {
+          e3 = e3.substring(r3.raw.length), t2.push(r3);
+          continue;
+        }
+        if (r3 = this.tokenizer.reflink(e3, this.tokens.links)) {
+          e3 = e3.substring(r3.raw.length);
+          let n3 = t2.at(-1);
+          "text" === r3.type && "text" === (n3 == null ? void 0 : n3.type) ? (n3.raw += r3.raw, n3.text += r3.text) : t2.push(r3);
+          continue;
+        }
+        if (r3 = this.tokenizer.emStrong(e3, n2, l2)) {
+          e3 = e3.substring(r3.raw.length), t2.push(r3);
+          continue;
+        }
+        if (r3 = this.tokenizer.codespan(e3)) {
+          e3 = e3.substring(r3.raw.length), t2.push(r3);
+          continue;
+        }
+        if (r3 = this.tokenizer.br(e3)) {
+          e3 = e3.substring(r3.raw.length), t2.push(r3);
+          continue;
+        }
+        if (r3 = this.tokenizer.del(e3)) {
+          e3 = e3.substring(r3.raw.length), t2.push(r3);
+          continue;
+        }
+        if (r3 = this.tokenizer.autolink(e3)) {
+          e3 = e3.substring(r3.raw.length), t2.push(r3);
+          continue;
+        }
+        if (!this.state.inLink && (r3 = this.tokenizer.url(e3))) {
+          e3 = e3.substring(r3.raw.length), t2.push(r3);
+          continue;
+        }
+        let i2 = e3;
+        if ((_c = this.options.extensions) == null ? void 0 : _c.startInline) {
+          let t3, n3 = 1 / 0, r4 = e3.slice(1);
+          this.options.extensions.startInline.forEach((e4) => {
+            t3 = e4.call({ lexer: this }, r4), "number" == typeof t3 && t3 >= 0 && (n3 = Math.min(n3, t3));
+          }), n3 < 1 / 0 && n3 >= 0 && (i2 = e3.substring(0, n3 + 1));
+        }
+        if (r3 = this.tokenizer.inlineText(i2)) {
+          e3 = e3.substring(r3.raw.length), "_" !== r3.raw.slice(-1) && (l2 = r3.raw.slice(-1)), s2 = true;
+          let n3 = t2.at(-1);
+          "text" === (n3 == null ? void 0 : n3.type) ? (n3.raw += r3.raw, n3.text += r3.text) : t2.push(r3);
+        } else if (e3) {
+          let t3 = "Infinite loop on byte: " + e3.charCodeAt(0);
+          if (this.options.silent) {
+            formatAppLog("error", "at node_modules/uview-plus/components/u-markdown/marked.esm.js:7", t3);
+            break;
+          }
+          throw new Error(t3);
+        }
+      }
+      return t2;
+    }
+  }, le = class {
+    constructor(e2) {
+      __publicField(this, "options");
+      __publicField(this, "parser");
+      this.options = e2 || t;
+    }
+    space(e2) {
+      return "";
+    }
+    code({ text: e2, lang: t2, escaped: n2 }) {
+      var _a2;
+      let r2 = (_a2 = (t2 || "").match(l.notSpaceStart)) == null ? void 0 : _a2[0], s2 = e2.replace(l.endingNewline, "") + "\n";
+      return r2 ? '<pre><code class="language-' + V(r2) + '">' + (n2 ? s2 : V(s2, true)) + "</code></pre>\n" : "<pre><code>" + (n2 ? s2 : V(s2, true)) + "</code></pre>\n";
+    }
+    blockquote({ tokens: e2 }) {
+      return `<blockquote>
+${this.parser.parse(e2)}</blockquote>
+`;
+    }
+    html({ text: e2 }) {
+      return e2;
+    }
+    heading({ tokens: e2, depth: t2 }) {
+      return `<h${t2}>${this.parser.parseInline(e2)}</h${t2}>
+`;
+    }
+    hr(e2) {
+      return "<hr>\n";
+    }
+    list(e2) {
+      let t2 = e2.ordered, n2 = e2.start, r2 = "";
+      for (let t3 = 0; t3 < e2.items.length; t3++) {
+        let n3 = e2.items[t3];
+        r2 += this.listitem(n3);
+      }
+      let s2 = t2 ? "ol" : "ul";
+      return "<" + s2 + (t2 && 1 !== n2 ? ' start="' + n2 + '"' : "") + ">\n" + r2 + "</" + s2 + ">\n";
+    }
+    listitem(e2) {
+      var _a2;
+      let t2 = "";
+      if (e2.task) {
+        let n2 = this.checkbox({ checked: !!e2.checked });
+        e2.loose ? "paragraph" === ((_a2 = e2.tokens[0]) == null ? void 0 : _a2.type) ? (e2.tokens[0].text = n2 + " " + e2.tokens[0].text, e2.tokens[0].tokens && e2.tokens[0].tokens.length > 0 && "text" === e2.tokens[0].tokens[0].type && (e2.tokens[0].tokens[0].text = n2 + " " + V(e2.tokens[0].tokens[0].text), e2.tokens[0].tokens[0].escaped = true)) : e2.tokens.unshift({ type: "text", raw: n2 + " ", text: n2 + " ", escaped: true }) : t2 += n2 + " ";
+      }
+      return t2 += this.parser.parse(e2.tokens, !!e2.loose), `<li>${t2}</li>
+`;
+    }
+    checkbox({ checked: e2 }) {
+      return "<input " + (e2 ? 'checked="" ' : "") + 'disabled="" type="checkbox">';
+    }
+    paragraph({ tokens: e2 }) {
+      return `<p>${this.parser.parseInline(e2)}</p>
+`;
+    }
+    table(e2) {
+      let t2 = "", n2 = "";
+      for (let t3 = 0; t3 < e2.header.length; t3++)
+        n2 += this.tablecell(e2.header[t3]);
+      t2 += this.tablerow({ text: n2 });
+      let r2 = "";
+      for (let t3 = 0; t3 < e2.rows.length; t3++) {
+        let s2 = e2.rows[t3];
+        n2 = "";
+        for (let e3 = 0; e3 < s2.length; e3++)
+          n2 += this.tablecell(s2[e3]);
+        r2 += this.tablerow({ text: n2 });
+      }
+      return r2 && (r2 = `<tbody>${r2}</tbody>`), "<table>\n<thead>\n" + t2 + "</thead>\n" + r2 + "</table>\n";
+    }
+    tablerow({ text: e2 }) {
+      return `<tr>
+${e2}</tr>
+`;
+    }
+    tablecell(e2) {
+      let t2 = this.parser.parseInline(e2.tokens), n2 = e2.header ? "th" : "td";
+      return (e2.align ? `<${n2} align="${e2.align}">` : `<${n2}>`) + t2 + `</${n2}>
+`;
+    }
+    strong({ tokens: e2 }) {
+      return `<strong>${this.parser.parseInline(e2)}</strong>`;
+    }
+    em({ tokens: e2 }) {
+      return `<em>${this.parser.parseInline(e2)}</em>`;
+    }
+    codespan({ text: e2 }) {
+      return `<code>${V(e2, true)}</code>`;
+    }
+    br(e2) {
+      return "<br>";
+    }
+    del({ tokens: e2 }) {
+      return `<del>${this.parser.parseInline(e2)}</del>`;
+    }
+    link({ href: e2, title: t2, tokens: n2 }) {
+      let r2 = this.parser.parseInline(n2), s2 = Y(e2);
+      if (null === s2)
+        return r2;
+      let l2 = '<a href="' + (e2 = s2) + '"';
+      return t2 && (l2 += ' title="' + V(t2) + '"'), l2 += ">" + r2 + "</a>", l2;
+    }
+    image({ href: e2, title: t2, text: n2, tokens: r2 }) {
+      r2 && (n2 = this.parser.parseInline(r2, this.parser.textRenderer));
+      let s2 = Y(e2);
+      if (null === s2)
+        return V(n2);
+      let l2 = `<img src="${e2 = s2}" alt="${n2}"`;
+      return t2 && (l2 += ` title="${V(t2)}"`), l2 += ">", l2;
+    }
+    text(e2) {
+      return "tokens" in e2 && e2.tokens ? this.parser.parseInline(e2.tokens) : "escaped" in e2 && e2.escaped ? e2.text : V(e2.text);
+    }
+  }, ie = class {
+    strong({ text: e2 }) {
+      return e2;
+    }
+    em({ text: e2 }) {
+      return e2;
+    }
+    codespan({ text: e2 }) {
+      return e2;
+    }
+    del({ text: e2 }) {
+      return e2;
+    }
+    html({ text: e2 }) {
+      return e2;
+    }
+    text({ text: e2 }) {
+      return e2;
+    }
+    link({ text: e2 }) {
+      return "" + e2;
+    }
+    image({ text: e2 }) {
+      return "" + e2;
+    }
+    br() {
+      return "";
+    }
+  }, ae = class e2 {
+    constructor(e3) {
+      __publicField(this, "options");
+      __publicField(this, "renderer");
+      __publicField(this, "textRenderer");
+      this.options = e3 || t, this.options.renderer = this.options.renderer || new le(), this.renderer = this.options.renderer, this.renderer.options = this.options, this.renderer.parser = this, this.textRenderer = new ie();
+    }
+    static parse(t2, n2) {
+      return new e2(n2).parse(t2);
+    }
+    static parseInline(t2, n2) {
+      return new e2(n2).parseInline(t2);
+    }
+    parse(e3, t2 = true) {
+      var _a2, _b;
+      let n2 = "";
+      for (let r2 = 0; r2 < e3.length; r2++) {
+        let s2 = e3[r2];
+        if ((_b = (_a2 = this.options.extensions) == null ? void 0 : _a2.renderers) == null ? void 0 : _b[s2.type]) {
+          let e4 = s2, t3 = this.options.extensions.renderers[e4.type].call({ parser: this }, e4);
+          if (false !== t3 || !["space", "hr", "heading", "code", "table", "blockquote", "list", "html", "paragraph", "text"].includes(e4.type)) {
+            n2 += t3 || "";
+            continue;
+          }
+        }
+        let l2 = s2;
+        switch (l2.type) {
+          case "space":
+            n2 += this.renderer.space(l2);
+            continue;
+          case "hr":
+            n2 += this.renderer.hr(l2);
+            continue;
+          case "heading":
+            n2 += this.renderer.heading(l2);
+            continue;
+          case "code":
+            n2 += this.renderer.code(l2);
+            continue;
+          case "table":
+            n2 += this.renderer.table(l2);
+            continue;
+          case "blockquote":
+            n2 += this.renderer.blockquote(l2);
+            continue;
+          case "list":
+            n2 += this.renderer.list(l2);
+            continue;
+          case "html":
+            n2 += this.renderer.html(l2);
+            continue;
+          case "paragraph":
+            n2 += this.renderer.paragraph(l2);
+            continue;
+          case "text": {
+            let s3 = l2, i2 = this.renderer.text(s3);
+            for (; r2 + 1 < e3.length && "text" === e3[r2 + 1].type; )
+              s3 = e3[++r2], i2 += "\n" + this.renderer.text(s3);
+            n2 += t2 ? this.renderer.paragraph({ type: "paragraph", raw: i2, text: i2, tokens: [{ type: "text", raw: i2, text: i2, escaped: true }] }) : i2;
+            continue;
+          }
+          default: {
+            let e4 = 'Token with "' + l2.type + '" type was not found.';
+            if (this.options.silent)
+              return formatAppLog("error", "at node_modules/uview-plus/components/u-markdown/marked.esm.js:7", e4), "";
+            throw new Error(e4);
+          }
+        }
+      }
+      return n2;
+    }
+    parseInline(e3, t2 = this.renderer) {
+      var _a2, _b;
+      let n2 = "";
+      for (let r2 = 0; r2 < e3.length; r2++) {
+        let s2 = e3[r2];
+        if ((_b = (_a2 = this.options.extensions) == null ? void 0 : _a2.renderers) == null ? void 0 : _b[s2.type]) {
+          let e4 = this.options.extensions.renderers[s2.type].call({ parser: this }, s2);
+          if (false !== e4 || !["escape", "html", "link", "image", "strong", "em", "codespan", "br", "del", "text"].includes(s2.type)) {
+            n2 += e4 || "";
+            continue;
+          }
+        }
+        let l2 = s2;
+        switch (l2.type) {
+          case "escape":
+          case "text":
+            n2 += t2.text(l2);
+            break;
+          case "html":
+            n2 += t2.html(l2);
+            break;
+          case "link":
+            n2 += t2.link(l2);
+            break;
+          case "image":
+            n2 += t2.image(l2);
+            break;
+          case "strong":
+            n2 += t2.strong(l2);
+            break;
+          case "em":
+            n2 += t2.em(l2);
+            break;
+          case "codespan":
+            n2 += t2.codespan(l2);
+            break;
+          case "br":
+            n2 += t2.br(l2);
+            break;
+          case "del":
+            n2 += t2.del(l2);
+            break;
+          default: {
+            let e4 = 'Token with "' + l2.type + '" type was not found.';
+            if (this.options.silent)
+              return formatAppLog("error", "at node_modules/uview-plus/components/u-markdown/marked.esm.js:7", e4), "";
+            throw new Error(e4);
+          }
+        }
+      }
+      return n2;
+    }
+  }, oe = (_a = class {
+    constructor(e2) {
+      __publicField(this, "options");
+      __publicField(this, "block");
+      this.options = e2 || t;
+    }
+    preprocess(e2) {
+      return e2;
+    }
+    postprocess(e2) {
+      return e2;
+    }
+    processAllTokens(e2) {
+      return e2;
+    }
+    provideLexer() {
+      return this.block ? se.lex : se.lexInline;
+    }
+    provideParser() {
+      return this.block ? ae.parse : ae.parseInline;
+    }
+  }, __publicField(_a, "passThroughHooks", /* @__PURE__ */ new Set(["preprocess", "postprocess", "processAllTokens"])), _a), ce = class {
+    constructor(...e2) {
+      __publicField(this, "defaults", { async: false, breaks: false, extensions: null, gfm: true, hooks: null, pedantic: false, renderer: null, silent: false, tokenizer: null, walkTokens: null });
+      __publicField(this, "options", this.setOptions);
+      __publicField(this, "parse", this.parseMarkdown(true));
+      __publicField(this, "parseInline", this.parseMarkdown(false));
+      __publicField(this, "Parser", ae);
+      __publicField(this, "Renderer", le);
+      __publicField(this, "TextRenderer", ie);
+      __publicField(this, "Lexer", se);
+      __publicField(this, "Tokenizer", re);
+      __publicField(this, "Hooks", oe);
+      this.use(...e2);
+    }
+    walkTokens(e2, t2) {
+      var _a2, _b;
+      let n2 = [];
+      for (let r2 of e2)
+        switch (n2 = n2.concat(t2.call(this, r2)), r2.type) {
+          case "table": {
+            let e3 = r2;
+            for (let r3 of e3.header)
+              n2 = n2.concat(this.walkTokens(r3.tokens, t2));
+            for (let r3 of e3.rows)
+              for (let e4 of r3)
+                n2 = n2.concat(this.walkTokens(e4.tokens, t2));
+            break;
+          }
+          case "list": {
+            let e3 = r2;
+            n2 = n2.concat(this.walkTokens(e3.items, t2));
+            break;
+          }
+          default: {
+            let e3 = r2;
+            ((_b = (_a2 = this.defaults.extensions) == null ? void 0 : _a2.childTokens) == null ? void 0 : _b[e3.type]) ? this.defaults.extensions.childTokens[e3.type].forEach((r3) => {
+              let s2 = e3[r3].flat(1 / 0);
+              n2 = n2.concat(this.walkTokens(s2, t2));
+            }) : e3.tokens && (n2 = n2.concat(this.walkTokens(e3.tokens, t2)));
+          }
+        }
+      return n2;
+    }
+    use(...e2) {
+      let t2 = this.defaults.extensions || { renderers: {}, childTokens: {} };
+      return e2.forEach((e3) => {
+        let n2 = { ...e3 };
+        if (n2.async = this.defaults.async || n2.async || false, e3.extensions && (e3.extensions.forEach((e4) => {
+          if (!e4.name)
+            throw new Error("extension name required");
+          if ("renderer" in e4) {
+            let n3 = t2.renderers[e4.name];
+            t2.renderers[e4.name] = n3 ? function(...t3) {
+              let r2 = e4.renderer.apply(this, t3);
+              return false === r2 && (r2 = n3.apply(this, t3)), r2;
+            } : e4.renderer;
+          }
+          if ("tokenizer" in e4) {
+            if (!e4.level || "block" !== e4.level && "inline" !== e4.level)
+              throw new Error("extension level must be 'block' or 'inline'");
+            let n3 = t2[e4.level];
+            n3 ? n3.unshift(e4.tokenizer) : t2[e4.level] = [e4.tokenizer], e4.start && ("block" === e4.level ? t2.startBlock ? t2.startBlock.push(e4.start) : t2.startBlock = [e4.start] : "inline" === e4.level && (t2.startInline ? t2.startInline.push(e4.start) : t2.startInline = [e4.start]));
+          }
+          "childTokens" in e4 && e4.childTokens && (t2.childTokens[e4.name] = e4.childTokens);
+        }), n2.extensions = t2), e3.renderer) {
+          let t3 = this.defaults.renderer || new le(this.defaults);
+          for (let n3 in e3.renderer) {
+            if (!(n3 in t3))
+              throw new Error(`renderer '${n3}' does not exist`);
+            if (["options", "parser"].includes(n3))
+              continue;
+            let r2 = n3, s2 = e3.renderer[r2], l2 = t3[r2];
+            t3[r2] = (...e4) => {
+              let n4 = s2.apply(t3, e4);
+              return false === n4 && (n4 = l2.apply(t3, e4)), n4 || "";
+            };
+          }
+          n2.renderer = t3;
+        }
+        if (e3.tokenizer) {
+          let t3 = this.defaults.tokenizer || new re(this.defaults);
+          for (let n3 in e3.tokenizer) {
+            if (!(n3 in t3))
+              throw new Error(`tokenizer '${n3}' does not exist`);
+            if (["options", "rules", "lexer"].includes(n3))
+              continue;
+            let r2 = n3, s2 = e3.tokenizer[r2], l2 = t3[r2];
+            t3[r2] = (...e4) => {
+              let n4 = s2.apply(t3, e4);
+              return false === n4 && (n4 = l2.apply(t3, e4)), n4;
+            };
+          }
+          n2.tokenizer = t3;
+        }
+        if (e3.hooks) {
+          let t3 = this.defaults.hooks || new oe();
+          for (let n3 in e3.hooks) {
+            if (!(n3 in t3))
+              throw new Error(`hook '${n3}' does not exist`);
+            if (["options", "block"].includes(n3))
+              continue;
+            let r2 = n3, s2 = e3.hooks[r2], l2 = t3[r2];
+            oe.passThroughHooks.has(n3) ? t3[r2] = (e4) => {
+              if (this.defaults.async)
+                return Promise.resolve(s2.call(t3, e4)).then((e5) => l2.call(t3, e5));
+              let n4 = s2.call(t3, e4);
+              return l2.call(t3, n4);
+            } : t3[r2] = (...e4) => {
+              let n4 = s2.apply(t3, e4);
+              return false === n4 && (n4 = l2.apply(t3, e4)), n4;
+            };
+          }
+          n2.hooks = t3;
+        }
+        if (e3.walkTokens) {
+          let t3 = this.defaults.walkTokens, r2 = e3.walkTokens;
+          n2.walkTokens = function(e4) {
+            let n3 = [];
+            return n3.push(r2.call(this, e4)), t3 && (n3 = n3.concat(t3.call(this, e4))), n3;
+          };
+        }
+        this.defaults = { ...this.defaults, ...n2 };
+      }), this;
+    }
+    setOptions(e2) {
+      return this.defaults = { ...this.defaults, ...e2 }, this;
+    }
+    lexer(e2, t2) {
+      return se.lex(e2, t2 ?? this.defaults);
+    }
+    parser(e2, t2) {
+      return ae.parse(e2, t2 ?? this.defaults);
+    }
+    parseMarkdown(e2) {
+      return (t2, n2) => {
+        let r2 = { ...n2 }, s2 = { ...this.defaults, ...r2 }, l2 = this.onError(!!s2.silent, !!s2.async);
+        if (true === this.defaults.async && false === r2.async)
+          return l2(new Error("marked(): The async option was set to true by an extension. Remove async: false from the parse options object to return a Promise."));
+        if (typeof t2 > "u" || null === t2)
+          return l2(new Error("marked(): input parameter is undefined or null"));
+        if ("string" != typeof t2)
+          return l2(new Error("marked(): input parameter is of type " + Object.prototype.toString.call(t2) + ", string expected"));
+        s2.hooks && (s2.hooks.options = s2, s2.hooks.block = e2);
+        let i2 = s2.hooks ? s2.hooks.provideLexer() : e2 ? se.lex : se.lexInline, a2 = s2.hooks ? s2.hooks.provideParser() : e2 ? ae.parse : ae.parseInline;
+        if (s2.async)
+          return Promise.resolve(s2.hooks ? s2.hooks.preprocess(t2) : t2).then((e3) => i2(e3, s2)).then((e3) => s2.hooks ? s2.hooks.processAllTokens(e3) : e3).then((e3) => s2.walkTokens ? Promise.all(this.walkTokens(e3, s2.walkTokens)).then(() => e3) : e3).then((e3) => a2(e3, s2)).then((e3) => s2.hooks ? s2.hooks.postprocess(e3) : e3).catch(l2);
+        try {
+          s2.hooks && (t2 = s2.hooks.preprocess(t2));
+          let e3 = i2(t2, s2);
+          s2.hooks && (e3 = s2.hooks.processAllTokens(e3)), s2.walkTokens && this.walkTokens(e3, s2.walkTokens);
+          let n3 = a2(e3, s2);
+          return s2.hooks && (n3 = s2.hooks.postprocess(n3)), n3;
+        } catch (e3) {
+          return l2(e3);
+        }
+      };
+    }
+    onError(e2, t2) {
+      return (n2) => {
+        if (n2.message += "\nPlease report this to https://github.com/markedjs/marked.", e2) {
+          let e3 = "<p>An error occurred:</p><pre>" + V(n2.message + "", true) + "</pre>";
+          return t2 ? Promise.resolve(e3) : e3;
+        }
+        if (t2)
+          return Promise.reject(n2);
+        throw n2;
+      };
+    }
+  }, he = new ce();
+  function pe(e2, t2) {
+    return he.parse(e2, t2);
+  }
+  pe.options = pe.setOptions = function(e2) {
+    return he.setOptions(e2), pe.defaults = he.defaults, n(pe.defaults), pe;
+  }, pe.getDefaults = e$1, pe.defaults = t, pe.use = function(...e2) {
+    return he.use(...e2), pe.defaults = he.defaults, n(pe.defaults), pe;
+  }, pe.walkTokens = function(e2, t2) {
+    return he.walkTokens(e2, t2);
+  }, pe.parseInline = he.parseInline, pe.Parser = ae, pe.parser = ae.parse, pe.Renderer = le, pe.TextRenderer = ie, pe.Lexer = se, pe.lexer = se.lex, pe.Tokenizer = re, pe.Hooks = oe, pe.parse = pe;
+  pe.options;
+  pe.setOptions;
+  pe.use;
+  pe.walkTokens;
+  pe.parseInline;
+  ae.parse;
+  se.lex;
+  const _sfc_main$2n = {
+    name: "up-markdown",
+    props: {
+      // markdown内容
+      content: {
+        type: String,
+        default: ""
+      },
+      // 是否启用图片预览
+      previewImg: {
+        type: Boolean,
+        default: true
+      },
+      // 是否显示代码块行号
+      showLineNumber: {
+        type: Boolean,
+        default: false
+      },
+      // 主题样式 'light' | 'dark'
+      theme: {
+        type: String,
+        default: "light"
+      }
+    },
+    data() {
+      return {
+        parsedContent: ""
+      };
+    },
+    watch: {
+      content: {
+        handler(newVal) {
+          this.parseMarkdown(newVal);
+        },
+        immediate: true
+      }
+    },
+    methods: {
+      // 解析markdown内容
+      parseMarkdown(content) {
+        if (!content) {
+          this.parsedContent = "";
+          return;
+        }
+        let parsed = pe(content);
+        parsed = this.handleCodeBlock(parsed);
+        parsed = this.applyTheme(parsed);
+        this.parsedContent = parsed;
+      },
+      // 处理代码块
+      handleCodeBlock(html2) {
+        return html2.replace(/<pre><code([^>]*)>([^<]+)<\/code><\/pre>/g, (match2, lang, code2) => {
+          const language = lang.match(/class="language-([^"]+)"/);
+          const langClass = language ? `language-${language[1]}` : "";
+          let result = `<pre class="up-markdown-code ${langClass}">`;
+          if (this.showLineNumber) {
+            const lines = code2.split("\n").filter((line) => line.trim() !== "");
+            result += '<span class="up-markdown-line-numbers">';
+            lines.push("");
+            lines.forEach((_2, index2) => {
+              result += `<span class="up-markdown-line-number">${index2 + 1}</span>`;
+            });
+            result += "</span>";
+          }
+          result += `<code class='code-lang ${langClass}'>${code2}</code></pre>`;
+          return result;
+        });
+      },
+      // 应用主题样式
+      applyTheme(html2) {
+        return html2;
+      }
+    }
+  };
+  function _sfc_render$2m(_ctx, _cache, $props, $setup, $data, $options) {
+    const _component_up_parse = resolveEasycom(vue.resolveDynamicComponent("up-parse"), __easycom_0$c);
+    return vue.openBlock(), vue.createElementBlock(
+      "view",
+      {
+        class: vue.normalizeClass(["up-markdown", $props.theme])
+      },
+      [
+        vue.createVNode(_component_up_parse, {
+          content: $data.parsedContent,
+          previewImg: $props.previewImg
+        }, null, 8, ["content", "previewImg"])
+      ],
+      2
+      /* CLASS */
+    );
+  }
+  const __easycom_1$f = /* @__PURE__ */ _export_sfc(_sfc_main$2n, [["render", _sfc_render$2m], ["__scopeId", "data-v-40656870"], ["__file", "D:/uniapp2023/studyParty/node_modules/uview-plus/components/u-markdown/u-markdown.vue"]]);
+  const __vite_glob_0_65 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+    __proto__: null,
+    default: __easycom_1$f
+  }, Symbol.toStringTag, { value: "Module" }));
+  const _sfc_main$2m = {
+    name: "ArticleDetail",
+    data() {
+      return {
+        articleId: 0,
+        commentContent: "",
+        comments: [],
+        isInputFocused: false,
+        keyboardHeight: 0,
+        // 新增键盘高度变量
+        selectedImages: []
+        // 新增图片选择数组
+      };
+    },
+    computed: {
+      ...mapState("article", ["currentArticle"]),
+      article() {
+        return this.currentArticle || {};
+      },
+      // 计算评论输入框的底部位置
+      commentInputBottom() {
+        return this.keyboardHeight > 0 ? this.keyboardHeight + "px" : "0px";
+      }
+    },
+    methods: {
+      ...mapActions("article", ["articleById", "niceArticle", "collectArticle"]),
+      ...mapActions("articleComment", ["getArticleComment", "addArticleComment"]),
+      // 返回上一页
+      goBack() {
+        uni.navigateBack();
+      },
+      // 完整图片URL
+      fullImageUrl(path2) {
+        if (!path2 || typeof path2 !== "string")
+          return "";
+        if (path2.startsWith("http")) {
+          return path2;
+        }
+        return imageUrl + path2;
+      },
+      // 格式化时间
+      formatTime(timeStr) {
+        const date3 = new Date(timeStr);
+        const now = /* @__PURE__ */ new Date();
+        const diff = now - date3;
+        const minutes = Math.floor(diff / (1e3 * 60));
+        const hours = Math.floor(diff / (1e3 * 60 * 60));
+        const days = Math.floor(diff / (1e3 * 60 * 60 * 24));
+        if (minutes < 1) {
+          return "刚刚";
+        } else if (minutes < 60) {
+          return `${minutes}分钟前`;
+        } else if (hours < 24) {
+          return `${hours}小时前`;
+        } else if (days < 30) {
+          return `${days}天前`;
+        } else {
+          return `${date3.getFullYear()}-${date3.getMonth() + 1}-${date3.getDate()}`;
+        }
+      },
+      // 格式化评论时间
+      formatCommentTime(timeStr) {
+        const date3 = new Date(timeStr);
+        return `${date3.getFullYear()}-${date3.getMonth() + 1}-${date3.getDate()} ${date3.getHours()}:${String(date3.getMinutes()).padStart(2, "0")}`;
+      },
+      // 获取文章详情
+      async getArticleDetail() {
+        try {
+          uni.showLoading({
+            title: "加载中..."
+          });
+          await this.articleById({ articleId: this.articleId });
+          await this.loadComments();
+        } catch (error2) {
+          formatAppLog("error", "at pages/forum/articleDetail.vue:284", "获取文章详情失败:", error2);
+          uni.showToast({
+            title: "获取文章详情失败",
+            icon: "none"
+          });
+        } finally {
+          uni.hideLoading();
+        }
+      },
+      // 加载评论
+      async loadComments() {
+        try {
+          const res2 = await this.getArticleComment({
+            articleId: this.articleId,
+            currentPage: 1
+          });
+          if (res2.code === 200) {
+            if (res2.data && res2.data.records) {
+              this.comments = res2.data.records;
+            } else {
+              this.comments = [];
+            }
+          }
+        } catch (error2) {
+          formatAppLog("error", "at pages/forum/articleDetail.vue:310", "获取评论失败:", error2);
+          uni.showToast({
+            title: "获取评论失败",
+            icon: "none"
+          });
+        }
+      },
+      // 切换点赞状态
+      async toggleLike() {
+        try {
+          const res2 = await this.niceArticle(this.articleId);
+          if (res2.code === 200) {
+            if (res2.data === "取消点赞") {
+              this.currentArticle.isNice = false;
+              this.currentArticle.nice -= 1;
+            } else if (res2.data === "点赞成功") {
+              this.currentArticle.isNice = true;
+              this.currentArticle.nice += 1;
+            }
+          }
+        } catch (error2) {
+          formatAppLog("error", "at pages/forum/articleDetail.vue:334", "点赞操作失败:", error2);
+          uni.$u.toast("操作失败");
+        }
+      },
+      // 切换收藏状态
+      async toggleCollect() {
+        try {
+          const res2 = await this.collectArticle(this.articleId);
+          if (res2.code === 200) {
+            if (res2.data === "取消收藏") {
+              this.currentArticle.isCollect = false;
+              this.currentArticle.collect -= 1;
+            } else if (res2.data === "收藏成功") {
+              this.currentArticle.isCollect = true;
+              this.currentArticle.collect += 1;
+            }
+          }
+        } catch (error2) {
+          formatAppLog("error", "at pages/forum/articleDetail.vue:355", "收藏操作失败:", error2);
+          uni.$u.toast("操作失败");
+        }
+      },
+      // 选择图片
+      selectImages() {
+        uni.chooseImage({
+          count: 9,
+          // 最多可以选择9张图片
+          sizeType: ["original", "compressed"],
+          // 可以指定是原图还是压缩图
+          sourceType: ["album", "camera"],
+          // 可以指定来源是相册还是相机
+          success: (res2) => {
+            this.selectedImages = [...this.selectedImages, ...res2.tempFilePaths];
+            if (this.selectedImages.length > 9) {
+              this.selectedImages = this.selectedImages.slice(0, 9);
+            }
+          },
+          fail: (err) => {
+            formatAppLog("error", "at pages/forum/articleDetail.vue:375", "选择图片失败:", err);
+            uni.$u.toast("选择图片失败");
+          }
+        });
+      },
+      // 移除选中的图片
+      removeImage(index2) {
+        this.selectedImages.splice(index2, 1);
+      },
+      // 提交评论（使用uni.uploadFile的files参数）
+      async submitComment() {
+        if (!this.commentContent.trim() && this.selectedImages.length === 0) {
+          uni.$u.toast("请输入评论内容或选择图片");
+          return;
+        }
+        try {
+          if (this.selectedImages.length > 0) {
+            uni.showLoading({
+              title: "提交评论中..."
+            });
+            const formData = {
+              articleId: this.articleId.toString(),
+              // 确保articleId是字符串
+              content: this.commentContent || ""
+              // 确保content是字符串
+            };
+            var files = [];
+            formatAppLog("log", "at pages/forum/articleDetail.vue:406", this.selectedImages);
+            for (let i2 = 0; i2 < this.selectedImages.length; i2++) {
+              files.push({
+                name: "sources",
+                uri: this.selectedImages[i2]
+              });
+            }
+            formatAppLog("log", "at pages/forum/articleDetail.vue:413", files);
+            const result = await new Promise((resolve, reject) => {
+              uni.uploadFile({
+                url: baseUrl + "/article/articleComment/addArticleComment",
+                files,
+                formData,
+                header: {
+                  "Authorization": `${uni.getStorageSync("token")}`
+                },
+                success: (res2) => {
+                  formatAppLog("log", "at pages/forum/articleDetail.vue:425", res2);
+                  if (res2.statusCode === 200) {
+                    let data2;
+                    try {
+                      data2 = typeof res2.data === "string" ? JSON.parse(res2.data) : res2.data;
+                    } catch (e2) {
+                      data2 = res2.data;
+                    }
+                    resolve({
+                      success: true,
+                      data: data2,
+                      statusCode: res2.statusCode
+                    });
+                  } else {
+                    reject({
+                      success: false,
+                      message: `HTTP ${res2.statusCode}`,
+                      statusCode: res2.statusCode,
+                      data: res2.data
+                    });
+                  }
+                },
+                fail: (err) => {
+                  formatAppLog("log", "at pages/forum/articleDetail.vue:448", err);
+                  reject({
+                    success: false,
+                    message: err.errMsg || "上传失败",
+                    code: err.errCode || -1
+                  });
+                }
+              });
+            });
+            formatAppLog("log", "at pages/forum/articleDetail.vue:457", result);
+            if (result.success && result.statusCode === 200) {
+              uni.showToast({
+                title: "评论成功",
+                icon: "success"
+              });
+              this.commentContent = "";
+              this.selectedImages = [];
+              await this.loadComments();
+              this.currentArticle.commentCount += 1;
+            } else {
+              throw new Error(result.message || "上传失败");
+            }
+          } else {
+            const res2 = await this.addArticleComment({
+              articleId: this.articleId,
+              content: this.commentContent
+            });
+            if (res2.code === 200) {
+              uni.$u.toast("评论成功");
+              this.commentContent = "";
+              this.selectedImages = [];
+              await this.loadComments();
+              this.currentArticle.commentCount += 1;
+            } else {
+              throw new Error(res2.msg || "提交失败");
+            }
+          }
+        } catch (error2) {
+          formatAppLog("error", "at pages/forum/articleDetail.vue:495", "提交评论失败:", error2);
+          uni.showToast({
+            title: error2.message || "提交评论失败",
+            icon: "none"
+          });
+        } finally {
+          uni.hideLoading();
+        }
+      },
+      // 切换评论点赞状态
+      async toggleCommentLike(comment) {
+        try {
+          uni.$u.toast("评论点赞功能待实现");
+        } catch (error2) {
+          formatAppLog("error", "at pages/forum/articleDetail.vue:512", "评论点赞操作失败:", error2);
+          uni.$u.toast("操作失败");
+        }
+      },
+      // 预览图片
+      previewImage(imgPath) {
+        uni.previewImage({
+          urls: [this.fullImageUrl(imgPath)]
+        });
+      },
+      // 聚焦评论输入框
+      focusCommentInput() {
+        this.isInputFocused = true;
+        this.$nextTick(() => {
+          this.$refs.commentInput.focus();
+        });
+      },
+      // 监听键盘高度变化
+      onKeyboardHeightChange(res2) {
+        this.keyboardHeight = res2.height;
+      }
+    },
+    async onLoad(options2) {
+      if (options2.id) {
+        this.articleId = parseInt(options2.id);
+        await this.getArticleDetail();
+      } else {
+        uni.showToast({
+          title: "参数错误",
+          icon: "none"
+        });
+        uni.navigateBack();
+      }
+    },
+    // 页面显示时监听键盘高度变化
+    onShow() {
+      uni.onKeyboardHeightChange(this.onKeyboardHeightChange);
+    },
+    // 页面隐藏时取消监听
+    onHide() {
+      uni.offKeyboardHeightChange(this.onKeyboardHeightChange);
+    },
+    // 页面卸载时取消监听
+    onUnload() {
+      uni.offKeyboardHeightChange(this.onKeyboardHeightChange);
+    }
+  };
+  function _sfc_render$2l(_ctx, _cache, $props, $setup, $data, $options) {
+    const _component_u_icon = resolveEasycom(vue.resolveDynamicComponent("u-icon"), __easycom_0$g);
+    const _component_u_markdown = resolveEasycom(vue.resolveDynamicComponent("u-markdown"), __easycom_1$f);
+    const _component_u_input = resolveEasycom(vue.resolveDynamicComponent("u-input"), __easycom_0$f);
+    const _component_u_button = resolveEasycom(vue.resolveDynamicComponent("u-button"), __easycom_3$5);
+    return vue.openBlock(), vue.createElementBlock("view", { class: "article-detail-container" }, [
+      vue.createCommentVNode(" 顶部导航 "),
+      vue.createElementVNode("header", { class: "app-header" }, [
+        vue.createElementVNode("div", { class: "header-top" }, [
+          vue.createElementVNode("div", {
+            class: "header-back",
+            onClick: _cache[0] || (_cache[0] = (...args) => $options.goBack && $options.goBack(...args))
+          }, [
+            vue.createVNode(_component_u_icon, {
+              name: "arrow-left",
+              size: "20",
+              color: "#fff"
+            })
+          ]),
+          vue.createElementVNode("div", { class: "header-title" }, "文章详情"),
+          vue.createElementVNode("div", { class: "header-actions" }, [
+            vue.createCommentVNode(" 占位元素，保持居中 ")
+          ])
+        ])
+      ]),
+      vue.createCommentVNode(" 文章内容区域 "),
+      vue.createElementVNode("view", { class: "content-container" }, [
+        vue.createElementVNode("scroll-view", {
+          class: "content-scroll",
+          "scroll-y": ""
+        }, [
+          vue.createCommentVNode(" 文章详情 "),
+          vue.createElementVNode("view", { class: "article-content section" }, [
+            vue.createElementVNode("view", { class: "article-header" }, [
+              vue.createElementVNode("view", { class: "article-user" }, [
+                vue.createElementVNode("view", { class: "user-avatar" }, [
+                  $options.article.head ? (vue.openBlock(), vue.createElementBlock("image", {
+                    key: 0,
+                    src: $options.fullImageUrl($options.article.head),
+                    mode: "aspectFill"
+                  }, null, 8, ["src"])) : (vue.openBlock(), vue.createElementBlock(
+                    "view",
+                    {
+                      key: 1,
+                      class: "avatar-placeholder"
+                    },
+                    vue.toDisplayString($options.article.name ? $options.article.name.substring(0, 1) : "U"),
+                    1
+                    /* TEXT */
+                  ))
+                ]),
+                vue.createElementVNode("view", { class: "user-info" }, [
+                  vue.createElementVNode(
+                    "view",
+                    { class: "user-name" },
+                    vue.toDisplayString($options.article.name),
+                    1
+                    /* TEXT */
+                  ),
+                  vue.createElementVNode(
+                    "view",
+                    { class: "user-school" },
+                    vue.toDisplayString($options.article.school),
+                    1
+                    /* TEXT */
+                  )
+                ])
+              ]),
+              vue.createElementVNode(
+                "view",
+                { class: "article-time" },
+                vue.toDisplayString($options.formatTime($options.article.createTime)),
+                1
+                /* TEXT */
+              )
+            ]),
+            vue.createElementVNode(
+              "view",
+              { class: "article-title" },
+              vue.toDisplayString($options.article.title),
+              1
+              /* TEXT */
+            ),
+            vue.createCommentVNode(" Markdown内容 "),
+            vue.createElementVNode("view", { class: "markdown-content" }, [
+              vue.createVNode(_component_u_markdown, {
+                content: $options.article.content
+              }, null, 8, ["content"])
+            ]),
+            vue.createCommentVNode(" 点赞收藏等操作 "),
+            vue.createElementVNode("view", { class: "article-actions" }, [
+              vue.createElementVNode("view", { class: "article-meta" }, [
+                vue.createElementVNode("view", { class: "meta-item" }, [
+                  vue.createVNode(_component_u_icon, {
+                    name: "eye",
+                    size: "14",
+                    color: "#999"
+                  }),
+                  vue.createElementVNode(
+                    "text",
+                    null,
+                    vue.toDisplayString($options.article.viewCount),
+                    1
+                    /* TEXT */
+                  )
+                ]),
+                vue.createElementVNode("view", {
+                  class: "meta-item",
+                  onClick: _cache[1] || (_cache[1] = (...args) => $options.focusCommentInput && $options.focusCommentInput(...args))
+                }, [
+                  vue.createVNode(_component_u_icon, {
+                    name: "chat",
+                    size: "14",
+                    color: "#999"
+                  }),
+                  vue.createElementVNode(
+                    "text",
+                    null,
+                    vue.toDisplayString($options.article.commentCount),
+                    1
+                    /* TEXT */
+                  )
+                ]),
+                vue.createElementVNode("view", {
+                  class: "meta-item",
+                  onClick: _cache[2] || (_cache[2] = (...args) => $options.toggleLike && $options.toggleLike(...args))
+                }, [
+                  vue.createVNode(_component_u_icon, {
+                    name: $options.article.isNice ? "heart-fill" : "heart",
+                    color: $options.article.isNice ? "#f00" : "#999",
+                    size: "14"
+                  }, null, 8, ["name", "color"]),
+                  vue.createElementVNode(
+                    "text",
+                    null,
+                    vue.toDisplayString($options.article.nice),
+                    1
+                    /* TEXT */
+                  )
+                ]),
+                vue.createElementVNode("view", {
+                  class: "meta-item",
+                  onClick: _cache[3] || (_cache[3] = (...args) => $options.toggleCollect && $options.toggleCollect(...args))
+                }, [
+                  vue.createVNode(_component_u_icon, {
+                    name: $options.article.isCollect ? "bookmark-fill" : "bookmark",
+                    color: $options.article.isCollect ? "#4361ee" : "#999",
+                    size: "14"
+                  }, null, 8, ["name", "color"]),
+                  vue.createElementVNode(
+                    "text",
+                    null,
+                    vue.toDisplayString($options.article.collect),
+                    1
+                    /* TEXT */
+                  )
+                ])
+              ])
+            ])
+          ]),
+          vue.createCommentVNode(" 评论区域 "),
+          vue.createElementVNode("view", { class: "comments-section section" }, [
+            vue.createElementVNode("view", { class: "section-header" }, [
+              vue.createElementVNode("view", { class: "section-title" }, [
+                vue.createVNode(_component_u_icon, {
+                  name: "chat",
+                  size: "18",
+                  color: "#333"
+                }),
+                vue.createElementVNode(
+                  "text",
+                  null,
+                  "评论 (" + vue.toDisplayString($options.article.commentCount) + ")",
+                  1
+                  /* TEXT */
+                )
+              ])
+            ]),
+            vue.createCommentVNode(" 评论列表 "),
+            vue.createElementVNode("view", { class: "comments-list" }, [
+              (vue.openBlock(true), vue.createElementBlock(
+                vue.Fragment,
+                null,
+                vue.renderList($data.comments, (comment) => {
+                  return vue.openBlock(), vue.createElementBlock("view", {
+                    key: comment.id,
+                    class: "comment-item"
+                  }, [
+                    vue.createElementVNode("view", { class: "comment-header" }, [
+                      vue.createElementVNode("view", { class: "comment-author" }, [
+                        vue.createElementVNode("view", { class: "user-avatar" }, [
+                          comment.head ? (vue.openBlock(), vue.createElementBlock("image", {
+                            key: 0,
+                            src: $options.fullImageUrl(comment.head),
+                            mode: "aspectFill"
+                          }, null, 8, ["src"])) : (vue.openBlock(), vue.createElementBlock(
+                            "view",
+                            {
+                              key: 1,
+                              class: "avatar-placeholder"
+                            },
+                            vue.toDisplayString(comment.name ? comment.name.substring(0, 1) : "U"),
+                            1
+                            /* TEXT */
+                          ))
+                        ]),
+                        vue.createElementVNode("view", { class: "user-info" }, [
+                          vue.createElementVNode(
+                            "view",
+                            { class: "user-name" },
+                            vue.toDisplayString(comment.name),
+                            1
+                            /* TEXT */
+                          ),
+                          vue.createElementVNode(
+                            "view",
+                            { class: "comment-time" },
+                            vue.toDisplayString($options.formatCommentTime(comment.createTime)),
+                            1
+                            /* TEXT */
+                          )
+                        ])
+                      ]),
+                      vue.createElementVNode("view", {
+                        class: "comment-like",
+                        onClick: ($event) => $options.toggleCommentLike(comment)
+                      }, [
+                        vue.createVNode(_component_u_icon, {
+                          name: comment.isNice ? "thumb-up-fill" : "thumb-up",
+                          color: comment.isNice ? "#4361ee" : "#999",
+                          size: "16"
+                        }, null, 8, ["name", "color"]),
+                        vue.createElementVNode(
+                          "text",
+                          {
+                            class: vue.normalizeClass({ liked: comment.isNice })
+                          },
+                          vue.toDisplayString(comment.nice),
+                          3
+                          /* TEXT, CLASS */
+                        )
+                      ], 8, ["onClick"])
+                    ]),
+                    vue.createElementVNode(
+                      "view",
+                      { class: "comment-content" },
+                      vue.toDisplayString(comment.content),
+                      1
+                      /* TEXT */
+                    ),
+                    vue.createCommentVNode(" 评论图片 "),
+                    comment.sources && comment.sources.length > 0 ? (vue.openBlock(), vue.createElementBlock("view", {
+                      key: 0,
+                      class: "comment-images"
+                    }, [
+                      (vue.openBlock(true), vue.createElementBlock(
+                        vue.Fragment,
+                        null,
+                        vue.renderList(comment.sources, (img, index2) => {
+                          return vue.openBlock(), vue.createElementBlock("view", {
+                            key: index2,
+                            class: "comment-image",
+                            onClick: ($event) => $options.previewImage(img.url)
+                          }, [
+                            vue.createElementVNode("image", {
+                              src: $options.fullImageUrl(img.url),
+                              mode: "aspectFill"
+                            }, null, 8, ["src"])
+                          ], 8, ["onClick"]);
+                        }),
+                        128
+                        /* KEYED_FRAGMENT */
+                      ))
+                    ])) : vue.createCommentVNode("v-if", true)
+                  ]);
+                }),
+                128
+                /* KEYED_FRAGMENT */
+              )),
+              vue.createCommentVNode(" 无评论提示 "),
+              $data.comments.length === 0 ? (vue.openBlock(), vue.createElementBlock("view", {
+                key: 0,
+                class: "no-comments"
+              }, [
+                vue.createElementVNode("text", null, "暂无评论，快来抢沙发吧！")
+              ])) : vue.createCommentVNode("v-if", true)
+            ])
+          ])
+        ])
+      ]),
+      vue.createCommentVNode(" 评论输入框 - 固定在底部 "),
+      vue.createElementVNode(
+        "view",
+        {
+          class: "comment-input-fixed",
+          style: vue.normalizeStyle({ bottom: $options.commentInputBottom })
+        },
+        [
+          vue.createCommentVNode(" 预览图片区域 "),
+          $data.selectedImages.length > 0 ? (vue.openBlock(), vue.createElementBlock("view", {
+            key: 0,
+            class: "image-preview-area"
+          }, [
+            (vue.openBlock(true), vue.createElementBlock(
+              vue.Fragment,
+              null,
+              vue.renderList($data.selectedImages, (img, index2) => {
+                return vue.openBlock(), vue.createElementBlock("view", {
+                  key: index2,
+                  class: "preview-image-container"
+                }, [
+                  vue.createElementVNode("image", {
+                    src: img,
+                    mode: "aspectFill",
+                    class: "preview-image"
+                  }, null, 8, ["src"]),
+                  vue.createElementVNode("view", {
+                    class: "remove-image",
+                    onClick: ($event) => $options.removeImage(index2)
+                  }, [
+                    vue.createVNode(_component_u_icon, {
+                      name: "close",
+                      size: "12",
+                      color: "#fff"
+                    })
+                  ], 8, ["onClick"])
+                ]);
+              }),
+              128
+              /* KEYED_FRAGMENT */
+            ))
+          ])) : vue.createCommentVNode("v-if", true),
+          vue.createElementVNode("view", { class: "comment-input-area" }, [
+            vue.createVNode(_component_u_input, {
+              ref: "commentInput",
+              modelValue: $data.commentContent,
+              "onUpdate:modelValue": _cache[4] || (_cache[4] = ($event) => $data.commentContent = $event),
+              placeholder: "请输入评论内容",
+              type: "textarea",
+              "auto-height": true,
+              class: "comment-input",
+              focus: $data.isInputFocused,
+              "adjust-position": false
+            }, null, 8, ["modelValue", "focus"]),
+            vue.createElementVNode("view", { class: "comment-actions" }, [
+              vue.createElementVNode("view", {
+                class: "image-upload-btn",
+                onClick: _cache[5] || (_cache[5] = (...args) => $options.selectImages && $options.selectImages(...args))
+              }, [
+                vue.createVNode(_component_u_icon, {
+                  name: "photo",
+                  size: "20",
+                  color: "#999"
+                })
+              ]),
+              vue.createVNode(_component_u_button, {
+                type: "primary",
+                size: "mini",
+                onClick: $options.submitComment,
+                disabled: !$data.commentContent.trim() && $data.selectedImages.length === 0,
+                class: "submit-btn"
+              }, {
+                default: vue.withCtx(() => [
+                  vue.createTextVNode(" 发送 ")
+                ]),
+                _: 1
+                /* STABLE */
+              }, 8, ["onClick", "disabled"])
+            ])
+          ])
+        ],
+        4
+        /* STYLE */
+      )
+    ]);
+  }
+  const PagesForumArticleDetail = /* @__PURE__ */ _export_sfc(_sfc_main$2m, [["render", _sfc_render$2l], ["__scopeId", "data-v-a5dd2988"], ["__file", "D:/uniapp2023/studyParty/pages/forum/articleDetail.vue"]]);
   const _imports_0$2 = "/static/chat/lianxiren.png";
   const _imports_1$1 = "/static/chat/qunzu.png";
-  const _sfc_main$2o = {
+  const _sfc_main$2l = {
     data() {
       return {
         activeTab: "messages",
@@ -10766,7 +14498,7 @@ if (uni.restoreGlobal) {
       });
     }
   };
-  function _sfc_render$2n(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$2k(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_u_input = resolveEasycom(vue.resolveDynamicComponent("u-input"), __easycom_0$f);
     return vue.openBlock(), vue.createElementBlock("div", { class: "body" }, [
       vue.createCommentVNode(" 顶部导航 "),
@@ -10943,7 +14675,7 @@ if (uni.restoreGlobal) {
       ])
     ]);
   }
-  const PagesChatListChatList = /* @__PURE__ */ _export_sfc(_sfc_main$2o, [["render", _sfc_render$2n], ["__scopeId", "data-v-ee09427d"], ["__file", "D:/uniapp2023/studyParty/pages/chatList/chatList.vue"]]);
+  const PagesChatListChatList = /* @__PURE__ */ _export_sfc(_sfc_main$2l, [["render", _sfc_render$2k], ["__scopeId", "data-v-ee09427d"], ["__file", "D:/uniapp2023/studyParty/pages/chatList/chatList.vue"]]);
   const props$1o = defineMixin({
     props: {
       // 是否展示组件
@@ -11026,7 +14758,7 @@ if (uni.restoreGlobal) {
       }
     }
   };
-  const _sfc_main$2n = {
+  const _sfc_main$2k = {
     name: "u-transition",
     data() {
       return {
@@ -11070,7 +14802,7 @@ if (uni.restoreGlobal) {
       }
     }
   };
-  function _sfc_render$2m(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$2j(_ctx, _cache, $props, $setup, $data, $options) {
     return $data.inited ? (vue.openBlock(), vue.createElementBlock(
       "view",
       {
@@ -11088,7 +14820,7 @@ if (uni.restoreGlobal) {
       /* CLASS, STYLE, NEED_HYDRATION */
     )) : vue.createCommentVNode("v-if", true);
   }
-  const __easycom_2$4 = /* @__PURE__ */ _export_sfc(_sfc_main$2n, [["render", _sfc_render$2m], ["__scopeId", "data-v-0573594d"], ["__file", "D:/uniapp2023/studyParty/node_modules/uview-plus/components/u-transition/u-transition.vue"]]);
+  const __easycom_2$4 = /* @__PURE__ */ _export_sfc(_sfc_main$2k, [["render", _sfc_render$2j], ["__scopeId", "data-v-0573594d"], ["__file", "D:/uniapp2023/studyParty/node_modules/uview-plus/components/u-transition/u-transition.vue"]]);
   const __vite_glob_0_128 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
     __proto__: null,
     default: __easycom_2$4
@@ -11207,7 +14939,7 @@ if (uni.restoreGlobal) {
       }
     }
   });
-  const _sfc_main$2m = {
+  const _sfc_main$2j = {
     name: "u-tag",
     mixins: [mpMixin, mixin, props$1n],
     data() {
@@ -11290,7 +15022,7 @@ if (uni.restoreGlobal) {
       }
     }
   };
-  function _sfc_render$2l(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$2i(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_up_icon = resolveEasycom(vue.resolveDynamicComponent("up-icon"), __easycom_0$g);
     const _component_u_transition = resolveEasycom(vue.resolveDynamicComponent("u-transition"), __easycom_2$4);
     return vue.openBlock(), vue.createBlock(_component_u_transition, {
@@ -11390,515 +15122,11 @@ if (uni.restoreGlobal) {
       /* FORWARDED */
     }, 8, ["show"]);
   }
-  const __easycom_0$c = /* @__PURE__ */ _export_sfc(_sfc_main$2m, [["render", _sfc_render$2l], ["__scopeId", "data-v-23de980f"], ["__file", "D:/uniapp2023/studyParty/node_modules/uview-plus/components/u-tag/u-tag.vue"]]);
+  const __easycom_0$b = /* @__PURE__ */ _export_sfc(_sfc_main$2j, [["render", _sfc_render$2i], ["__scopeId", "data-v-23de980f"], ["__file", "D:/uniapp2023/studyParty/node_modules/uview-plus/components/u-tag/u-tag.vue"]]);
   const __vite_glob_0_118 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
     __proto__: null,
-    default: __easycom_0$c
+    default: __easycom_0$b
   }, Symbol.toStringTag, { value: "Module" }));
-  const props$1m = defineMixin({
-    props: {
-      // 内置图标名称，或图片路径，建议绝对路径
-      icon: {
-        type: String,
-        default: () => props$1y.empty.icon
-      },
-      // 提示文字
-      text: {
-        type: String,
-        default: () => props$1y.empty.text
-      },
-      // 文字颜色
-      textColor: {
-        type: String,
-        default: () => props$1y.empty.textColor
-      },
-      // 文字大小
-      textSize: {
-        type: [String, Number],
-        default: () => props$1y.empty.textSize
-      },
-      // 图标的颜色
-      iconColor: {
-        type: String,
-        default: () => props$1y.empty.iconColor
-      },
-      // 图标的大小
-      iconSize: {
-        type: [String, Number],
-        default: () => props$1y.empty.iconSize
-      },
-      // 选择预置的图标类型
-      mode: {
-        type: String,
-        default: () => props$1y.empty.mode
-      },
-      //  图标宽度，单位px
-      width: {
-        type: [String, Number],
-        default: () => props$1y.empty.width
-      },
-      // 图标高度，单位px
-      height: {
-        type: [String, Number],
-        default: () => props$1y.empty.height
-      },
-      // 是否显示组件
-      show: {
-        type: Boolean,
-        default: () => props$1y.empty.show
-      },
-      // 组件距离上一个元素之间的距离，默认px单位
-      marginTop: {
-        type: [String, Number],
-        default: () => props$1y.empty.marginTop
-      }
-    }
-  });
-  const _sfc_main$2l = {
-    name: "u-empty",
-    mixins: [mpMixin, mixin, props$1m],
-    data() {
-      return {
-        icons: {
-          car: t$1("up.empty.car"),
-          page: t$1("up.empty.page"),
-          search: t$1("up.empty.search"),
-          address: t$1("up.empty.address"),
-          wifi: t$1("up.empty.wifi"),
-          order: t$1("up.empty.order"),
-          coupon: t$1("up.empty.coupon"),
-          favor: t$1("up.empty.favor"),
-          permission: t$1("up.empty.permission"),
-          history: t$1("up.empty.history"),
-          news: t$1("up.empty.news"),
-          message: t$1("up.empty.message"),
-          list: t$1("up.empty.list"),
-          data: t$1("up.empty.data"),
-          comment: t$1("up.empty.comment")
-        }
-      };
-    },
-    computed: {
-      // 组件样式
-      emptyStyle() {
-        const style = {};
-        style.marginTop = addUnit(this.marginTop);
-        return deepMerge$1(addStyle(this.customStyle), style);
-      },
-      // 文本样式
-      textStyle() {
-        const style = {};
-        style.color = this.textColor;
-        style.fontSize = addUnit(this.textSize);
-        return style;
-      },
-      // 判断icon是否图片路径
-      isSrc() {
-        return this.icon.indexOf("/") >= 0;
-      }
-    },
-    methods: {
-      addUnit
-    }
-  };
-  function _sfc_render$2k(_ctx, _cache, $props, $setup, $data, $options) {
-    const _component_up_icon = resolveEasycom(vue.resolveDynamicComponent("up-icon"), __easycom_0$g);
-    return _ctx.show ? (vue.openBlock(), vue.createElementBlock(
-      "view",
-      {
-        key: 0,
-        class: "u-empty",
-        style: vue.normalizeStyle([$options.emptyStyle])
-      },
-      [
-        !$options.isSrc ? (vue.openBlock(), vue.createBlock(_component_up_icon, {
-          key: 0,
-          name: _ctx.mode === "message" ? "chat" : `empty-${_ctx.mode}`,
-          size: _ctx.iconSize,
-          color: _ctx.iconColor,
-          "margin-top": "14"
-        }, null, 8, ["name", "size", "color"])) : (vue.openBlock(), vue.createElementBlock("image", {
-          key: 1,
-          style: vue.normalizeStyle({
-            width: $options.addUnit(_ctx.width),
-            height: $options.addUnit(_ctx.height)
-          }),
-          src: _ctx.icon,
-          mode: "widthFix"
-        }, null, 12, ["src"])),
-        vue.createElementVNode(
-          "text",
-          {
-            class: "u-empty__text",
-            style: vue.normalizeStyle([$options.textStyle])
-          },
-          vue.toDisplayString(_ctx.text ? _ctx.text : $data.icons[_ctx.mode]),
-          5
-          /* TEXT, STYLE */
-        ),
-        _ctx.$slots.default || _ctx.$slots.$default ? (vue.openBlock(), vue.createElementBlock("view", {
-          key: 2,
-          class: "u-empty__wrap"
-        }, [
-          vue.renderSlot(_ctx.$slots, "default", {}, void 0, true)
-        ])) : vue.createCommentVNode("v-if", true)
-      ],
-      4
-      /* STYLE */
-    )) : vue.createCommentVNode("v-if", true);
-  }
-  const __easycom_4$1 = /* @__PURE__ */ _export_sfc(_sfc_main$2l, [["render", _sfc_render$2k], ["__scopeId", "data-v-bd84101d"], ["__file", "D:/uniapp2023/studyParty/node_modules/uview-plus/components/u-empty/u-empty.vue"]]);
-  const __vite_glob_0_41 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
-    __proto__: null,
-    default: __easycom_4$1
-  }, Symbol.toStringTag, { value: "Module" }));
-  const _sfc_main$2k = {
-    data() {
-      return {
-        imageUrl,
-        articleCount: 0,
-        // 发帖数量，等待后端更新数据
-        motivationalQuotes: [
-          "每一次坚持，都是成功的积累。",
-          "学习如逆水行舟，不进则退。",
-          "今天的努力，是明天的收获。",
-          "知识是通往自由的金钥匙。",
-          "持之以恒，方能成就非凡。",
-          "学而时习之，不亦说乎？",
-          "书山有路勤为径，学海无涯苦作舟。",
-          "不积跬步，无以至千里。",
-          "学习是成长的阶梯。",
-          "勤奋是成功之母。",
-          "学如逆水行舟，不进则退。",
-          "知识改变命运，学习成就未来。",
-          "每天进步一点点，就是成功的开始。",
-          "学习是点亮人生的明灯。",
-          "坚持就是胜利，努力必有回报。"
-        ]
-      };
-    },
-    computed: {
-      ...mapState({
-        userInfo: (state2) => state2.user.userInfo
-      })
-    },
-    onLoad() {
-      formatAppLog("log", "at pages/profile/profile.vue:170", "个人中心页面加载");
-    },
-    methods: {
-      ...mapActions("user", ["selectUser"]),
-      // 获取用户头像
-      getUserAvatar() {
-        if (this.userInfo.head) {
-          return this.imageUrl + this.userInfo.head;
-        }
-        return this.imageUrl + "/head/group.png";
-      },
-      // 获取用户状态
-      getUserStatus() {
-        const statusMap = {
-          1: "学生",
-          2: "老师",
-          3: "企业"
-        };
-        return statusMap[this.userInfo.status] || "未知";
-      },
-      // 获取用户状态标签类型
-      getUserStatusType() {
-        const typeMap = {
-          1: "success",
-          // 学生 - 绿色
-          2: "primary",
-          // 老师 - 蓝色
-          3: "warning"
-          // 企业 - 橙色
-        };
-        return typeMap[this.userInfo.status] || "info";
-      },
-      // 格式化日期
-      formatDate(dateString) {
-        if (!dateString)
-          return "未知";
-        const date3 = new Date(dateString);
-        return `${date3.getFullYear()}-${(date3.getMonth() + 1).toString().padStart(2, "0")}-${date3.getDate().toString().padStart(2, "0")}`;
-      },
-      // 获取随机励志话语
-      getRandomQuote() {
-        const randomIndex = Math.floor(Math.random() * this.motivationalQuotes.length);
-        return this.motivationalQuotes[randomIndex];
-      },
-      // 编辑资料
-      editProfile() {
-        uni.navigateTo({
-          url: "/pages/userInfo/userInfo"
-        });
-      },
-      // 跳转到设置页面
-      toSettings() {
-        uni.navigateTo({
-          url: "/pages/profile/settings"
-        });
-      },
-      // 跳转到小组列表
-      toGroupList() {
-        uni.navigateTo({
-          url: "/pages/chatList/groupList"
-        });
-      },
-      // 跳转到我的任务
-      toMyTasks() {
-        uni.navigateTo({
-          url: "/pages/completedTasks/completedTasks"
-        });
-      },
-      // 跳转到我的好友
-      toMyFriends() {
-        uni.navigateTo({
-          url: "/pages/chatList/friendList"
-        });
-      },
-      // 跳转到成就页面
-      toAchievements() {
-        this.$u.toast("成就功能正在开发中");
-      }
-    }
-  };
-  function _sfc_render$2j(_ctx, _cache, $props, $setup, $data, $options) {
-    const _component_u_icon = resolveEasycom(vue.resolveDynamicComponent("u-icon"), __easycom_0$g);
-    const _component_u_tag = resolveEasycom(vue.resolveDynamicComponent("u-tag"), __easycom_0$c);
-    const _component_u_button = resolveEasycom(vue.resolveDynamicComponent("u-button"), __easycom_3$4);
-    const _component_u_empty = resolveEasycom(vue.resolveDynamicComponent("u-empty"), __easycom_4$1);
-    return vue.openBlock(), vue.createElementBlock("view", { class: "body" }, [
-      vue.createCommentVNode(" 顶部导航 "),
-      vue.createElementVNode("header", null, [
-        vue.createElementVNode("div", { class: "header-top" }, [
-          vue.createElementVNode("div", { class: "logo" }, [
-            vue.createElementVNode("i", { class: "fas fa-user" }),
-            vue.createElementVNode("span", null, "个人中心")
-          ]),
-          vue.createElementVNode("div", { class: "header-actions" }, [
-            vue.createVNode(_component_u_icon, {
-              name: "setting",
-              size: "20",
-              color: "#ffffff",
-              onClick: $options.toSettings
-            }, null, 8, ["onClick"])
-          ])
-        ])
-      ]),
-      vue.createCommentVNode(" 用户信息概览 "),
-      vue.createElementVNode("div", { class: "user-overview" }, [
-        vue.createElementVNode("div", { class: "user-header" }, [
-          vue.createElementVNode("image", {
-            class: "avatar",
-            src: $options.getUserAvatar(),
-            mode: "aspectFill"
-          }, null, 8, ["src"]),
-          vue.createElementVNode("div", { class: "user-basic-info" }, [
-            vue.createElementVNode("div", { class: "user-name-row" }, [
-              vue.createElementVNode(
-                "h2",
-                { class: "user-name" },
-                vue.toDisplayString(_ctx.userInfo.name || "未设置昵称"),
-                1
-                /* TEXT */
-              )
-            ]),
-            vue.createElementVNode(
-              "p",
-              { class: "user-school" },
-              vue.toDisplayString(_ctx.userInfo.school || "未设置学校"),
-              1
-              /* TEXT */
-            ),
-            vue.createElementVNode(
-              "p",
-              { class: "user-major" },
-              vue.toDisplayString(_ctx.userInfo.major || "未设置专业"),
-              1
-              /* TEXT */
-            )
-          ]),
-          vue.createElementVNode("div", { class: "user-status-container" }, [
-            vue.createElementVNode("div", { class: "user-status-tag" }, [
-              vue.createVNode(_component_u_tag, {
-                text: $options.getUserStatus(),
-                type: $options.getUserStatusType(),
-                size: "mini"
-              }, null, 8, ["text", "type"])
-            ])
-          ])
-        ]),
-        vue.createElementVNode("div", { class: "edit-profile-section" }, [
-          vue.createVNode(_component_u_button, {
-            type: "primary",
-            size: "small",
-            plain: "",
-            onClick: $options.editProfile,
-            "custom-style": {
-              borderColor: "#4361ee",
-              color: "#4361ee",
-              backgroundColor: "transparent",
-              borderRadius: "20px",
-              fontSize: "12px",
-              height: "28px",
-              padding: "0 15px"
-            }
-          }, {
-            default: vue.withCtx(() => [
-              vue.createVNode(_component_u_icon, {
-                name: "edit-pen",
-                size: "14",
-                color: "#4361ee",
-                style: { "margin-right": "4px" }
-              }),
-              vue.createTextVNode(" 编辑资料 ")
-            ]),
-            _: 1
-            /* STABLE */
-          }, 8, ["onClick"])
-        ]),
-        vue.createElementVNode("div", { class: "user-stats" }, [
-          vue.createElementVNode("div", { class: "stat-item" }, [
-            vue.createElementVNode(
-              "div",
-              { class: "stat-value" },
-              vue.toDisplayString(_ctx.userInfo.finishTask || 0),
-              1
-              /* TEXT */
-            ),
-            vue.createElementVNode("div", { class: "stat-label" }, "完成任务")
-          ]),
-          vue.createElementVNode("div", { class: "stat-item" }, [
-            vue.createElementVNode(
-              "div",
-              { class: "stat-value" },
-              vue.toDisplayString($data.articleCount || 0),
-              1
-              /* TEXT */
-            ),
-            vue.createElementVNode("div", { class: "stat-label" }, "发布帖子")
-          ]),
-          vue.createElementVNode("div", { class: "stat-item" }, [
-            vue.createElementVNode(
-              "div",
-              { class: "stat-value" },
-              vue.toDisplayString(_ctx.userInfo.starPrestige || 0),
-              1
-              /* TEXT */
-            ),
-            vue.createElementVNode("div", { class: "stat-label" }, "学术声望")
-          ])
-        ])
-      ]),
-      vue.createCommentVNode(" 学习统计 "),
-      vue.createElementVNode("div", { class: "study-progress-section" }, [
-        vue.createElementVNode("div", { class: "section-title" }, [
-          vue.createElementVNode("h3", null, "学习统计")
-        ]),
-        vue.createElementVNode("div", { class: "study-progress" }, [
-          vue.createCommentVNode(" 连续打卡卡片 "),
-          vue.createElementVNode("div", { class: "clock-in-card" }, [
-            vue.createElementVNode(
-              "div",
-              { class: "clock-in-days" },
-              vue.toDisplayString(_ctx.userInfo.clockIn || 0) + "天",
-              1
-              /* TEXT */
-            ),
-            vue.createElementVNode(
-              "div",
-              { class: "motivational-quote" },
-              vue.toDisplayString($options.getRandomQuote()),
-              1
-              /* TEXT */
-            ),
-            vue.createElementVNode("div", { class: "clock-in-label" }, "连续打卡")
-          ]),
-          vue.createElementVNode("div", { class: "study-hours" }, [
-            vue.createElementVNode(
-              "span",
-              null,
-              "注册时间: " + vue.toDisplayString($options.formatDate(_ctx.userInfo.createDate)),
-              1
-              /* TEXT */
-            )
-          ])
-        ])
-      ]),
-      vue.createCommentVNode(" 功能菜单 "),
-      vue.createElementVNode("div", { class: "function-menu" }, [
-        vue.createElementVNode("div", { class: "menu-grid" }, [
-          vue.createElementVNode("div", {
-            class: "menu-item",
-            onClick: _cache[0] || (_cache[0] = (...args) => $options.toGroupList && $options.toGroupList(...args))
-          }, [
-            vue.createElementVNode("div", { class: "menu-icon" }, [
-              vue.createVNode(_component_u_icon, {
-                name: "account",
-                size: "24",
-                color: "#4361ee"
-              })
-            ]),
-            vue.createElementVNode("div", { class: "menu-name" }, "我的小组")
-          ]),
-          vue.createElementVNode("div", {
-            class: "menu-item",
-            onClick: _cache[1] || (_cache[1] = (...args) => $options.toMyTasks && $options.toMyTasks(...args))
-          }, [
-            vue.createElementVNode("div", { class: "menu-icon" }, [
-              vue.createVNode(_component_u_icon, {
-                name: "order",
-                size: "24",
-                color: "#4361ee"
-              })
-            ]),
-            vue.createElementVNode("div", { class: "menu-name" }, "我的任务")
-          ]),
-          vue.createElementVNode("div", {
-            class: "menu-item",
-            onClick: _cache[2] || (_cache[2] = (...args) => $options.toMyFriends && $options.toMyFriends(...args))
-          }, [
-            vue.createElementVNode("div", { class: "menu-icon" }, [
-              vue.createVNode(_component_u_icon, {
-                name: "man-add",
-                size: "24",
-                color: "#4361ee"
-              })
-            ]),
-            vue.createElementVNode("div", { class: "menu-name" }, "我的好友")
-          ]),
-          vue.createElementVNode("div", {
-            class: "menu-item",
-            onClick: _cache[3] || (_cache[3] = (...args) => $options.toAchievements && $options.toAchievements(...args))
-          }, [
-            vue.createElementVNode("div", { class: "menu-icon" }, [
-              vue.createVNode(_component_u_icon, {
-                name: "star",
-                size: "24",
-                color: "#4361ee"
-              })
-            ]),
-            vue.createElementVNode("div", { class: "menu-name" }, "我的成就")
-          ])
-        ])
-      ]),
-      vue.createCommentVNode(" 其他信息占位 "),
-      vue.createElementVNode("div", { class: "placeholder-section" }, [
-        vue.createElementVNode("div", { class: "section-title" }, [
-          vue.createElementVNode("h3", null, "更多信息")
-        ]),
-        vue.createElementVNode("div", { class: "placeholder-content" }, [
-          vue.createVNode(_component_u_empty, {
-            mode: "list",
-            text: "更多功能正在开发中",
-            icon: "http://cdn.uviewui.com/uview/empty/data.png"
-          })
-        ])
-      ])
-    ]);
-  }
-  const PagesProfileProfile = /* @__PURE__ */ _export_sfc(_sfc_main$2k, [["render", _sfc_render$2j], ["__scopeId", "data-v-dd383ca2"], ["__file", "D:/uniapp2023/studyParty/pages/profile/profile.vue"]]);
   const DoubleUnicodePrefixReg = /^[\uD800-\uDBFF]$/;
   const DoubleUnicodeSuffixReg = /^[\uDC00-\uDFFF]$/;
   const DoubleUnicodeReg = /[\uD800-\uDBFF][\uDC00-\uDFFF]/g;
@@ -36183,7 +39411,7 @@ if (uni.restoreGlobal) {
     segmentit: 2,
     format: OutputFormat.AllSegment
   });
-  const _sfc_main$2j = {
+  const _sfc_main$2i = {
     data() {
       return {
         searchQuery: "",
@@ -36506,10 +39734,10 @@ if (uni.restoreGlobal) {
       }
     }
   };
-  function _sfc_render$2i(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$2h(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_u_icon = resolveEasycom(vue.resolveDynamicComponent("u-icon"), __easycom_0$g);
-    const _component_u_tag = resolveEasycom(vue.resolveDynamicComponent("u-tag"), __easycom_0$c);
-    const _component_u_button = resolveEasycom(vue.resolveDynamicComponent("u-button"), __easycom_3$4);
+    const _component_u_tag = resolveEasycom(vue.resolveDynamicComponent("u-tag"), __easycom_0$b);
+    const _component_u_button = resolveEasycom(vue.resolveDynamicComponent("u-button"), __easycom_3$5);
     return vue.openBlock(), vue.createElementBlock("view", null, [
       vue.createElementVNode("div", { class: "body" }, [
         vue.createCommentVNode(" 顶部导航 "),
@@ -36726,7 +39954,7 @@ if (uni.restoreGlobal) {
       ])
     ]);
   }
-  const PagesChatListFriendList = /* @__PURE__ */ _export_sfc(_sfc_main$2j, [["render", _sfc_render$2i], ["__file", "D:/uniapp2023/studyParty/pages/chatList/friendList.vue"]]);
+  const PagesChatListFriendList = /* @__PURE__ */ _export_sfc(_sfc_main$2i, [["render", _sfc_render$2h], ["__file", "D:/uniapp2023/studyParty/pages/chatList/friendList.vue"]]);
   class UploadUtils {
     /**
      * 单文件上传
@@ -36905,7 +40133,7 @@ if (uni.restoreGlobal) {
   const _imports_0$1 = "/static/tool/jianpan.png";
   let recorderManager = null;
   let innerAudioContext2 = null;
-  const _sfc_main$2i = {
+  const _sfc_main$2h = {
     data() {
       return {
         InputValue: "",
@@ -37266,7 +40494,7 @@ if (uni.restoreGlobal) {
       }
     }
   };
-  function _sfc_render$2h(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$2g(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_u_icon = resolveEasycom(vue.resolveDynamicComponent("u-icon"), __easycom_0$g);
     return vue.openBlock(), vue.createElementBlock("div", { class: "body" }, [
       vue.createElementVNode("div", { class: "app-container" }, [
@@ -37564,8 +40792,8 @@ if (uni.restoreGlobal) {
       ])
     ]);
   }
-  const PagesChatListChatPage = /* @__PURE__ */ _export_sfc(_sfc_main$2i, [["render", _sfc_render$2h], ["__file", "D:/uniapp2023/studyParty/pages/chatList/chatPage.vue"]]);
-  const props$1l = defineMixin({
+  const PagesChatListChatPage = /* @__PURE__ */ _export_sfc(_sfc_main$2h, [["render", _sfc_render$2g], ["__file", "D:/uniapp2023/studyParty/pages/chatList/chatPage.vue"]]);
+  const props$1m = defineMixin({
     props: {
       // 是否显示遮罩
       show: {
@@ -37589,9 +40817,9 @@ if (uni.restoreGlobal) {
       }
     }
   });
-  const _sfc_main$2h = {
+  const _sfc_main$2g = {
     name: "u-overlay",
-    mixins: [mpMixin, mixin, props$1l],
+    mixins: [mpMixin, mixin, props$1m],
     computed: {
       overlayStyle() {
         const style = {
@@ -37613,7 +40841,7 @@ if (uni.restoreGlobal) {
       }
     }
   };
-  function _sfc_render$2g(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$2f(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_u_transition = resolveEasycom(vue.resolveDynamicComponent("u-transition"), __easycom_2$4);
     return vue.openBlock(), vue.createBlock(_component_u_transition, {
       show: _ctx.show,
@@ -37630,17 +40858,17 @@ if (uni.restoreGlobal) {
       /* FORWARDED */
     }, 8, ["show", "duration", "custom-style", "onClick", "onTouchmove"]);
   }
-  const __easycom_1$f = /* @__PURE__ */ _export_sfc(_sfc_main$2h, [["render", _sfc_render$2g], ["__scopeId", "data-v-35f7c3e5"], ["__file", "D:/uniapp2023/studyParty/node_modules/uview-plus/components/u-overlay/u-overlay.vue"]]);
+  const __easycom_1$e = /* @__PURE__ */ _export_sfc(_sfc_main$2g, [["render", _sfc_render$2f], ["__scopeId", "data-v-35f7c3e5"], ["__file", "D:/uniapp2023/studyParty/node_modules/uview-plus/components/u-overlay/u-overlay.vue"]]);
   const __vite_glob_0_75 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
     __proto__: null,
-    default: __easycom_1$f
+    default: __easycom_1$e
   }, Symbol.toStringTag, { value: "Module" }));
-  const props$1k = defineMixin({
+  const props$1l = defineMixin({
     props: {}
   });
-  const _sfc_main$2g = {
+  const _sfc_main$2f = {
     name: "u-safe-bottom",
-    mixins: [mpMixin, mixin, props$1k],
+    mixins: [mpMixin, mixin, props$1l],
     data() {
       return {
         safeAreaBottomHeight: 0,
@@ -37656,7 +40884,7 @@ if (uni.restoreGlobal) {
     mounted() {
     }
   };
-  function _sfc_render$2f(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$2e(_ctx, _cache, $props, $setup, $data, $options) {
     return vue.openBlock(), vue.createElementBlock(
       "view",
       {
@@ -37668,12 +40896,12 @@ if (uni.restoreGlobal) {
       /* CLASS, STYLE */
     );
   }
-  const __easycom_0$b = /* @__PURE__ */ _export_sfc(_sfc_main$2g, [["render", _sfc_render$2f], ["__scopeId", "data-v-3ec581de"], ["__file", "D:/uniapp2023/studyParty/node_modules/uview-plus/components/u-safe-bottom/u-safe-bottom.vue"]]);
+  const __easycom_0$a = /* @__PURE__ */ _export_sfc(_sfc_main$2f, [["render", _sfc_render$2e], ["__scopeId", "data-v-3ec581de"], ["__file", "D:/uniapp2023/studyParty/node_modules/uview-plus/components/u-safe-bottom/u-safe-bottom.vue"]]);
   const __vite_glob_0_94 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
     __proto__: null,
-    default: __easycom_0$b
+    default: __easycom_0$a
   }, Symbol.toStringTag, { value: "Module" }));
-  const props$1j = defineMixin({
+  const props$1k = defineMixin({
     props: {
       // 是否展示弹窗
       show: {
@@ -37772,9 +41000,9 @@ if (uni.restoreGlobal) {
       }
     }
   });
-  const _sfc_main$2f = {
+  const _sfc_main$2e = {
     name: "u-popup",
-    mixins: [mpMixin, mixin, props$1j],
+    mixins: [mpMixin, mixin, props$1k],
     data() {
       return {
         overlayDuration: this.duration + 50,
@@ -37950,11 +41178,11 @@ if (uni.restoreGlobal) {
       }
     }
   };
-  function _sfc_render$2e(_ctx, _cache, $props, $setup, $data, $options) {
-    const _component_u_overlay = resolveEasycom(vue.resolveDynamicComponent("u-overlay"), __easycom_1$f);
+  function _sfc_render$2d(_ctx, _cache, $props, $setup, $data, $options) {
+    const _component_u_overlay = resolveEasycom(vue.resolveDynamicComponent("u-overlay"), __easycom_1$e);
     const _component_u_status_bar = resolveEasycom(vue.resolveDynamicComponent("u-status-bar"), __easycom_0$e);
     const _component_up_icon = resolveEasycom(vue.resolveDynamicComponent("up-icon"), __easycom_0$g);
-    const _component_u_safe_bottom = resolveEasycom(vue.resolveDynamicComponent("u-safe-bottom"), __easycom_0$b);
+    const _component_u_safe_bottom = resolveEasycom(vue.resolveDynamicComponent("u-safe-bottom"), __easycom_0$a);
     const _component_u_transition = resolveEasycom(vue.resolveDynamicComponent("u-transition"), __easycom_2$4);
     return vue.openBlock(), vue.createElementBlock(
       "view",
@@ -38058,12 +41286,12 @@ if (uni.restoreGlobal) {
       /* CLASS, STYLE */
     );
   }
-  const __easycom_3$3 = /* @__PURE__ */ _export_sfc(_sfc_main$2f, [["render", _sfc_render$2e], ["__scopeId", "data-v-74921bef"], ["__file", "D:/uniapp2023/studyParty/node_modules/uview-plus/components/u-popup/u-popup.vue"]]);
+  const __easycom_3$4 = /* @__PURE__ */ _export_sfc(_sfc_main$2e, [["render", _sfc_render$2d], ["__scopeId", "data-v-74921bef"], ["__file", "D:/uniapp2023/studyParty/node_modules/uview-plus/components/u-popup/u-popup.vue"]]);
   const __vite_glob_0_83 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
     __proto__: null,
-    default: __easycom_3$3
+    default: __easycom_3$4
   }, Symbol.toStringTag, { value: "Module" }));
-  const props$1i = defineMixin({
+  const props$1j = defineMixin({
     props: {
       // 是否展示modal
       show: {
@@ -38172,9 +41400,9 @@ if (uni.restoreGlobal) {
       }
     }
   });
-  const _sfc_main$2e = {
+  const _sfc_main$2d = {
     name: "u-modal",
-    mixins: [mpMixin, mixin, props$1i],
+    mixins: [mpMixin, mixin, props$1j],
     data() {
       return {
         loading: false
@@ -38235,10 +41463,10 @@ if (uni.restoreGlobal) {
       }
     }
   };
-  function _sfc_render$2d(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$2c(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_u_line = resolveEasycom(vue.resolveDynamicComponent("u-line"), __easycom_1$h);
     const _component_u_loading_icon = resolveEasycom(vue.resolveDynamicComponent("u-loading-icon"), __easycom_1$g);
-    const _component_u_popup = resolveEasycom(vue.resolveDynamicComponent("u-popup"), __easycom_3$3);
+    const _component_u_popup = resolveEasycom(vue.resolveDynamicComponent("u-popup"), __easycom_3$4);
     return vue.openBlock(), vue.createBlock(_component_u_popup, {
       mode: "center",
       zoom: _ctx.zoom,
@@ -38393,10 +41621,10 @@ if (uni.restoreGlobal) {
       /* FORWARDED */
     }, 8, ["zoom", "show", "class", "customStyle", "closeOnClickOverlay", "duration", "onClick"]);
   }
-  const __easycom_0$a = /* @__PURE__ */ _export_sfc(_sfc_main$2e, [["render", _sfc_render$2d], ["__scopeId", "data-v-12b77a26"], ["__file", "D:/uniapp2023/studyParty/node_modules/uview-plus/components/u-modal/u-modal.vue"]]);
+  const __easycom_0$9 = /* @__PURE__ */ _export_sfc(_sfc_main$2d, [["render", _sfc_render$2c], ["__scopeId", "data-v-12b77a26"], ["__file", "D:/uniapp2023/studyParty/node_modules/uview-plus/components/u-modal/u-modal.vue"]]);
   const __vite_glob_0_67 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
     __proto__: null,
-    default: __easycom_0$a
+    default: __easycom_0$9
   }, Symbol.toStringTag, { value: "Module" }));
   const user = {
     namespaced: true,
@@ -38515,7 +41743,7 @@ if (uni.restoreGlobal) {
   const _imports_8 = "/static/userInfo/youxiang.png";
   const _imports_9 = "/static/userInfo/userinfo.png";
   const _imports_10 = "/static/userInfo/qianshoushenpitongguo-xianxing.png";
-  const _sfc_main$2d = {
+  const _sfc_main$2c = {
     data() {
       return {
         showAliasModal: false,
@@ -38620,12 +41848,12 @@ if (uni.restoreGlobal) {
       }
     }
   };
-  function _sfc_render$2c(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$2b(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_u_icon = resolveEasycom(vue.resolveDynamicComponent("u-icon"), __easycom_0$g);
     const _component_u_input = resolveEasycom(vue.resolveDynamicComponent("u-input"), __easycom_0$f);
-    const _component_u_button = resolveEasycom(vue.resolveDynamicComponent("u-button"), __easycom_3$4);
-    const _component_up_popup = resolveEasycom(vue.resolveDynamicComponent("up-popup"), __easycom_3$3);
-    const _component_up_modal = resolveEasycom(vue.resolveDynamicComponent("up-modal"), __easycom_0$a);
+    const _component_u_button = resolveEasycom(vue.resolveDynamicComponent("u-button"), __easycom_3$5);
+    const _component_up_popup = resolveEasycom(vue.resolveDynamicComponent("up-popup"), __easycom_3$4);
+    const _component_up_modal = resolveEasycom(vue.resolveDynamicComponent("up-modal"), __easycom_0$9);
     return vue.openBlock(), vue.createElementBlock("view", null, [
       vue.createElementVNode("div", { class: "body" }, [
         vue.createCommentVNode(" 顶部导航 "),
@@ -39053,8 +42281,8 @@ if (uni.restoreGlobal) {
       ])
     ]);
   }
-  const PagesUserInfoUserInfo = /* @__PURE__ */ _export_sfc(_sfc_main$2d, [["render", _sfc_render$2c], ["__file", "D:/uniapp2023/studyParty/pages/userInfo/userInfo.vue"]]);
-  const props$1h = defineMixin({
+  const PagesUserInfoUserInfo = /* @__PURE__ */ _export_sfc(_sfc_main$2c, [["render", _sfc_render$2b], ["__file", "D:/uniapp2023/studyParty/pages/userInfo/userInfo.vue"]]);
+  const props$1i = defineMixin({
     props: {
       // 背景颜色（默认transparent）
       bgColor: {
@@ -39078,9 +42306,9 @@ if (uni.restoreGlobal) {
       }
     }
   });
-  const _sfc_main$2c = {
+  const _sfc_main$2b = {
     name: "u-gap",
-    mixins: [mpMixin, mixin, props$1h],
+    mixins: [mpMixin, mixin, props$1i],
     computed: {
       gapStyle() {
         const style = {
@@ -39093,7 +42321,7 @@ if (uni.restoreGlobal) {
       }
     }
   };
-  function _sfc_render$2b(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$2a(_ctx, _cache, $props, $setup, $data, $options) {
     return vue.openBlock(), vue.createElementBlock(
       "view",
       {
@@ -39105,12 +42333,12 @@ if (uni.restoreGlobal) {
       /* STYLE */
     );
   }
-  const __easycom_2$3 = /* @__PURE__ */ _export_sfc(_sfc_main$2c, [["render", _sfc_render$2b], ["__file", "D:/uniapp2023/studyParty/node_modules/uview-plus/components/u-gap/u-gap.vue"]]);
+  const __easycom_2$3 = /* @__PURE__ */ _export_sfc(_sfc_main$2b, [["render", _sfc_render$2a], ["__file", "D:/uniapp2023/studyParty/node_modules/uview-plus/components/u-gap/u-gap.vue"]]);
   const __vite_glob_0_45 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
     __proto__: null,
     default: __easycom_2$3
   }, Symbol.toStringTag, { value: "Module" }));
-  const _sfc_main$2b = {
+  const _sfc_main$2a = {
     name: "u-toast",
     mixins: [mpMixin, mixin],
     data() {
@@ -39226,11 +42454,11 @@ if (uni.restoreGlobal) {
       this.clearTimer();
     }
   };
-  function _sfc_render$2a(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$29(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_u_loading_icon = resolveEasycom(vue.resolveDynamicComponent("u-loading-icon"), __easycom_1$g);
     const _component_up_icon = resolveEasycom(vue.resolveDynamicComponent("up-icon"), __easycom_0$g);
     const _component_u_gap = resolveEasycom(vue.resolveDynamicComponent("u-gap"), __easycom_2$3);
-    const _component_u_overlay = resolveEasycom(vue.resolveDynamicComponent("u-overlay"), __easycom_1$f);
+    const _component_u_overlay = resolveEasycom(vue.resolveDynamicComponent("u-overlay"), __easycom_1$e);
     return vue.openBlock(), vue.createElementBlock("view", { class: "u-toast" }, [
       vue.createVNode(_component_u_overlay, {
         show: $data.isShow,
@@ -39283,12 +42511,12 @@ if (uni.restoreGlobal) {
       }, 8, ["show", "zIndex", "custom-style"])
     ]);
   }
-  const __easycom_0$9 = /* @__PURE__ */ _export_sfc(_sfc_main$2b, [["render", _sfc_render$2a], ["__scopeId", "data-v-2232870a"], ["__file", "D:/uniapp2023/studyParty/node_modules/uview-plus/components/u-toast/u-toast.vue"]]);
+  const __easycom_0$8 = /* @__PURE__ */ _export_sfc(_sfc_main$2a, [["render", _sfc_render$29], ["__scopeId", "data-v-2232870a"], ["__file", "D:/uniapp2023/studyParty/node_modules/uview-plus/components/u-toast/u-toast.vue"]]);
   const __vite_glob_0_124 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
     __proto__: null,
-    default: __easycom_0$9
+    default: __easycom_0$8
   }, Symbol.toStringTag, { value: "Module" }));
-  const _sfc_main$2a = {
+  const _sfc_main$29 = {
     data() {
       return {
         activeTab: "requests",
@@ -39517,11 +42745,11 @@ if (uni.restoreGlobal) {
       }
     }
   };
-  function _sfc_render$29(_ctx, _cache, $props, $setup, $data, $options) {
-    const _component_up_toast = resolveEasycom(vue.resolveDynamicComponent("up-toast"), __easycom_0$9);
+  function _sfc_render$28(_ctx, _cache, $props, $setup, $data, $options) {
+    const _component_up_toast = resolveEasycom(vue.resolveDynamicComponent("up-toast"), __easycom_0$8);
     const _component_u_icon = resolveEasycom(vue.resolveDynamicComponent("u-icon"), __easycom_0$g);
     const _component_up_input = resolveEasycom(vue.resolveDynamicComponent("up-input"), __easycom_0$f);
-    const _component_u_button = resolveEasycom(vue.resolveDynamicComponent("u-button"), __easycom_3$4);
+    const _component_u_button = resolveEasycom(vue.resolveDynamicComponent("u-button"), __easycom_3$5);
     return vue.openBlock(), vue.createElementBlock("view", null, [
       vue.createVNode(
         _component_up_toast,
@@ -39852,7 +43080,164 @@ if (uni.restoreGlobal) {
       ])
     ]);
   }
-  const PagesChatListAddFriend = /* @__PURE__ */ _export_sfc(_sfc_main$2a, [["render", _sfc_render$29], ["__file", "D:/uniapp2023/studyParty/pages/chatList/addFriend.vue"]]);
+  const PagesChatListAddFriend = /* @__PURE__ */ _export_sfc(_sfc_main$29, [["render", _sfc_render$28], ["__file", "D:/uniapp2023/studyParty/pages/chatList/addFriend.vue"]]);
+  const props$1h = defineMixin({
+    props: {
+      // 内置图标名称，或图片路径，建议绝对路径
+      icon: {
+        type: String,
+        default: () => props$1y.empty.icon
+      },
+      // 提示文字
+      text: {
+        type: String,
+        default: () => props$1y.empty.text
+      },
+      // 文字颜色
+      textColor: {
+        type: String,
+        default: () => props$1y.empty.textColor
+      },
+      // 文字大小
+      textSize: {
+        type: [String, Number],
+        default: () => props$1y.empty.textSize
+      },
+      // 图标的颜色
+      iconColor: {
+        type: String,
+        default: () => props$1y.empty.iconColor
+      },
+      // 图标的大小
+      iconSize: {
+        type: [String, Number],
+        default: () => props$1y.empty.iconSize
+      },
+      // 选择预置的图标类型
+      mode: {
+        type: String,
+        default: () => props$1y.empty.mode
+      },
+      //  图标宽度，单位px
+      width: {
+        type: [String, Number],
+        default: () => props$1y.empty.width
+      },
+      // 图标高度，单位px
+      height: {
+        type: [String, Number],
+        default: () => props$1y.empty.height
+      },
+      // 是否显示组件
+      show: {
+        type: Boolean,
+        default: () => props$1y.empty.show
+      },
+      // 组件距离上一个元素之间的距离，默认px单位
+      marginTop: {
+        type: [String, Number],
+        default: () => props$1y.empty.marginTop
+      }
+    }
+  });
+  const _sfc_main$28 = {
+    name: "u-empty",
+    mixins: [mpMixin, mixin, props$1h],
+    data() {
+      return {
+        icons: {
+          car: t$1("up.empty.car"),
+          page: t$1("up.empty.page"),
+          search: t$1("up.empty.search"),
+          address: t$1("up.empty.address"),
+          wifi: t$1("up.empty.wifi"),
+          order: t$1("up.empty.order"),
+          coupon: t$1("up.empty.coupon"),
+          favor: t$1("up.empty.favor"),
+          permission: t$1("up.empty.permission"),
+          history: t$1("up.empty.history"),
+          news: t$1("up.empty.news"),
+          message: t$1("up.empty.message"),
+          list: t$1("up.empty.list"),
+          data: t$1("up.empty.data"),
+          comment: t$1("up.empty.comment")
+        }
+      };
+    },
+    computed: {
+      // 组件样式
+      emptyStyle() {
+        const style = {};
+        style.marginTop = addUnit(this.marginTop);
+        return deepMerge$1(addStyle(this.customStyle), style);
+      },
+      // 文本样式
+      textStyle() {
+        const style = {};
+        style.color = this.textColor;
+        style.fontSize = addUnit(this.textSize);
+        return style;
+      },
+      // 判断icon是否图片路径
+      isSrc() {
+        return this.icon.indexOf("/") >= 0;
+      }
+    },
+    methods: {
+      addUnit
+    }
+  };
+  function _sfc_render$27(_ctx, _cache, $props, $setup, $data, $options) {
+    const _component_up_icon = resolveEasycom(vue.resolveDynamicComponent("up-icon"), __easycom_0$g);
+    return _ctx.show ? (vue.openBlock(), vue.createElementBlock(
+      "view",
+      {
+        key: 0,
+        class: "u-empty",
+        style: vue.normalizeStyle([$options.emptyStyle])
+      },
+      [
+        !$options.isSrc ? (vue.openBlock(), vue.createBlock(_component_up_icon, {
+          key: 0,
+          name: _ctx.mode === "message" ? "chat" : `empty-${_ctx.mode}`,
+          size: _ctx.iconSize,
+          color: _ctx.iconColor,
+          "margin-top": "14"
+        }, null, 8, ["name", "size", "color"])) : (vue.openBlock(), vue.createElementBlock("image", {
+          key: 1,
+          style: vue.normalizeStyle({
+            width: $options.addUnit(_ctx.width),
+            height: $options.addUnit(_ctx.height)
+          }),
+          src: _ctx.icon,
+          mode: "widthFix"
+        }, null, 12, ["src"])),
+        vue.createElementVNode(
+          "text",
+          {
+            class: "u-empty__text",
+            style: vue.normalizeStyle([$options.textStyle])
+          },
+          vue.toDisplayString(_ctx.text ? _ctx.text : $data.icons[_ctx.mode]),
+          5
+          /* TEXT, STYLE */
+        ),
+        _ctx.$slots.default || _ctx.$slots.$default ? (vue.openBlock(), vue.createElementBlock("view", {
+          key: 2,
+          class: "u-empty__wrap"
+        }, [
+          vue.renderSlot(_ctx.$slots, "default", {}, void 0, true)
+        ])) : vue.createCommentVNode("v-if", true)
+      ],
+      4
+      /* STYLE */
+    )) : vue.createCommentVNode("v-if", true);
+  }
+  const __easycom_3$3 = /* @__PURE__ */ _export_sfc(_sfc_main$28, [["render", _sfc_render$27], ["__scopeId", "data-v-bd84101d"], ["__file", "D:/uniapp2023/studyParty/node_modules/uview-plus/components/u-empty/u-empty.vue"]]);
+  const __vite_glob_0_41 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+    __proto__: null,
+    default: __easycom_3$3
+  }, Symbol.toStringTag, { value: "Module" }));
   const props$1g = defineMixin({
     props: {
       // 组件状态，loadmore-加载前的状态，loading-加载中的状态，nomore-没有更多的状态
@@ -39947,7 +43332,7 @@ if (uni.restoreGlobal) {
       }
     }
   });
-  const _sfc_main$29 = {
+  const _sfc_main$27 = {
     name: "u-loadmore",
     mixins: [mpMixin, mixin, props$1g],
     data() {
@@ -39990,7 +43375,7 @@ if (uni.restoreGlobal) {
       }
     }
   };
-  function _sfc_render$28(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$26(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_u_line = resolveEasycom(vue.resolveDynamicComponent("u-line"), __easycom_1$h);
     const _component_u_loading_icon = resolveEasycom(vue.resolveDynamicComponent("u-loading-icon"), __easycom_1$g);
     return vue.openBlock(), vue.createElementBlock(
@@ -40060,12 +43445,12 @@ if (uni.restoreGlobal) {
       /* STYLE */
     );
   }
-  const __easycom_1$e = /* @__PURE__ */ _export_sfc(_sfc_main$29, [["render", _sfc_render$28], ["__scopeId", "data-v-5817e4cf"], ["__file", "D:/uniapp2023/studyParty/node_modules/uview-plus/components/u-loadmore/u-loadmore.vue"]]);
+  const __easycom_1$d = /* @__PURE__ */ _export_sfc(_sfc_main$27, [["render", _sfc_render$26], ["__scopeId", "data-v-5817e4cf"], ["__file", "D:/uniapp2023/studyParty/node_modules/uview-plus/components/u-loadmore/u-loadmore.vue"]]);
   const __vite_glob_0_64 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
     __proto__: null,
-    default: __easycom_1$e
+    default: __easycom_1$d
   }, Symbol.toStringTag, { value: "Module" }));
-  const _sfc_main$28 = {
+  const _sfc_main$26 = {
     name: "u-pull-refresh",
     props: {
       // 是否正在刷新
@@ -40223,9 +43608,9 @@ if (uni.restoreGlobal) {
       }
     }
   };
-  function _sfc_render$27(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$25(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_up_icon = resolveEasycom(vue.resolveDynamicComponent("up-icon"), __easycom_0$g);
-    const _component_u_loadmore = resolveEasycom(vue.resolveDynamicComponent("u-loadmore"), __easycom_1$e);
+    const _component_u_loadmore = resolveEasycom(vue.resolveDynamicComponent("u-loadmore"), __easycom_1$d);
     return vue.openBlock(), vue.createElementBlock(
       "view",
       {
@@ -40353,12 +43738,12 @@ if (uni.restoreGlobal) {
       /* NEED_HYDRATION */
     );
   }
-  const __easycom_1$d = /* @__PURE__ */ _export_sfc(_sfc_main$28, [["render", _sfc_render$27], ["__scopeId", "data-v-719103f2"], ["__file", "D:/uniapp2023/studyParty/node_modules/uview-plus/components/u-pull-refresh/u-pull-refresh.vue"]]);
+  const __easycom_1$c = /* @__PURE__ */ _export_sfc(_sfc_main$26, [["render", _sfc_render$25], ["__scopeId", "data-v-719103f2"], ["__file", "D:/uniapp2023/studyParty/node_modules/uview-plus/components/u-pull-refresh/u-pull-refresh.vue"]]);
   const __vite_glob_0_85 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
     __proto__: null,
-    default: __easycom_1$d
+    default: __easycom_1$c
   }, Symbol.toStringTag, { value: "Module" }));
-  const _sfc_main$27 = {
+  const _sfc_main$25 = {
     data() {
       return {
         searchQuery: "",
@@ -40561,12 +43946,12 @@ if (uni.restoreGlobal) {
       }
     }
   };
-  function _sfc_render$26(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$24(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_u_icon = resolveEasycom(vue.resolveDynamicComponent("u-icon"), __easycom_0$g);
     const _component_u_loading_icon = resolveEasycom(vue.resolveDynamicComponent("u-loading-icon"), __easycom_1$g);
-    const _component_u_button = resolveEasycom(vue.resolveDynamicComponent("u-button"), __easycom_3$4);
-    const _component_u_empty = resolveEasycom(vue.resolveDynamicComponent("u-empty"), __easycom_4$1);
-    const _component_u_pull_refresh = resolveEasycom(vue.resolveDynamicComponent("u-pull-refresh"), __easycom_1$d);
+    const _component_u_button = resolveEasycom(vue.resolveDynamicComponent("u-button"), __easycom_3$5);
+    const _component_u_empty = resolveEasycom(vue.resolveDynamicComponent("u-empty"), __easycom_3$3);
+    const _component_u_pull_refresh = resolveEasycom(vue.resolveDynamicComponent("u-pull-refresh"), __easycom_1$c);
     return vue.openBlock(), vue.createElementBlock("view", null, [
       vue.createElementVNode("div", { class: "body" }, [
         vue.createCommentVNode(" 顶部导航 "),
@@ -40936,7 +44321,7 @@ if (uni.restoreGlobal) {
       ])
     ]);
   }
-  const PagesChatListGroupList = /* @__PURE__ */ _export_sfc(_sfc_main$27, [["render", _sfc_render$26], ["__file", "D:/uniapp2023/studyParty/pages/chatList/groupList.vue"]]);
+  const PagesChatListGroupList = /* @__PURE__ */ _export_sfc(_sfc_main$25, [["render", _sfc_render$24], ["__file", "D:/uniapp2023/studyParty/pages/chatList/groupList.vue"]]);
   const props$1f = defineMixin({
     props: {
       // 输入框的内容
@@ -41061,7 +44446,7 @@ if (uni.restoreGlobal) {
       }
     }
   });
-  const _sfc_main$26 = {
+  const _sfc_main$24 = {
     name: "u-textarea",
     mixins: [mpMixin, mixin, props$1f],
     data() {
@@ -41163,7 +44548,7 @@ if (uni.restoreGlobal) {
       }
     }
   };
-  function _sfc_render$25(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$23(_ctx, _cache, $props, $setup, $data, $options) {
     return vue.openBlock(), vue.createElementBlock(
       "view",
       {
@@ -41218,7 +44603,7 @@ if (uni.restoreGlobal) {
       /* CLASS, STYLE */
     );
   }
-  const __easycom_3$2 = /* @__PURE__ */ _export_sfc(_sfc_main$26, [["render", _sfc_render$25], ["__scopeId", "data-v-31706dd7"], ["__file", "D:/uniapp2023/studyParty/node_modules/uview-plus/components/u-textarea/u-textarea.vue"]]);
+  const __easycom_3$2 = /* @__PURE__ */ _export_sfc(_sfc_main$24, [["render", _sfc_render$23], ["__scopeId", "data-v-31706dd7"], ["__file", "D:/uniapp2023/studyParty/node_modules/uview-plus/components/u-textarea/u-textarea.vue"]]);
   const __vite_glob_0_121 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
     __proto__: null,
     default: __easycom_3$2
@@ -41281,7 +44666,7 @@ if (uni.restoreGlobal) {
       }
     });
   };
-  const _sfc_main$25 = {
+  const _sfc_main$23 = {
     data() {
       return {
         groupId: null,
@@ -42163,11 +45548,11 @@ if (uni.restoreGlobal) {
       this.editRule = this.groupDetail.rule || "";
     }
   };
-  function _sfc_render$24(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$22(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_u_icon = resolveEasycom(vue.resolveDynamicComponent("u-icon"), __easycom_0$g);
-    const _component_u_button = resolveEasycom(vue.resolveDynamicComponent("u-button"), __easycom_3$4);
+    const _component_u_button = resolveEasycom(vue.resolveDynamicComponent("u-button"), __easycom_3$5);
     const _component_u_textarea = resolveEasycom(vue.resolveDynamicComponent("u-textarea"), __easycom_3$2);
-    const _component_u_popup = resolveEasycom(vue.resolveDynamicComponent("u-popup"), __easycom_3$3);
+    const _component_u_popup = resolveEasycom(vue.resolveDynamicComponent("u-popup"), __easycom_3$4);
     const _component_u_input = resolveEasycom(vue.resolveDynamicComponent("u-input"), __easycom_0$f);
     return vue.openBlock(), vue.createElementBlock("view", null, [
       vue.createElementVNode("div", { class: "body" }, [
@@ -43041,8 +46426,8 @@ if (uni.restoreGlobal) {
       ])
     ]);
   }
-  const PagesUserInfoGroupInfo = /* @__PURE__ */ _export_sfc(_sfc_main$25, [["render", _sfc_render$24], ["__file", "D:/uniapp2023/studyParty/pages/userInfo/groupInfo.vue"]]);
-  const _sfc_main$24 = {
+  const PagesUserInfoGroupInfo = /* @__PURE__ */ _export_sfc(_sfc_main$23, [["render", _sfc_render$22], ["__file", "D:/uniapp2023/studyParty/pages/userInfo/groupInfo.vue"]]);
+  const _sfc_main$22 = {
     data() {
       return {
         searchKeyword: "",
@@ -43317,9 +46702,9 @@ if (uni.restoreGlobal) {
       }
     }
   };
-  function _sfc_render$23(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$21(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_u_icon = resolveEasycom(vue.resolveDynamicComponent("u-icon"), __easycom_0$g);
-    const _component_u_button = resolveEasycom(vue.resolveDynamicComponent("u-button"), __easycom_3$4);
+    const _component_u_button = resolveEasycom(vue.resolveDynamicComponent("u-button"), __easycom_3$5);
     return vue.openBlock(), vue.createElementBlock("div", null, [
       vue.createElementVNode("div", { id: "app" }, [
         vue.createCommentVNode(" 顶部导航 "),
@@ -43882,2950 +47267,8 @@ if (uni.restoreGlobal) {
       ])
     ]);
   }
-  const PagesChatListGroupTaskList = /* @__PURE__ */ _export_sfc(_sfc_main$24, [["render", _sfc_render$23], ["__file", "D:/uniapp2023/studyParty/pages/chatList/groupTaskList.vue"]]);
-  const block0$2 = (Comp) => {
-    (Comp.$wxs || (Comp.$wxs = [])).push("handler");
-    (Comp.$wxsModules || (Comp.$wxsModules = {}))["handler"] = "6006ff9a";
-  };
-  const _sfc_main$23 = {
-    name: "node",
-    options: {},
-    data() {
-      return {
-        ctrl: {}
-      };
-    },
-    props: {
-      name: String,
-      attrs: {
-        type: Object,
-        default() {
-          return {};
-        }
-      },
-      childs: Array,
-      opts: Array
-    },
-    components: {},
-    mounted() {
-      this.$nextTick(() => {
-        var _a2, _b;
-        for (this.root = this == null ? void 0 : this.$parent; this.root && ((_a2 = this.root) == null ? void 0 : _a2.$options.name) !== "mp-html"; this.root = (_b = this.root) == null ? void 0 : _b.$parent)
-          ;
-      });
-      if (this.opts[0]) {
-        let i2;
-        for (i2 = this.childs.length; i2--; ) {
-          if (this.childs[i2].name === "img")
-            break;
-        }
-        if (i2 !== -1) {
-          this.observer = uni.createIntersectionObserver(this).relativeToViewport({
-            top: 500,
-            bottom: 500
-          });
-          this.observer.observe("._img", (res2) => {
-            if (res2.intersectionRatio) {
-              this.$set(this.ctrl, "load", 1);
-              this.observer.disconnect();
-            }
-          });
-        }
-      }
-    },
-    beforeDestroy() {
-      if (this.observer) {
-        this.observer.disconnect();
-      }
-    },
-    methods: {
-      /**
-       * @description 播放视频事件
-       * @param {Event} e
-       */
-      play(e2) {
-        const i2 = e2.currentTarget.dataset.i;
-        const node2 = this.childs[i2];
-        this.root.$emit("play", {
-          source: node2.name,
-          attrs: {
-            ...node2.attrs,
-            src: node2.src[this.ctrl[i2] || 0]
-          }
-        });
-      },
-      /**
-       * @description 图片点击事件
-       * @param {Event} e
-       */
-      imgTap(e2) {
-        const node2 = this.childs[e2.currentTarget.dataset.i];
-        if (node2.a) {
-          this.linkTap(node2.a);
-          return;
-        }
-        if (node2.attrs.ignore)
-          return;
-        node2.attrs.src = node2.attrs.src || node2.attrs["data-src"];
-        this.root.$emit("imgtap", node2.attrs);
-        if (this.root.previewImg) {
-          uni.previewImage({
-            current: parseInt(node2.attrs.i),
-            urls: this.root.imgList
-          });
-        }
-      },
-      /**
-       * @description 图片长按
-       */
-      imgLongTap(e2) {
-        const attrs = this.childs[e2.currentTarget.dataset.i].attrs;
-        if (this.opts[3] && !attrs.ignore) {
-          uni.showActionSheet({
-            itemList: ["保存图片"],
-            success: () => {
-              const save = (path2) => {
-                uni.saveImageToPhotosAlbum({
-                  filePath: path2,
-                  success() {
-                    uni.showToast({
-                      title: "保存成功"
-                    });
-                  }
-                });
-              };
-              if (this.root.imgList[attrs.i].startsWith("http")) {
-                uni.downloadFile({
-                  url: this.root.imgList[attrs.i],
-                  success: (res2) => save(res2.tempFilePath)
-                });
-              } else {
-                save(this.root.imgList[attrs.i]);
-              }
-            }
-          });
-        }
-      },
-      /**
-       * @description 图片加载完成事件
-       * @param {Event} e
-       */
-      imgLoad(e2) {
-        const i2 = e2.currentTarget.dataset.i;
-        if (!this.childs[i2].w) {
-          this.$set(this.ctrl, i2, e2.detail.width);
-        } else if (this.opts[1] && !this.ctrl[i2] || this.ctrl[i2] === -1) {
-          this.$set(this.ctrl, i2, 1);
-        }
-        this.checkReady();
-      },
-      /**
-       * @description 检查是否所有图片加载完毕
-       */
-      checkReady() {
-        if (this.root && !this.root.lazyLoad) {
-          this.root._unloadimgs -= 1;
-          if (!this.root._unloadimgs) {
-            setTimeout(() => {
-              this.root.getRect().then((rect) => {
-                this.root.$emit("ready", rect);
-              }).catch(() => {
-                this.root.$emit("ready", {});
-              });
-            }, 350);
-          }
-        }
-      },
-      /**
-       * @description 链接点击事件
-       * @param {Event} e
-       */
-      linkTap(e2) {
-        const node2 = e2.currentTarget ? this.childs[e2.currentTarget.dataset.i] : {};
-        const attrs = node2.attrs || e2;
-        const href = attrs.href;
-        this.root.$emit("linktap", Object.assign({
-          innerText: this.root.getText(node2.children || [])
-          // 链接内的文本内容
-        }, attrs));
-        if (href) {
-          if (href[0] === "#") {
-            this.root.navigateTo(href.substring(1)).catch(() => {
-            });
-          } else if (href.split("?")[0].includes("://")) {
-            if (this.root.copyLink) {
-              plus.runtime.openWeb(href);
-            }
-          } else {
-            uni.navigateTo({
-              url: href,
-              fail() {
-                uni.switchTab({
-                  url: href,
-                  fail() {
-                  }
-                });
-              }
-            });
-          }
-        }
-      },
-      /**
-       * @description 错误事件
-       * @param {Event} e
-       */
-      mediaError(e2) {
-        const i2 = e2.currentTarget.dataset.i;
-        const node2 = this.childs[i2];
-        if (node2.name === "video" || node2.name === "audio") {
-          let index2 = (this.ctrl[i2] || 0) + 1;
-          if (index2 > node2.src.length) {
-            index2 = 0;
-          }
-          if (index2 < node2.src.length) {
-            this.$set(this.ctrl, i2, index2);
-            return;
-          }
-        } else if (node2.name === "img") {
-          if (this.opts[2]) {
-            this.$set(this.ctrl, i2, -1);
-          }
-          this.checkReady();
-        }
-        if (this.root) {
-          this.root.$emit("error", {
-            source: node2.name,
-            attrs: node2.attrs,
-            errMsg: e2.detail.errMsg
-          });
-        }
-      }
-    }
-  };
-  function _sfc_render$22(_ctx, _cache, $props, $setup, $data, $options) {
-    const _component_node = vue.resolveComponent("node", true);
-    return vue.openBlock(), vue.createElementBlock("view", {
-      id: $props.attrs.id,
-      class: vue.normalizeClass("_block _" + $props.name + " " + $props.attrs.class),
-      style: vue.normalizeStyle($props.attrs.style)
-    }, [
-      (vue.openBlock(true), vue.createElementBlock(
-        vue.Fragment,
-        null,
-        vue.renderList($props.childs, (n2, i2) => {
-          return vue.openBlock(), vue.createElementBlock(
-            vue.Fragment,
-            { key: i2 },
-            [
-              vue.createCommentVNode(" 图片 "),
-              vue.createCommentVNode(" 占位图 "),
-              n2.name === "img" && !n2.t && ($props.opts[1] && !$data.ctrl[i2] || $data.ctrl[i2] < 0) ? (vue.openBlock(), vue.createElementBlock("image", {
-                key: 0,
-                class: "_img",
-                style: vue.normalizeStyle(n2.attrs.style),
-                src: $data.ctrl[i2] < 0 ? $props.opts[2] : $props.opts[1],
-                mode: "widthFix"
-              }, null, 12, ["src"])) : vue.createCommentVNode("v-if", true),
-              vue.createCommentVNode(" 显示图片 "),
-              vue.createCommentVNode(" 表格中的图片，使用 rich-text 防止大小不正确 "),
-              n2.name === "img" && n2.t ? (vue.openBlock(), vue.createElementBlock("rich-text", {
-                key: 1,
-                style: vue.normalizeStyle("display:" + n2.t),
-                nodes: [{ attrs: { style: n2.attrs.style || "", src: n2.attrs.src }, name: "img" }],
-                "data-i": i2,
-                onClick: _cache[0] || (_cache[0] = vue.withModifiers((...args) => $options.imgTap && $options.imgTap(...args), ["stop"]))
-              }, null, 12, ["nodes", "data-i"])) : n2.name === "img" ? (vue.openBlock(), vue.createElementBlock("image", {
-                key: 2,
-                id: n2.attrs.id,
-                class: vue.normalizeClass("_img " + n2.attrs.class),
-                style: vue.normalizeStyle(($data.ctrl[i2] === -1 ? "display:none;" : "") + "width:" + ($data.ctrl[i2] || 1) + "px;" + n2.attrs.style),
-                src: n2.attrs.src || ($data.ctrl.load ? n2.attrs["data-src"] : ""),
-                mode: !n2.h ? "widthFix" : !n2.w ? "heightFix" : n2.m || "",
-                "data-i": i2,
-                onLoad: _cache[1] || (_cache[1] = (...args) => $options.imgLoad && $options.imgLoad(...args)),
-                onError: _cache[2] || (_cache[2] = (...args) => $options.mediaError && $options.mediaError(...args)),
-                onClick: _cache[3] || (_cache[3] = vue.withModifiers((...args) => $options.imgTap && $options.imgTap(...args), ["stop"])),
-                onLongpress: _cache[4] || (_cache[4] = (...args) => $options.imgLongTap && $options.imgLongTap(...args))
-              }, null, 46, ["id", "src", "mode", "data-i"])) : n2.text ? (vue.openBlock(), vue.createElementBlock(
-                vue.Fragment,
-                { key: 3 },
-                [
-                  vue.createCommentVNode(" 文本 "),
-                  vue.createElementVNode(
-                    "text",
-                    { decode: "" },
-                    vue.toDisplayString(n2.text),
-                    1
-                    /* TEXT */
-                  )
-                ],
-                2112
-                /* STABLE_FRAGMENT, DEV_ROOT_FRAGMENT */
-              )) : n2.name === "br" ? (vue.openBlock(), vue.createElementBlock("text", { key: 4 }, vue.toDisplayString("\n"))) : n2.name === "a" ? (vue.openBlock(), vue.createElementBlock(
-                vue.Fragment,
-                { key: 5 },
-                [
-                  vue.createCommentVNode(" 链接 "),
-                  vue.createElementVNode("view", {
-                    id: n2.attrs.id,
-                    class: vue.normalizeClass((n2.attrs.href ? "_a " : "") + n2.attrs.class),
-                    "hover-class": "_hover",
-                    style: vue.normalizeStyle("display:inline;" + n2.attrs.style),
-                    "data-i": i2,
-                    onClick: _cache[5] || (_cache[5] = vue.withModifiers((...args) => $options.linkTap && $options.linkTap(...args), ["stop"]))
-                  }, [
-                    vue.createVNode(_component_node, {
-                      name: "span",
-                      childs: n2.children,
-                      opts: $props.opts,
-                      style: { "display": "inherit" }
-                    }, null, 8, ["childs", "opts"])
-                  ], 14, ["id", "data-i"])
-                ],
-                2112
-                /* STABLE_FRAGMENT, DEV_ROOT_FRAGMENT */
-              )) : n2.html ? (vue.openBlock(), vue.createElementBlock(
-                vue.Fragment,
-                { key: 6 },
-                [
-                  vue.createCommentVNode(" 视频 "),
-                  vue.createElementVNode("view", {
-                    id: n2.attrs.id,
-                    class: vue.normalizeClass("_video " + n2.attrs.class),
-                    style: vue.normalizeStyle(n2.attrs.style),
-                    innerHTML: n2.html,
-                    "data-i": i2,
-                    onVplay: _cache[6] || (_cache[6] = vue.withModifiers((...args) => $options.play && $options.play(...args), ["stop"]))
-                  }, null, 46, ["id", "innerHTML", "data-i"])
-                ],
-                2112
-                /* STABLE_FRAGMENT, DEV_ROOT_FRAGMENT */
-              )) : n2.name === "iframe" ? (vue.openBlock(), vue.createElementBlock("iframe", {
-                key: 7,
-                style: vue.normalizeStyle(n2.attrs.style),
-                allowfullscreen: n2.attrs.allowfullscreen,
-                frameborder: n2.attrs.frameborder,
-                src: n2.attrs.src
-              }, null, 12, ["allowfullscreen", "frameborder", "src"])) : n2.name === "embed" ? (vue.openBlock(), vue.createElementBlock("embed", {
-                key: 8,
-                style: vue.normalizeStyle(n2.attrs.style),
-                src: n2.attrs.src
-              }, null, 12, ["src"])) : n2.name === "table" && n2.c || n2.name === "li" ? (vue.openBlock(), vue.createElementBlock("view", {
-                key: 9,
-                id: n2.attrs.id,
-                class: vue.normalizeClass("_" + n2.name + " " + n2.attrs.class),
-                style: vue.normalizeStyle(n2.attrs.style)
-              }, [
-                n2.name === "li" ? (vue.openBlock(), vue.createBlock(_component_node, {
-                  key: 0,
-                  childs: n2.children,
-                  opts: $props.opts
-                }, null, 8, ["childs", "opts"])) : (vue.openBlock(true), vue.createElementBlock(
-                  vue.Fragment,
-                  { key: 1 },
-                  vue.renderList(n2.children, (tbody, x2) => {
-                    return vue.openBlock(), vue.createElementBlock(
-                      "view",
-                      {
-                        key: x2,
-                        class: vue.normalizeClass("_" + tbody.name + " " + tbody.attrs.class),
-                        style: vue.normalizeStyle(tbody.attrs.style)
-                      },
-                      [
-                        tbody.name === "td" || tbody.name === "th" ? (vue.openBlock(), vue.createBlock(_component_node, {
-                          key: 0,
-                          childs: tbody.children,
-                          opts: $props.opts
-                        }, null, 8, ["childs", "opts"])) : (vue.openBlock(true), vue.createElementBlock(
-                          vue.Fragment,
-                          { key: 1 },
-                          vue.renderList(tbody.children, (tr, y2) => {
-                            return vue.openBlock(), vue.createElementBlock(
-                              vue.Fragment,
-                              { key: y2 },
-                              [
-                                tr.name === "td" || tr.name === "th" ? (vue.openBlock(), vue.createElementBlock(
-                                  "view",
-                                  {
-                                    key: 0,
-                                    class: vue.normalizeClass("_" + tr.name + " " + tr.attrs.class),
-                                    style: vue.normalizeStyle(tr.attrs.style)
-                                  },
-                                  [
-                                    vue.createVNode(_component_node, {
-                                      childs: tr.children,
-                                      opts: $props.opts
-                                    }, null, 8, ["childs", "opts"])
-                                  ],
-                                  6
-                                  /* CLASS, STYLE */
-                                )) : (vue.openBlock(), vue.createElementBlock(
-                                  "view",
-                                  {
-                                    key: 1,
-                                    class: vue.normalizeClass("_" + tr.name + " " + tr.attrs.class),
-                                    style: vue.normalizeStyle(tr.attrs.style)
-                                  },
-                                  [
-                                    (vue.openBlock(true), vue.createElementBlock(
-                                      vue.Fragment,
-                                      null,
-                                      vue.renderList(tr.children, (td, z2) => {
-                                        return vue.openBlock(), vue.createElementBlock(
-                                          "view",
-                                          {
-                                            key: z2,
-                                            class: vue.normalizeClass("_" + td.name + " " + td.attrs.class),
-                                            style: vue.normalizeStyle(td.attrs.style)
-                                          },
-                                          [
-                                            vue.createVNode(_component_node, {
-                                              childs: td.children,
-                                              opts: $props.opts
-                                            }, null, 8, ["childs", "opts"])
-                                          ],
-                                          6
-                                          /* CLASS, STYLE */
-                                        );
-                                      }),
-                                      128
-                                      /* KEYED_FRAGMENT */
-                                    ))
-                                  ],
-                                  6
-                                  /* CLASS, STYLE */
-                                ))
-                              ],
-                              64
-                              /* STABLE_FRAGMENT */
-                            );
-                          }),
-                          128
-                          /* KEYED_FRAGMENT */
-                        ))
-                      ],
-                      6
-                      /* CLASS, STYLE */
-                    );
-                  }),
-                  128
-                  /* KEYED_FRAGMENT */
-                ))
-              ], 14, ["id"])) : !n2.c ? (vue.openBlock(), vue.createElementBlock(
-                vue.Fragment,
-                { key: 10 },
-                [
-                  vue.createCommentVNode(" insert "),
-                  vue.createCommentVNode(" 富文本 "),
-                  vue.createElementVNode("rich-text", {
-                    id: n2.attrs.id,
-                    style: vue.normalizeStyle("display:inline;" + n2.f),
-                    preview: false,
-                    selectable: $props.opts[4],
-                    "user-select": $props.opts[4],
-                    nodes: [n2]
-                  }, null, 12, ["id", "selectable", "user-select", "nodes"])
-                ],
-                2112
-                /* STABLE_FRAGMENT, DEV_ROOT_FRAGMENT */
-              )) : n2.c === 2 ? (vue.openBlock(), vue.createElementBlock(
-                vue.Fragment,
-                { key: 11 },
-                [
-                  vue.createCommentVNode(" 继续递归 "),
-                  vue.createElementVNode("view", {
-                    id: n2.attrs.id,
-                    class: vue.normalizeClass("_block _" + n2.name + " " + n2.attrs.class),
-                    style: vue.normalizeStyle(n2.f + ";" + n2.attrs.style)
-                  }, [
-                    (vue.openBlock(true), vue.createElementBlock(
-                      vue.Fragment,
-                      null,
-                      vue.renderList(n2.children, (n22, j2) => {
-                        return vue.openBlock(), vue.createBlock(_component_node, {
-                          key: j2,
-                          style: vue.normalizeStyle(n22.f),
-                          name: n22.name,
-                          attrs: n22.attrs,
-                          childs: n22.children,
-                          opts: $props.opts
-                        }, null, 8, ["style", "name", "attrs", "childs", "opts"]);
-                      }),
-                      128
-                      /* KEYED_FRAGMENT */
-                    ))
-                  ], 14, ["id"])
-                ],
-                2112
-                /* STABLE_FRAGMENT, DEV_ROOT_FRAGMENT */
-              )) : (vue.openBlock(), vue.createBlock(_component_node, {
-                key: 12,
-                style: vue.normalizeStyle(n2.f),
-                name: n2.name,
-                attrs: n2.attrs,
-                childs: n2.children,
-                opts: $props.opts
-              }, null, 8, ["style", "name", "attrs", "childs", "opts"]))
-            ],
-            64
-            /* STABLE_FRAGMENT */
-          );
-        }),
-        128
-        /* KEYED_FRAGMENT */
-      ))
-    ], 14, ["id"]);
-  }
-  if (typeof block0$2 === "function")
-    block0$2(_sfc_main$23);
-  const node$1 = /* @__PURE__ */ _export_sfc(_sfc_main$23, [["render", _sfc_render$22], ["__scopeId", "data-v-f3dc3055"], ["__file", "D:/uniapp2023/studyParty/node_modules/uview-plus/components/u-parse/node/node.vue"]]);
-  const config = {
-    // 信任的标签（保持标签名不变）
-    trustTags: makeMap("a,abbr,ad,audio,b,blockquote,br,code,col,colgroup,dd,del,dl,dt,div,em,fieldset,h1,h2,h3,h4,h5,h6,hr,i,img,ins,label,legend,li,ol,p,q,ruby,rt,source,span,strong,sub,sup,table,tbody,td,tfoot,th,thead,tr,title,ul,video"),
-    // 块级标签（转为 div，其他的非信任标签转为 span）
-    blockTags: makeMap("address,article,aside,body,caption,center,cite,footer,header,html,nav,pre,section"),
-    // 行内标签
-    inlineTags: makeMap("abbr,b,big,code,del,em,i,ins,label,q,small,span,strong,sub,sup"),
-    // 要移除的标签
-    ignoreTags: makeMap("area,base,canvas,embed,frame,head,iframe,input,link,map,meta,param,rp,script,source,style,textarea,title,track,wbr"),
-    // 自闭合的标签
-    voidTags: makeMap("area,base,br,col,circle,ellipse,embed,frame,hr,img,input,line,link,meta,param,path,polygon,rect,source,track,use,wbr"),
-    // html 实体
-    entities: {
-      lt: "<",
-      gt: ">",
-      quot: '"',
-      apos: "'",
-      ensp: " ",
-      emsp: " ",
-      nbsp: " ",
-      semi: ";",
-      ndash: "–",
-      mdash: "—",
-      middot: "·",
-      lsquo: "‘",
-      rsquo: "’",
-      ldquo: "“",
-      rdquo: "”",
-      bull: "•",
-      hellip: "…",
-      larr: "←",
-      uarr: "↑",
-      rarr: "→",
-      darr: "↓"
-    },
-    // 默认的标签样式
-    tagStyle: {
-      address: "font-style:italic",
-      big: "display:inline;font-size:1.2em",
-      caption: "display:table-caption;text-align:center",
-      center: "text-align:center",
-      cite: "font-style:italic",
-      dd: "margin-left:40px",
-      mark: "background-color:yellow",
-      pre: "font-family:monospace;white-space:pre",
-      s: "text-decoration:line-through",
-      small: "display:inline;font-size:0.8em",
-      strike: "text-decoration:line-through",
-      u: "text-decoration:underline"
-    },
-    // svg 大小写对照表
-    svgDict: {
-      animatetransform: "animateTransform",
-      lineargradient: "linearGradient",
-      viewbox: "viewBox",
-      attributename: "attributeName",
-      repeatcount: "repeatCount",
-      repeatdur: "repeatDur",
-      foreignobject: "foreignObject"
-    }
-  };
-  const tagSelector = {};
-  let windowWidth;
-  const systemInfo = uni.getSystemInfoSync();
-  windowWidth = systemInfo.windowWidth;
-  const blankChar = makeMap(" ,\r,\n,	,\f");
-  let idIndex = 0;
-  config.ignoreTags.iframe = void 0;
-  config.trustTags.iframe = true;
-  config.ignoreTags.embed = void 0;
-  config.trustTags.embed = true;
-  function makeMap(str) {
-    const map2 = /* @__PURE__ */ Object.create(null);
-    const list = str.split(",");
-    for (let i2 = list.length; i2--; ) {
-      map2[list[i2]] = true;
-    }
-    return map2;
-  }
-  function decodeEntity(str, amp) {
-    let i2 = str.indexOf("&");
-    while (i2 !== -1) {
-      const j2 = str.indexOf(";", i2 + 3);
-      let code2;
-      if (j2 === -1)
-        break;
-      if (str[i2 + 1] === "#") {
-        code2 = parseInt((str[i2 + 2] === "x" ? "0" : "") + str.substring(i2 + 2, j2));
-        if (!isNaN(code2)) {
-          str = str.substr(0, i2) + String.fromCharCode(code2) + str.substr(j2 + 1);
-        }
-      } else {
-        code2 = str.substring(i2 + 1, j2);
-        if (config.entities[code2] || code2 === "amp" && amp) {
-          str = str.substr(0, i2) + (config.entities[code2] || "&") + str.substr(j2 + 1);
-        }
-      }
-      i2 = str.indexOf("&", i2 + 1);
-    }
-    return str;
-  }
-  function mergeNodes(nodes) {
-    let i2 = nodes.length - 1;
-    for (let j2 = i2; j2 >= -1; j2--) {
-      if (j2 === -1 || nodes[j2].c || !nodes[j2].name || nodes[j2].name !== "div" && nodes[j2].name !== "p" && nodes[j2].name[0] !== "h" || (nodes[j2].attrs.style || "").includes("inline")) {
-        if (i2 - j2 >= 5) {
-          nodes.splice(j2 + 1, i2 - j2, {
-            name: "div",
-            attrs: {},
-            children: nodes.slice(j2 + 1, i2 + 1)
-          });
-        }
-        i2 = j2 - 1;
-      }
-    }
-  }
-  function Parser(vm) {
-    this.options = vm || {};
-    this.tagStyle = Object.assign({}, config.tagStyle, this.options.tagStyle);
-    this.imgList = vm.imgList || [];
-    this.imgList._unloadimgs = 0;
-    this.plugins = vm.plugins || [];
-    this.attrs = /* @__PURE__ */ Object.create(null);
-    this.stack = [];
-    this.nodes = [];
-    this.pre = (this.options.containerStyle || "").includes("white-space") && this.options.containerStyle.includes("pre") ? 2 : 0;
-  }
-  Parser.prototype.parse = function(content) {
-    for (let i2 = this.plugins.length; i2--; ) {
-      if (this.plugins[i2].onUpdate) {
-        content = this.plugins[i2].onUpdate(content, config) || content;
-      }
-    }
-    new Lexer(this).parse(content);
-    while (this.stack.length) {
-      this.popNode();
-    }
-    if (this.nodes.length > 50) {
-      mergeNodes(this.nodes);
-    }
-    return this.nodes;
-  };
-  Parser.prototype.expose = function() {
-    for (let i2 = this.stack.length; i2--; ) {
-      const item = this.stack[i2];
-      if (item.c || item.name === "a" || item.name === "video" || item.name === "audio")
-        return;
-      item.c = 1;
-    }
-  };
-  Parser.prototype.hook = function(node2) {
-    for (let i2 = this.plugins.length; i2--; ) {
-      if (this.plugins[i2].onParse && this.plugins[i2].onParse(node2, this) === false) {
-        return false;
-      }
-    }
-    return true;
-  };
-  Parser.prototype.getUrl = function(url2) {
-    const domain = this.options.domain;
-    if (url2[0] === "/") {
-      if (url2[1] === "/") {
-        url2 = (domain ? domain.split("://")[0] : "http") + ":" + url2;
-      } else if (domain) {
-        url2 = domain + url2;
-      } else {
-        url2 = plus.io.convertLocalFileSystemURL(url2);
-      }
-    } else if (!url2.includes("data:") && !url2.includes("://")) {
-      if (domain) {
-        url2 = domain + "/" + url2;
-      } else {
-        url2 = plus.io.convertLocalFileSystemURL(url2);
-      }
-    }
-    return url2;
-  };
-  Parser.prototype.parseStyle = function(node2) {
-    const attrs = node2.attrs;
-    const list = (this.tagStyle[node2.name] || "").split(";").concat((attrs.style || "").split(";"));
-    const styleObj = {};
-    let tmp = "";
-    if (attrs.id && !this.xml) {
-      if (this.options.useAnchor) {
-        this.expose();
-      } else if (node2.name !== "img" && node2.name !== "a" && node2.name !== "video" && node2.name !== "audio") {
-        attrs.id = void 0;
-      }
-    }
-    if (attrs.width) {
-      styleObj.width = parseFloat(attrs.width) + (attrs.width.includes("%") ? "%" : "px");
-      attrs.width = void 0;
-    }
-    if (attrs.height) {
-      styleObj.height = parseFloat(attrs.height) + (attrs.height.includes("%") ? "%" : "px");
-      attrs.height = void 0;
-    }
-    for (let i2 = 0, len = list.length; i2 < len; i2++) {
-      const info = list[i2].split(":");
-      if (info.length < 2)
-        continue;
-      const key2 = info.shift().trim().toLowerCase();
-      let value2 = info.join(":").trim();
-      if (value2[0] === "-" && value2.lastIndexOf("-") > 0 || value2.includes("safe")) {
-        tmp += `;${key2}:${value2}`;
-      } else if (!styleObj[key2] || value2.includes("import") || !styleObj[key2].includes("import")) {
-        if (value2.includes("url")) {
-          let j2 = value2.indexOf("(") + 1;
-          if (j2) {
-            while (value2[j2] === '"' || value2[j2] === "'" || blankChar[value2[j2]]) {
-              j2++;
-            }
-            value2 = value2.substr(0, j2) + this.getUrl(value2.substr(j2));
-          }
-        } else if (value2.includes("rpx")) {
-          value2 = value2.replace(/[0-9.]+\s*rpx/g, ($2) => parseFloat($2) * windowWidth / 750 + "px");
-        }
-        styleObj[key2] = value2;
-      }
-    }
-    node2.attrs.style = tmp;
-    return styleObj;
-  };
-  Parser.prototype.onTagName = function(name2) {
-    this.tagName = this.xml ? name2 : name2.toLowerCase();
-    if (this.tagName === "svg") {
-      this.xml = (this.xml || 0) + 1;
-      config.ignoreTags.style = void 0;
-    }
-  };
-  Parser.prototype.onAttrName = function(name2) {
-    name2 = this.xml ? name2 : name2.toLowerCase();
-    if (name2.includes("?") || name2.includes(";")) {
-      this.attrName = void 0;
-      return;
-    }
-    if (name2.substr(0, 5) === "data-") {
-      if (name2 === "data-src" && !this.attrs.src) {
-        this.attrName = "src";
-      } else if (this.tagName === "img" || this.tagName === "a") {
-        this.attrName = name2;
-      } else {
-        this.attrName = void 0;
-      }
-    } else {
-      this.attrName = name2;
-      this.attrs[name2] = "T";
-    }
-  };
-  Parser.prototype.onAttrVal = function(val) {
-    const name2 = this.attrName || "";
-    if (name2 === "style" || name2 === "href") {
-      this.attrs[name2] = decodeEntity(val, true);
-    } else if (name2.includes("src")) {
-      this.attrs[name2] = this.getUrl(decodeEntity(val, true));
-    } else if (name2) {
-      this.attrs[name2] = val;
-    }
-  };
-  Parser.prototype.onOpenTag = function(selfClose) {
-    const node2 = /* @__PURE__ */ Object.create(null);
-    node2.name = this.tagName;
-    node2.attrs = this.attrs;
-    if (this.options.nodes.length) {
-      node2.type = "node";
-    }
-    this.attrs = /* @__PURE__ */ Object.create(null);
-    const attrs = node2.attrs;
-    const parent = this.stack[this.stack.length - 1];
-    const siblings = parent ? parent.children : this.nodes;
-    const close = this.xml ? selfClose : config.voidTags[node2.name];
-    if (tagSelector[node2.name]) {
-      attrs.class = tagSelector[node2.name] + (attrs.class ? " " + attrs.class : "");
-    }
-    if (node2.name === "embed") {
-      this.expose();
-    }
-    if (node2.name === "video" || node2.name === "audio") {
-      if (node2.name === "video" && !attrs.id) {
-        attrs.id = "v" + idIndex++;
-      }
-      if (!attrs.controls && !attrs.autoplay) {
-        attrs.controls = "T";
-      }
-      node2.src = [];
-      if (attrs.src) {
-        node2.src.push(attrs.src);
-        attrs.src = void 0;
-      }
-      this.expose();
-    }
-    if (close) {
-      if (!this.hook(node2) || config.ignoreTags[node2.name]) {
-        if (node2.name === "base" && !this.options.domain) {
-          this.options.domain = attrs.href;
-        } else if (node2.name === "source" && parent && (parent.name === "video" || parent.name === "audio") && attrs.src) {
-          parent.src.push(attrs.src);
-        }
-        return;
-      }
-      const styleObj = this.parseStyle(node2);
-      if (node2.name === "img") {
-        if (attrs.src) {
-          if (attrs.src.includes("webp")) {
-            node2.webp = "T";
-          }
-          if (attrs.src.includes("data:") && this.options.previewImg !== "all" && !attrs["original-src"]) {
-            attrs.ignore = "T";
-          }
-          if (!attrs.ignore || node2.webp || attrs.src.includes("cloud://")) {
-            for (let i2 = this.stack.length; i2--; ) {
-              const item = this.stack[i2];
-              if (item.name === "a") {
-                node2.a = item.attrs;
-              }
-              if (item.name === "table" && !node2.webp && !attrs.src.includes("cloud://")) {
-                if (!styleObj.display || styleObj.display.includes("inline")) {
-                  node2.t = "inline-block";
-                } else {
-                  node2.t = styleObj.display;
-                }
-                styleObj.display = void 0;
-              }
-              item.c = 1;
-            }
-            attrs.i = this.imgList.length.toString();
-            let src = attrs["original-src"] || attrs.src;
-            this.imgList.push(src);
-            if (!node2.t) {
-              this.imgList._unloadimgs += 1;
-            }
-            if (this.options.lazyLoad) {
-              attrs["data-src"] = attrs.src;
-              attrs.src = void 0;
-            }
-          }
-        }
-        if (styleObj.display === "inline") {
-          styleObj.display = "";
-        }
-        if (attrs.ignore) {
-          styleObj["max-width"] = styleObj["max-width"] || "100%";
-          attrs.style += ";-webkit-touch-callout:none";
-        }
-        if (parseInt(styleObj.width) > windowWidth) {
-          styleObj.height = void 0;
-        }
-        if (!isNaN(parseInt(styleObj.width))) {
-          node2.w = "T";
-        }
-        if (!isNaN(parseInt(styleObj.height)) && (!styleObj.height.includes("%") || parent && (parent.attrs.style || "").includes("height"))) {
-          node2.h = "T";
-        }
-        if (node2.w && node2.h && styleObj["object-fit"]) {
-          if (styleObj["object-fit"] === "contain") {
-            node2.m = "aspectFit";
-          } else if (styleObj["object-fit"] === "cover") {
-            node2.m = "aspectFill";
-          }
-        }
-      } else if (node2.name === "svg") {
-        siblings.push(node2);
-        this.stack.push(node2);
-        this.popNode();
-        return;
-      }
-      for (const key2 in styleObj) {
-        if (styleObj[key2]) {
-          attrs.style += `;${key2}:${styleObj[key2].replace(" !important", "")}`;
-        }
-      }
-      attrs.style = attrs.style.substr(1) || void 0;
-    } else {
-      if ((node2.name === "pre" || (attrs.style || "").includes("white-space") && attrs.style.includes("pre")) && this.pre !== 2) {
-        this.pre = node2.pre = 1;
-      }
-      node2.children = [];
-      this.stack.push(node2);
-    }
-    siblings.push(node2);
-  };
-  Parser.prototype.onCloseTag = function(name2) {
-    name2 = this.xml ? name2 : name2.toLowerCase();
-    let i2;
-    for (i2 = this.stack.length; i2--; ) {
-      if (this.stack[i2].name === name2)
-        break;
-    }
-    if (i2 !== -1) {
-      while (this.stack.length > i2) {
-        this.popNode();
-      }
-    } else if (name2 === "p" || name2 === "br") {
-      const siblings = this.stack.length ? this.stack[this.stack.length - 1].children : this.nodes;
-      siblings.push({
-        name: name2,
-        attrs: {
-          class: tagSelector[name2] || "",
-          style: this.tagStyle[name2] || ""
-        }
-      });
-    }
-  };
-  Parser.prototype.popNode = function() {
-    const node2 = this.stack.pop();
-    let attrs = node2.attrs;
-    const children = node2.children;
-    const parent = this.stack[this.stack.length - 1];
-    const siblings = parent ? parent.children : this.nodes;
-    if (!this.hook(node2) || config.ignoreTags[node2.name]) {
-      if (node2.name === "title" && children.length && children[0].type === "text" && this.options.setTitle) {
-        uni.setNavigationBarTitle({
-          title: children[0].text
-        });
-      }
-      siblings.pop();
-      return;
-    }
-    if (node2.pre && this.pre !== 2) {
-      this.pre = node2.pre = void 0;
-      for (let i2 = this.stack.length; i2--; ) {
-        if (this.stack[i2].pre) {
-          this.pre = 1;
-        }
-      }
-    }
-    const styleObj = {};
-    if (node2.name === "svg") {
-      if (this.xml > 1) {
-        this.xml--;
-        return;
-      }
-      let src = "";
-      const style = attrs.style;
-      attrs.style = "";
-      attrs.xmlns = "http://www.w3.org/2000/svg";
-      (function traversal(node3) {
-        if (node3.type === "text") {
-          src += node3.text;
-          return;
-        }
-        const name2 = config.svgDict[node3.name] || node3.name;
-        if (name2 === "foreignObject") {
-          for (const child of node3.children || []) {
-            if (child.attrs && !child.attrs.xmlns) {
-              child.attrs.xmlns = "http://www.w3.org/1999/xhtml";
-              break;
-            }
-          }
-        }
-        src += "<" + name2;
-        for (const item in node3.attrs) {
-          const val = node3.attrs[item];
-          if (val) {
-            src += ` ${config.svgDict[item] || item}="${val.replace(/"/g, "")}"`;
-          }
-        }
-        if (!node3.children) {
-          src += "/>";
-        } else {
-          src += ">";
-          for (let i2 = 0; i2 < node3.children.length; i2++) {
-            traversal(node3.children[i2]);
-          }
-          src += "</" + name2 + ">";
-        }
-      })(node2);
-      node2.name = "img";
-      node2.attrs = {
-        src: "data:image/svg+xml;utf8," + src.replace(/#/g, "%23"),
-        style,
-        ignore: "T"
-      };
-      node2.children = void 0;
-      this.xml = false;
-      config.ignoreTags.style = true;
-      return;
-    }
-    if (attrs.align) {
-      if (node2.name === "table") {
-        if (attrs.align === "center") {
-          styleObj["margin-inline-start"] = styleObj["margin-inline-end"] = "auto";
-        } else {
-          styleObj.float = attrs.align;
-        }
-      } else {
-        styleObj["text-align"] = attrs.align;
-      }
-      attrs.align = void 0;
-    }
-    if (attrs.dir) {
-      styleObj.direction = attrs.dir;
-      attrs.dir = void 0;
-    }
-    if (node2.name === "font") {
-      if (attrs.color) {
-        styleObj.color = attrs.color;
-        attrs.color = void 0;
-      }
-      if (attrs.face) {
-        styleObj["font-family"] = attrs.face;
-        attrs.face = void 0;
-      }
-      if (attrs.size) {
-        let size2 = parseInt(attrs.size);
-        if (!isNaN(size2)) {
-          if (size2 < 1) {
-            size2 = 1;
-          } else if (size2 > 7) {
-            size2 = 7;
-          }
-          styleObj["font-size"] = ["x-small", "small", "medium", "large", "x-large", "xx-large", "xxx-large"][size2 - 1];
-        }
-        attrs.size = void 0;
-      }
-    }
-    if ((attrs.class || "").includes("align-center")) {
-      styleObj["text-align"] = "center";
-    }
-    Object.assign(styleObj, this.parseStyle(node2));
-    if (node2.name !== "table" && parseInt(styleObj.width) > windowWidth) {
-      styleObj["max-width"] = "100%";
-      styleObj["box-sizing"] = "border-box";
-    }
-    if (config.blockTags[node2.name]) {
-      node2.name = "div";
-    } else if (!config.trustTags[node2.name] && !this.xml) {
-      node2.name = "span";
-    }
-    if (node2.name === "a" || node2.name === "ad" || node2.name === "iframe") {
-      this.expose();
-    } else if (node2.name === "video") {
-      if ((styleObj.height || "").includes("auto")) {
-        styleObj.height = void 0;
-      }
-      let str = '<video style="width:100%;height:100%"';
-      for (const item in attrs) {
-        if (attrs[item]) {
-          str += " " + item + '="' + attrs[item] + '"';
-        }
-      }
-      if (this.options.pauseVideo) {
-        str += ` onplay="this.dispatchEvent(new CustomEvent('vplay',{bubbles:!0}));for(var e=document.getElementsByTagName('video'),t=0;t<e.length;t++)e[t]!=this&&e[t].pause()"`;
-      }
-      str += ">";
-      for (let i2 = 0; i2 < node2.src.length; i2++) {
-        str += '<source src="' + node2.src[i2] + '">';
-      }
-      str += "</video>";
-      node2.html = str;
-    } else if ((node2.name === "ul" || node2.name === "ol") && node2.c) {
-      const types2 = {
-        a: "lower-alpha",
-        A: "upper-alpha",
-        i: "lower-roman",
-        I: "upper-roman"
-      };
-      if (types2[attrs.type]) {
-        attrs.style += ";list-style-type:" + types2[attrs.type];
-        attrs.type = void 0;
-      }
-      for (let i2 = children.length; i2--; ) {
-        if (children[i2].name === "li") {
-          children[i2].c = 1;
-        }
-      }
-    } else if (node2.name === "table") {
-      let padding = parseFloat(attrs.cellpadding);
-      let spacing = parseFloat(attrs.cellspacing);
-      const border = parseFloat(attrs.border);
-      const bordercolor = styleObj["border-color"];
-      const borderstyle = styleObj["border-style"];
-      if (node2.c) {
-        if (isNaN(padding)) {
-          padding = 2;
-        }
-        if (isNaN(spacing)) {
-          spacing = 2;
-        }
-      }
-      if (border) {
-        attrs.style += `;border:${border}px ${borderstyle || "solid"} ${bordercolor || "gray"}`;
-      }
-      if (node2.flag && node2.c) {
-        styleObj.display = "grid";
-        if (styleObj["border-collapse"] === "collapse") {
-          styleObj["border-collapse"] = void 0;
-          spacing = 0;
-        }
-        if (spacing) {
-          styleObj["grid-gap"] = spacing + "px";
-          styleObj.padding = spacing + "px";
-        } else if (border) {
-          attrs.style += ";border-left:0;border-top:0";
-        }
-        const width = [];
-        const trList = [];
-        const cells = [];
-        const map2 = {};
-        (function traversal(nodes) {
-          for (let i2 = 0; i2 < nodes.length; i2++) {
-            if (nodes[i2].name === "tr") {
-              trList.push(nodes[i2]);
-            } else if (nodes[i2].name === "colgroup") {
-              let colI = 1;
-              for (const col of nodes[i2].children || []) {
-                if (col.name === "col") {
-                  const style = col.attrs.style || "";
-                  const start = style.indexOf("width") ? style.indexOf(";width") : 0;
-                  if (start !== -1) {
-                    let end = style.indexOf(";", start + 6);
-                    if (end === -1) {
-                      end = style.length;
-                    }
-                    width[colI] = style.substring(start ? start + 7 : 6, end);
-                  }
-                  colI += 1;
-                }
-              }
-            } else {
-              traversal(nodes[i2].children || []);
-            }
-          }
-        })(children);
-        for (let row = 1; row <= trList.length; row++) {
-          let col = 1;
-          for (let j2 = 0; j2 < trList[row - 1].children.length; j2++) {
-            const td = trList[row - 1].children[j2];
-            if (td.name === "td" || td.name === "th") {
-              while (map2[row + "." + col]) {
-                col++;
-              }
-              let style = td.attrs.style || "";
-              let start = style.indexOf("width") ? style.indexOf(";width") : 0;
-              if (start !== -1) {
-                let end = style.indexOf(";", start + 6);
-                if (end === -1) {
-                  end = style.length;
-                }
-                if (!td.attrs.colspan) {
-                  width[col] = style.substring(start ? start + 7 : 6, end);
-                }
-                style = style.substr(0, start) + style.substr(end);
-              }
-              style += ";display:flex";
-              start = style.indexOf("vertical-align");
-              if (start !== -1) {
-                const val = style.substr(start + 15, 10);
-                if (val.includes("middle")) {
-                  style += ";align-items:center";
-                } else if (val.includes("bottom")) {
-                  style += ";align-items:flex-end";
-                }
-              } else {
-                style += ";align-items:center";
-              }
-              start = style.indexOf("text-align");
-              if (start !== -1) {
-                const val = style.substr(start + 11, 10);
-                if (val.includes("center")) {
-                  style += ";justify-content: center";
-                } else if (val.includes("right")) {
-                  style += ";justify-content: right";
-                }
-              }
-              style = (border ? `;border:${border}px ${borderstyle || "solid"} ${bordercolor || "gray"}` + (spacing ? "" : ";border-right:0;border-bottom:0") : "") + (padding ? `;padding:${padding}px` : "") + ";" + style;
-              if (td.attrs.colspan) {
-                style += `;grid-column-start:${col};grid-column-end:${col + parseInt(td.attrs.colspan)}`;
-                if (!td.attrs.rowspan) {
-                  style += `;grid-row-start:${row};grid-row-end:${row + 1}`;
-                }
-                col += parseInt(td.attrs.colspan) - 1;
-              }
-              if (td.attrs.rowspan) {
-                style += `;grid-row-start:${row};grid-row-end:${row + parseInt(td.attrs.rowspan)}`;
-                if (!td.attrs.colspan) {
-                  style += `;grid-column-start:${col};grid-column-end:${col + 1}`;
-                }
-                for (let rowspan = 1; rowspan < td.attrs.rowspan; rowspan++) {
-                  for (let colspan = 0; colspan < (td.attrs.colspan || 1); colspan++) {
-                    map2[row + rowspan + "." + (col - colspan)] = 1;
-                  }
-                }
-              }
-              if (style) {
-                td.attrs.style = style;
-              }
-              cells.push(td);
-              col++;
-            }
-          }
-          if (row === 1) {
-            let temp = "";
-            for (let i2 = 1; i2 < col; i2++) {
-              temp += (width[i2] ? width[i2] : "auto") + " ";
-            }
-            styleObj["grid-template-columns"] = temp;
-          }
-        }
-        node2.children = cells;
-      } else {
-        if (node2.c) {
-          styleObj.display = "table";
-        }
-        if (!isNaN(spacing)) {
-          styleObj["border-spacing"] = spacing + "px";
-        }
-        if (border || padding) {
-          (function traversal(nodes) {
-            for (let i2 = 0; i2 < nodes.length; i2++) {
-              const td = nodes[i2];
-              if (td.name === "th" || td.name === "td") {
-                if (border) {
-                  td.attrs.style = `border:${border}px ${borderstyle || "solid"} ${bordercolor || "gray"};${td.attrs.style || ""}`;
-                }
-                if (padding) {
-                  td.attrs.style = `padding:${padding}px;${td.attrs.style || ""}`;
-                }
-              } else if (td.children) {
-                traversal(td.children);
-              }
-            }
-          })(children);
-        }
-      }
-      if (this.options.scrollTable && !(attrs.style || "").includes("inline")) {
-        const table = Object.assign({}, node2);
-        node2.name = "div";
-        node2.attrs = {
-          style: "overflow:auto"
-        };
-        node2.children = [table];
-        attrs = table.attrs;
-      }
-    } else if ((node2.name === "tbody" || node2.name === "tr") && node2.flag && node2.c) {
-      node2.flag = void 0;
-      (function traversal(nodes) {
-        for (let i2 = 0; i2 < nodes.length; i2++) {
-          if (nodes[i2].name === "td") {
-            for (const style of ["color", "background", "background-color"]) {
-              if (styleObj[style]) {
-                nodes[i2].attrs.style = style + ":" + styleObj[style] + ";" + (nodes[i2].attrs.style || "");
-              }
-            }
-          } else {
-            traversal(nodes[i2].children || []);
-          }
-        }
-      })(children);
-    } else if ((node2.name === "td" || node2.name === "th") && (attrs.colspan || attrs.rowspan)) {
-      for (let i2 = this.stack.length; i2--; ) {
-        if (this.stack[i2].name === "table" || this.stack[i2].name === "tbody" || this.stack[i2].name === "tr") {
-          this.stack[i2].flag = 1;
-        }
-      }
-    } else if (node2.name === "ruby") {
-      node2.name = "span";
-      for (let i2 = 0; i2 < children.length - 1; i2++) {
-        if (children[i2].type === "text" && children[i2 + 1].name === "rt") {
-          children[i2] = {
-            name: "div",
-            attrs: {
-              style: "display:inline-block;text-align:center"
-            },
-            children: [{
-              name: "div",
-              attrs: {
-                style: "font-size:50%;" + (children[i2 + 1].attrs.style || "")
-              },
-              children: children[i2 + 1].children
-            }, children[i2]]
-          };
-          children.splice(i2 + 1, 1);
-        }
-      }
-    } else if (node2.c) {
-      (function traversal(node3) {
-        node3.c = 2;
-        for (let i2 = node3.children.length; i2--; ) {
-          const child = node3.children[i2];
-          if (child.name && (config.inlineTags[child.name] || (child.attrs.style || "").includes("inline") && child.children) && !child.c) {
-            traversal(child);
-          }
-          if (!child.c || child.name === "table") {
-            node3.c = 1;
-          }
-        }
-      })(node2);
-    }
-    if ((styleObj.display || "").includes("flex") && !node2.c) {
-      for (let i2 = children.length; i2--; ) {
-        const item = children[i2];
-        if (item.f) {
-          item.attrs.style = (item.attrs.style || "") + item.f;
-          item.f = void 0;
-        }
-      }
-    }
-    const flex = parent && ((parent.attrs.style || "").includes("flex") || (parent.attrs.style || "").includes("grid")) && !node2.c;
-    if (flex) {
-      node2.f = ";max-width:100%";
-    }
-    if (children.length >= 50 && node2.c && !(styleObj.display || "").includes("flex")) {
-      mergeNodes(children);
-    }
-    for (const key2 in styleObj) {
-      if (styleObj[key2]) {
-        const val = `;${key2}:${styleObj[key2].replace(" !important", "")}`;
-        if (flex && (key2.includes("flex") && key2 !== "flex-direction" || key2 === "align-self" || key2.includes("grid") || styleObj[key2][0] === "-" || key2.includes("width") && val.includes("%"))) {
-          node2.f += val;
-          if (key2 === "width") {
-            attrs.style += ";width:100%";
-          }
-        } else {
-          attrs.style += val;
-        }
-      }
-    }
-    attrs.style = attrs.style.substr(1) || void 0;
-  };
-  Parser.prototype.onText = function(text) {
-    if (!this.pre) {
-      let trim2 = "";
-      let flag2;
-      for (let i2 = 0, len = text.length; i2 < len; i2++) {
-        if (!blankChar[text[i2]]) {
-          trim2 += text[i2];
-        } else {
-          if (trim2[trim2.length - 1] !== " ") {
-            trim2 += " ";
-          }
-          if (text[i2] === "\n" && !flag2) {
-            flag2 = true;
-          }
-        }
-      }
-      if (trim2 === " ") {
-        if (flag2)
-          return;
-        else {
-          const parent = this.stack[this.stack.length - 1];
-          if (parent && parent.name[0] === "t")
-            return;
-        }
-      }
-      text = trim2;
-    }
-    const node2 = /* @__PURE__ */ Object.create(null);
-    node2.type = "text";
-    node2.text = decodeEntity(text);
-    if (this.hook(node2)) {
-      const siblings = this.stack.length ? this.stack[this.stack.length - 1].children : this.nodes;
-      siblings.push(node2);
-    }
-  };
-  function Lexer(handler) {
-    this.handler = handler;
-  }
-  Lexer.prototype.parse = function(content) {
-    this.content = content || "";
-    this.i = 0;
-    this.start = 0;
-    this.state = this.text;
-    for (let len = this.content.length; this.i !== -1 && this.i < len; ) {
-      this.state();
-    }
-  };
-  Lexer.prototype.checkClose = function(method3) {
-    const selfClose = this.content[this.i] === "/";
-    if (this.content[this.i] === ">" || selfClose && this.content[this.i + 1] === ">") {
-      if (method3) {
-        this.handler[method3](this.content.substring(this.start, this.i));
-      }
-      this.i += selfClose ? 2 : 1;
-      this.start = this.i;
-      this.handler.onOpenTag(selfClose);
-      if (this.handler.tagName === "script") {
-        this.i = this.content.indexOf("</", this.i);
-        if (this.i !== -1) {
-          this.i += 2;
-          this.start = this.i;
-        }
-        this.state = this.endTag;
-      } else {
-        this.state = this.text;
-      }
-      return true;
-    }
-    return false;
-  };
-  Lexer.prototype.text = function() {
-    this.i = this.content.indexOf("<", this.i);
-    if (this.i === -1) {
-      if (this.start < this.content.length) {
-        this.handler.onText(this.content.substring(this.start, this.content.length));
-      }
-      return;
-    }
-    const c2 = this.content[this.i + 1];
-    if (c2 >= "a" && c2 <= "z" || c2 >= "A" && c2 <= "Z") {
-      if (this.start !== this.i) {
-        this.handler.onText(this.content.substring(this.start, this.i));
-      }
-      this.start = ++this.i;
-      this.state = this.tagName;
-    } else if (c2 === "/" || c2 === "!" || c2 === "?") {
-      if (this.start !== this.i) {
-        this.handler.onText(this.content.substring(this.start, this.i));
-      }
-      const next2 = this.content[this.i + 2];
-      if (c2 === "/" && (next2 >= "a" && next2 <= "z" || next2 >= "A" && next2 <= "Z")) {
-        this.i += 2;
-        this.start = this.i;
-        this.state = this.endTag;
-        return;
-      }
-      let end = "-->";
-      if (c2 !== "!" || this.content[this.i + 2] !== "-" || this.content[this.i + 3] !== "-") {
-        end = ">";
-      }
-      this.i = this.content.indexOf(end, this.i);
-      if (this.i !== -1) {
-        this.i += end.length;
-        this.start = this.i;
-      }
-    } else {
-      this.i++;
-    }
-  };
-  Lexer.prototype.tagName = function() {
-    if (blankChar[this.content[this.i]]) {
-      this.handler.onTagName(this.content.substring(this.start, this.i));
-      while (blankChar[this.content[++this.i]])
-        ;
-      if (this.i < this.content.length && !this.checkClose()) {
-        this.start = this.i;
-        this.state = this.attrName;
-      }
-    } else if (!this.checkClose("onTagName")) {
-      this.i++;
-    }
-  };
-  Lexer.prototype.attrName = function() {
-    let c2 = this.content[this.i];
-    if (blankChar[c2] || c2 === "=") {
-      this.handler.onAttrName(this.content.substring(this.start, this.i));
-      let needVal = c2 === "=";
-      const len = this.content.length;
-      while (++this.i < len) {
-        c2 = this.content[this.i];
-        if (!blankChar[c2]) {
-          if (this.checkClose())
-            return;
-          if (needVal) {
-            this.start = this.i;
-            this.state = this.attrVal;
-            return;
-          }
-          if (this.content[this.i] === "=") {
-            needVal = true;
-          } else {
-            this.start = this.i;
-            this.state = this.attrName;
-            return;
-          }
-        }
-      }
-    } else if (!this.checkClose("onAttrName")) {
-      this.i++;
-    }
-  };
-  Lexer.prototype.attrVal = function() {
-    const c2 = this.content[this.i];
-    const len = this.content.length;
-    if (c2 === '"' || c2 === "'") {
-      this.start = ++this.i;
-      this.i = this.content.indexOf(c2, this.i);
-      if (this.i === -1)
-        return;
-      this.handler.onAttrVal(this.content.substring(this.start, this.i));
-    } else {
-      for (; this.i < len; this.i++) {
-        if (blankChar[this.content[this.i]]) {
-          this.handler.onAttrVal(this.content.substring(this.start, this.i));
-          break;
-        } else if (this.checkClose("onAttrVal"))
-          return;
-      }
-    }
-    while (blankChar[this.content[++this.i]])
-      ;
-    if (this.i < len && !this.checkClose()) {
-      this.start = this.i;
-      this.state = this.attrName;
-    }
-  };
-  Lexer.prototype.endTag = function() {
-    const c2 = this.content[this.i];
-    if (blankChar[c2] || c2 === ">" || c2 === "/") {
-      this.handler.onCloseTag(this.content.substring(this.start, this.i));
-      if (c2 !== ">") {
-        this.i = this.content.indexOf(">", this.i);
-        if (this.i === -1)
-          return;
-      }
-      this.start = ++this.i;
-      this.state = this.text;
-    } else {
-      this.i++;
-    }
-  };
-  const plugins = [];
-  const _sfc_main$22 = {
-    name: "u-parse",
-    data() {
-      return {
-        nodes: []
-      };
-    },
-    props: {
-      containerStyle: {
-        type: String,
-        default: ""
-      },
-      content: {
-        type: String,
-        default: ""
-      },
-      copyLink: {
-        type: [Boolean, String],
-        default: true
-      },
-      domain: String,
-      errorImg: {
-        type: String,
-        default: ""
-      },
-      lazyLoad: {
-        type: [Boolean, String],
-        default: false
-      },
-      loadingImg: {
-        type: String,
-        default: ""
-      },
-      pauseVideo: {
-        type: [Boolean, String],
-        default: true
-      },
-      previewImg: {
-        type: [Boolean, String],
-        default: true
-      },
-      scrollTable: [Boolean, String],
-      selectable: [Boolean, String],
-      setTitle: {
-        type: [Boolean, String],
-        default: true
-      },
-      showImgMenu: {
-        type: [Boolean, String],
-        default: true
-      },
-      tagStyle: Object,
-      useAnchor: [Boolean, Number]
-    },
-    emits: ["load", "ready", "imgTap", "linkTap", "play", "error"],
-    components: {
-      node: node$1
-    },
-    watch: {
-      content(content) {
-        this.setContent(content);
-      }
-    },
-    created() {
-      this.plugins = [];
-      for (let i2 = plugins.length; i2--; ) {
-        this.plugins.push(new plugins[i2](this));
-      }
-    },
-    mounted() {
-      if (this.content && !this.nodes.length) {
-        this.setContent(this.content);
-      }
-    },
-    beforeUnmount() {
-      this._hook("onDetached");
-    },
-    methods: {
-      /**
-       * @description 将锚点跳转的范围限定在一个 scroll-view 内
-       * @param {Object} page scroll-view 所在页面的示例
-       * @param {String} selector scroll-view 的选择器
-       * @param {String} scrollTop scroll-view scroll-top 属性绑定的变量名
-       */
-      in(page2, selector, scrollTop) {
-        if (page2 && selector && scrollTop) {
-          this._in = {
-            page: page2,
-            selector,
-            scrollTop
-          };
-        }
-      },
-      /**
-       * @description 锚点跳转
-       * @param {String} id 要跳转的锚点 id
-       * @param {Number} offset 跳转位置的偏移量
-       * @returns {Promise}
-       */
-      navigateTo(id2, offset) {
-        return new Promise((resolve, reject) => {
-          if (!this.useAnchor) {
-            reject(Error("Anchor is disabled"));
-            return;
-          }
-          offset = offset || parseInt(this.useAnchor) || 0;
-          let deep = " ";
-          const selector = uni.createSelectorQuery().in(this._in ? this._in.page : this).select((this._in ? this._in.selector : "._root") + (id2 ? `${deep}#${id2}` : "")).boundingClientRect();
-          if (this._in) {
-            selector.select(this._in.selector).scrollOffset().select(this._in.selector).boundingClientRect();
-          } else {
-            selector.selectViewport().scrollOffset();
-          }
-          selector.exec((res2) => {
-            if (!res2[0]) {
-              reject(Error("Label not found"));
-              return;
-            }
-            const scrollTop = res2[1].scrollTop + res2[0].top - (res2[2] ? res2[2].top : 0) + offset;
-            if (this._in) {
-              this._in.page[this._in.scrollTop] = scrollTop;
-            } else {
-              uni.pageScrollTo({
-                scrollTop,
-                duration: 300
-              });
-            }
-            resolve();
-          });
-        });
-      },
-      /**
-       * @description 获取文本内容
-       * @return {String}
-       */
-      getText(nodes) {
-        let text = "";
-        (function traversal(nodes2) {
-          for (let i2 = 0; i2 < nodes2.length; i2++) {
-            const node2 = nodes2[i2];
-            if (node2.type === "text") {
-              text += node2.text.replace(/&amp;/g, "&");
-            } else if (node2.name === "br") {
-              text += "\n";
-            } else {
-              const isBlock = node2.name === "p" || node2.name === "div" || node2.name === "tr" || node2.name === "li" || node2.name[0] === "h" && node2.name[1] > "0" && node2.name[1] < "7";
-              if (isBlock && text && text[text.length - 1] !== "\n") {
-                text += "\n";
-              }
-              if (node2.children) {
-                traversal(node2.children);
-              }
-              if (isBlock && text[text.length - 1] !== "\n") {
-                text += "\n";
-              } else if (node2.name === "td" || node2.name === "th") {
-                text += "	";
-              }
-            }
-          }
-        })(nodes || this.nodes);
-        return text;
-      },
-      /**
-       * @description 获取内容大小和位置
-       * @return {Promise}
-       */
-      getRect() {
-        return new Promise((resolve, reject) => {
-          uni.createSelectorQuery().in(this).select("#_root").boundingClientRect().exec((res2) => res2[0] ? resolve(res2[0]) : reject(Error("Root label not found")));
-        });
-      },
-      /**
-       * @description 暂停播放媒体
-       */
-      pauseMedia() {
-        for (let i2 = (this._videos || []).length; i2--; ) {
-          this._videos[i2].pause();
-        }
-        const command = 'for(var e=document.getElementsByTagName("video"),i=e.length;i--;)e[i].pause()';
-        let page2 = this.$parent;
-        while (!page2.$scope)
-          page2 = page2.$parent;
-        page2.$scope.$getAppWebview().evalJS(command);
-      },
-      /**
-       * @description 设置媒体播放速率
-       * @param {Number} rate 播放速率
-       */
-      setPlaybackRate(rate) {
-        this.playbackRate = rate;
-        for (let i2 = (this._videos || []).length; i2--; ) {
-          this._videos[i2].playbackRate(rate);
-        }
-        const command = 'for(var e=document.getElementsByTagName("video"),i=e.length;i--;)e[i].playbackRate=' + rate;
-        let page2 = this.$parent;
-        while (!page2.$scope)
-          page2 = page2.$parent;
-        page2.$scope.$getAppWebview().evalJS(command);
-      },
-      /**
-       * @description 设置内容
-       * @param {String} content html 内容
-       * @param {Boolean} append 是否在尾部追加
-       */
-      setContent(content, append2) {
-        if (!append2 || !this.imgList) {
-          this.imgList = [];
-        }
-        const nodes = new Parser(this).parse(content);
-        this.$set(this, "nodes", append2 ? (this.nodes || []).concat(nodes) : nodes);
-        this._videos = [];
-        this.$nextTick(() => {
-          this._hook("onLoad");
-          this.$emit("load");
-        });
-        if (this.lazyLoad || this.imgList._unloadimgs < this.imgList.length / 2) {
-          let height = 0;
-          const callback = (rect) => {
-            if (!rect || !rect.height)
-              rect = {};
-            if (rect.height === height) {
-              this.$emit("ready", rect);
-            } else {
-              height = rect.height;
-              setTimeout(() => {
-                this.getRect().then(callback).catch(callback);
-              }, 350);
-            }
-          };
-          this.getRect().then(callback).catch(callback);
-        } else {
-          if (!this.imgList._unloadimgs) {
-            this.getRect().then((rect) => {
-              this.$emit("ready", rect);
-            }).catch(() => {
-              this.$emit("ready", {});
-            });
-          }
-        }
-      },
-      /**
-       * @description 调用插件钩子函数
-       */
-      _hook(name2) {
-        for (let i2 = plugins.length; i2--; ) {
-          if (this.plugins[i2][name2]) {
-            this.plugins[i2][name2]();
-          }
-        }
-      }
-    }
-  };
-  function _sfc_render$21(_ctx, _cache, $props, $setup, $data, $options) {
-    const _component_node = vue.resolveComponent("node");
-    return vue.openBlock(), vue.createElementBlock(
-      "view",
-      {
-        id: "_root",
-        class: vue.normalizeClass(($props.selectable ? "_select " : "") + "_root"),
-        style: vue.normalizeStyle($props.containerStyle)
-      },
-      [
-        !$data.nodes[0] ? vue.renderSlot(_ctx.$slots, "default", { key: 0 }, void 0, true) : (vue.openBlock(), vue.createBlock(_component_node, {
-          key: 1,
-          childs: $data.nodes,
-          opts: [$props.lazyLoad, $props.loadingImg, $props.errorImg, $props.showImgMenu, $props.selectable],
-          name: "span"
-        }, null, 8, ["childs", "opts"]))
-      ],
-      6
-      /* CLASS, STYLE */
-    );
-  }
-  const __easycom_0$8 = /* @__PURE__ */ _export_sfc(_sfc_main$22, [["render", _sfc_render$21], ["__scopeId", "data-v-c147f742"], ["__file", "D:/uniapp2023/studyParty/node_modules/uview-plus/components/u-parse/u-parse.vue"]]);
-  const __vite_glob_0_77 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
-    __proto__: null,
-    default: __easycom_0$8
-  }, Symbol.toStringTag, { value: "Module" }));
-  function e$1() {
-    return { async: false, breaks: false, extensions: null, gfm: true, hooks: null, pedantic: false, renderer: null, silent: false, tokenizer: null, walkTokens: null };
-  }
-  var t = { async: false, breaks: false, extensions: null, gfm: true, hooks: null, pedantic: false, renderer: null, silent: false, tokenizer: null, walkTokens: null };
-  function n(e2) {
-    t = e2;
-  }
-  var r = { exec: () => null };
-  function s(e2, t2 = "") {
-    let n2 = "string" == typeof e2 ? e2 : e2.source, r2 = { replace: (e3, t3) => {
-      let s2 = "string" == typeof t3 ? t3 : t3.source;
-      return s2 = s2.replace(l.caret, "$1"), n2 = n2.replace(e3, s2), r2;
-    }, getRegex: () => new RegExp(n2, t2) };
-    return r2;
-  }
-  var l = { codeRemoveIndent: /^(?: {1,4}| {0,3}\t)/gm, outputLinkReplace: /\\([\[\]])/g, indentCodeCompensation: /^(\s+)(?:```)/, beginningSpace: /^\s+/, endingHash: /#$/, startingSpaceChar: /^ /, endingSpaceChar: / $/, nonSpaceChar: /[^ ]/, newLineCharGlobal: /\n/g, tabCharGlobal: /\t/g, multipleSpaceGlobal: /\s+/g, blankLine: /^[ \t]*$/, doubleBlankLine: /\n[ \t]*\n[ \t]*$/, blockquoteStart: /^ {0,3}>/, blockquoteSetextReplace: /\n {0,3}((?:=+|-+) *)(?=\n|$)/g, blockquoteSetextReplace2: /^ {0,3}>[ \t]?/gm, listReplaceTabs: /^\t+/, listReplaceNesting: /^ {1,4}(?=( {4})*[^ ])/g, listIsTask: /^\[[ xX]\] /, listReplaceTask: /^\[[ xX]\] +/, anyLine: /\n.*\n/, hrefBrackets: /^<(.*)>$/, tableDelimiter: /[:|]/, tableAlignChars: /^\||\| *$/g, tableRowBlankLine: /\n[ \t]*$/, tableAlignRight: /^ *-+: *$/, tableAlignCenter: /^ *:-+: *$/, tableAlignLeft: /^ *:-+ *$/, startATag: /^<a /i, endATag: /^<\/a>/i, startPreScriptTag: /^<(pre|code|kbd|script)(\s|>)/i, endPreScriptTag: /^<\/(pre|code|kbd|script)(\s|>)/i, startAngleBracket: /^</, endAngleBracket: />$/, pedanticHrefTitle: /^([^'"]*[^\s])\s+(['"])(.*)\2/, unicodeAlphaNumeric: /[a-zA-Z0-9\u00C0-\u02AF\u0300-\u036F\u0400-\u04FF\u0500-\u052F\u1E00-\u1EFF]/u, escapeTest: /[&<>"']/, escapeReplace: /[&<>"']/g, escapeTestNoEncode: /[<>"']|&(?!(#\d{1,7}|#[Xx][a-fA-F0-9]{1,6}|\w+);)/, escapeReplaceNoEncode: /[<>"']|&(?!(#\d{1,7}|#[Xx][a-fA-F0-9]{1,6}|\w+);)/g, unescapeTest: /&(#(?:\d+)|(?:#x[0-9A-Fa-f]+)|(?:\w+));?/gi, caret: /(^|[^\[])\^/g, percentDecode: /%25/g, findPipe: /\|/g, splitPipe: / \|/, slashPipe: /\\\|/g, carriageReturn: /\r\n|\r/g, spaceLine: /^ +$/gm, notSpaceStart: /^\S*/, endingNewline: /\n$/, listItemRegex: (e2) => new RegExp(`^( {0,3}${e2})((?:[	 ][^\\n]*)?(?:\\n|$))`), nextBulletRegex: (e2) => new RegExp(`^ {0,${Math.min(3, e2 - 1)}}(?:[*+-]|\\d{1,9}[.)])((?:[ 	][^\\n]*)?(?:\\n|$))`), hrRegex: (e2) => new RegExp(`^ {0,${Math.min(3, e2 - 1)}}((?:- *){3,}|(?:_ *){3,}|(?:\\* *){3,})(?:\\n+|$)`), fencesBeginRegex: (e2) => new RegExp(`^ {0,${Math.min(3, e2 - 1)}}(?:\`\`\`|~~~)`), headingBeginRegex: (e2) => new RegExp(`^ {0,${Math.min(3, e2 - 1)}}#`), htmlBeginRegex: (e2) => new RegExp(`^ {0,${Math.min(3, e2 - 1)}}<(?:[a-z].*>|!--)`, "i") }, i = /^ {0,3}((?:-[\t ]*){3,}|(?:_[ \t]*){3,}|(?:\*[ \t]*){3,})(?:\n+|$)/, a = /(?:[*+-]|\d{1,9}[.)])/, o = /^(?!bull |blockCode|fences|blockquote|heading|html|table)((?:.|\n(?!\s*?\n|bull |blockCode|fences|blockquote|heading|html|table))+?)\n {0,3}(=+|-+) *(?:\n+|$)/, c = s(o).replace(/bull/g, a).replace(/blockCode/g, /(?: {4}| {0,3}\t)/).replace(/fences/g, / {0,3}(?:`{3,}|~{3,})/).replace(/blockquote/g, / {0,3}>/).replace(/heading/g, / {0,3}#{1,6}/).replace(/html/g, / {0,3}<[^\n>]+>\n/).replace(/\|table/g, "").getRegex(), h = s(o).replace(/bull/g, a).replace(/blockCode/g, /(?: {4}| {0,3}\t)/).replace(/fences/g, / {0,3}(?:`{3,}|~{3,})/).replace(/blockquote/g, / {0,3}>/).replace(/heading/g, / {0,3}#{1,6}/).replace(/html/g, / {0,3}<[^\n>]+>\n/).replace(/table/g, / {0,3}\|?(?:[:\- ]*\|)+[\:\- ]*\n/).getRegex(), p = /^([^\n]+(?:\n(?!hr|heading|lheading|blockquote|fences|list|html|table| +\n)[^\n]+)*)/, u = /(?!\s*\])(?:\\.|[^\[\]\\])+/, g = s(/^ {0,3}\[(label)\]: *(?:\n[ \t]*)?([^<\s][^\s]*|<.*?>)(?:(?: +(?:\n[ \t]*)?| *\n[ \t]*)(title))? *(?:\n+|$)/).replace("label", u).replace("title", /(?:"(?:\\"?|[^"\\])*"|'[^'\n]*(?:\n[^'\n]+)*\n?'|\([^()]*\))/).getRegex(), k = s(/^( {0,3}bull)([ \t][^\n]+?)?(?:\n|$)/).replace(/bull/g, a).getRegex(), d = "address|article|aside|base|basefont|blockquote|body|caption|center|col|colgroup|dd|details|dialog|dir|div|dl|dt|fieldset|figcaption|figure|footer|form|frame|frameset|h[1-6]|head|header|hr|html|iframe|legend|li|link|main|menu|menuitem|meta|nav|noframes|ol|optgroup|option|p|param|search|section|summary|table|tbody|td|tfoot|th|thead|title|tr|track|ul", f = /<!--(?:-?>|[\s\S]*?(?:-->|$))/, x = s("^ {0,3}(?:<(script|pre|style|textarea)[\\s>][\\s\\S]*?(?:</\\1>[^\\n]*\\n+|$)|comment[^\\n]*(\\n+|$)|<\\?[\\s\\S]*?(?:\\?>\\n*|$)|<![A-Z][\\s\\S]*?(?:>\\n*|$)|<!\\[CDATA\\[[\\s\\S]*?(?:\\]\\]>\\n*|$)|</?(tag)(?: +|\\n|/?>)[\\s\\S]*?(?:(?:\\n[ 	]*)+\\n|$)|<(?!script|pre|style|textarea)([a-z][\\w-]*)(?:attribute)*? */?>(?=[ \\t]*(?:\\n|$))[\\s\\S]*?(?:(?:\\n[ 	]*)+\\n|$)|</(?!script|pre|style|textarea)[a-z][\\w-]*\\s*>(?=[ \\t]*(?:\\n|$))[\\s\\S]*?(?:(?:\\n[ 	]*)+\\n|$))", "i").replace("comment", f).replace("tag", d).replace("attribute", / +[a-zA-Z:_][\w.:-]*(?: *= *"[^"\n]*"| *= *'[^'\n]*'| *= *[^\s"'=<>`]+)?/).getRegex(), b = s(p).replace("hr", i).replace("heading", " {0,3}#{1,6}(?:\\s|$)").replace("|lheading", "").replace("|table", "").replace("blockquote", " {0,3}>").replace("fences", " {0,3}(?:`{3,}(?=[^`\\n]*\\n)|~{3,})[^\\n]*\\n").replace("list", " {0,3}(?:[*+-]|1[.)]) ").replace("html", "</?(?:tag)(?: +|\\n|/?>)|<(?:script|pre|style|textarea|!--)").replace("tag", d).getRegex(), w = { blockquote: s(/^( {0,3}> ?(paragraph|[^\n]*)(?:\n|$))+/).replace("paragraph", b).getRegex(), code: /^((?: {4}| {0,3}\t)[^\n]+(?:\n(?:[ \t]*(?:\n|$))*)?)+/, def: g, fences: /^ {0,3}(`{3,}(?=[^`\n]*(?:\n|$))|~{3,})([^\n]*)(?:\n|$)(?:|([\s\S]*?)(?:\n|$))(?: {0,3}\1[~`]* *(?=\n|$)|$)/, heading: /^ {0,3}(#{1,6})(?=\s|$)(.*)(?:\n+|$)/, hr: i, html: x, lheading: c, list: k, newline: /^(?:[ \t]*(?:\n|$))+/, paragraph: b, table: r, text: /^[^\n]+/ }, m = s("^ *([^\\n ].*)\\n {0,3}((?:\\| *)?:?-+:? *(?:\\| *:?-+:? *)*(?:\\| *)?)(?:\\n((?:(?! *\\n|hr|heading|blockquote|code|fences|list|html).*(?:\\n|$))*)\\n*|$)").replace("hr", i).replace("heading", " {0,3}#{1,6}(?:\\s|$)").replace("blockquote", " {0,3}>").replace("code", "(?: {4}| {0,3}	)[^\\n]").replace("fences", " {0,3}(?:`{3,}(?=[^`\\n]*\\n)|~{3,})[^\\n]*\\n").replace("list", " {0,3}(?:[*+-]|1[.)]) ").replace("html", "</?(?:tag)(?: +|\\n|/?>)|<(?:script|pre|style|textarea|!--)").replace("tag", d).getRegex(), y = { ...w, lheading: h, table: m, paragraph: s(p).replace("hr", i).replace("heading", " {0,3}#{1,6}(?:\\s|$)").replace("|lheading", "").replace("table", m).replace("blockquote", " {0,3}>").replace("fences", " {0,3}(?:`{3,}(?=[^`\\n]*\\n)|~{3,})[^\\n]*\\n").replace("list", " {0,3}(?:[*+-]|1[.)]) ").replace("html", "</?(?:tag)(?: +|\\n|/?>)|<(?:script|pre|style|textarea|!--)").replace("tag", d).getRegex() }, $$3G = { ...w, html: s(`^ *(?:comment *(?:\\n|\\s*$)|<(tag)[\\s\\S]+?</\\1> *(?:\\n{2,}|\\s*$)|<tag(?:"[^"]*"|'[^']*'|\\s[^'"/>\\s]*)*?/?> *(?:\\n{2,}|\\s*$))`).replace("comment", f).replace(/tag/g, "(?!(?:a|em|strong|small|s|cite|q|dfn|abbr|data|time|code|var|samp|kbd|sub|sup|i|b|u|mark|ruby|rt|rp|bdi|bdo|span|br|wbr|ins|del|img)\\b)\\w+(?!:|[^\\w\\s@]*@)\\b").getRegex(), def: /^ *\[([^\]]+)\]: *<?([^\s>]+)>?(?: +(["(][^\n]+[")]))? *(?:\n+|$)/, heading: /^(#{1,6})(.*)(?:\n+|$)/, fences: r, lheading: /^(.+?)\n {0,3}(=+|-+) *(?:\n+|$)/, paragraph: s(p).replace("hr", i).replace("heading", " *#{1,6} *[^\n]").replace("lheading", c).replace("|table", "").replace("blockquote", " {0,3}>").replace("|fences", "").replace("|list", "").replace("|html", "").replace("|tag", "").getRegex() }, R = /^( {2,}|\\)\n(?!\s*$)/, S = /[!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~·！￥……（）——《》「」『』【】、；：‘’“”，。、]/u, T = /[\s!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~·！￥……（）——《》「」『』【】、；：‘’“”，。、]/, z = /[^a-zA-Z0-9\u4e00-\u9fa5\s!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~·！￥……（）——《》「」『』【】、；：‘’“”，。、]/, A = s(/^((?![*_])punctSpace)/, "u").replace(/punctSpace/g, T).getRegex(), _ = /[!"#$%&'()*+,-./:;<=>?@[\]^_`{|}·！￥……（）——《》「」『』【】、；：‘’“”，。、]/, P = /^(?:\*+(?:((?!\*)punct)|[^\s*]))|^_+(?:((?!_)punct)|([^\s_]))/, I = s(P, "u").replace(/punct/g, S).getRegex(), L = s(P, "u").replace(/punct/g, _).getRegex(), B = "^[^_*]*?__[^_*]*?\\*[^_*]*?(?=__)|[^*]+(?=[^*])|(?!\\*)punct(\\*+)(?=[\\s]|$)|notPunctSpace(\\*+)(?!\\*)(?=punctSpace|$)|(?!\\*)punctSpace(\\*+)(?=notPunctSpace)|[\\s](\\*+)(?!\\*)(?=punct)|(?!\\*)punct(\\*+)(?!\\*)(?=punct)|notPunctSpace(\\*+)(?=notPunctSpace)", C = s(B, "gu").replace(/notPunctSpace/g, z).replace(/punctSpace/g, T).replace(/punct/g, S).getRegex(), q = s(B, "gu").replace(/notPunctSpace/g, /[a-zA-Z0-9\u4e00-\u9fa5~]/).replace(/punctSpace/g, /[\s!"#$%&'()*+,-./:;<=>?@[\]^_`{|}·！￥……（）——《》「」『』【】、；：‘’“”，。、]/).replace(/punct/g, _).getRegex(), E$2 = s("^[^_*]*?\\*\\*[^_*]*?_[^_*]*?(?=\\*\\*)|[^_]+(?=[^_])|(?!_)punct(_+)(?=[\\s]|$)|notPunctSpace(_+)(?!_)(?=punctSpace|$)|(?!_)punctSpace(_+)(?=notPunctSpace)|[\\s](_+)(?!_)(?=punct)|(?!_)punct(_+)(?!_)(?=punct)", "gu").replace(/notPunctSpace/g, z).replace(/punctSpace/g, T).replace(/punct/g, S).getRegex(), v = s(/\\(punct)/, "gu").replace(/punct/g, S).getRegex(), Z = s(/^<(scheme:[^\s\x00-\x1f<>]*|email)>/).replace("scheme", /[a-zA-Z][a-zA-Z0-9+.-]{1,31}/).replace("email", /[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+(@)[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+(?![-_])/).getRegex(), D = s(f).replace("(?:-->|$)", "-->").getRegex(), M = s("^comment|^</[a-zA-Z][\\w:-]*\\s*>|^<[a-zA-Z][\\w-]*(?:attribute)*?\\s*/?>|^<\\?[\\s\\S]*?\\?>|^<![a-zA-Z]+\\s[\\s\\S]*?>|^<!\\[CDATA\\[[\\s\\S]*?\\]\\]>").replace("comment", D).replace("attribute", /\s+[a-zA-Z:_][\w.:-]*(?:\s*=\s*"[^"]*"|\s*=\s*'[^']*'|\s*=\s*[^\s"'=<>`]+)?/).getRegex(), O = /(?:\[(?:\\.|[^\[\]\\])*\]|\\.|`[^`]*`|[^\[\]\\`])*?/, Q = s(/^!?\[(label)\]\(\s*(href)(?:(?:[ \t]*(?:\n[ \t]*)?)(title))?\s*\)/).replace("label", O).replace("href", /<(?:\\.|[^\n<>\\])+>|[^ \t\n\x00-\x1f]*/).replace("title", /"(?:\\"?|[^"\\])*"|'(?:\\'?|[^'\\])*'|\((?:\\\)?|[^)\\])*\)/).getRegex(), N = s(/^!?\[(label)\]\[(ref)\]/).replace("label", O).replace("ref", u).getRegex(), j = s(/^!?\[(ref)\](?:\[\])?/).replace("ref", u).getRegex(), G = { _backpedal: r, anyPunctuation: v, autolink: Z, blockSkip: /\[[^[\]]*?\]\((?:\\.|[^\\\(\)]|\((?:\\.|[^\\\(\)])*\))*\)|`[^`]*?`|<(?! )[^<>]*?>/g, br: R, code: /^(`+)([^`]|[^`][\s\S]*?[^`])\1(?!`)/, del: r, emStrongLDelim: I, emStrongRDelimAst: C, emStrongRDelimUnd: E$2, escape: /^\\([!"#$%&'()*+,\-./:;<=>?@\[\]\\^_`{|}~])/, link: Q, nolink: j, punctuation: A, reflink: N, reflinkSearch: s("reflink|nolink(?!\\()", "g").replace("reflink", N).replace("nolink", j).getRegex(), tag: M, text: /^(`+|[^`])(?:(?= {2,}\n)|[\s\S]*?(?:(?=[\\<!\[`*_]|\b_|$)|[^ ](?= {2,}\n)))/, url: r }, H = { ...G, link: s(/^!?\[(label)\]\((.*?)\)/).replace("label", O).getRegex(), reflink: s(/^!?\[(label)\]\s*\[([^\]]*)\]/).replace("label", O).getRegex() }, W = { ...G, emStrongRDelimAst: q, emStrongLDelim: L, url: s(/^((?:ftp|https?):\/\/|www\.)(?:[a-zA-Z0-9\-]+\.?)+[^\s<]*|^email/, "i").replace("email", /[A-Za-z0-9._+-]+(@)[a-zA-Z0-9-_]+(?:\.[a-zA-Z0-9-_]*[a-zA-Z0-9])+(?![-_])/).getRegex(), _backpedal: /(?:[^?!.,:;*_'"~()&]+|\([^)]*\)|&(?![a-zA-Z0-9]+;$)|[?!.,:;*_'"~)]+(?!$))+/, del: /^(~~?)(?=[^\s~])((?:\\.|[^\\])*?(?:\\.|[^\s~\\]))\1(?=[^~]|$)/, text: /^([`~]+|[^`~])(?:(?= {2,}\n)|(?=[a-zA-Z0-9.!#$%&'*+\/=?_`{\|}~-]+@)|[\s\S]*?(?:(?=[\\<!\[`*~_]|\b_|https?:\/\/|ftp:\/\/|www\.|$)|[^ ](?= {2,}\n)|[^a-zA-Z0-9.!#$%&'*+\/=?_`{\|}~-](?=[a-zA-Z0-9.!#$%&'*+\/=?_`{\|}~-]+@)))/ }, X = { ...W, br: s(R).replace("{2,}", "*").getRegex(), text: s(W.text).replace("\\b_", "\\b_| {2,}\\n").replace(/\{2,\}/g, "*").getRegex() }, F = { normal: w, gfm: y, pedantic: $$3G }, U = { normal: G, gfm: W, breaks: X, pedantic: H }, J = { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }, K = (e2) => J[e2];
-  function V(e2, t2) {
-    if (t2) {
-      if (l.escapeTest.test(e2))
-        return e2.replace(l.escapeReplace, K);
-    } else if (l.escapeTestNoEncode.test(e2))
-      return e2.replace(l.escapeReplaceNoEncode, K);
-    return e2;
-  }
-  function Y(e2) {
-    try {
-      e2 = encodeURI(e2).replace(l.percentDecode, "%");
-    } catch {
-      return null;
-    }
-    return e2;
-  }
-  function ee(e2, t2) {
-    var _a2;
-    let n2 = e2.replace(l.findPipe, (e3, t3, n3) => {
-      let r3 = false, s2 = t3;
-      for (; --s2 >= 0 && "\\" === n3[s2]; )
-        r3 = !r3;
-      return r3 ? "|" : " |";
-    }).split(l.splitPipe), r2 = 0;
-    if (n2[0].trim() || n2.shift(), n2.length > 0 && !((_a2 = n2.at(-1)) == null ? void 0 : _a2.trim()) && n2.pop(), t2)
-      if (n2.length > t2)
-        n2.splice(t2);
-      else
-        for (; n2.length < t2; )
-          n2.push("");
-    for (; r2 < n2.length; r2++)
-      n2[r2] = n2[r2].trim().replace(l.slashPipe, "|");
-    return n2;
-  }
-  function te(e2, t2, n2) {
-    let r2 = e2.length;
-    if (0 === r2)
-      return "";
-    let s2 = 0;
-    for (; s2 < r2; ) {
-      let l2 = e2.charAt(r2 - s2 - 1);
-      if (l2 !== t2 || n2) {
-        if (l2 === t2 || !n2)
-          break;
-        s2++;
-      } else
-        s2++;
-    }
-    return e2.slice(0, r2 - s2);
-  }
-  function ne(e2, t2, n2, r2, s2) {
-    let l2 = t2.href, i2 = t2.title || null, a2 = e2[1].replace(s2.other.outputLinkReplace, "$1");
-    r2.state.inLink = true;
-    let o2 = { type: "!" === e2[0].charAt(0) ? "image" : "link", raw: n2, href: l2, title: i2, text: a2, tokens: r2.inlineTokens(a2) };
-    return r2.state.inLink = false, o2;
-  }
-  var re = class {
-    constructor(e2) {
-      __publicField(this, "options");
-      __publicField(this, "rules");
-      __publicField(this, "lexer");
-      this.options = e2 || t;
-    }
-    space(e2) {
-      let t2 = this.rules.block.newline.exec(e2);
-      if (t2 && t2[0].length > 0)
-        return { type: "space", raw: t2[0] };
-    }
-    code(e2) {
-      let t2 = this.rules.block.code.exec(e2);
-      if (t2) {
-        let e3 = t2[0].replace(this.rules.other.codeRemoveIndent, "");
-        return { type: "code", raw: t2[0], codeBlockStyle: "indented", text: this.options.pedantic ? e3 : te(e3, "\n") };
-      }
-    }
-    fences(e2) {
-      let t2 = this.rules.block.fences.exec(e2);
-      if (t2) {
-        let e3 = t2[0], n2 = function(e4, t3, n3) {
-          let r2 = e4.match(n3.other.indentCodeCompensation);
-          if (null === r2)
-            return t3;
-          let s2 = r2[1];
-          return t3.split("\n").map((e5) => {
-            let t4 = e5.match(n3.other.beginningSpace);
-            if (null === t4)
-              return e5;
-            let [r3] = t4;
-            return r3.length >= s2.length ? e5.slice(s2.length) : e5;
-          }).join("\n");
-        }(e3, t2[3] || "", this.rules);
-        return { type: "code", raw: e3, lang: t2[2] ? t2[2].trim().replace(this.rules.inline.anyPunctuation, "$1") : t2[2], text: n2 };
-      }
-    }
-    heading(e2) {
-      let t2 = this.rules.block.heading.exec(e2);
-      if (t2) {
-        let e3 = t2[2].trim();
-        if (this.rules.other.endingHash.test(e3)) {
-          let t3 = te(e3, "#");
-          (this.options.pedantic || !t3 || this.rules.other.endingSpaceChar.test(t3)) && (e3 = t3.trim());
-        }
-        return { type: "heading", raw: t2[0], depth: t2[1].length, text: e3, tokens: this.lexer.inline(e3) };
-      }
-    }
-    hr(e2) {
-      let t2 = this.rules.block.hr.exec(e2);
-      if (t2)
-        return { type: "hr", raw: te(t2[0], "\n") };
-    }
-    blockquote(e2) {
-      let t2 = this.rules.block.blockquote.exec(e2);
-      if (t2) {
-        let e3 = te(t2[0], "\n").split("\n"), n2 = "", r2 = "", s2 = [];
-        for (; e3.length > 0; ) {
-          let t3, l2 = false, i2 = [];
-          for (t3 = 0; t3 < e3.length; t3++)
-            if (this.rules.other.blockquoteStart.test(e3[t3]))
-              i2.push(e3[t3]), l2 = true;
-            else {
-              if (l2)
-                break;
-              i2.push(e3[t3]);
-            }
-          e3 = e3.slice(t3);
-          let a2 = i2.join("\n"), o2 = a2.replace(this.rules.other.blockquoteSetextReplace, "\n    $1").replace(this.rules.other.blockquoteSetextReplace2, "");
-          n2 = n2 ? `${n2}
-${a2}` : a2, r2 = r2 ? `${r2}
-${o2}` : o2;
-          let c2 = this.lexer.state.top;
-          if (this.lexer.state.top = true, this.lexer.blockTokens(o2, s2, true), this.lexer.state.top = c2, 0 === e3.length)
-            break;
-          let h2 = s2.at(-1);
-          if ("code" === (h2 == null ? void 0 : h2.type))
-            break;
-          if ("blockquote" === (h2 == null ? void 0 : h2.type)) {
-            let t4 = h2, l3 = t4.raw + "\n" + e3.join("\n"), i3 = this.blockquote(l3);
-            s2[s2.length - 1] = i3, n2 = n2.substring(0, n2.length - t4.raw.length) + i3.raw, r2 = r2.substring(0, r2.length - t4.text.length) + i3.text;
-            break;
-          }
-          if ("list" !== (h2 == null ? void 0 : h2.type))
-            ;
-          else {
-            let t4 = h2, l3 = t4.raw + "\n" + e3.join("\n"), i3 = this.list(l3);
-            s2[s2.length - 1] = i3, n2 = n2.substring(0, n2.length - h2.raw.length) + i3.raw, r2 = r2.substring(0, r2.length - t4.raw.length) + i3.raw, e3 = l3.substring(s2.at(-1).raw.length).split("\n");
-          }
-        }
-        return { type: "blockquote", raw: n2, tokens: s2, text: r2 };
-      }
-    }
-    list(e2) {
-      let t2 = this.rules.block.list.exec(e2);
-      if (t2) {
-        let n2 = t2[1].trim(), r2 = n2.length > 1, s2 = { type: "list", raw: "", ordered: r2, start: r2 ? +n2.slice(0, -1) : "", loose: false, items: [] };
-        n2 = r2 ? `\\d{1,9}\\${n2.slice(-1)}` : `\\${n2}`, this.options.pedantic && (n2 = r2 ? n2 : "[*+-]");
-        let l2 = this.rules.other.listItemRegex(n2), i2 = false;
-        for (; e2; ) {
-          let n3 = false, r3 = "", a3 = "";
-          if (!(t2 = l2.exec(e2)) || this.rules.block.hr.test(e2))
-            break;
-          r3 = t2[0], e2 = e2.substring(r3.length);
-          let o2 = t2[2].split("\n", 1)[0].replace(this.rules.other.listReplaceTabs, (e3) => " ".repeat(3 * e3.length)), c2 = e2.split("\n", 1)[0], h2 = !o2.trim(), p2 = 0;
-          if (this.options.pedantic ? (p2 = 2, a3 = o2.trimStart()) : h2 ? p2 = t2[1].length + 1 : (p2 = t2[2].search(this.rules.other.nonSpaceChar), p2 = p2 > 4 ? 1 : p2, a3 = o2.slice(p2), p2 += t2[1].length), h2 && this.rules.other.blankLine.test(c2) && (r3 += c2 + "\n", e2 = e2.substring(c2.length + 1), n3 = true), !n3) {
-            let t3 = this.rules.other.nextBulletRegex(p2), n4 = this.rules.other.hrRegex(p2), s3 = this.rules.other.fencesBeginRegex(p2), l3 = this.rules.other.headingBeginRegex(p2), i3 = this.rules.other.htmlBeginRegex(p2);
-            for (; e2; ) {
-              let u3, g3 = e2.split("\n", 1)[0];
-              if (c2 = g3, this.options.pedantic ? (c2 = c2.replace(this.rules.other.listReplaceNesting, "  "), u3 = c2) : u3 = c2.replace(this.rules.other.tabCharGlobal, "    "), s3.test(c2) || l3.test(c2) || i3.test(c2) || t3.test(c2) || n4.test(c2))
-                break;
-              if (u3.search(this.rules.other.nonSpaceChar) >= p2 || !c2.trim())
-                a3 += "\n" + u3.slice(p2);
-              else {
-                if (h2 || o2.replace(this.rules.other.tabCharGlobal, "    ").search(this.rules.other.nonSpaceChar) >= 4 || s3.test(o2) || l3.test(o2) || n4.test(o2))
-                  break;
-                a3 += "\n" + c2;
-              }
-              !h2 && !c2.trim() && (h2 = true), r3 += g3 + "\n", e2 = e2.substring(g3.length + 1), o2 = u3.slice(p2);
-            }
-          }
-          s2.loose || (i2 ? s2.loose = true : this.rules.other.doubleBlankLine.test(r3) && (i2 = true));
-          let u2, g2 = null;
-          this.options.gfm && (g2 = this.rules.other.listIsTask.exec(a3), g2 && (u2 = "[ ] " !== g2[0], a3 = a3.replace(this.rules.other.listReplaceTask, ""))), s2.items.push({ type: "list_item", raw: r3, task: !!g2, checked: u2, loose: false, text: a3, tokens: [] }), s2.raw += r3;
-        }
-        let a2 = s2.items.at(-1);
-        if (!a2)
-          return;
-        a2.raw = a2.raw.trimEnd(), a2.text = a2.text.trimEnd(), s2.raw = s2.raw.trimEnd();
-        for (let e3 = 0; e3 < s2.items.length; e3++)
-          if (this.lexer.state.top = false, s2.items[e3].tokens = this.lexer.blockTokens(s2.items[e3].text, []), !s2.loose) {
-            let t3 = s2.items[e3].tokens.filter((e4) => "space" === e4.type), n3 = t3.length > 0 && t3.some((e4) => this.rules.other.anyLine.test(e4.raw));
-            s2.loose = n3;
-          }
-        if (s2.loose)
-          for (let e3 = 0; e3 < s2.items.length; e3++)
-            s2.items[e3].loose = true;
-        return s2;
-      }
-    }
-    html(e2) {
-      let t2 = this.rules.block.html.exec(e2);
-      if (t2)
-        return { type: "html", block: true, raw: t2[0], pre: "pre" === t2[1] || "script" === t2[1] || "style" === t2[1], text: t2[0] };
-    }
-    def(e2) {
-      let t2 = this.rules.block.def.exec(e2);
-      if (t2) {
-        let e3 = t2[1].toLowerCase().replace(this.rules.other.multipleSpaceGlobal, " "), n2 = t2[2] ? t2[2].replace(this.rules.other.hrefBrackets, "$1").replace(this.rules.inline.anyPunctuation, "$1") : "", r2 = t2[3] ? t2[3].substring(1, t2[3].length - 1).replace(this.rules.inline.anyPunctuation, "$1") : t2[3];
-        return { type: "def", tag: e3, raw: t2[0], href: n2, title: r2 };
-      }
-    }
-    table(e2) {
-      var _a2;
-      let t2 = this.rules.block.table.exec(e2);
-      if (!t2 || !this.rules.other.tableDelimiter.test(t2[2]))
-        return;
-      let n2 = ee(t2[1]), r2 = t2[2].replace(this.rules.other.tableAlignChars, "").split("|"), s2 = ((_a2 = t2[3]) == null ? void 0 : _a2.trim()) ? t2[3].replace(this.rules.other.tableRowBlankLine, "").split("\n") : [], l2 = { type: "table", raw: t2[0], header: [], align: [], rows: [] };
-      if (n2.length === r2.length) {
-        for (let e3 of r2)
-          this.rules.other.tableAlignRight.test(e3) ? l2.align.push("right") : this.rules.other.tableAlignCenter.test(e3) ? l2.align.push("center") : this.rules.other.tableAlignLeft.test(e3) ? l2.align.push("left") : l2.align.push(null);
-        for (let e3 = 0; e3 < n2.length; e3++)
-          l2.header.push({ text: n2[e3], tokens: this.lexer.inline(n2[e3]), header: true, align: l2.align[e3] });
-        for (let e3 of s2)
-          l2.rows.push(ee(e3, l2.header.length).map((e4, t3) => ({ text: e4, tokens: this.lexer.inline(e4), header: false, align: l2.align[t3] })));
-        return l2;
-      }
-    }
-    lheading(e2) {
-      let t2 = this.rules.block.lheading.exec(e2);
-      if (t2)
-        return { type: "heading", raw: t2[0], depth: "=" === t2[2].charAt(0) ? 1 : 2, text: t2[1], tokens: this.lexer.inline(t2[1]) };
-    }
-    paragraph(e2) {
-      let t2 = this.rules.block.paragraph.exec(e2);
-      if (t2) {
-        let e3 = "\n" === t2[1].charAt(t2[1].length - 1) ? t2[1].slice(0, -1) : t2[1];
-        return { type: "paragraph", raw: t2[0], text: e3, tokens: this.lexer.inline(e3) };
-      }
-    }
-    text(e2) {
-      let t2 = this.rules.block.text.exec(e2);
-      if (t2)
-        return { type: "text", raw: t2[0], text: t2[0], tokens: this.lexer.inline(t2[0]) };
-    }
-    escape(e2) {
-      let t2 = this.rules.inline.escape.exec(e2);
-      if (t2)
-        return { type: "escape", raw: t2[0], text: t2[1] };
-    }
-    tag(e2) {
-      let t2 = this.rules.inline.tag.exec(e2);
-      if (t2)
-        return !this.lexer.state.inLink && this.rules.other.startATag.test(t2[0]) ? this.lexer.state.inLink = true : this.lexer.state.inLink && this.rules.other.endATag.test(t2[0]) && (this.lexer.state.inLink = false), !this.lexer.state.inRawBlock && this.rules.other.startPreScriptTag.test(t2[0]) ? this.lexer.state.inRawBlock = true : this.lexer.state.inRawBlock && this.rules.other.endPreScriptTag.test(t2[0]) && (this.lexer.state.inRawBlock = false), { type: "html", raw: t2[0], inLink: this.lexer.state.inLink, inRawBlock: this.lexer.state.inRawBlock, block: false, text: t2[0] };
-    }
-    link(e2) {
-      let t2 = this.rules.inline.link.exec(e2);
-      if (t2) {
-        let e3 = t2[2].trim();
-        if (!this.options.pedantic && this.rules.other.startAngleBracket.test(e3)) {
-          if (!this.rules.other.endAngleBracket.test(e3))
-            return;
-          let t3 = te(e3.slice(0, -1), "\\");
-          if ((e3.length - t3.length) % 2 == 0)
-            return;
-        } else {
-          let e4 = function(e5, t3) {
-            if (-1 === e5.indexOf(t3[1]))
-              return -1;
-            let n3 = 0;
-            for (let r3 = 0; r3 < e5.length; r3++)
-              if ("\\" === e5[r3])
-                r3++;
-              else if (e5[r3] === t3[0])
-                n3++;
-              else if (e5[r3] === t3[1] && (n3--, n3 < 0))
-                return r3;
-            return n3 > 0 ? -2 : -1;
-          }(t2[2], "()");
-          if (-2 === e4)
-            return;
-          if (e4 > -1) {
-            let n3 = (0 === t2[0].indexOf("!") ? 5 : 4) + t2[1].length + e4;
-            t2[2] = t2[2].substring(0, e4), t2[0] = t2[0].substring(0, n3).trim(), t2[3] = "";
-          }
-        }
-        let n2 = t2[2], r2 = "";
-        if (this.options.pedantic) {
-          let e4 = this.rules.other.pedanticHrefTitle.exec(n2);
-          e4 && (n2 = e4[1], r2 = e4[3]);
-        } else
-          r2 = t2[3] ? t2[3].slice(1, -1) : "";
-        return n2 = n2.trim(), this.rules.other.startAngleBracket.test(n2) && (n2 = this.options.pedantic && !this.rules.other.endAngleBracket.test(e3) ? n2.slice(1) : n2.slice(1, -1)), ne(t2, { href: n2 && n2.replace(this.rules.inline.anyPunctuation, "$1"), title: r2 && r2.replace(this.rules.inline.anyPunctuation, "$1") }, t2[0], this.lexer, this.rules);
-      }
-    }
-    reflink(e2, t2) {
-      let n2;
-      if ((n2 = this.rules.inline.reflink.exec(e2)) || (n2 = this.rules.inline.nolink.exec(e2))) {
-        let e3 = t2[(n2[2] || n2[1]).replace(this.rules.other.multipleSpaceGlobal, " ").toLowerCase()];
-        if (!e3) {
-          let e4 = n2[0].charAt(0);
-          return { type: "text", raw: e4, text: e4 };
-        }
-        return ne(n2, e3, n2[0], this.lexer, this.rules);
-      }
-    }
-    emStrong(e2, t2, n2 = "") {
-      let r2 = this.rules.inline.emStrongLDelim.exec(e2);
-      if (!(!r2 || r2[3] && n2.match(this.rules.other.unicodeAlphaNumeric)) && (!r2[1] && !r2[2] || !n2 || this.rules.inline.punctuation.exec(n2))) {
-        let n3, s2, l2 = [...r2[0]].length - 1, i2 = l2, a2 = 0, o2 = "*" === r2[0][0] ? this.rules.inline.emStrongRDelimAst : this.rules.inline.emStrongRDelimUnd;
-        for (o2.lastIndex = 0, t2 = t2.slice(-1 * e2.length + l2); null != (r2 = o2.exec(t2)); ) {
-          if (n3 = r2[1] || r2[2] || r2[3] || r2[4] || r2[5] || r2[6], !n3)
-            continue;
-          if (s2 = [...n3].length, r2[3] || r2[4]) {
-            i2 += s2;
-            continue;
-          }
-          if ((r2[5] || r2[6]) && l2 % 3 && !((l2 + s2) % 3)) {
-            a2 += s2;
-            continue;
-          }
-          if (i2 -= s2, i2 > 0)
-            continue;
-          s2 = Math.min(s2, s2 + i2 + a2);
-          let t3 = [...r2[0]][0].length, o3 = e2.slice(0, l2 + r2.index + t3 + s2);
-          if (Math.min(l2, s2) % 2) {
-            let e3 = o3.slice(1, -1);
-            return { type: "em", raw: o3, text: e3, tokens: this.lexer.inlineTokens(e3) };
-          }
-          let c2 = o3.slice(2, -2);
-          return { type: "strong", raw: o3, text: c2, tokens: this.lexer.inlineTokens(c2) };
-        }
-      }
-    }
-    codespan(e2) {
-      let t2 = this.rules.inline.code.exec(e2);
-      if (t2) {
-        let e3 = t2[2].replace(this.rules.other.newLineCharGlobal, " "), n2 = this.rules.other.nonSpaceChar.test(e3), r2 = this.rules.other.startingSpaceChar.test(e3) && this.rules.other.endingSpaceChar.test(e3);
-        return n2 && r2 && (e3 = e3.substring(1, e3.length - 1)), { type: "codespan", raw: t2[0], text: e3 };
-      }
-    }
-    br(e2) {
-      let t2 = this.rules.inline.br.exec(e2);
-      if (t2)
-        return { type: "br", raw: t2[0] };
-    }
-    del(e2) {
-      let t2 = this.rules.inline.del.exec(e2);
-      if (t2)
-        return { type: "del", raw: t2[0], text: t2[2], tokens: this.lexer.inlineTokens(t2[2]) };
-    }
-    autolink(e2) {
-      let t2 = this.rules.inline.autolink.exec(e2);
-      if (t2) {
-        let e3, n2;
-        return "@" === t2[2] ? (e3 = t2[1], n2 = "mailto:" + e3) : (e3 = t2[1], n2 = e3), { type: "link", raw: t2[0], text: e3, href: n2, tokens: [{ type: "text", raw: e3, text: e3 }] };
-      }
-    }
-    url(e2) {
-      var _a2;
-      let t2;
-      if (t2 = this.rules.inline.url.exec(e2)) {
-        let e3, n2;
-        if ("@" === t2[2])
-          e3 = t2[0], n2 = "mailto:" + e3;
-        else {
-          let r2;
-          do {
-            r2 = t2[0], t2[0] = ((_a2 = this.rules.inline._backpedal.exec(t2[0])) == null ? void 0 : _a2[0]) ?? "";
-          } while (r2 !== t2[0]);
-          e3 = t2[0], n2 = "www." === t2[1] ? "http://" + t2[0] : t2[0];
-        }
-        return { type: "link", raw: t2[0], text: e3, href: n2, tokens: [{ type: "text", raw: e3, text: e3 }] };
-      }
-    }
-    inlineText(e2) {
-      let t2 = this.rules.inline.text.exec(e2);
-      if (t2) {
-        let e3 = this.lexer.state.inRawBlock;
-        return { type: "text", raw: t2[0], text: t2[0], escaped: e3 };
-      }
-    }
-  }, se = class e2 {
-    constructor(e3) {
-      __publicField(this, "tokens");
-      __publicField(this, "options");
-      __publicField(this, "state");
-      __publicField(this, "tokenizer");
-      __publicField(this, "inlineQueue");
-      this.tokens = [], this.tokens.links = /* @__PURE__ */ Object.create(null), this.options = e3 || t, this.options.tokenizer = this.options.tokenizer || new re(), this.tokenizer = this.options.tokenizer, this.tokenizer.options = this.options, this.tokenizer.lexer = this, this.inlineQueue = [], this.state = { inLink: false, inRawBlock: false, top: true };
-      let n2 = { other: l, block: F.normal, inline: U.normal };
-      this.options.pedantic ? (n2.block = F.pedantic, n2.inline = U.pedantic) : this.options.gfm && (n2.block = F.gfm, this.options.breaks ? n2.inline = U.breaks : n2.inline = U.gfm), this.tokenizer.rules = n2;
-    }
-    static get rules() {
-      return { block: F, inline: U };
-    }
-    static lex(t2, n2) {
-      return new e2(n2).lex(t2);
-    }
-    static lexInline(t2, n2) {
-      return new e2(n2).inlineTokens(t2);
-    }
-    lex(e3) {
-      e3 = e3.replace(l.carriageReturn, "\n"), this.blockTokens(e3, this.tokens);
-      for (let e4 = 0; e4 < this.inlineQueue.length; e4++) {
-        let t2 = this.inlineQueue[e4];
-        this.inlineTokens(t2.src, t2.tokens);
-      }
-      return this.inlineQueue = [], this.tokens;
-    }
-    blockTokens(e3, t2 = [], n2 = false) {
-      var _a2, _b, _c;
-      for (this.options.pedantic && (e3 = e3.replace(l.tabCharGlobal, "    ").replace(l.spaceLine, "")); e3; ) {
-        let r2;
-        if ((_b = (_a2 = this.options.extensions) == null ? void 0 : _a2.block) == null ? void 0 : _b.some((n3) => !!(r2 = n3.call({ lexer: this }, e3, t2)) && (e3 = e3.substring(r2.raw.length), t2.push(r2), true)))
-          continue;
-        if (r2 = this.tokenizer.space(e3)) {
-          e3 = e3.substring(r2.raw.length);
-          let n3 = t2.at(-1);
-          1 === r2.raw.length && void 0 !== n3 ? n3.raw += "\n" : t2.push(r2);
-          continue;
-        }
-        if (r2 = this.tokenizer.code(e3)) {
-          e3 = e3.substring(r2.raw.length);
-          let n3 = t2.at(-1);
-          "paragraph" === (n3 == null ? void 0 : n3.type) || "text" === (n3 == null ? void 0 : n3.type) ? (n3.raw += (n3.raw.endsWith("\n") ? "" : "\n") + r2.raw, n3.text += "\n" + r2.text, this.inlineQueue.at(-1).src = n3.text) : t2.push(r2);
-          continue;
-        }
-        if (r2 = this.tokenizer.fences(e3)) {
-          e3 = e3.substring(r2.raw.length), t2.push(r2);
-          continue;
-        }
-        if (r2 = this.tokenizer.heading(e3)) {
-          e3 = e3.substring(r2.raw.length), t2.push(r2);
-          continue;
-        }
-        if (r2 = this.tokenizer.hr(e3)) {
-          e3 = e3.substring(r2.raw.length), t2.push(r2);
-          continue;
-        }
-        if (r2 = this.tokenizer.blockquote(e3)) {
-          e3 = e3.substring(r2.raw.length), t2.push(r2);
-          continue;
-        }
-        if (r2 = this.tokenizer.list(e3)) {
-          e3 = e3.substring(r2.raw.length), t2.push(r2);
-          continue;
-        }
-        if (r2 = this.tokenizer.html(e3)) {
-          e3 = e3.substring(r2.raw.length), t2.push(r2);
-          continue;
-        }
-        if (r2 = this.tokenizer.def(e3)) {
-          e3 = e3.substring(r2.raw.length);
-          let n3 = t2.at(-1);
-          "paragraph" === (n3 == null ? void 0 : n3.type) || "text" === (n3 == null ? void 0 : n3.type) ? (n3.raw += (n3.raw.endsWith("\n") ? "" : "\n") + r2.raw, n3.text += "\n" + r2.raw, this.inlineQueue.at(-1).src = n3.text) : this.tokens.links[r2.tag] || (this.tokens.links[r2.tag] = { href: r2.href, title: r2.title });
-          continue;
-        }
-        if (r2 = this.tokenizer.table(e3)) {
-          e3 = e3.substring(r2.raw.length), t2.push(r2);
-          continue;
-        }
-        if (r2 = this.tokenizer.lheading(e3)) {
-          e3 = e3.substring(r2.raw.length), t2.push(r2);
-          continue;
-        }
-        let s2 = e3;
-        if ((_c = this.options.extensions) == null ? void 0 : _c.startBlock) {
-          let t3, n3 = 1 / 0, r3 = e3.slice(1);
-          this.options.extensions.startBlock.forEach((e4) => {
-            t3 = e4.call({ lexer: this }, r3), "number" == typeof t3 && t3 >= 0 && (n3 = Math.min(n3, t3));
-          }), n3 < 1 / 0 && n3 >= 0 && (s2 = e3.substring(0, n3 + 1));
-        }
-        if (this.state.top && (r2 = this.tokenizer.paragraph(s2))) {
-          let l2 = t2.at(-1);
-          n2 && "paragraph" === (l2 == null ? void 0 : l2.type) ? (l2.raw += (l2.raw.endsWith("\n") ? "" : "\n") + r2.raw, l2.text += "\n" + r2.text, this.inlineQueue.pop(), this.inlineQueue.at(-1).src = l2.text) : t2.push(r2), n2 = s2.length !== e3.length, e3 = e3.substring(r2.raw.length);
-        } else if (r2 = this.tokenizer.text(e3)) {
-          e3 = e3.substring(r2.raw.length);
-          let n3 = t2.at(-1);
-          "text" === (n3 == null ? void 0 : n3.type) ? (n3.raw += (n3.raw.endsWith("\n") ? "" : "\n") + r2.raw, n3.text += "\n" + r2.text, this.inlineQueue.pop(), this.inlineQueue.at(-1).src = n3.text) : t2.push(r2);
-        } else if (e3) {
-          let t3 = "Infinite loop on byte: " + e3.charCodeAt(0);
-          if (this.options.silent) {
-            formatAppLog("error", "at node_modules/uview-plus/components/u-markdown/marked.esm.js:7", t3);
-            break;
-          }
-          throw new Error(t3);
-        }
-      }
-      return this.state.top = true, t2;
-    }
-    inline(e3, t2 = []) {
-      return this.inlineQueue.push({ src: e3, tokens: t2 }), t2;
-    }
-    inlineTokens(e3, t2 = []) {
-      var _a2, _b, _c;
-      let n2 = e3, r2 = null;
-      if (this.tokens.links) {
-        let e4 = Object.keys(this.tokens.links);
-        if (e4.length > 0)
-          for (; null != (r2 = this.tokenizer.rules.inline.reflinkSearch.exec(n2)); )
-            e4.includes(r2[0].slice(r2[0].lastIndexOf("[") + 1, -1)) && (n2 = n2.slice(0, r2.index) + "[" + "a".repeat(r2[0].length - 2) + "]" + n2.slice(this.tokenizer.rules.inline.reflinkSearch.lastIndex));
-      }
-      for (; null != (r2 = this.tokenizer.rules.inline.anyPunctuation.exec(n2)); )
-        n2 = n2.slice(0, r2.index) + "++" + n2.slice(this.tokenizer.rules.inline.anyPunctuation.lastIndex);
-      for (; null != (r2 = this.tokenizer.rules.inline.blockSkip.exec(n2)); )
-        n2 = n2.slice(0, r2.index) + "[" + "a".repeat(r2[0].length - 2) + "]" + n2.slice(this.tokenizer.rules.inline.blockSkip.lastIndex);
-      let s2 = false, l2 = "";
-      for (; e3; ) {
-        let r3;
-        if (s2 || (l2 = ""), s2 = false, (_b = (_a2 = this.options.extensions) == null ? void 0 : _a2.inline) == null ? void 0 : _b.some((n3) => !!(r3 = n3.call({ lexer: this }, e3, t2)) && (e3 = e3.substring(r3.raw.length), t2.push(r3), true)))
-          continue;
-        if (r3 = this.tokenizer.escape(e3)) {
-          e3 = e3.substring(r3.raw.length), t2.push(r3);
-          continue;
-        }
-        if (r3 = this.tokenizer.tag(e3)) {
-          e3 = e3.substring(r3.raw.length), t2.push(r3);
-          continue;
-        }
-        if (r3 = this.tokenizer.link(e3)) {
-          e3 = e3.substring(r3.raw.length), t2.push(r3);
-          continue;
-        }
-        if (r3 = this.tokenizer.reflink(e3, this.tokens.links)) {
-          e3 = e3.substring(r3.raw.length);
-          let n3 = t2.at(-1);
-          "text" === r3.type && "text" === (n3 == null ? void 0 : n3.type) ? (n3.raw += r3.raw, n3.text += r3.text) : t2.push(r3);
-          continue;
-        }
-        if (r3 = this.tokenizer.emStrong(e3, n2, l2)) {
-          e3 = e3.substring(r3.raw.length), t2.push(r3);
-          continue;
-        }
-        if (r3 = this.tokenizer.codespan(e3)) {
-          e3 = e3.substring(r3.raw.length), t2.push(r3);
-          continue;
-        }
-        if (r3 = this.tokenizer.br(e3)) {
-          e3 = e3.substring(r3.raw.length), t2.push(r3);
-          continue;
-        }
-        if (r3 = this.tokenizer.del(e3)) {
-          e3 = e3.substring(r3.raw.length), t2.push(r3);
-          continue;
-        }
-        if (r3 = this.tokenizer.autolink(e3)) {
-          e3 = e3.substring(r3.raw.length), t2.push(r3);
-          continue;
-        }
-        if (!this.state.inLink && (r3 = this.tokenizer.url(e3))) {
-          e3 = e3.substring(r3.raw.length), t2.push(r3);
-          continue;
-        }
-        let i2 = e3;
-        if ((_c = this.options.extensions) == null ? void 0 : _c.startInline) {
-          let t3, n3 = 1 / 0, r4 = e3.slice(1);
-          this.options.extensions.startInline.forEach((e4) => {
-            t3 = e4.call({ lexer: this }, r4), "number" == typeof t3 && t3 >= 0 && (n3 = Math.min(n3, t3));
-          }), n3 < 1 / 0 && n3 >= 0 && (i2 = e3.substring(0, n3 + 1));
-        }
-        if (r3 = this.tokenizer.inlineText(i2)) {
-          e3 = e3.substring(r3.raw.length), "_" !== r3.raw.slice(-1) && (l2 = r3.raw.slice(-1)), s2 = true;
-          let n3 = t2.at(-1);
-          "text" === (n3 == null ? void 0 : n3.type) ? (n3.raw += r3.raw, n3.text += r3.text) : t2.push(r3);
-        } else if (e3) {
-          let t3 = "Infinite loop on byte: " + e3.charCodeAt(0);
-          if (this.options.silent) {
-            formatAppLog("error", "at node_modules/uview-plus/components/u-markdown/marked.esm.js:7", t3);
-            break;
-          }
-          throw new Error(t3);
-        }
-      }
-      return t2;
-    }
-  }, le = class {
-    constructor(e2) {
-      __publicField(this, "options");
-      __publicField(this, "parser");
-      this.options = e2 || t;
-    }
-    space(e2) {
-      return "";
-    }
-    code({ text: e2, lang: t2, escaped: n2 }) {
-      var _a2;
-      let r2 = (_a2 = (t2 || "").match(l.notSpaceStart)) == null ? void 0 : _a2[0], s2 = e2.replace(l.endingNewline, "") + "\n";
-      return r2 ? '<pre><code class="language-' + V(r2) + '">' + (n2 ? s2 : V(s2, true)) + "</code></pre>\n" : "<pre><code>" + (n2 ? s2 : V(s2, true)) + "</code></pre>\n";
-    }
-    blockquote({ tokens: e2 }) {
-      return `<blockquote>
-${this.parser.parse(e2)}</blockquote>
-`;
-    }
-    html({ text: e2 }) {
-      return e2;
-    }
-    heading({ tokens: e2, depth: t2 }) {
-      return `<h${t2}>${this.parser.parseInline(e2)}</h${t2}>
-`;
-    }
-    hr(e2) {
-      return "<hr>\n";
-    }
-    list(e2) {
-      let t2 = e2.ordered, n2 = e2.start, r2 = "";
-      for (let t3 = 0; t3 < e2.items.length; t3++) {
-        let n3 = e2.items[t3];
-        r2 += this.listitem(n3);
-      }
-      let s2 = t2 ? "ol" : "ul";
-      return "<" + s2 + (t2 && 1 !== n2 ? ' start="' + n2 + '"' : "") + ">\n" + r2 + "</" + s2 + ">\n";
-    }
-    listitem(e2) {
-      var _a2;
-      let t2 = "";
-      if (e2.task) {
-        let n2 = this.checkbox({ checked: !!e2.checked });
-        e2.loose ? "paragraph" === ((_a2 = e2.tokens[0]) == null ? void 0 : _a2.type) ? (e2.tokens[0].text = n2 + " " + e2.tokens[0].text, e2.tokens[0].tokens && e2.tokens[0].tokens.length > 0 && "text" === e2.tokens[0].tokens[0].type && (e2.tokens[0].tokens[0].text = n2 + " " + V(e2.tokens[0].tokens[0].text), e2.tokens[0].tokens[0].escaped = true)) : e2.tokens.unshift({ type: "text", raw: n2 + " ", text: n2 + " ", escaped: true }) : t2 += n2 + " ";
-      }
-      return t2 += this.parser.parse(e2.tokens, !!e2.loose), `<li>${t2}</li>
-`;
-    }
-    checkbox({ checked: e2 }) {
-      return "<input " + (e2 ? 'checked="" ' : "") + 'disabled="" type="checkbox">';
-    }
-    paragraph({ tokens: e2 }) {
-      return `<p>${this.parser.parseInline(e2)}</p>
-`;
-    }
-    table(e2) {
-      let t2 = "", n2 = "";
-      for (let t3 = 0; t3 < e2.header.length; t3++)
-        n2 += this.tablecell(e2.header[t3]);
-      t2 += this.tablerow({ text: n2 });
-      let r2 = "";
-      for (let t3 = 0; t3 < e2.rows.length; t3++) {
-        let s2 = e2.rows[t3];
-        n2 = "";
-        for (let e3 = 0; e3 < s2.length; e3++)
-          n2 += this.tablecell(s2[e3]);
-        r2 += this.tablerow({ text: n2 });
-      }
-      return r2 && (r2 = `<tbody>${r2}</tbody>`), "<table>\n<thead>\n" + t2 + "</thead>\n" + r2 + "</table>\n";
-    }
-    tablerow({ text: e2 }) {
-      return `<tr>
-${e2}</tr>
-`;
-    }
-    tablecell(e2) {
-      let t2 = this.parser.parseInline(e2.tokens), n2 = e2.header ? "th" : "td";
-      return (e2.align ? `<${n2} align="${e2.align}">` : `<${n2}>`) + t2 + `</${n2}>
-`;
-    }
-    strong({ tokens: e2 }) {
-      return `<strong>${this.parser.parseInline(e2)}</strong>`;
-    }
-    em({ tokens: e2 }) {
-      return `<em>${this.parser.parseInline(e2)}</em>`;
-    }
-    codespan({ text: e2 }) {
-      return `<code>${V(e2, true)}</code>`;
-    }
-    br(e2) {
-      return "<br>";
-    }
-    del({ tokens: e2 }) {
-      return `<del>${this.parser.parseInline(e2)}</del>`;
-    }
-    link({ href: e2, title: t2, tokens: n2 }) {
-      let r2 = this.parser.parseInline(n2), s2 = Y(e2);
-      if (null === s2)
-        return r2;
-      let l2 = '<a href="' + (e2 = s2) + '"';
-      return t2 && (l2 += ' title="' + V(t2) + '"'), l2 += ">" + r2 + "</a>", l2;
-    }
-    image({ href: e2, title: t2, text: n2, tokens: r2 }) {
-      r2 && (n2 = this.parser.parseInline(r2, this.parser.textRenderer));
-      let s2 = Y(e2);
-      if (null === s2)
-        return V(n2);
-      let l2 = `<img src="${e2 = s2}" alt="${n2}"`;
-      return t2 && (l2 += ` title="${V(t2)}"`), l2 += ">", l2;
-    }
-    text(e2) {
-      return "tokens" in e2 && e2.tokens ? this.parser.parseInline(e2.tokens) : "escaped" in e2 && e2.escaped ? e2.text : V(e2.text);
-    }
-  }, ie = class {
-    strong({ text: e2 }) {
-      return e2;
-    }
-    em({ text: e2 }) {
-      return e2;
-    }
-    codespan({ text: e2 }) {
-      return e2;
-    }
-    del({ text: e2 }) {
-      return e2;
-    }
-    html({ text: e2 }) {
-      return e2;
-    }
-    text({ text: e2 }) {
-      return e2;
-    }
-    link({ text: e2 }) {
-      return "" + e2;
-    }
-    image({ text: e2 }) {
-      return "" + e2;
-    }
-    br() {
-      return "";
-    }
-  }, ae = class e2 {
-    constructor(e3) {
-      __publicField(this, "options");
-      __publicField(this, "renderer");
-      __publicField(this, "textRenderer");
-      this.options = e3 || t, this.options.renderer = this.options.renderer || new le(), this.renderer = this.options.renderer, this.renderer.options = this.options, this.renderer.parser = this, this.textRenderer = new ie();
-    }
-    static parse(t2, n2) {
-      return new e2(n2).parse(t2);
-    }
-    static parseInline(t2, n2) {
-      return new e2(n2).parseInline(t2);
-    }
-    parse(e3, t2 = true) {
-      var _a2, _b;
-      let n2 = "";
-      for (let r2 = 0; r2 < e3.length; r2++) {
-        let s2 = e3[r2];
-        if ((_b = (_a2 = this.options.extensions) == null ? void 0 : _a2.renderers) == null ? void 0 : _b[s2.type]) {
-          let e4 = s2, t3 = this.options.extensions.renderers[e4.type].call({ parser: this }, e4);
-          if (false !== t3 || !["space", "hr", "heading", "code", "table", "blockquote", "list", "html", "paragraph", "text"].includes(e4.type)) {
-            n2 += t3 || "";
-            continue;
-          }
-        }
-        let l2 = s2;
-        switch (l2.type) {
-          case "space":
-            n2 += this.renderer.space(l2);
-            continue;
-          case "hr":
-            n2 += this.renderer.hr(l2);
-            continue;
-          case "heading":
-            n2 += this.renderer.heading(l2);
-            continue;
-          case "code":
-            n2 += this.renderer.code(l2);
-            continue;
-          case "table":
-            n2 += this.renderer.table(l2);
-            continue;
-          case "blockquote":
-            n2 += this.renderer.blockquote(l2);
-            continue;
-          case "list":
-            n2 += this.renderer.list(l2);
-            continue;
-          case "html":
-            n2 += this.renderer.html(l2);
-            continue;
-          case "paragraph":
-            n2 += this.renderer.paragraph(l2);
-            continue;
-          case "text": {
-            let s3 = l2, i2 = this.renderer.text(s3);
-            for (; r2 + 1 < e3.length && "text" === e3[r2 + 1].type; )
-              s3 = e3[++r2], i2 += "\n" + this.renderer.text(s3);
-            n2 += t2 ? this.renderer.paragraph({ type: "paragraph", raw: i2, text: i2, tokens: [{ type: "text", raw: i2, text: i2, escaped: true }] }) : i2;
-            continue;
-          }
-          default: {
-            let e4 = 'Token with "' + l2.type + '" type was not found.';
-            if (this.options.silent)
-              return formatAppLog("error", "at node_modules/uview-plus/components/u-markdown/marked.esm.js:7", e4), "";
-            throw new Error(e4);
-          }
-        }
-      }
-      return n2;
-    }
-    parseInline(e3, t2 = this.renderer) {
-      var _a2, _b;
-      let n2 = "";
-      for (let r2 = 0; r2 < e3.length; r2++) {
-        let s2 = e3[r2];
-        if ((_b = (_a2 = this.options.extensions) == null ? void 0 : _a2.renderers) == null ? void 0 : _b[s2.type]) {
-          let e4 = this.options.extensions.renderers[s2.type].call({ parser: this }, s2);
-          if (false !== e4 || !["escape", "html", "link", "image", "strong", "em", "codespan", "br", "del", "text"].includes(s2.type)) {
-            n2 += e4 || "";
-            continue;
-          }
-        }
-        let l2 = s2;
-        switch (l2.type) {
-          case "escape":
-          case "text":
-            n2 += t2.text(l2);
-            break;
-          case "html":
-            n2 += t2.html(l2);
-            break;
-          case "link":
-            n2 += t2.link(l2);
-            break;
-          case "image":
-            n2 += t2.image(l2);
-            break;
-          case "strong":
-            n2 += t2.strong(l2);
-            break;
-          case "em":
-            n2 += t2.em(l2);
-            break;
-          case "codespan":
-            n2 += t2.codespan(l2);
-            break;
-          case "br":
-            n2 += t2.br(l2);
-            break;
-          case "del":
-            n2 += t2.del(l2);
-            break;
-          default: {
-            let e4 = 'Token with "' + l2.type + '" type was not found.';
-            if (this.options.silent)
-              return formatAppLog("error", "at node_modules/uview-plus/components/u-markdown/marked.esm.js:7", e4), "";
-            throw new Error(e4);
-          }
-        }
-      }
-      return n2;
-    }
-  }, oe = (_a = class {
-    constructor(e2) {
-      __publicField(this, "options");
-      __publicField(this, "block");
-      this.options = e2 || t;
-    }
-    preprocess(e2) {
-      return e2;
-    }
-    postprocess(e2) {
-      return e2;
-    }
-    processAllTokens(e2) {
-      return e2;
-    }
-    provideLexer() {
-      return this.block ? se.lex : se.lexInline;
-    }
-    provideParser() {
-      return this.block ? ae.parse : ae.parseInline;
-    }
-  }, __publicField(_a, "passThroughHooks", /* @__PURE__ */ new Set(["preprocess", "postprocess", "processAllTokens"])), _a), ce = class {
-    constructor(...e2) {
-      __publicField(this, "defaults", { async: false, breaks: false, extensions: null, gfm: true, hooks: null, pedantic: false, renderer: null, silent: false, tokenizer: null, walkTokens: null });
-      __publicField(this, "options", this.setOptions);
-      __publicField(this, "parse", this.parseMarkdown(true));
-      __publicField(this, "parseInline", this.parseMarkdown(false));
-      __publicField(this, "Parser", ae);
-      __publicField(this, "Renderer", le);
-      __publicField(this, "TextRenderer", ie);
-      __publicField(this, "Lexer", se);
-      __publicField(this, "Tokenizer", re);
-      __publicField(this, "Hooks", oe);
-      this.use(...e2);
-    }
-    walkTokens(e2, t2) {
-      var _a2, _b;
-      let n2 = [];
-      for (let r2 of e2)
-        switch (n2 = n2.concat(t2.call(this, r2)), r2.type) {
-          case "table": {
-            let e3 = r2;
-            for (let r3 of e3.header)
-              n2 = n2.concat(this.walkTokens(r3.tokens, t2));
-            for (let r3 of e3.rows)
-              for (let e4 of r3)
-                n2 = n2.concat(this.walkTokens(e4.tokens, t2));
-            break;
-          }
-          case "list": {
-            let e3 = r2;
-            n2 = n2.concat(this.walkTokens(e3.items, t2));
-            break;
-          }
-          default: {
-            let e3 = r2;
-            ((_b = (_a2 = this.defaults.extensions) == null ? void 0 : _a2.childTokens) == null ? void 0 : _b[e3.type]) ? this.defaults.extensions.childTokens[e3.type].forEach((r3) => {
-              let s2 = e3[r3].flat(1 / 0);
-              n2 = n2.concat(this.walkTokens(s2, t2));
-            }) : e3.tokens && (n2 = n2.concat(this.walkTokens(e3.tokens, t2)));
-          }
-        }
-      return n2;
-    }
-    use(...e2) {
-      let t2 = this.defaults.extensions || { renderers: {}, childTokens: {} };
-      return e2.forEach((e3) => {
-        let n2 = { ...e3 };
-        if (n2.async = this.defaults.async || n2.async || false, e3.extensions && (e3.extensions.forEach((e4) => {
-          if (!e4.name)
-            throw new Error("extension name required");
-          if ("renderer" in e4) {
-            let n3 = t2.renderers[e4.name];
-            t2.renderers[e4.name] = n3 ? function(...t3) {
-              let r2 = e4.renderer.apply(this, t3);
-              return false === r2 && (r2 = n3.apply(this, t3)), r2;
-            } : e4.renderer;
-          }
-          if ("tokenizer" in e4) {
-            if (!e4.level || "block" !== e4.level && "inline" !== e4.level)
-              throw new Error("extension level must be 'block' or 'inline'");
-            let n3 = t2[e4.level];
-            n3 ? n3.unshift(e4.tokenizer) : t2[e4.level] = [e4.tokenizer], e4.start && ("block" === e4.level ? t2.startBlock ? t2.startBlock.push(e4.start) : t2.startBlock = [e4.start] : "inline" === e4.level && (t2.startInline ? t2.startInline.push(e4.start) : t2.startInline = [e4.start]));
-          }
-          "childTokens" in e4 && e4.childTokens && (t2.childTokens[e4.name] = e4.childTokens);
-        }), n2.extensions = t2), e3.renderer) {
-          let t3 = this.defaults.renderer || new le(this.defaults);
-          for (let n3 in e3.renderer) {
-            if (!(n3 in t3))
-              throw new Error(`renderer '${n3}' does not exist`);
-            if (["options", "parser"].includes(n3))
-              continue;
-            let r2 = n3, s2 = e3.renderer[r2], l2 = t3[r2];
-            t3[r2] = (...e4) => {
-              let n4 = s2.apply(t3, e4);
-              return false === n4 && (n4 = l2.apply(t3, e4)), n4 || "";
-            };
-          }
-          n2.renderer = t3;
-        }
-        if (e3.tokenizer) {
-          let t3 = this.defaults.tokenizer || new re(this.defaults);
-          for (let n3 in e3.tokenizer) {
-            if (!(n3 in t3))
-              throw new Error(`tokenizer '${n3}' does not exist`);
-            if (["options", "rules", "lexer"].includes(n3))
-              continue;
-            let r2 = n3, s2 = e3.tokenizer[r2], l2 = t3[r2];
-            t3[r2] = (...e4) => {
-              let n4 = s2.apply(t3, e4);
-              return false === n4 && (n4 = l2.apply(t3, e4)), n4;
-            };
-          }
-          n2.tokenizer = t3;
-        }
-        if (e3.hooks) {
-          let t3 = this.defaults.hooks || new oe();
-          for (let n3 in e3.hooks) {
-            if (!(n3 in t3))
-              throw new Error(`hook '${n3}' does not exist`);
-            if (["options", "block"].includes(n3))
-              continue;
-            let r2 = n3, s2 = e3.hooks[r2], l2 = t3[r2];
-            oe.passThroughHooks.has(n3) ? t3[r2] = (e4) => {
-              if (this.defaults.async)
-                return Promise.resolve(s2.call(t3, e4)).then((e5) => l2.call(t3, e5));
-              let n4 = s2.call(t3, e4);
-              return l2.call(t3, n4);
-            } : t3[r2] = (...e4) => {
-              let n4 = s2.apply(t3, e4);
-              return false === n4 && (n4 = l2.apply(t3, e4)), n4;
-            };
-          }
-          n2.hooks = t3;
-        }
-        if (e3.walkTokens) {
-          let t3 = this.defaults.walkTokens, r2 = e3.walkTokens;
-          n2.walkTokens = function(e4) {
-            let n3 = [];
-            return n3.push(r2.call(this, e4)), t3 && (n3 = n3.concat(t3.call(this, e4))), n3;
-          };
-        }
-        this.defaults = { ...this.defaults, ...n2 };
-      }), this;
-    }
-    setOptions(e2) {
-      return this.defaults = { ...this.defaults, ...e2 }, this;
-    }
-    lexer(e2, t2) {
-      return se.lex(e2, t2 ?? this.defaults);
-    }
-    parser(e2, t2) {
-      return ae.parse(e2, t2 ?? this.defaults);
-    }
-    parseMarkdown(e2) {
-      return (t2, n2) => {
-        let r2 = { ...n2 }, s2 = { ...this.defaults, ...r2 }, l2 = this.onError(!!s2.silent, !!s2.async);
-        if (true === this.defaults.async && false === r2.async)
-          return l2(new Error("marked(): The async option was set to true by an extension. Remove async: false from the parse options object to return a Promise."));
-        if (typeof t2 > "u" || null === t2)
-          return l2(new Error("marked(): input parameter is undefined or null"));
-        if ("string" != typeof t2)
-          return l2(new Error("marked(): input parameter is of type " + Object.prototype.toString.call(t2) + ", string expected"));
-        s2.hooks && (s2.hooks.options = s2, s2.hooks.block = e2);
-        let i2 = s2.hooks ? s2.hooks.provideLexer() : e2 ? se.lex : se.lexInline, a2 = s2.hooks ? s2.hooks.provideParser() : e2 ? ae.parse : ae.parseInline;
-        if (s2.async)
-          return Promise.resolve(s2.hooks ? s2.hooks.preprocess(t2) : t2).then((e3) => i2(e3, s2)).then((e3) => s2.hooks ? s2.hooks.processAllTokens(e3) : e3).then((e3) => s2.walkTokens ? Promise.all(this.walkTokens(e3, s2.walkTokens)).then(() => e3) : e3).then((e3) => a2(e3, s2)).then((e3) => s2.hooks ? s2.hooks.postprocess(e3) : e3).catch(l2);
-        try {
-          s2.hooks && (t2 = s2.hooks.preprocess(t2));
-          let e3 = i2(t2, s2);
-          s2.hooks && (e3 = s2.hooks.processAllTokens(e3)), s2.walkTokens && this.walkTokens(e3, s2.walkTokens);
-          let n3 = a2(e3, s2);
-          return s2.hooks && (n3 = s2.hooks.postprocess(n3)), n3;
-        } catch (e3) {
-          return l2(e3);
-        }
-      };
-    }
-    onError(e2, t2) {
-      return (n2) => {
-        if (n2.message += "\nPlease report this to https://github.com/markedjs/marked.", e2) {
-          let e3 = "<p>An error occurred:</p><pre>" + V(n2.message + "", true) + "</pre>";
-          return t2 ? Promise.resolve(e3) : e3;
-        }
-        if (t2)
-          return Promise.reject(n2);
-        throw n2;
-      };
-    }
-  }, he = new ce();
-  function pe(e2, t2) {
-    return he.parse(e2, t2);
-  }
-  pe.options = pe.setOptions = function(e2) {
-    return he.setOptions(e2), pe.defaults = he.defaults, n(pe.defaults), pe;
-  }, pe.getDefaults = e$1, pe.defaults = t, pe.use = function(...e2) {
-    return he.use(...e2), pe.defaults = he.defaults, n(pe.defaults), pe;
-  }, pe.walkTokens = function(e2, t2) {
-    return he.walkTokens(e2, t2);
-  }, pe.parseInline = he.parseInline, pe.Parser = ae, pe.parser = ae.parse, pe.Renderer = le, pe.TextRenderer = ie, pe.Lexer = se, pe.lexer = se.lex, pe.Tokenizer = re, pe.Hooks = oe, pe.parse = pe;
-  pe.options;
-  pe.setOptions;
-  pe.use;
-  pe.walkTokens;
-  pe.parseInline;
-  ae.parse;
-  se.lex;
+  const PagesChatListGroupTaskList = /* @__PURE__ */ _export_sfc(_sfc_main$22, [["render", _sfc_render$21], ["__file", "D:/uniapp2023/studyParty/pages/chatList/groupTaskList.vue"]]);
   const _sfc_main$21 = {
-    name: "up-markdown",
-    props: {
-      // markdown内容
-      content: {
-        type: String,
-        default: ""
-      },
-      // 是否启用图片预览
-      previewImg: {
-        type: Boolean,
-        default: true
-      },
-      // 是否显示代码块行号
-      showLineNumber: {
-        type: Boolean,
-        default: false
-      },
-      // 主题样式 'light' | 'dark'
-      theme: {
-        type: String,
-        default: "light"
-      }
-    },
-    data() {
-      return {
-        parsedContent: ""
-      };
-    },
-    watch: {
-      content: {
-        handler(newVal) {
-          this.parseMarkdown(newVal);
-        },
-        immediate: true
-      }
-    },
-    methods: {
-      // 解析markdown内容
-      parseMarkdown(content) {
-        if (!content) {
-          this.parsedContent = "";
-          return;
-        }
-        let parsed = pe(content);
-        parsed = this.handleCodeBlock(parsed);
-        parsed = this.applyTheme(parsed);
-        this.parsedContent = parsed;
-      },
-      // 处理代码块
-      handleCodeBlock(html2) {
-        return html2.replace(/<pre><code([^>]*)>([^<]+)<\/code><\/pre>/g, (match2, lang, code2) => {
-          const language = lang.match(/class="language-([^"]+)"/);
-          const langClass = language ? `language-${language[1]}` : "";
-          let result = `<pre class="up-markdown-code ${langClass}">`;
-          if (this.showLineNumber) {
-            const lines = code2.split("\n").filter((line) => line.trim() !== "");
-            result += '<span class="up-markdown-line-numbers">';
-            lines.push("");
-            lines.forEach((_2, index2) => {
-              result += `<span class="up-markdown-line-number">${index2 + 1}</span>`;
-            });
-            result += "</span>";
-          }
-          result += `<code class='code-lang ${langClass}'>${code2}</code></pre>`;
-          return result;
-        });
-      },
-      // 应用主题样式
-      applyTheme(html2) {
-        return html2;
-      }
-    }
-  };
-  function _sfc_render$20(_ctx, _cache, $props, $setup, $data, $options) {
-    const _component_up_parse = resolveEasycom(vue.resolveDynamicComponent("up-parse"), __easycom_0$8);
-    return vue.openBlock(), vue.createElementBlock(
-      "view",
-      {
-        class: vue.normalizeClass(["up-markdown", $props.theme])
-      },
-      [
-        vue.createVNode(_component_up_parse, {
-          content: $data.parsedContent,
-          previewImg: $props.previewImg
-        }, null, 8, ["content", "previewImg"])
-      ],
-      2
-      /* CLASS */
-    );
-  }
-  const __easycom_1$c = /* @__PURE__ */ _export_sfc(_sfc_main$21, [["render", _sfc_render$20], ["__scopeId", "data-v-40656870"], ["__file", "D:/uniapp2023/studyParty/node_modules/uview-plus/components/u-markdown/u-markdown.vue"]]);
-  const __vite_glob_0_65 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
-    __proto__: null,
-    default: __easycom_1$c
-  }, Symbol.toStringTag, { value: "Module" }));
-  const _sfc_main$20 = {
     data() {
       return {
         taskId: null,
@@ -47512,11 +47955,11 @@ ${placeholder}
       }
     }
   };
-  function _sfc_render$1$(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$20(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_u_icon = resolveEasycom(vue.resolveDynamicComponent("u-icon"), __easycom_0$g);
-    const _component_u_markdown = resolveEasycom(vue.resolveDynamicComponent("u-markdown"), __easycom_1$c);
-    const _component_u_button = resolveEasycom(vue.resolveDynamicComponent("u-button"), __easycom_3$4);
-    const _component_u_popup = resolveEasycom(vue.resolveDynamicComponent("u-popup"), __easycom_3$3);
+    const _component_u_markdown = resolveEasycom(vue.resolveDynamicComponent("u-markdown"), __easycom_1$f);
+    const _component_u_button = resolveEasycom(vue.resolveDynamicComponent("u-button"), __easycom_3$5);
+    const _component_u_popup = resolveEasycom(vue.resolveDynamicComponent("u-popup"), __easycom_3$4);
     return vue.openBlock(), vue.createElementBlock("view", { class: "container" }, [
       vue.createCommentVNode(" 顶部导航 "),
       vue.createElementVNode("header", { class: "app-header" }, [
@@ -47931,8 +48374,8 @@ ${placeholder}
       }, 8, ["show", "onClose"])
     ]);
   }
-  const PagesChatListGroupTaskDetail = /* @__PURE__ */ _export_sfc(_sfc_main$20, [["render", _sfc_render$1$], ["__scopeId", "data-v-dc252075"], ["__file", "D:/uniapp2023/studyParty/pages/chatList/groupTaskDetail.vue"]]);
-  const _sfc_main$1$ = {
+  const PagesChatListGroupTaskDetail = /* @__PURE__ */ _export_sfc(_sfc_main$21, [["render", _sfc_render$20], ["__scopeId", "data-v-dc252075"], ["__file", "D:/uniapp2023/studyParty/pages/chatList/groupTaskDetail.vue"]]);
+  const _sfc_main$20 = {
     data() {
       return {
         searchQuery: "",
@@ -48242,14 +48685,14 @@ ${placeholder}
       }
     }
   };
-  function _sfc_render$1_(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$1$(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_u_icon = resolveEasycom(vue.resolveDynamicComponent("u-icon"), __easycom_0$g);
     const _component_u_input = resolveEasycom(vue.resolveDynamicComponent("u-input"), __easycom_0$f);
     const _component_u_loading_icon = resolveEasycom(vue.resolveDynamicComponent("u-loading-icon"), __easycom_1$g);
-    const _component_u_button = resolveEasycom(vue.resolveDynamicComponent("u-button"), __easycom_3$4);
-    const _component_u_empty = resolveEasycom(vue.resolveDynamicComponent("u-empty"), __easycom_4$1);
+    const _component_u_button = resolveEasycom(vue.resolveDynamicComponent("u-button"), __easycom_3$5);
+    const _component_u_empty = resolveEasycom(vue.resolveDynamicComponent("u-empty"), __easycom_3$3);
     const _component_u_textarea = resolveEasycom(vue.resolveDynamicComponent("u-textarea"), __easycom_3$2);
-    const _component_u_popup = resolveEasycom(vue.resolveDynamicComponent("u-popup"), __easycom_3$3);
+    const _component_u_popup = resolveEasycom(vue.resolveDynamicComponent("u-popup"), __easycom_3$4);
     return vue.openBlock(), vue.createElementBlock("view", null, [
       vue.createElementVNode("div", { class: "body" }, [
         vue.createCommentVNode(" 顶部导航 "),
@@ -48612,8 +49055,8 @@ ${placeholder}
       ])
     ]);
   }
-  const PagesChatListSearchGroup = /* @__PURE__ */ _export_sfc(_sfc_main$1$, [["render", _sfc_render$1_], ["__scopeId", "data-v-cce9e0f0"], ["__file", "D:/uniapp2023/studyParty/pages/chatList/searchGroup.vue"]]);
-  const _sfc_main$1_ = {
+  const PagesChatListSearchGroup = /* @__PURE__ */ _export_sfc(_sfc_main$20, [["render", _sfc_render$1$], ["__scopeId", "data-v-cce9e0f0"], ["__file", "D:/uniapp2023/studyParty/pages/chatList/searchGroup.vue"]]);
+  const _sfc_main$1$ = {
     data() {
       return {
         activeTab: "received",
@@ -48966,12 +49409,12 @@ ${placeholder}
       }
     }
   };
-  function _sfc_render$1Z(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$1_(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_u_icon = resolveEasycom(vue.resolveDynamicComponent("u-icon"), __easycom_0$g);
     const _component_u_loading_icon = resolveEasycom(vue.resolveDynamicComponent("u-loading-icon"), __easycom_1$g);
-    const _component_u_button = resolveEasycom(vue.resolveDynamicComponent("u-button"), __easycom_3$4);
-    const _component_u_pull_refresh = resolveEasycom(vue.resolveDynamicComponent("u-pull-refresh"), __easycom_1$d);
-    const _component_u_empty = resolveEasycom(vue.resolveDynamicComponent("u-empty"), __easycom_4$1);
+    const _component_u_button = resolveEasycom(vue.resolveDynamicComponent("u-button"), __easycom_3$5);
+    const _component_u_pull_refresh = resolveEasycom(vue.resolveDynamicComponent("u-pull-refresh"), __easycom_1$c);
+    const _component_u_empty = resolveEasycom(vue.resolveDynamicComponent("u-empty"), __easycom_3$3);
     return vue.openBlock(), vue.createElementBlock("view", null, [
       vue.createElementVNode("div", { class: "body" }, [
         vue.createCommentVNode(" 顶部导航 "),
@@ -49484,8 +49927,8 @@ ${placeholder}
       ])
     ]);
   }
-  const PagesChatListGroupApplications = /* @__PURE__ */ _export_sfc(_sfc_main$1_, [["render", _sfc_render$1Z], ["__scopeId", "data-v-7ff16c5b"], ["__file", "D:/uniapp2023/studyParty/pages/chatList/groupApplications.vue"]]);
-  const _sfc_main$1Z = {
+  const PagesChatListGroupApplications = /* @__PURE__ */ _export_sfc(_sfc_main$1$, [["render", _sfc_render$1_], ["__scopeId", "data-v-7ff16c5b"], ["__file", "D:/uniapp2023/studyParty/pages/chatList/groupApplications.vue"]]);
+  const _sfc_main$1_ = {
     data() {
       return {
         formData: {
@@ -49639,9 +50082,9 @@ ${placeholder}
       }
     }
   };
-  function _sfc_render$1Y(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$1Z(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_u_icon = resolveEasycom(vue.resolveDynamicComponent("u-icon"), __easycom_0$g);
-    const _component_u_button = resolveEasycom(vue.resolveDynamicComponent("u-button"), __easycom_3$4);
+    const _component_u_button = resolveEasycom(vue.resolveDynamicComponent("u-button"), __easycom_3$5);
     const _component_u_input = resolveEasycom(vue.resolveDynamicComponent("u-input"), __easycom_0$f);
     const _component_u_textarea = resolveEasycom(vue.resolveDynamicComponent("u-textarea"), __easycom_3$2);
     return vue.openBlock(), vue.createElementBlock("view", null, [
@@ -49841,7 +50284,7 @@ ${placeholder}
       ])
     ]);
   }
-  const PagesChatListCreateGroup = /* @__PURE__ */ _export_sfc(_sfc_main$1Z, [["render", _sfc_render$1Y], ["__scopeId", "data-v-fe84f90b"], ["__file", "D:/uniapp2023/studyParty/pages/chatList/createGroup.vue"]]);
+  const PagesChatListCreateGroup = /* @__PURE__ */ _export_sfc(_sfc_main$1_, [["render", _sfc_render$1Z], ["__scopeId", "data-v-fe84f90b"], ["__file", "D:/uniapp2023/studyParty/pages/chatList/createGroup.vue"]]);
   const openType = defineMixin({
     props: {
       openType: String
@@ -49939,7 +50382,7 @@ ${placeholder}
       }
     }
   });
-  const _sfc_main$1Y = {
+  const _sfc_main$1Z = {
     name: "u-action-sheet",
     // 一些props参数和methods方法，通过mixin混入，因为其他文件也会用到
     mixins: [openType, buttonMixin, mixin, props$1e],
@@ -49988,12 +50431,12 @@ ${placeholder}
       }
     }
   };
-  function _sfc_render$1X(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$1Y(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_up_icon = resolveEasycom(vue.resolveDynamicComponent("up-icon"), __easycom_0$g);
     const _component_u_line = resolveEasycom(vue.resolveDynamicComponent("u-line"), __easycom_1$h);
     const _component_u_loading_icon = resolveEasycom(vue.resolveDynamicComponent("u-loading-icon"), __easycom_1$g);
     const _component_u_gap = resolveEasycom(vue.resolveDynamicComponent("u-gap"), __easycom_2$3);
-    const _component_u_popup = resolveEasycom(vue.resolveDynamicComponent("u-popup"), __easycom_3$3);
+    const _component_u_popup = resolveEasycom(vue.resolveDynamicComponent("u-popup"), __easycom_3$4);
     return vue.openBlock(), vue.createBlock(_component_u_popup, {
       show: _ctx.show,
       mode: "bottom",
@@ -50150,7 +50593,7 @@ ${placeholder}
       /* FORWARDED */
     }, 8, ["show", "onClose", "safeAreaInsetBottom", "round"]);
   }
-  const __easycom_4 = /* @__PURE__ */ _export_sfc(_sfc_main$1Y, [["render", _sfc_render$1X], ["__scopeId", "data-v-05ea451b"], ["__file", "D:/uniapp2023/studyParty/node_modules/uview-plus/components/u-action-sheet/u-action-sheet.vue"]]);
+  const __easycom_4 = /* @__PURE__ */ _export_sfc(_sfc_main$1Z, [["render", _sfc_render$1Y], ["__scopeId", "data-v-05ea451b"], ["__file", "D:/uniapp2023/studyParty/node_modules/uview-plus/components/u-action-sheet/u-action-sheet.vue"]]);
   const __vite_glob_0_1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
     __proto__: null,
     default: __easycom_4
@@ -50331,7 +50774,7 @@ ${placeholder}
       }
     });
   };
-  const _sfc_main$1X = {
+  const _sfc_main$1Y = {
     data() {
       return {
         groupId: null,
@@ -50706,7 +51149,7 @@ ${placeholder}
       }
     }
   };
-  function _sfc_render$1W(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$1X(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_u_icon = resolveEasycom(vue.resolveDynamicComponent("u-icon"), __easycom_0$g);
     const _component_u_action_sheet = resolveEasycom(vue.resolveDynamicComponent("u-action-sheet"), __easycom_4);
     return vue.openBlock(), vue.createElementBlock("view", null, [
@@ -50919,8 +51362,8 @@ ${placeholder}
       }, null, 8, ["show", "actions", "onSelect"])
     ]);
   }
-  const PagesChatListGroupMembers = /* @__PURE__ */ _export_sfc(_sfc_main$1X, [["render", _sfc_render$1W], ["__file", "D:/uniapp2023/studyParty/pages/chatList/groupMembers.vue"]]);
-  const _sfc_main$1W = {
+  const PagesChatListGroupMembers = /* @__PURE__ */ _export_sfc(_sfc_main$1Y, [["render", _sfc_render$1X], ["__file", "D:/uniapp2023/studyParty/pages/chatList/groupMembers.vue"]]);
+  const _sfc_main$1X = {
     data() {
       return {
         markdownContent: ""
@@ -50937,9 +51380,9 @@ ${placeholder}
       }
     }
   };
-  function _sfc_render$1V(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$1W(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_u_icon = resolveEasycom(vue.resolveDynamicComponent("u-icon"), __easycom_0$g);
-    const _component_u_markdown = resolveEasycom(vue.resolveDynamicComponent("u-markdown"), __easycom_1$c);
+    const _component_u_markdown = resolveEasycom(vue.resolveDynamicComponent("u-markdown"), __easycom_1$f);
     return vue.openBlock(), vue.createElementBlock("view", { class: "container" }, [
       vue.createCommentVNode(" 顶部导航 "),
       vue.createElementVNode("header", { class: "app-header" }, [
@@ -50972,8 +51415,8 @@ ${placeholder}
       ])
     ]);
   }
-  const PagesChatListMarkdownPreview = /* @__PURE__ */ _export_sfc(_sfc_main$1W, [["render", _sfc_render$1V], ["__scopeId", "data-v-d4ff899a"], ["__file", "D:/uniapp2023/studyParty/pages/chatList/markdownPreview.vue"]]);
-  const _sfc_main$1V = {
+  const PagesChatListMarkdownPreview = /* @__PURE__ */ _export_sfc(_sfc_main$1X, [["render", _sfc_render$1W], ["__scopeId", "data-v-d4ff899a"], ["__file", "D:/uniapp2023/studyParty/pages/chatList/markdownPreview.vue"]]);
+  const _sfc_main$1W = {
     data() {
       return {
         titleExample: `# 一级标题
@@ -51005,9 +51448,9 @@ __f__('log','at pages/chatList/markdownGuide.vue:129','Hello, World!');
       }
     }
   };
-  function _sfc_render$1U(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$1V(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_u_icon = resolveEasycom(vue.resolveDynamicComponent("u-icon"), __easycom_0$g);
-    const _component_u_markdown = resolveEasycom(vue.resolveDynamicComponent("u-markdown"), __easycom_1$c);
+    const _component_u_markdown = resolveEasycom(vue.resolveDynamicComponent("u-markdown"), __easycom_1$f);
     return vue.openBlock(), vue.createElementBlock("view", { class: "container" }, [
       vue.createCommentVNode(" 顶部导航 "),
       vue.createElementVNode("header", { class: "app-header" }, [
@@ -51087,7 +51530,7 @@ __f__('log','at pages/chatList/markdownGuide.vue:129','Hello, World!');
       ])
     ]);
   }
-  const PagesChatListMarkdownGuide = /* @__PURE__ */ _export_sfc(_sfc_main$1V, [["render", _sfc_render$1U], ["__scopeId", "data-v-8ad07f3f"], ["__file", "D:/uniapp2023/studyParty/pages/chatList/markdownGuide.vue"]]);
+  const PagesChatListMarkdownGuide = /* @__PURE__ */ _export_sfc(_sfc_main$1W, [["render", _sfc_render$1V], ["__scopeId", "data-v-8ad07f3f"], ["__file", "D:/uniapp2023/studyParty/pages/chatList/markdownGuide.vue"]]);
   const props$1d = defineMixin({
     props: {
       // 是否展示工具条
@@ -51127,7 +51570,7 @@ __f__('log','at pages/chatList/markdownGuide.vue:129','Hello, World!');
       }
     }
   });
-  const _sfc_main$1U = {
+  const _sfc_main$1V = {
     name: "u-toolbar",
     mixins: [mpMixin, mixin, props$1d],
     emits: ["confirm", "cancel"],
@@ -51144,7 +51587,7 @@ __f__('log','at pages/chatList/markdownGuide.vue:129','Hello, World!');
       }
     }
   };
-  function _sfc_render$1T(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$1U(_ctx, _cache, $props, $setup, $data, $options) {
     return _ctx.show ? (vue.openBlock(), vue.createElementBlock(
       "view",
       {
@@ -51209,7 +51652,7 @@ __f__('log','at pages/chatList/markdownGuide.vue:129','Hello, World!');
       /* NEED_HYDRATION */
     )) : vue.createCommentVNode("v-if", true);
   }
-  const __easycom_1$b = /* @__PURE__ */ _export_sfc(_sfc_main$1U, [["render", _sfc_render$1T], ["__scopeId", "data-v-3fd495d6"], ["__file", "D:/uniapp2023/studyParty/node_modules/uview-plus/components/u-toolbar/u-toolbar.vue"]]);
+  const __easycom_1$b = /* @__PURE__ */ _export_sfc(_sfc_main$1V, [["render", _sfc_render$1U], ["__scopeId", "data-v-3fd495d6"], ["__file", "D:/uniapp2023/studyParty/node_modules/uview-plus/components/u-toolbar/u-toolbar.vue"]]);
   const __vite_glob_0_125 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
     __proto__: null,
     default: __easycom_1$b
@@ -51364,7 +51807,7 @@ __f__('log','at pages/chatList/markdownGuide.vue:129','Hello, World!');
       }
     }
   });
-  const _sfc_main$1T = {
+  const _sfc_main$1U = {
     name: "u-picker",
     mixins: [mpMixin, mixin, props$1c],
     data() {
@@ -51619,11 +52062,11 @@ __f__('log','at pages/chatList/markdownGuide.vue:129','Hello, World!');
       }
     }
   };
-  function _sfc_render$1S(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$1T(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_up_input = resolveEasycom(vue.resolveDynamicComponent("up-input"), __easycom_0$f);
     const _component_u_toolbar = resolveEasycom(vue.resolveDynamicComponent("u-toolbar"), __easycom_1$b);
     const _component_u_loading_icon = resolveEasycom(vue.resolveDynamicComponent("u-loading-icon"), __easycom_1$g);
-    const _component_u_popup = resolveEasycom(vue.resolveDynamicComponent("u-popup"), __easycom_3$3);
+    const _component_u_popup = resolveEasycom(vue.resolveDynamicComponent("u-popup"), __easycom_3$4);
     return vue.openBlock(), vue.createElementBlock("view", { class: "u-picker-wraper" }, [
       _ctx.hasInput ? (vue.openBlock(), vue.createElementBlock("view", {
         key: 0,
@@ -51732,7 +52175,7 @@ __f__('log','at pages/chatList/markdownGuide.vue:129','Hello, World!');
       }, 8, ["show", "mode", "zIndex", "bgColor", "round", "duration", "pageInline", "overlayOpacity", "onClose"])
     ]);
   }
-  const __easycom_1$a = /* @__PURE__ */ _export_sfc(_sfc_main$1T, [["render", _sfc_render$1S], ["__scopeId", "data-v-1500ce68"], ["__file", "D:/uniapp2023/studyParty/node_modules/uview-plus/components/u-picker/u-picker.vue"]]);
+  const __easycom_1$a = /* @__PURE__ */ _export_sfc(_sfc_main$1U, [["render", _sfc_render$1T], ["__scopeId", "data-v-1500ce68"], ["__file", "D:/uniapp2023/studyParty/node_modules/uview-plus/components/u-picker/u-picker.vue"]]);
   const __vite_glob_0_81 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
     __proto__: null,
     default: __easycom_1$a
@@ -52192,7 +52635,7 @@ __f__('log','at pages/chatList/markdownGuide.vue:129','Hello, World!');
     }
     return result;
   }
-  const _sfc_main$1S = {
+  const _sfc_main$1T = {
     name: "up-datetime-picker",
     mixins: [mpMixin, mixin, props$1b],
     data() {
@@ -52526,7 +52969,7 @@ __f__('log','at pages/chatList/markdownGuide.vue:129','Hello, World!');
       }
     }
   };
-  function _sfc_render$1R(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$1S(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_up_input = resolveEasycom(vue.resolveDynamicComponent("up-input"), __easycom_0$f);
     const _component_u_picker = resolveEasycom(vue.resolveDynamicComponent("u-picker"), __easycom_1$a);
     return vue.openBlock(), vue.createElementBlock("view", { class: "u-datetime-picker" }, [
@@ -52577,12 +53020,12 @@ __f__('log','at pages/chatList/markdownGuide.vue:129','Hello, World!');
       }, 8, ["show", "popupMode", "closeOnClickOverlay", "columns", "title", "itemHeight", "showToolbar", "visibleItemCount", "defaultIndex", "cancelText", "confirmText", "cancelColor", "confirmColor", "toolbarRightSlot", "pageInline", "onClose", "onCancel", "onConfirm", "onChange"])
     ]);
   }
-  const __easycom_3$1 = /* @__PURE__ */ _export_sfc(_sfc_main$1S, [["render", _sfc_render$1R], ["__scopeId", "data-v-e39cc2d0"], ["__file", "D:/uniapp2023/studyParty/node_modules/uview-plus/components/u-datetime-picker/u-datetime-picker.vue"]]);
+  const __easycom_3$1 = /* @__PURE__ */ _export_sfc(_sfc_main$1T, [["render", _sfc_render$1S], ["__scopeId", "data-v-e39cc2d0"], ["__file", "D:/uniapp2023/studyParty/node_modules/uview-plus/components/u-datetime-picker/u-datetime-picker.vue"]]);
   const __vite_glob_0_36 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
     __proto__: null,
     default: __easycom_3$1
   }, Symbol.toStringTag, { value: "Module" }));
-  const _sfc_main$1R = {
+  const _sfc_main$1S = {
     data() {
       return {
         groupId: null,
@@ -53090,9 +53533,9 @@ ${placeholder}
       }
     }
   };
-  function _sfc_render$1Q(_ctx, _cache, $props, $setup, $data, $options) {
+  function _sfc_render$1R(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_u_icon = resolveEasycom(vue.resolveDynamicComponent("u-icon"), __easycom_0$g);
-    const _component_u_button = resolveEasycom(vue.resolveDynamicComponent("u-button"), __easycom_3$4);
+    const _component_u_button = resolveEasycom(vue.resolveDynamicComponent("u-button"), __easycom_3$5);
     const _component_u__input = resolveEasycom(vue.resolveDynamicComponent("u--input"), __easycom_0$f);
     const _component_u_datetime_picker = resolveEasycom(vue.resolveDynamicComponent("u-datetime-picker"), __easycom_3$1);
     return vue.openBlock(), vue.createElementBlock("view", { class: "add-task-page" }, [
@@ -53292,7 +53735,354 @@ ${placeholder}
       }, null, 8, ["show", "modelValue", "onConfirm"])
     ]);
   }
-  const PagesChatListAddGroupTask = /* @__PURE__ */ _export_sfc(_sfc_main$1R, [["render", _sfc_render$1Q], ["__scopeId", "data-v-27f1c303"], ["__file", "D:/uniapp2023/studyParty/pages/chatList/addGroupTask.vue"]]);
+  const PagesChatListAddGroupTask = /* @__PURE__ */ _export_sfc(_sfc_main$1S, [["render", _sfc_render$1R], ["__scopeId", "data-v-27f1c303"], ["__file", "D:/uniapp2023/studyParty/pages/chatList/addGroupTask.vue"]]);
+  const _sfc_main$1R = {
+    data() {
+      return {
+        imageUrl,
+        articleCount: 0,
+        // 发帖数量，等待后端更新数据
+        motivationalQuotes: [
+          "每一次坚持，都是成功的积累。",
+          "学习如逆水行舟，不进则退。",
+          "今天的努力，是明天的收获。",
+          "知识是通往自由的金钥匙。",
+          "持之以恒，方能成就非凡。",
+          "学而时习之，不亦说乎？",
+          "书山有路勤为径，学海无涯苦作舟。",
+          "不积跬步，无以至千里。",
+          "学习是成长的阶梯。",
+          "勤奋是成功之母。",
+          "学如逆水行舟，不进则退。",
+          "知识改变命运，学习成就未来。",
+          "每天进步一点点，就是成功的开始。",
+          "学习是点亮人生的明灯。",
+          "坚持就是胜利，努力必有回报。"
+        ]
+      };
+    },
+    computed: {
+      ...mapState({
+        userInfo: (state2) => state2.user.userInfo
+      })
+    },
+    onLoad() {
+      formatAppLog("log", "at pages/profile/profile.vue:170", "个人中心页面加载");
+    },
+    methods: {
+      ...mapActions("user", ["selectUser"]),
+      // 获取用户头像
+      getUserAvatar() {
+        if (this.userInfo.head) {
+          return this.imageUrl + this.userInfo.head;
+        }
+        return this.imageUrl + "/head/group.png";
+      },
+      // 获取用户状态
+      getUserStatus() {
+        const statusMap = {
+          1: "学生",
+          2: "老师",
+          3: "企业"
+        };
+        return statusMap[this.userInfo.status] || "未知";
+      },
+      // 获取用户状态标签类型
+      getUserStatusType() {
+        const typeMap = {
+          1: "success",
+          // 学生 - 绿色
+          2: "primary",
+          // 老师 - 蓝色
+          3: "warning"
+          // 企业 - 橙色
+        };
+        return typeMap[this.userInfo.status] || "info";
+      },
+      // 格式化日期
+      formatDate(dateString) {
+        if (!dateString)
+          return "未知";
+        const date3 = new Date(dateString);
+        return `${date3.getFullYear()}-${(date3.getMonth() + 1).toString().padStart(2, "0")}-${date3.getDate().toString().padStart(2, "0")}`;
+      },
+      // 获取随机励志话语
+      getRandomQuote() {
+        const randomIndex = Math.floor(Math.random() * this.motivationalQuotes.length);
+        return this.motivationalQuotes[randomIndex];
+      },
+      // 编辑资料
+      editProfile() {
+        uni.navigateTo({
+          url: "/pages/userInfo/userInfo"
+        });
+      },
+      // 跳转到设置页面
+      toSettings() {
+        uni.navigateTo({
+          url: "/pages/profile/settings"
+        });
+      },
+      // 跳转到小组列表
+      toGroupList() {
+        uni.navigateTo({
+          url: "/pages/chatList/groupList"
+        });
+      },
+      // 跳转到我的任务
+      toMyTasks() {
+        uni.navigateTo({
+          url: "/pages/completedTasks/completedTasks"
+        });
+      },
+      // 跳转到我的好友
+      toMyFriends() {
+        uni.navigateTo({
+          url: "/pages/chatList/friendList"
+        });
+      },
+      // 跳转到成就页面
+      toAchievements() {
+        this.$u.toast("成就功能正在开发中");
+      }
+    }
+  };
+  function _sfc_render$1Q(_ctx, _cache, $props, $setup, $data, $options) {
+    const _component_u_icon = resolveEasycom(vue.resolveDynamicComponent("u-icon"), __easycom_0$g);
+    const _component_u_tag = resolveEasycom(vue.resolveDynamicComponent("u-tag"), __easycom_0$b);
+    const _component_u_button = resolveEasycom(vue.resolveDynamicComponent("u-button"), __easycom_3$5);
+    const _component_u_empty = resolveEasycom(vue.resolveDynamicComponent("u-empty"), __easycom_3$3);
+    return vue.openBlock(), vue.createElementBlock("view", { class: "body" }, [
+      vue.createCommentVNode(" 顶部导航 "),
+      vue.createElementVNode("header", null, [
+        vue.createElementVNode("div", { class: "header-top" }, [
+          vue.createElementVNode("div", { class: "logo" }, [
+            vue.createElementVNode("i", { class: "fas fa-user" }),
+            vue.createElementVNode("span", null, "个人中心")
+          ]),
+          vue.createElementVNode("div", { class: "header-actions" }, [
+            vue.createVNode(_component_u_icon, {
+              name: "setting",
+              size: "20",
+              color: "#ffffff",
+              onClick: $options.toSettings
+            }, null, 8, ["onClick"])
+          ])
+        ])
+      ]),
+      vue.createCommentVNode(" 用户信息概览 "),
+      vue.createElementVNode("div", { class: "user-overview" }, [
+        vue.createElementVNode("div", { class: "user-header" }, [
+          vue.createElementVNode("image", {
+            class: "avatar",
+            src: $options.getUserAvatar(),
+            mode: "aspectFill"
+          }, null, 8, ["src"]),
+          vue.createElementVNode("div", { class: "user-basic-info" }, [
+            vue.createElementVNode("div", { class: "user-name-row" }, [
+              vue.createElementVNode(
+                "h2",
+                { class: "user-name" },
+                vue.toDisplayString(_ctx.userInfo.name || "未设置昵称"),
+                1
+                /* TEXT */
+              )
+            ]),
+            vue.createElementVNode(
+              "p",
+              { class: "user-school" },
+              vue.toDisplayString(_ctx.userInfo.school || "未设置学校"),
+              1
+              /* TEXT */
+            ),
+            vue.createElementVNode(
+              "p",
+              { class: "user-major" },
+              vue.toDisplayString(_ctx.userInfo.major || "未设置专业"),
+              1
+              /* TEXT */
+            )
+          ]),
+          vue.createElementVNode("div", { class: "user-status-container" }, [
+            vue.createElementVNode("div", { class: "user-status-tag" }, [
+              vue.createVNode(_component_u_tag, {
+                text: $options.getUserStatus(),
+                type: $options.getUserStatusType(),
+                size: "mini"
+              }, null, 8, ["text", "type"])
+            ])
+          ])
+        ]),
+        vue.createElementVNode("div", { class: "edit-profile-section" }, [
+          vue.createVNode(_component_u_button, {
+            type: "primary",
+            size: "small",
+            plain: "",
+            onClick: $options.editProfile,
+            "custom-style": {
+              borderColor: "#4361ee",
+              color: "#4361ee",
+              backgroundColor: "transparent",
+              borderRadius: "20px",
+              fontSize: "12px",
+              height: "28px",
+              padding: "0 15px"
+            }
+          }, {
+            default: vue.withCtx(() => [
+              vue.createVNode(_component_u_icon, {
+                name: "edit-pen",
+                size: "14",
+                color: "#4361ee",
+                style: { "margin-right": "4px" }
+              }),
+              vue.createTextVNode(" 编辑资料 ")
+            ]),
+            _: 1
+            /* STABLE */
+          }, 8, ["onClick"])
+        ]),
+        vue.createElementVNode("div", { class: "user-stats" }, [
+          vue.createElementVNode("div", { class: "stat-item" }, [
+            vue.createElementVNode(
+              "div",
+              { class: "stat-value" },
+              vue.toDisplayString(_ctx.userInfo.finishTask || 0),
+              1
+              /* TEXT */
+            ),
+            vue.createElementVNode("div", { class: "stat-label" }, "完成任务")
+          ]),
+          vue.createElementVNode("div", { class: "stat-item" }, [
+            vue.createElementVNode(
+              "div",
+              { class: "stat-value" },
+              vue.toDisplayString($data.articleCount || 0),
+              1
+              /* TEXT */
+            ),
+            vue.createElementVNode("div", { class: "stat-label" }, "发布帖子")
+          ]),
+          vue.createElementVNode("div", { class: "stat-item" }, [
+            vue.createElementVNode(
+              "div",
+              { class: "stat-value" },
+              vue.toDisplayString(_ctx.userInfo.starPrestige || 0),
+              1
+              /* TEXT */
+            ),
+            vue.createElementVNode("div", { class: "stat-label" }, "学术声望")
+          ])
+        ])
+      ]),
+      vue.createCommentVNode(" 学习统计 "),
+      vue.createElementVNode("div", { class: "study-progress-section" }, [
+        vue.createElementVNode("div", { class: "section-title" }, [
+          vue.createElementVNode("h3", null, "学习统计")
+        ]),
+        vue.createElementVNode("div", { class: "study-progress" }, [
+          vue.createCommentVNode(" 连续打卡卡片 "),
+          vue.createElementVNode("div", { class: "clock-in-card" }, [
+            vue.createElementVNode(
+              "div",
+              { class: "clock-in-days" },
+              vue.toDisplayString(_ctx.userInfo.clockIn || 0) + "天",
+              1
+              /* TEXT */
+            ),
+            vue.createElementVNode(
+              "div",
+              { class: "motivational-quote" },
+              vue.toDisplayString($options.getRandomQuote()),
+              1
+              /* TEXT */
+            ),
+            vue.createElementVNode("div", { class: "clock-in-label" }, "连续打卡")
+          ]),
+          vue.createElementVNode("div", { class: "study-hours" }, [
+            vue.createElementVNode(
+              "span",
+              null,
+              "注册时间: " + vue.toDisplayString($options.formatDate(_ctx.userInfo.createDate)),
+              1
+              /* TEXT */
+            )
+          ])
+        ])
+      ]),
+      vue.createCommentVNode(" 功能菜单 "),
+      vue.createElementVNode("div", { class: "function-menu" }, [
+        vue.createElementVNode("div", { class: "menu-grid" }, [
+          vue.createElementVNode("div", {
+            class: "menu-item",
+            onClick: _cache[0] || (_cache[0] = (...args) => $options.toGroupList && $options.toGroupList(...args))
+          }, [
+            vue.createElementVNode("div", { class: "menu-icon" }, [
+              vue.createVNode(_component_u_icon, {
+                name: "account",
+                size: "24",
+                color: "#4361ee"
+              })
+            ]),
+            vue.createElementVNode("div", { class: "menu-name" }, "我的小组")
+          ]),
+          vue.createElementVNode("div", {
+            class: "menu-item",
+            onClick: _cache[1] || (_cache[1] = (...args) => $options.toMyTasks && $options.toMyTasks(...args))
+          }, [
+            vue.createElementVNode("div", { class: "menu-icon" }, [
+              vue.createVNode(_component_u_icon, {
+                name: "order",
+                size: "24",
+                color: "#4361ee"
+              })
+            ]),
+            vue.createElementVNode("div", { class: "menu-name" }, "我的任务")
+          ]),
+          vue.createElementVNode("div", {
+            class: "menu-item",
+            onClick: _cache[2] || (_cache[2] = (...args) => $options.toMyFriends && $options.toMyFriends(...args))
+          }, [
+            vue.createElementVNode("div", { class: "menu-icon" }, [
+              vue.createVNode(_component_u_icon, {
+                name: "man-add",
+                size: "24",
+                color: "#4361ee"
+              })
+            ]),
+            vue.createElementVNode("div", { class: "menu-name" }, "我的好友")
+          ]),
+          vue.createElementVNode("div", {
+            class: "menu-item",
+            onClick: _cache[3] || (_cache[3] = (...args) => $options.toAchievements && $options.toAchievements(...args))
+          }, [
+            vue.createElementVNode("div", { class: "menu-icon" }, [
+              vue.createVNode(_component_u_icon, {
+                name: "star",
+                size: "24",
+                color: "#4361ee"
+              })
+            ]),
+            vue.createElementVNode("div", { class: "menu-name" }, "我的成就")
+          ])
+        ])
+      ]),
+      vue.createCommentVNode(" 其他信息占位 "),
+      vue.createElementVNode("div", { class: "placeholder-section" }, [
+        vue.createElementVNode("div", { class: "section-title" }, [
+          vue.createElementVNode("h3", null, "更多信息")
+        ]),
+        vue.createElementVNode("div", { class: "placeholder-content" }, [
+          vue.createVNode(_component_u_empty, {
+            mode: "list",
+            text: "更多功能正在开发中",
+            icon: "http://cdn.uviewui.com/uview/empty/data.png"
+          })
+        ])
+      ])
+    ]);
+  }
+  const PagesProfileProfile = /* @__PURE__ */ _export_sfc(_sfc_main$1R, [["render", _sfc_render$1Q], ["__scopeId", "data-v-dd383ca2"], ["__file", "D:/uniapp2023/studyParty/pages/profile/profile.vue"]]);
   const _sfc_main$1Q = {
     data() {
       return {};
@@ -53341,7 +54131,7 @@ ${placeholder}
   };
   function _sfc_render$1P(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_u_icon = resolveEasycom(vue.resolveDynamicComponent("u-icon"), __easycom_0$g);
-    const _component_u_button = resolveEasycom(vue.resolveDynamicComponent("u-button"), __easycom_3$4);
+    const _component_u_button = resolveEasycom(vue.resolveDynamicComponent("u-button"), __easycom_3$5);
     return vue.openBlock(), vue.createElementBlock("view", { class: "container" }, [
       vue.createCommentVNode(" 顶部导航栏 "),
       vue.createElementVNode("view", { class: "navbar" }, [
@@ -53518,7 +54308,7 @@ ${placeholder}
   function _sfc_render$1O(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_u_icon = resolveEasycom(vue.resolveDynamicComponent("u-icon"), __easycom_0$g);
     const _component_u_input = resolveEasycom(vue.resolveDynamicComponent("u-input"), __easycom_0$f);
-    const _component_u_button = resolveEasycom(vue.resolveDynamicComponent("u-button"), __easycom_3$4);
+    const _component_u_button = resolveEasycom(vue.resolveDynamicComponent("u-button"), __easycom_3$5);
     return vue.openBlock(), vue.createElementBlock("view", { class: "container" }, [
       vue.createCommentVNode(" 顶部导航栏 "),
       vue.createElementVNode("view", { class: "navbar" }, [
@@ -53795,7 +54585,7 @@ ${placeholder}
   function _sfc_render$1M(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_u_icon = resolveEasycom(vue.resolveDynamicComponent("u-icon"), __easycom_0$g);
     const _component_u_input = resolveEasycom(vue.resolveDynamicComponent("u-input"), __easycom_0$f);
-    const _component_u_button = resolveEasycom(vue.resolveDynamicComponent("u-button"), __easycom_3$4);
+    const _component_u_button = resolveEasycom(vue.resolveDynamicComponent("u-button"), __easycom_3$5);
     return vue.openBlock(), vue.createElementBlock("view", { class: "container" }, [
       vue.createCommentVNode(" 顶部导航栏 "),
       vue.createElementVNode("view", { class: "navbar" }, [
@@ -54121,7 +54911,7 @@ ${placeholder}
   };
   function _sfc_render$1L(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_u_icon = resolveEasycom(vue.resolveDynamicComponent("u-icon"), __easycom_0$g);
-    const _component_u_button = resolveEasycom(vue.resolveDynamicComponent("u-button"), __easycom_3$4);
+    const _component_u_button = resolveEasycom(vue.resolveDynamicComponent("u-button"), __easycom_3$5);
     return vue.openBlock(), vue.createElementBlock("view", { class: "body" }, [
       vue.createCommentVNode(" 顶部导航 "),
       vue.createElementVNode("header", { class: "app-header" }, [
@@ -54420,8 +55210,8 @@ ${placeholder}
   __definePage("pages/register/register", PagesRegisterRegister);
   __definePage("pages/index/index", PagesIndexIndex);
   __definePage("pages/forum/forum", PagesForumForum);
+  __definePage("pages/forum/articleDetail", PagesForumArticleDetail);
   __definePage("pages/chatList/chatList", PagesChatListChatList);
-  __definePage("pages/profile/profile", PagesProfileProfile);
   __definePage("pages/chatList/friendList", PagesChatListFriendList);
   __definePage("pages/chatList/chatPage", PagesChatListChatPage);
   __definePage("pages/userInfo/userInfo", PagesUserInfoUserInfo);
@@ -54437,6 +55227,7 @@ ${placeholder}
   __definePage("pages/chatList/markdownPreview", PagesChatListMarkdownPreview);
   __definePage("pages/chatList/markdownGuide", PagesChatListMarkdownGuide);
   __definePage("pages/chatList/addGroupTask", PagesChatListAddGroupTask);
+  __definePage("pages/profile/profile", PagesProfileProfile);
   __definePage("pages/profile/settings", PagesProfileSettings);
   __definePage("pages/profile/changePassword", PagesProfileChangePassword);
   __definePage("pages/profile/about", PagesProfileAbout);
@@ -69832,7 +70623,10 @@ ${placeholder}
     return request({
       url: "/article/myArticle",
       method: "POST",
-      data: data2
+      data: data2,
+      header: {
+        "Content-Type": "application/x-www-form-urlencoded"
+      }
     });
   };
   const articleById = (data2) => {
@@ -69841,6 +70635,9 @@ ${placeholder}
       method: "POST",
       data: {
         articleId: data2.articleId
+      },
+      header: {
+        "Content-Type": "application/x-www-form-urlencoded"
       }
     });
   };
@@ -69851,6 +70648,9 @@ ${placeholder}
       data: {
         searchContext: data2.searchContext,
         currentPage: data2.currentPage
+      },
+      header: {
+        "Content-Type": "application/x-www-form-urlencoded"
       }
     });
   };
@@ -69858,6 +70658,9 @@ ${placeholder}
     return request({
       url: "/article/createArticle",
       method: "POST",
+      header: {
+        "Content-Type": "application/x-www-form-urlencoded"
+      },
       data: {
         title: data2.title,
         summary: data2.summary,
@@ -69871,6 +70674,9 @@ ${placeholder}
       method: "POST",
       data: {
         articleId: data2.articleId
+      },
+      header: {
+        "Content-Type": "application/x-www-form-urlencoded"
       }
     });
   };
@@ -69880,15 +70686,21 @@ ${placeholder}
       method: "GET",
       data: {
         page: data2.page
+      },
+      header: {
+        "Content-Type": "application/x-www-form-urlencoded"
       }
     });
   };
   const niceArticle = (data2) => {
     return request({
       url: "/article/niceArticle",
-      method: "Post",
+      method: "POST",
       data: {
-        page: data2.page
+        articleId: data2.articleId
+      },
+      header: {
+        "Content-Type": "application/x-www-form-urlencoded"
       }
     });
   };
@@ -69897,7 +70709,10 @@ ${placeholder}
       url: "/article/collectArticle",
       method: "POST",
       data: {
-        page: data2.page
+        articleId: data2.articleId
+      },
+      header: {
+        "Content-Type": "application/x-www-form-urlencoded"
       }
     });
   };
@@ -69921,14 +70736,36 @@ ${placeholder}
       SET_HOT_ARTICLES(state2, list) {
         state2.hotArticles = list;
       },
-      SET_RECOMMEND_ARTICLES(state2, list) {
-        state2.recommendArticles = list;
+      SET_RECOMMEND_ARTICLES(state2, data2) {
+        if (data2 && data2.records) {
+          state2.recommendArticles = data2.records;
+        } else if (Array.isArray(data2)) {
+          state2.recommendArticles = data2;
+        } else {
+          state2.recommendArticles = [];
+        }
       },
       SET_NICE_ARTICLES(state2, list) {
         state2.niceArticles = list;
       },
       SET_COLLECTED_ARTICLES(state2, list) {
         state2.collectedArticles = list;
+      },
+      // 更新文章的点赞状态
+      UPDATE_ARTICLE_LIKE(state2, { articleId, isNice }) {
+        const recommendArticle = state2.recommendArticles.find((article2) => article2.id === articleId);
+        if (recommendArticle) {
+          recommendArticle.isNice = isNice;
+          recommendArticle.nice += isNice ? 1 : -1;
+        }
+      },
+      // 更新文章的收藏状态
+      UPDATE_ARTICLE_FAVORITE(state2, { articleId, isCollect }) {
+        const recommendArticle = state2.recommendArticles.find((article2) => article2.id === articleId);
+        if (recommendArticle) {
+          recommendArticle.isCollect = isCollect;
+          recommendArticle.collect += isCollect ? 1 : -1;
+        }
       }
     },
     actions: {
@@ -69961,21 +70798,24 @@ ${placeholder}
       async recommend({ commit }, params2) {
         const res2 = await recommend(params2);
         if (res2.code === 200) {
-          commit("SET_RECOMMEND_ARTICLES", res2.data.list);
+          commit("SET_RECOMMEND_ARTICLES", res2.data);
         }
         return res2;
       },
-      async niceArticle({ commit }, params2) {
-        const res2 = await niceArticle(params2);
+      async niceArticle({ commit }, articleId) {
+        const res2 = await niceArticle({ articleId });
         if (res2.code === 200) {
-          commit("SET_NICE_ARTICLES", res2.data.list);
+          const isNice = res2.data === "取消点赞" ? false : true;
+          commit("UPDATE_ARTICLE_LIKE", { articleId, isNice });
         }
         return res2;
       },
-      async collectArticle({ commit }, params2) {
-        const res2 = await collectArticle(params2);
+      // 收藏文章
+      async collectArticle({ commit }, articleId) {
+        const res2 = await collectArticle({ articleId });
         if (res2.code === 200) {
-          commit("SET_COLLECTED_ARTICLES", res2.data.list);
+          const isCollect = res2.data === "取消收藏" ? false : true;
+          commit("UPDATE_ARTICLE_FAVORITE", { articleId, isCollect });
         }
         return res2;
       }
@@ -69985,7 +70825,13 @@ ${placeholder}
     return request({
       url: "/article/articleComment/addArticleComment",
       method: "POST",
-      data: data2
+      data: {
+        articleId: data2.articleId,
+        content: data2.content
+      },
+      header: {
+        "Content-Type": "application/x-www-form-urlencoded"
+      }
     });
   };
   const deleteArticleComment = (data2) => {
@@ -69994,6 +70840,9 @@ ${placeholder}
       method: "POST",
       data: {
         articleCommentId: data2.articleCommentId
+      },
+      header: {
+        "Content-Type": "application/x-www-form-urlencoded"
       }
     });
   };
@@ -70004,6 +70853,9 @@ ${placeholder}
       data: {
         articleId: data2.articleId,
         currentPage: data2.currentPage
+      },
+      header: {
+        "Content-Type": "application/x-www-form-urlencoded"
       }
     });
   };
@@ -70013,6 +70865,9 @@ ${placeholder}
       method: "POST",
       data: {
         articleCommentId: data2.articleCommentId
+      },
+      header: {
+        "Content-Type": "application/x-www-form-urlencoded"
       }
     });
   };
@@ -70049,9 +70904,9 @@ ${placeholder}
     }
   };
   const actions$3 = {
-    async getArticleComment({ commit }, articleId) {
+    async getArticleComment({ commit }, { articleId, currentPage = 1 }) {
       try {
-        const res2 = await getArticleComment(articleId);
+        const res2 = await getArticleComment({ articleId, currentPage });
         commit("SET_COMMENTS", res2.data);
         return res2;
       } catch (error2) {
@@ -70061,30 +70916,32 @@ ${placeholder}
     },
     async addArticleComment({ commit }, { articleId, content }) {
       try {
-        const res2 = await addArticleComment(articleId, content);
-        commit("ADD_COMMENT", res2.data);
+        const res2 = await addArticleComment({ articleId, content });
+        if (res2 && res2.code === 200 && res2.data) {
+          commit("ADD_COMMENT", res2.data);
+        }
         return res2;
       } catch (error2) {
-        formatAppLog("error", "at store/article/articleComment.js:54", "提交评论失败:", error2);
+        formatAppLog("error", "at store/article/articleComment.js:57", "提交评论失败:", error2);
         throw error2;
       }
     },
     async deleteArticleComment({ commit }, commentId) {
       try {
-        const res2 = await deleteArticleComment(commentId);
+        const res2 = await deleteArticleComment({ commentId });
         commit("REMOVE_COMMENT", commentId);
         return res2;
       } catch (error2) {
-        formatAppLog("error", "at store/article/articleComment.js:64", "删除评论失败:", error2);
+        formatAppLog("error", "at store/article/articleComment.js:67", "删除评论失败:", error2);
         throw error2;
       }
     },
     async niceArticleComment({ commit }, commentId) {
       try {
-        const res2 = await niceArticleComment(commentId);
+        const res2 = await niceArticleComment({ commentId });
         return res2;
       } catch (error2) {
-        formatAppLog("error", "at store/article/articleComment.js:74", "设置精华评论失败:", error2);
+        formatAppLog("error", "at store/article/articleComment.js:77", "设置精华评论失败:", error2);
         throw error2;
       }
     }
@@ -71307,7 +72164,7 @@ ${placeholder}
     }
   };
   function _sfc_render$1J(_ctx, _cache, $props, $setup, $data, $options) {
-    const _component_up_modal = resolveEasycom(vue.resolveDynamicComponent("up-modal"), __easycom_0$a);
+    const _component_up_modal = resolveEasycom(vue.resolveDynamicComponent("up-modal"), __easycom_0$9);
     return vue.openBlock(), vue.createElementBlock("view", { class: "up-agreement" }, [
       vue.createVNode(_component_up_modal, {
         show: $data.show,
@@ -75870,8 +76727,8 @@ ${placeholder}
   function _sfc_render$1w(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_uHeader = vue.resolveComponent("uHeader");
     const _component_uMonth = vue.resolveComponent("uMonth");
-    const _component_u_button = resolveEasycom(vue.resolveDynamicComponent("u-button"), __easycom_3$4);
-    const _component_u_popup = resolveEasycom(vue.resolveDynamicComponent("u-popup"), __easycom_3$3);
+    const _component_u_button = resolveEasycom(vue.resolveDynamicComponent("u-button"), __easycom_3$5);
+    const _component_u_popup = resolveEasycom(vue.resolveDynamicComponent("u-popup"), __easycom_3$4);
     return vue.openBlock(), vue.createBlock(_component_u_popup, {
       show: _ctx.show,
       mode: "bottom",
@@ -77377,8 +78234,8 @@ ${placeholder}
     const _component_up_icon = resolveEasycom(vue.resolveDynamicComponent("up-icon"), __easycom_0$g);
     const _component_up_cell = resolveEasycom(vue.resolveDynamicComponent("up-cell"), __easycom_1$4);
     const _component_up_cell_group = resolveEasycom(vue.resolveDynamicComponent("up-cell-group"), __easycom_2$1);
-    const _component_up_button = resolveEasycom(vue.resolveDynamicComponent("up-button"), __easycom_3$4);
-    const _component_up_popup = resolveEasycom(vue.resolveDynamicComponent("up-popup"), __easycom_3$3);
+    const _component_up_button = resolveEasycom(vue.resolveDynamicComponent("up-button"), __easycom_3$5);
+    const _component_up_popup = resolveEasycom(vue.resolveDynamicComponent("up-popup"), __easycom_3$4);
     return vue.openBlock(), vue.createBlock(_component_up_popup, {
       show: $data.popupShow,
       mode: "bottom",
@@ -78392,7 +79249,7 @@ ${placeholder}
     }
   };
   function _sfc_render$1m(_ctx, _cache, $props, $setup, $data, $options) {
-    const _component_up_tag = resolveEasycom(vue.resolveDynamicComponent("up-tag"), __easycom_0$c);
+    const _component_up_tag = resolveEasycom(vue.resolveDynamicComponent("up-tag"), __easycom_0$b);
     return vue.openBlock(), vue.createElementBlock("scroll-view", {
       "scroll-x": $props.wrap === false,
       class: vue.normalizeClass(["up-choose", $props.wrap ? "up-choose-wrap" : "up-choose-nowrap"])
@@ -81009,8 +81866,8 @@ ${placeholder}
   };
   function _sfc_render$1a(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_up_subsection = resolveEasycom(vue.resolveDynamicComponent("up-subsection"), __easycom_0$6);
-    const _component_up_button = resolveEasycom(vue.resolveDynamicComponent("up-button"), __easycom_3$4);
-    const _component_up_popup = resolveEasycom(vue.resolveDynamicComponent("up-popup"), __easycom_3$3);
+    const _component_up_button = resolveEasycom(vue.resolveDynamicComponent("up-button"), __easycom_3$5);
+    const _component_up_popup = resolveEasycom(vue.resolveDynamicComponent("up-popup"), __easycom_3$4);
     return vue.openBlock(), vue.createElementBlock("view", { class: "up-color-picker" }, [
       vue.createElementVNode(
         "view",
@@ -82114,7 +82971,7 @@ ${placeholder}
     }
   };
   function _sfc_render$15(_ctx, _cache, $props, $setup, $data, $options) {
-    const _component_up_tag = resolveEasycom(vue.resolveDynamicComponent("up-tag"), __easycom_0$c);
+    const _component_up_tag = resolveEasycom(vue.resolveDynamicComponent("up-tag"), __easycom_0$b);
     return vue.openBlock(), vue.createElementBlock(
       "view",
       {
@@ -85069,8 +85926,8 @@ ${placeholder}
   };
   function _sfc_render$Z(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_up_number_box = resolveEasycom(vue.resolveDynamicComponent("up-number-box"), __easycom_0$4);
-    const _component_up_button = resolveEasycom(vue.resolveDynamicComponent("up-button"), __easycom_3$4);
-    const _component_up_popup = resolveEasycom(vue.resolveDynamicComponent("up-popup"), __easycom_3$3);
+    const _component_up_button = resolveEasycom(vue.resolveDynamicComponent("up-button"), __easycom_3$5);
+    const _component_up_popup = resolveEasycom(vue.resolveDynamicComponent("up-popup"), __easycom_3$4);
     return vue.openBlock(), vue.createElementBlock("view", { class: "up-goods-sku" }, [
       vue.createElementVNode("view", {
         onClick: _cache[0] || (_cache[0] = (...args) => $options.open && $options.open(...args))
@@ -86008,7 +86865,7 @@ ${placeholder}
   function _sfc_render$U(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_u_number_keyboard = resolveEasycom(vue.resolveDynamicComponent("u-number-keyboard"), __easycom_0$3);
     const _component_u_car_keyboard = resolveEasycom(vue.resolveDynamicComponent("u-car-keyboard"), __easycom_1$6);
-    const _component_u_popup = resolveEasycom(vue.resolveDynamicComponent("u-popup"), __easycom_3$3);
+    const _component_u_popup = resolveEasycom(vue.resolveDynamicComponent("u-popup"), __easycom_3$4);
     return vue.openBlock(), vue.createBlock(_component_u_popup, {
       overlay: _ctx.overlay,
       closeOnClickOverlay: _ctx.closeOnClickOverlay,
@@ -87436,8 +88293,8 @@ ${placeholder}
   };
   function _sfc_render$M(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_up_icon = resolveEasycom(vue.resolveDynamicComponent("up-icon"), __easycom_0$g);
-    const _component_u_button = resolveEasycom(vue.resolveDynamicComponent("u-button"), __easycom_3$4);
-    const _component_u_overlay = resolveEasycom(vue.resolveDynamicComponent("u-overlay"), __easycom_1$f);
+    const _component_u_button = resolveEasycom(vue.resolveDynamicComponent("u-button"), __easycom_3$5);
+    const _component_u_overlay = resolveEasycom(vue.resolveDynamicComponent("u-overlay"), __easycom_1$e);
     return vue.openBlock(), vue.createBlock(_component_u_overlay, {
       show: !$data.isConnected,
       zIndex: _ctx.zIndex,
@@ -88817,7 +89674,7 @@ ${placeholder}
     }
   };
   function _sfc_render$E(_ctx, _cache, $props, $setup, $data, $options) {
-    const _component_u_overlay = resolveEasycom(vue.resolveDynamicComponent("u-overlay"), __easycom_1$f);
+    const _component_u_overlay = resolveEasycom(vue.resolveDynamicComponent("u-overlay"), __easycom_1$e);
     const _component_u_line = resolveEasycom(vue.resolveDynamicComponent("u-line"), __easycom_1$h);
     const _component_u_transition = resolveEasycom(vue.resolveDynamicComponent("u-transition"), __easycom_2$4);
     return vue.openBlock(), vue.createElementBlock(
@@ -92323,7 +93180,7 @@ ${placeholder}
   };
   function _sfc_render$v(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_u_virtual_list = resolveEasycom(vue.resolveDynamicComponent("u-virtual-list"), __easycom_0);
-    const _component_u_pull_refresh = resolveEasycom(vue.resolveDynamicComponent("u-pull-refresh"), __easycom_1$d);
+    const _component_u_pull_refresh = resolveEasycom(vue.resolveDynamicComponent("u-pull-refresh"), __easycom_1$c);
     return vue.openBlock(), vue.createBlock(_component_u_pull_refresh, {
       refreshing: $data.refreshing,
       threshold: 50,
@@ -93080,7 +93937,7 @@ ${placeholder}
   };
   function _sfc_render$r(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_up_icon = resolveEasycom(vue.resolveDynamicComponent("up-icon"), __easycom_0$g);
-    const _component_u_overlay = resolveEasycom(vue.resolveDynamicComponent("u-overlay"), __easycom_1$f);
+    const _component_u_overlay = resolveEasycom(vue.resolveDynamicComponent("u-overlay"), __easycom_1$e);
     return vue.openBlock(), vue.createElementBlock("view", { class: "u-select" }, [
       vue.createElementVNode("view", { class: "u-select__content" }, [
         vue.createElementVNode("view", {
@@ -93947,7 +94804,7 @@ ${placeholder}
     }
   };
   function _sfc_render$o(_ctx, _cache, $props, $setup, $data, $options) {
-    const _component_u_safe_bottom = resolveEasycom(vue.resolveDynamicComponent("u-safe-bottom"), __easycom_0$b);
+    const _component_u_safe_bottom = resolveEasycom(vue.resolveDynamicComponent("u-safe-bottom"), __easycom_0$a);
     return vue.openBlock(), vue.createElementBlock("view", { class: "u-tabbar" }, [
       vue.createElementVNode(
         "view",
@@ -94133,7 +94990,7 @@ ${placeholder}
     const _component_up_icon = resolveEasycom(vue.resolveDynamicComponent("up-icon"), __easycom_0$g);
     const _component_up_tabs = resolveEasycom(vue.resolveDynamicComponent("up-tabs"), __easycom_1$5);
     const _component_u_avatar = resolveEasycom(vue.resolveDynamicComponent("u-avatar"), __easycom_2$2);
-    const _component_up_button = resolveEasycom(vue.resolveDynamicComponent("up-button"), __easycom_3$4);
+    const _component_up_button = resolveEasycom(vue.resolveDynamicComponent("up-button"), __easycom_3$5);
     const _component_up_action_sheet = resolveEasycom(vue.resolveDynamicComponent("up-action-sheet"), __easycom_4);
     const _component_up_slider = resolveEasycom(vue.resolveDynamicComponent("up-slider"), __easycom_1$1);
     const _component_up_tabbar_item = resolveEasycom(vue.resolveDynamicComponent("up-tabbar-item"), __easycom_6);
@@ -98946,7 +99803,7 @@ ${placeholder}
     const _component_up_icon = resolveEasycom(vue.resolveDynamicComponent("up-icon"), __easycom_0$g);
     const _component_u_loading_icon = resolveEasycom(vue.resolveDynamicComponent("u-loading-icon"), __easycom_1$g);
     const _component_up_gap = resolveEasycom(vue.resolveDynamicComponent("up-gap"), __easycom_2$3);
-    const _component_up_popup = resolveEasycom(vue.resolveDynamicComponent("up-popup"), __easycom_3$3);
+    const _component_up_popup = resolveEasycom(vue.resolveDynamicComponent("up-popup"), __easycom_3$4);
     return vue.openBlock(), vue.createElementBlock(
       "view",
       {
