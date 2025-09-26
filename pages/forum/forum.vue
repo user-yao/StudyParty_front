@@ -103,7 +103,17 @@
                 <view class="user-info">
                   <view class="user-name">
                     {{ article.name }}
-                    <text class="identity-tag" :class="article.isAuthority ? 'authority' : ''">
+                    <text 
+                      v-if="article.identity === '我'" 
+                      class="identity-tag me-tag"
+                    >
+                      {{ article.identity }}
+                    </text>
+                    <text 
+                      v-else
+                      class="identity-tag" 
+                      :class="article.isAuthority ? 'authority' : ''"
+                    >
                       {{ article.identity }}
                     </text>
                   </view>
@@ -258,12 +268,15 @@ export default {
     // 处理推荐文章数据，添加完整的头像URL和身份标识
     recommendedArticles() {
       return this.recommendArticles.map(article => {
+        // 判断是否为当前用户发布的文章
+        const isCurrentUser = article.uploader === uni.getStorageSync('user').id;
+        
         return {
           ...article,
           // 拼接完整的头像URL
           head: article.head ? imageUrl + article.head : null,
-          // 根据status确定身份标识
-          identity: this.getIdentityText(article.status),
+          // 根据是否为当前用户确定身份标识
+          identity: isCurrentUser ? '我' : this.getIdentityText(article.status),
           // 是否为权威用户（声望值大于100）
           isAuthority: article.starPrestige > 100
         };
@@ -702,6 +715,11 @@ export default {
 .identity-tag.authority {
   background: linear-gradient(135deg, #ffd700, #ffa500);
   color: #fff;
+}
+
+.me-tag {
+  background-color: #f0f0f0;
+  color: #666;
 }
 
 .user-school {

@@ -335,6 +335,10 @@
   background: linear-gradient(135deg, #ffd700, #ffa500);
   color: #fff;
 }
+.me-tag[data-v-aeadbf01] {
+  background-color: #f0f0f0;
+  color: #666;
+}
 .user-school[data-v-aeadbf01] {
   font-size: 0.75rem;
   color: #999;

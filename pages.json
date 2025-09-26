@@ -37,6 +37,7 @@
 			"style": {
 				"navigationBarTitleText": "文章详情"
 			}
+			
 		},
 		{
 			"path": "pages/chatList/chatList",
@@ -201,8 +202,8 @@
 		"navigationBarBackgroundColor": "#F8F8F8",
 		"backgroundColor": "#F8F8F8",
 		"app-plus": {
-			"bounce": "none"
-			
+			"bounce": "none",
+			"scrollIndicator":"none"
 		}
 	},
   "tabBar": {

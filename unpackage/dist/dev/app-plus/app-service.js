@@ -10006,12 +10006,13 @@ if (uni.restoreGlobal) {
       // 处理推荐文章数据，添加完整的头像URL和身份标识
       recommendedArticles() {
         return this.recommendArticles.map((article2) => {
+          const isCurrentUser = article2.uploader === uni.getStorageSync("user").id;
           return {
             ...article2,
             // 拼接完整的头像URL
             head: article2.head ? imageUrl + article2.head : null,
-            // 根据status确定身份标识
-            identity: this.getIdentityText(article2.status),
+            // 根据是否为当前用户确定身份标识
+            identity: isCurrentUser ? "我" : this.getIdentityText(article2.status),
             // 是否为权威用户（声望值大于100）
             isAuthority: article2.starPrestige > 100
           };
@@ -10038,7 +10039,7 @@ if (uni.restoreGlobal) {
         try {
           await this.recommend({ page: 1 });
         } catch (error2) {
-          formatAppLog("error", "at pages/forum/forum.vue:289", "获取推荐文章失败:", error2);
+          formatAppLog("error", "at pages/forum/forum.vue:302", "获取推荐文章失败:", error2);
           uni.showToast({
             title: "获取推荐文章失败",
             icon: "none"
@@ -10098,7 +10099,7 @@ if (uni.restoreGlobal) {
         try {
           const res2 = await this.niceArticle(article2.id);
           if (res2.code === 200) {
-            formatAppLog("log", "at pages/forum/forum.vue:351", res2);
+            formatAppLog("log", "at pages/forum/forum.vue:364", res2);
             if (res2.data === "取消点赞") {
               article2.isNice = false;
               article2.nice -= 1;
@@ -10108,7 +10109,7 @@ if (uni.restoreGlobal) {
             }
           }
         } catch (error2) {
-          formatAppLog("error", "at pages/forum/forum.vue:363", "点赞操作失败:", error2);
+          formatAppLog("error", "at pages/forum/forum.vue:376", "点赞操作失败:", error2);
           uni.$u.toast("操作失败");
         }
       },
@@ -10126,7 +10127,7 @@ if (uni.restoreGlobal) {
             }
           }
         } catch (error2) {
-          formatAppLog("error", "at pages/forum/forum.vue:383", "收藏操作失败:", error2);
+          formatAppLog("error", "at pages/forum/forum.vue:396", "收藏操作失败:", error2);
           uni.$u.toast("操作失败");
         }
       },
@@ -10140,7 +10141,7 @@ if (uni.restoreGlobal) {
           await this.recommend({ page: nextPage });
           this.loadingMore = false;
         } catch (error2) {
-          formatAppLog("error", "at pages/forum/forum.vue:399", "加载更多推荐文章失败:", error2);
+          formatAppLog("error", "at pages/forum/forum.vue:412", "加载更多推荐文章失败:", error2);
           uni.showToast({
             title: "加载更多失败",
             icon: "none"
@@ -10358,15 +10359,25 @@ if (uni.restoreGlobal) {
                             1
                             /* TEXT */
                           ),
-                          vue.createElementVNode(
+                          article2.identity === "我" ? (vue.openBlock(), vue.createElementBlock(
                             "text",
                             {
+                              key: 0,
+                              class: "identity-tag me-tag"
+                            },
+                            vue.toDisplayString(article2.identity),
+                            1
+                            /* TEXT */
+                          )) : (vue.openBlock(), vue.createElementBlock(
+                            "text",
+                            {
+                              key: 1,
                               class: vue.normalizeClass(["identity-tag", article2.isAuthority ? "authority" : ""])
                             },
                             vue.toDisplayString(article2.identity),
                             3
                             /* TEXT, CLASS */
-                          )
+                          ))
                         ]),
                         vue.createElementVNode(
                           "view",
@@ -13445,14 +13456,22 @@ ${e2}</tr>
         isInputFocused: false,
         keyboardHeight: 0,
         // 新增键盘高度变量
-        selectedImages: []
+        selectedImages: [],
         // 新增图片选择数组
+        scrollTop: 0,
+        // 滚动位置
+        showBackTop: false
+        // 是否显示返回顶部按钮
       };
     },
     computed: {
       ...mapState("article", ["currentArticle"]),
+      ...mapState("user", ["userInfo"]),
       article() {
         return this.currentArticle || {};
+      },
+      currentUser() {
+        return this.userInfo || {};
       },
       // 计算评论输入框的底部位置
       commentInputBottom() {
@@ -13509,7 +13528,7 @@ ${e2}</tr>
           await this.articleById({ articleId: this.articleId });
           await this.loadComments();
         } catch (error2) {
-          formatAppLog("error", "at pages/forum/articleDetail.vue:284", "获取文章详情失败:", error2);
+          formatAppLog("error", "at pages/forum/articleDetail.vue:345", "获取文章详情失败:", error2);
           uni.showToast({
             title: "获取文章详情失败",
             icon: "none"
@@ -13526,14 +13545,14 @@ ${e2}</tr>
             currentPage: 1
           });
           if (res2.code === 200) {
-            if (res2.data && res2.data.records) {
+            if (res2.data && res2.data.records && Array.isArray(res2.data.records)) {
               this.comments = res2.data.records;
             } else {
               this.comments = [];
             }
           }
         } catch (error2) {
-          formatAppLog("error", "at pages/forum/articleDetail.vue:310", "获取评论失败:", error2);
+          formatAppLog("error", "at pages/forum/articleDetail.vue:371", "获取评论失败:", error2);
           uni.showToast({
             title: "获取评论失败",
             icon: "none"
@@ -13554,7 +13573,7 @@ ${e2}</tr>
             }
           }
         } catch (error2) {
-          formatAppLog("error", "at pages/forum/articleDetail.vue:334", "点赞操作失败:", error2);
+          formatAppLog("error", "at pages/forum/articleDetail.vue:395", "点赞操作失败:", error2);
           uni.$u.toast("操作失败");
         }
       },
@@ -13572,7 +13591,7 @@ ${e2}</tr>
             }
           }
         } catch (error2) {
-          formatAppLog("error", "at pages/forum/articleDetail.vue:355", "收藏操作失败:", error2);
+          formatAppLog("error", "at pages/forum/articleDetail.vue:416", "收藏操作失败:", error2);
           uni.$u.toast("操作失败");
         }
       },
@@ -13592,7 +13611,7 @@ ${e2}</tr>
             }
           },
           fail: (err) => {
-            formatAppLog("error", "at pages/forum/articleDetail.vue:375", "选择图片失败:", err);
+            formatAppLog("error", "at pages/forum/articleDetail.vue:436", "选择图片失败:", err);
             uni.$u.toast("选择图片失败");
           }
         });
@@ -13608,96 +13627,52 @@ ${e2}</tr>
           return;
         }
         try {
-          if (this.selectedImages.length > 0) {
-            uni.showLoading({
-              title: "提交评论中..."
-            });
-            const formData = {
-              articleId: this.articleId.toString(),
-              // 确保articleId是字符串
-              content: this.commentContent || ""
-              // 确保content是字符串
-            };
-            var files = [];
-            formatAppLog("log", "at pages/forum/articleDetail.vue:406", this.selectedImages);
-            for (let i2 = 0; i2 < this.selectedImages.length; i2++) {
-              files.push({
-                name: "sources",
-                uri: this.selectedImages[i2]
-              });
-            }
-            formatAppLog("log", "at pages/forum/articleDetail.vue:413", files);
-            const result = await new Promise((resolve, reject) => {
-              uni.uploadFile({
-                url: baseUrl + "/article/articleComment/addArticleComment",
-                files,
-                formData,
-                header: {
-                  "Authorization": `${uni.getStorageSync("token")}`
-                },
-                success: (res2) => {
-                  formatAppLog("log", "at pages/forum/articleDetail.vue:425", res2);
-                  if (res2.statusCode === 200) {
-                    let data2;
-                    try {
-                      data2 = typeof res2.data === "string" ? JSON.parse(res2.data) : res2.data;
-                    } catch (e2) {
-                      data2 = res2.data;
+          uni.showLoading({
+            title: "提交评论中..."
+          });
+          const res2 = await this.addArticleComment({
+            articleId: this.articleId,
+            content: this.commentContent
+          });
+          if (res2.code === 200) {
+            const commentId = res2.data;
+            if (this.selectedImages.length > 0) {
+              for (let i2 = 0; i2 < this.selectedImages.length; i2++) {
+                formatAppLog("log", "at pages/forum/articleDetail.vue:473", this.selectedImages[i2]);
+                await new Promise((resolve, reject) => {
+                  uni.uploadFile({
+                    url: baseUrl + "/article/articleComment/addArticleCommentImage",
+                    filePath: this.selectedImages[i2],
+                    name: "image",
+                    formData: {
+                      articleCommentId: commentId.toString()
+                    },
+                    header: {
+                      "Authorization": `${uni.getStorageSync("token")}`
+                    },
+                    success: (uploadRes) => {
+                      resolve(uploadRes);
+                    },
+                    fail: (err) => {
+                      reject(err);
                     }
-                    resolve({
-                      success: true,
-                      data: data2,
-                      statusCode: res2.statusCode
-                    });
-                  } else {
-                    reject({
-                      success: false,
-                      message: `HTTP ${res2.statusCode}`,
-                      statusCode: res2.statusCode,
-                      data: res2.data
-                    });
-                  }
-                },
-                fail: (err) => {
-                  formatAppLog("log", "at pages/forum/articleDetail.vue:448", err);
-                  reject({
-                    success: false,
-                    message: err.errMsg || "上传失败",
-                    code: err.errCode || -1
                   });
-                }
-              });
-            });
-            formatAppLog("log", "at pages/forum/articleDetail.vue:457", result);
-            if (result.success && result.statusCode === 200) {
-              uni.showToast({
-                title: "评论成功",
-                icon: "success"
-              });
-              this.commentContent = "";
-              this.selectedImages = [];
-              await this.loadComments();
-              this.currentArticle.commentCount += 1;
-            } else {
-              throw new Error(result.message || "上传失败");
+                });
+              }
             }
+            uni.showToast({
+              title: "评论成功",
+              icon: "success"
+            });
+            this.commentContent = "";
+            this.selectedImages = [];
+            await this.loadComments();
+            this.currentArticle.commentCount += 1;
           } else {
-            const res2 = await this.addArticleComment({
-              articleId: this.articleId,
-              content: this.commentContent
-            });
-            if (res2.code === 200) {
-              uni.$u.toast("评论成功");
-              this.commentContent = "";
-              this.selectedImages = [];
-              await this.loadComments();
-              this.currentArticle.commentCount += 1;
-            } else {
-              throw new Error(res2.msg || "提交失败");
-            }
+            throw new Error(res2.msg || "提交失败");
           }
         } catch (error2) {
-          formatAppLog("error", "at pages/forum/articleDetail.vue:495", "提交评论失败:", error2);
+          formatAppLog("error", "at pages/forum/articleDetail.vue:511", "提交评论失败:", error2);
           uni.showToast({
             title: error2.message || "提交评论失败",
             icon: "none"
@@ -13711,7 +13686,7 @@ ${e2}</tr>
         try {
           uni.$u.toast("评论点赞功能待实现");
         } catch (error2) {
-          formatAppLog("error", "at pages/forum/articleDetail.vue:512", "评论点赞操作失败:", error2);
+          formatAppLog("error", "at pages/forum/articleDetail.vue:528", "评论点赞操作失败:", error2);
           uni.$u.toast("操作失败");
         }
       },
@@ -13731,6 +13706,18 @@ ${e2}</tr>
       // 监听键盘高度变化
       onKeyboardHeightChange(res2) {
         this.keyboardHeight = res2.height;
+      },
+      // 滚动事件处理
+      onScroll(e2) {
+        const scrollTop = e2.detail.scrollTop;
+        this.showBackTop = scrollTop > 500;
+      },
+      // 返回顶部
+      backToTop() {
+        this.scrollTop = 0;
+        this.$nextTick(() => {
+          this.scrollTop = 0;
+        });
       }
     },
     async onLoad(options2) {
@@ -13787,7 +13774,10 @@ ${e2}</tr>
       vue.createElementVNode("view", { class: "content-container" }, [
         vue.createElementVNode("scroll-view", {
           class: "content-scroll",
-          "scroll-y": ""
+          "scroll-y": "",
+          "scroll-top": $data.scrollTop,
+          onScroll: _cache[4] || (_cache[4] = (...args) => $options.onScroll && $options.onScroll(...args)),
+          "show-scrollbar": "false"
         }, [
           vue.createCommentVNode(" 文章详情 "),
           vue.createElementVNode("view", { class: "article-content section" }, [
@@ -13810,13 +13800,27 @@ ${e2}</tr>
                   ))
                 ]),
                 vue.createElementVNode("view", { class: "user-info" }, [
-                  vue.createElementVNode(
-                    "view",
-                    { class: "user-name" },
-                    vue.toDisplayString($options.article.name),
-                    1
-                    /* TEXT */
-                  ),
+                  vue.createElementVNode("view", { class: "user-name" }, [
+                    vue.createTextVNode(
+                      vue.toDisplayString($options.article.name) + " ",
+                      1
+                      /* TEXT */
+                    ),
+                    vue.createCommentVNode(" 文章作者身份标识 "),
+                    _ctx.userInfo && $options.article.uploader === _ctx.userInfo.id ? (vue.openBlock(), vue.createElementBlock("text", {
+                      key: 0,
+                      class: "user-identity identity-me"
+                    }, "我")) : $options.article.status === 1 ? (vue.openBlock(), vue.createElementBlock("text", {
+                      key: 1,
+                      class: "user-identity identity-student"
+                    }, "学生")) : $options.article.status === 2 ? (vue.openBlock(), vue.createElementBlock("text", {
+                      key: 2,
+                      class: "user-identity identity-teacher"
+                    }, "老师")) : $options.article.status === 3 ? (vue.openBlock(), vue.createElementBlock("text", {
+                      key: 3,
+                      class: "user-identity identity-enterprise"
+                    }, "企业")) : vue.createCommentVNode("v-if", true)
+                  ]),
                   vue.createElementVNode(
                     "view",
                     { class: "user-school" },
@@ -13965,13 +13969,30 @@ ${e2}</tr>
                           ))
                         ]),
                         vue.createElementVNode("view", { class: "user-info" }, [
-                          vue.createElementVNode(
-                            "view",
-                            { class: "user-name" },
-                            vue.toDisplayString(comment.name),
-                            1
-                            /* TEXT */
-                          ),
+                          vue.createElementVNode("view", { class: "user-name" }, [
+                            vue.createTextVNode(
+                              vue.toDisplayString(comment.name) + " ",
+                              1
+                              /* TEXT */
+                            ),
+                            vue.createCommentVNode(" 身份标识 "),
+                            $options.article && comment.userId === $options.article.userId ? (vue.openBlock(), vue.createElementBlock("text", {
+                              key: 0,
+                              class: "user-identity identity-owner"
+                            }, "楼主")) : _ctx.userInfo && comment.userId === _ctx.userInfo.id ? (vue.openBlock(), vue.createElementBlock("text", {
+                              key: 1,
+                              class: "user-identity identity-me"
+                            }, "我")) : comment.status === 1 ? (vue.openBlock(), vue.createElementBlock("text", {
+                              key: 2,
+                              class: "user-identity identity-student"
+                            }, "学生")) : comment.status === 2 ? (vue.openBlock(), vue.createElementBlock("text", {
+                              key: 3,
+                              class: "user-identity identity-teacher"
+                            }, "老师")) : comment.status === 3 ? (vue.openBlock(), vue.createElementBlock("text", {
+                              key: 4,
+                              class: "user-identity identity-enterprise"
+                            }, "企业")) : vue.createCommentVNode("v-if", true)
+                          ]),
                           vue.createElementVNode(
                             "view",
                             { class: "comment-time" },
@@ -14046,7 +14067,7 @@ ${e2}</tr>
               ])) : vue.createCommentVNode("v-if", true)
             ])
           ])
-        ])
+        ], 40, ["scroll-top"])
       ]),
       vue.createCommentVNode(" 评论输入框 - 固定在底部 "),
       vue.createElementVNode(
@@ -14091,10 +14112,20 @@ ${e2}</tr>
             ))
           ])) : vue.createCommentVNode("v-if", true),
           vue.createElementVNode("view", { class: "comment-input-area" }, [
+            vue.createElementVNode("view", {
+              class: "image-upload-btn",
+              onClick: _cache[5] || (_cache[5] = (...args) => $options.selectImages && $options.selectImages(...args))
+            }, [
+              vue.createVNode(_component_u_icon, {
+                name: "photo",
+                size: "20",
+                color: "#666"
+              })
+            ]),
             vue.createVNode(_component_u_input, {
               ref: "commentInput",
               modelValue: $data.commentContent,
-              "onUpdate:modelValue": _cache[4] || (_cache[4] = ($event) => $data.commentContent = $event),
+              "onUpdate:modelValue": _cache[6] || (_cache[6] = ($event) => $data.commentContent = $event),
               placeholder: "请输入评论内容",
               type: "textarea",
               "auto-height": true,
@@ -14102,36 +14133,36 @@ ${e2}</tr>
               focus: $data.isInputFocused,
               "adjust-position": false
             }, null, 8, ["modelValue", "focus"]),
-            vue.createElementVNode("view", { class: "comment-actions" }, [
-              vue.createElementVNode("view", {
-                class: "image-upload-btn",
-                onClick: _cache[5] || (_cache[5] = (...args) => $options.selectImages && $options.selectImages(...args))
-              }, [
-                vue.createVNode(_component_u_icon, {
-                  name: "photo",
-                  size: "20",
-                  color: "#999"
-                })
+            vue.createVNode(_component_u_button, {
+              type: "primary",
+              size: "mini",
+              onClick: $options.submitComment,
+              disabled: !$data.commentContent.trim() && $data.selectedImages.length === 0,
+              class: "submit-btn"
+            }, {
+              default: vue.withCtx(() => [
+                vue.createTextVNode(" 发送 ")
               ]),
-              vue.createVNode(_component_u_button, {
-                type: "primary",
-                size: "mini",
-                onClick: $options.submitComment,
-                disabled: !$data.commentContent.trim() && $data.selectedImages.length === 0,
-                class: "submit-btn"
-              }, {
-                default: vue.withCtx(() => [
-                  vue.createTextVNode(" 发送 ")
-                ]),
-                _: 1
-                /* STABLE */
-              }, 8, ["onClick", "disabled"])
-            ])
+              _: 1
+              /* STABLE */
+            }, 8, ["onClick", "disabled"])
           ])
         ],
         4
         /* STYLE */
-      )
+      ),
+      vue.createCommentVNode(" 返回顶部按钮 "),
+      $data.showBackTop ? (vue.openBlock(), vue.createElementBlock("view", {
+        key: 0,
+        class: "back-to-top",
+        onClick: _cache[7] || (_cache[7] = (...args) => $options.backToTop && $options.backToTop(...args))
+      }, [
+        vue.createVNode(_component_u_icon, {
+          name: "arrow-upward",
+          size: "20",
+          color: "#fff"
+        })
+      ])) : vue.createCommentVNode("v-if", true)
     ]);
   }
   const PagesForumArticleDetail = /* @__PURE__ */ _export_sfc(_sfc_main$2m, [["render", _sfc_render$2l], ["__scopeId", "data-v-a5dd2988"], ["__file", "D:/uniapp2023/studyParty/pages/forum/articleDetail.vue"]]);
@@ -70876,29 +70907,41 @@ ${placeholder}
   };
   const mutations$3 = {
     SET_COMMENTS(state2, comments) {
-      state2.comments = comments;
+      state2.comments = Array.isArray(comments) ? comments : [];
     },
     ADD_COMMENT(state2, comment) {
-      state2.comments.unshift(comment);
+      if (Array.isArray(state2.comments)) {
+        state2.comments.unshift(comment);
+      } else {
+        state2.comments = [comment];
+      }
     },
     UPDATE_COMMENT(state2, updatedComment) {
-      const index2 = state2.comments.findIndex((cmt) => cmt.id === updatedComment.id);
-      if (index2 !== -1) {
-        state2.comments[index2] = updatedComment;
+      if (Array.isArray(state2.comments)) {
+        const index2 = state2.comments.findIndex((cmt) => cmt.id === updatedComment.id);
+        if (index2 !== -1) {
+          state2.comments[index2] = updatedComment;
+        }
       }
     },
     REMOVE_COMMENT(state2, commentId) {
-      state2.comments = state2.comments.filter((cmt) => cmt.id !== commentId);
+      if (Array.isArray(state2.comments)) {
+        state2.comments = state2.comments.filter((cmt) => cmt.id !== commentId);
+      } else {
+        state2.comments = [];
+      }
     },
     SET_COMMENT_LIKE(state2, { commentId, isLike }) {
-      const index2 = state2.comments.findIndex((cmt) => cmt.id === commentId);
-      if (index2 !== -1) {
-        if (isLike) {
-          state2.comments[index2].likeCount++;
-          state2.comments[index2].isLiked = true;
-        } else {
-          state2.comments[index2].likeCount--;
-          state2.comments[index2].isLiked = false;
+      if (Array.isArray(state2.comments)) {
+        const index2 = state2.comments.findIndex((cmt) => cmt.id === commentId);
+        if (index2 !== -1) {
+          if (isLike) {
+            state2.comments[index2].likeCount++;
+            state2.comments[index2].isLiked = true;
+          } else {
+            state2.comments[index2].likeCount--;
+            state2.comments[index2].isLiked = false;
+          }
         }
       }
     }
@@ -70907,10 +70950,13 @@ ${placeholder}
     async getArticleComment({ commit }, { articleId, currentPage = 1 }) {
       try {
         const res2 = await getArticleComment({ articleId, currentPage });
-        commit("SET_COMMENTS", res2.data);
+        if (res2 && res2.code === 200) {
+          const comments = res2.data && res2.data.records ? res2.data.records : [];
+          commit("SET_COMMENTS", comments);
+        }
         return res2;
       } catch (error2) {
-        formatAppLog("error", "at store/article/articleComment.js:44", "获取文章评论失败:", error2);
+        formatAppLog("error", "at store/article/articleComment.js:66", "获取文章评论失败:", error2);
         throw error2;
       }
     },
@@ -70922,7 +70968,7 @@ ${placeholder}
         }
         return res2;
       } catch (error2) {
-        formatAppLog("error", "at store/article/articleComment.js:57", "提交评论失败:", error2);
+        formatAppLog("error", "at store/article/articleComment.js:79", "提交评论失败:", error2);
         throw error2;
       }
     },
@@ -70932,7 +70978,7 @@ ${placeholder}
         commit("REMOVE_COMMENT", commentId);
         return res2;
       } catch (error2) {
-        formatAppLog("error", "at store/article/articleComment.js:67", "删除评论失败:", error2);
+        formatAppLog("error", "at store/article/articleComment.js:89", "删除评论失败:", error2);
         throw error2;
       }
     },
@@ -70941,7 +70987,7 @@ ${placeholder}
         const res2 = await niceArticleComment({ commentId });
         return res2;
       } catch (error2) {
-        formatAppLog("error", "at store/article/articleComment.js:77", "设置精华评论失败:", error2);
+        formatAppLog("error", "at store/article/articleComment.js:99", "设置精华评论失败:", error2);
         throw error2;
       }
     }

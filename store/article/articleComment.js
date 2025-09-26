@@ -6,29 +6,46 @@ const state = {
 
 const mutations = {
   SET_COMMENTS(state, comments) {
-    state.comments = comments;
+    // 确保 comments 是数组
+    state.comments = Array.isArray(comments) ? comments : [];
   },
   ADD_COMMENT(state, comment) {
-    state.comments.unshift(comment);
+    // 确保 comments 是数组后再操作
+    if (Array.isArray(state.comments)) {
+      state.comments.unshift(comment);
+    } else {
+      state.comments = [comment];
+    }
   },
   UPDATE_COMMENT(state, updatedComment) {
-    const index = state.comments.findIndex(cmt => cmt.id === updatedComment.id);
-    if (index !== -1) {
-      state.comments[index] = updatedComment;
+    // 确保 comments 是数组后再操作
+    if (Array.isArray(state.comments)) {
+      const index = state.comments.findIndex(cmt => cmt.id === updatedComment.id);
+      if (index !== -1) {
+        state.comments[index] = updatedComment;
+      }
     }
   },
   REMOVE_COMMENT(state, commentId) {
-    state.comments = state.comments.filter(cmt => cmt.id !== commentId);
+    // 确保 comments 是数组后再操作
+    if (Array.isArray(state.comments)) {
+      state.comments = state.comments.filter(cmt => cmt.id !== commentId);
+    } else {
+      state.comments = [];
+    }
   },
   SET_COMMENT_LIKE(state, { commentId, isLike }) {
-    const index = state.comments.findIndex(cmt => cmt.id === commentId);
-    if (index !== -1) {
-      if (isLike) {
-        state.comments[index].likeCount++;
-        state.comments[index].isLiked = true;
-      } else {
-        state.comments[index].likeCount--;
-        state.comments[index].isLiked = false;
+    // 确保 comments 是数组后再操作
+    if (Array.isArray(state.comments)) {
+      const index = state.comments.findIndex(cmt => cmt.id === commentId);
+      if (index !== -1) {
+        if (isLike) {
+          state.comments[index].likeCount++;
+          state.comments[index].isLiked = true;
+        } else {
+          state.comments[index].likeCount--;
+          state.comments[index].isLiked = false;
+        }
       }
     }
   }
@@ -38,7 +55,12 @@ const actions = {
   async getArticleComment({ commit }, { articleId, currentPage = 1 }) {
     try {
       const res = await getArticleComment({ articleId, currentPage });
-      commit('SET_COMMENTS', res.data);
+      // 处理返回的数据，确保是数组格式
+      if (res && res.code === 200) {
+        // 根据实际返回的数据结构调整
+        const comments = res.data && res.data.records ? res.data.records : [];
+        commit('SET_COMMENTS', comments);
+      }
       return res;
     } catch (error) {
       console.error('获取文章评论失败:', error);

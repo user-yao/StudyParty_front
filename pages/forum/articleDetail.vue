@@ -15,7 +15,13 @@
     
     <!-- 文章内容区域 -->
     <view class="content-container">
-      <scroll-view class="content-scroll" scroll-y>
+      <scroll-view 
+        class="content-scroll" 
+        scroll-y
+        :scroll-top="scrollTop"
+        @scroll="onScroll"
+        show-scrollbar="false"
+      >
         <!-- 文章详情 -->
         <view class="article-content section">
           <view class="article-header">
@@ -31,7 +37,26 @@
                 </view>
               </view>
               <view class="user-info">
-                <view class="user-name">{{ article.name }}</view>
+                <view class="user-name">
+                  {{ article.name }}
+                  <!-- 文章作者身份标识 -->
+                  <text 
+                    v-if="userInfo && article.uploader === userInfo.id" 
+                    class="user-identity identity-me"
+                  >我</text>
+                  <text 
+                    v-else-if="article.status === 1" 
+                    class="user-identity identity-student"
+                  >学生</text>
+                  <text 
+                    v-else-if="article.status === 2" 
+                    class="user-identity identity-teacher"
+                  >老师</text>
+                  <text 
+                    v-else-if="article.status === 3" 
+                    class="user-identity identity-enterprise"
+                  >企业</text>
+                </view>
                 <view class="user-school">{{ article.school }}</view>
               </view>
             </view>
@@ -107,7 +132,30 @@
                     </view>
                   </view>
                   <view class="user-info">
-                    <view class="user-name">{{ comment.name }}</view>
+                    <view class="user-name">
+                      {{ comment.name }}
+                      <!-- 身份标识 -->
+                      <text 
+                        v-if="article && comment.userId === article.userId" 
+                        class="user-identity identity-owner"
+                      >楼主</text>
+                      <text 
+                        v-else-if="userInfo && comment.userId === userInfo.id" 
+                        class="user-identity identity-me"
+                      >我</text>
+                      <text 
+                        v-else-if="comment.status === 1" 
+                        class="user-identity identity-student"
+                      >学生</text>
+                      <text 
+                        v-else-if="comment.status === 2" 
+                        class="user-identity identity-teacher"
+                      >老师</text>
+                      <text 
+                        v-else-if="comment.status === 3" 
+                        class="user-identity identity-enterprise"
+                      >企业</text>
+                    </view>
                     <view class="comment-time">{{ formatCommentTime(comment.createTime) }}</view>
                   </view>
                 </view>
@@ -162,6 +210,9 @@
       </view>
       
       <view class="comment-input-area">
+        <view class="image-upload-btn" @click="selectImages">
+          <u-icon name="photo" size="20" color="#666"></u-icon>
+        </view>
         <u-input 
           ref="commentInput"
           v-model="commentContent" 
@@ -172,21 +223,25 @@
           :focus="isInputFocused"
           :adjust-position="false"
         ></u-input>
-        <view class="comment-actions">
-          <view class="image-upload-btn" @click="selectImages">
-            <u-icon name="photo" size="20" color="#999"></u-icon>
-          </view>
-          <u-button 
-            type="primary" 
-            size="mini" 
-            @click="submitComment"
-            :disabled="!commentContent.trim() && selectedImages.length === 0"
-            class="submit-btn"
-          >
-            发送
-          </u-button>
-        </view>
+        <u-button 
+          type="primary" 
+          size="mini" 
+          @click="submitComment"
+          :disabled="!commentContent.trim() && selectedImages.length === 0"
+          class="submit-btn"
+        >
+          发送
+        </u-button>
       </view>
+    </view>
+    
+    <!-- 返回顶部按钮 -->
+    <view 
+      v-if="showBackTop" 
+      class="back-to-top" 
+      @click="backToTop"
+    >
+      <u-icon name="arrow-upward" size="20" color="#fff"></u-icon>
     </view>
   </view>
 </template>
@@ -205,13 +260,19 @@ export default {
       comments: [],
       isInputFocused: false,
       keyboardHeight: 0, // 新增键盘高度变量
-      selectedImages: [] // 新增图片选择数组
+      selectedImages: [], // 新增图片选择数组
+      scrollTop: 0, // 滚动位置
+      showBackTop: false // 是否显示返回顶部按钮
     }
   },
   computed: {
     ...mapState('article', ['currentArticle']),
+    ...mapState('user', ['userInfo']),
     article() {
       return this.currentArticle || {};
+    },
+    currentUser() {
+      return this.userInfo || {};
     },
     // 计算评论输入框的底部位置
     commentInputBottom() {
@@ -221,12 +282,12 @@ export default {
   methods: {
     ...mapActions('article', ['articleById', 'niceArticle', 'collectArticle']),
     ...mapActions('articleComment', ['getArticleComment', 'addArticleComment']),
-    
+
     // 返回上一页
     goBack() {
       uni.navigateBack();
     },
-    
+
     // 完整图片URL
     fullImageUrl(path) {
       // 确保path是字符串类型
@@ -238,7 +299,7 @@ export default {
       // 拼接基础URL
       return imageUrl + path;
     },
-    
+
     // 格式化时间
     formatTime(timeStr) {
       const date = new Date(timeStr);
@@ -247,7 +308,7 @@ export default {
       const minutes = Math.floor(diff / (1000 * 60));
       const hours = Math.floor(diff / (1000 * 60 * 60));
       const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-      
+
       if (minutes < 1) {
         return '刚刚';
       } else if (minutes < 60) {
@@ -260,13 +321,13 @@ export default {
         return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
       }
     },
-    
+
     // 格式化评论时间
     formatCommentTime(timeStr) {
       const date = new Date(timeStr);
       return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()} ${date.getHours()}:${String(date.getMinutes()).padStart(2, '0')}`;
     },
-    
+
     // 获取文章详情
     async getArticleDetail() {
       try {
@@ -274,10 +335,10 @@ export default {
         uni.showLoading({
           title: '加载中...'
         });
-        
+
         // 获取文章详情
         await this.articleById({ articleId: this.articleId });
-        
+
         // 获取评论列表
         await this.loadComments();
       } catch (error) {
@@ -290,7 +351,7 @@ export default {
         uni.hideLoading();
       }
     },
-    
+
     // 加载评论
     async loadComments() {
       try {
@@ -299,8 +360,8 @@ export default {
           currentPage: 1
         });
         if (res.code === 200) {
-          // 处理评论数据
-          if (res.data && res.data.records) {
+          // 处理评论数据，确保是数组格式
+          if (res.data && res.data.records && Array.isArray(res.data.records)) {
             this.comments = res.data.records;
           } else {
             this.comments = [];
@@ -314,13 +375,13 @@ export default {
         });
       }
     },
-    
+
     // 切换点赞状态
     async toggleLike() {
       try {
         const res = await this.niceArticle(this.articleId);
         if (res.code === 200) {
-          
+
           // 更新文章的点赞状态和数量
           if (res.data === "取消点赞") {
             this.currentArticle.isNice = false;
@@ -335,13 +396,13 @@ export default {
         uni.$u.toast('操作失败');
       }
     },
-    
+
     // 切换收藏状态
     async toggleCollect() {
       try {
         const res = await this.collectArticle(this.articleId);
         if (res.code === 200) {
-          
+
           // 更新文章的收藏状态和数量
           if (res.data === "取消收藏") {
             this.currentArticle.isCollect = false;
@@ -356,7 +417,7 @@ export default {
         uni.$u.toast('操作失败');
       }
     },
-    
+
     // 选择图片
     selectImages() {
       uni.chooseImage({
@@ -377,12 +438,12 @@ export default {
         }
       });
     },
-    
+
     // 移除选中的图片
     removeImage(index) {
       this.selectedImages.splice(index, 1);
     },
-    
+
     // 提交评论（使用uni.uploadFile的files参数）
     async submitComment() {
       if (!this.commentContent.trim() && this.selectedImages.length === 0) {
@@ -391,105 +452,60 @@ export default {
       }
       
       try {
-        // 如果有图片，使用uni.uploadFile的files参数上传
-        if (this.selectedImages.length > 0) {
-          uni.showLoading({
-            title: '提交评论中...'
-          });
+        uni.showLoading({
+          title: '提交评论中...'
+        });
+        
+        // 先提交评论内容
+        const res = await this.addArticleComment({
+          articleId: this.articleId,
+          content: this.commentContent
+        });
+        
+        if (res.code === 200) {
+          // 获取评论ID
+          const commentId = res.data;
           
-          // 构造formData
-          const formData = {
-            articleId: this.articleId.toString(), // 确保articleId是字符串
-            content: this.commentContent || '' // 确保content是字符串
-          };
-          var files = [];
-          console.log(this.selectedImages);
-          for (let i = 0; i < this.selectedImages.length; i++) {
-            files.push({
-              name: 'sources',
-              uri: this.selectedImages[i]
-            });
-          }
-          console.log(files);
-
-          // 使用uni.uploadFile的files参数一次性上传所有图片
-          const result = await new Promise((resolve, reject) => {
-            uni.uploadFile({
-              url: baseUrl + '/article/articleComment/addArticleComment',
-              files: files,
-              formData: formData,
-              header: {
-                'Authorization': `${uni.getStorageSync('token')}`
-              },
-              success: (res) => {
-                console.log(res);
-                if (res.statusCode === 200) {
-                  let data;
-                  try {
-                    data = typeof res.data === 'string' ? JSON.parse(res.data) : res.data;
-                  } catch (e) {
-                    data = res.data;
+          // 如果有图片，上传图片
+          if (this.selectedImages.length > 0) {
+            // 逐个上传图片
+            for (let i = 0; i < this.selectedImages.length; i++) {
+				console.log(this.selectedImages[i])
+              await new Promise((resolve, reject) => {
+                uni.uploadFile({
+                  url: baseUrl + '/article/articleComment/addArticleCommentImage',
+                  filePath: this.selectedImages[i],
+                  name: 'image',
+                  formData: {
+                    articleCommentId: commentId.toString()
+                  },
+                  header: {
+                    'Authorization': `${uni.getStorageSync('token')}`
+                  },
+                  success: (uploadRes) => {
+                    resolve(uploadRes);
+                  },
+                  fail: (err) => {
+                    reject(err);
                   }
-                  resolve({
-                    success: true,
-                    data: data,
-                    statusCode: res.statusCode
-                  });
-                } else {
-                  reject({
-                    success: false,
-                    message: `HTTP ${res.statusCode}`,
-                    statusCode: res.statusCode,
-                    data: res.data
-                  });
-                }
-              },
-              fail: (err) => {
-                console.log(err);
-                reject({
-                  success: false,
-                  message: err.errMsg || '上传失败',
-                  code: err.errCode || -1
                 });
-              }
-            });
-          });
-          console.log(result);
-          // 检查上传结果
-          if (result.success && result.statusCode === 200) {
-            uni.showToast({
-              title: '评论成功',
-              icon: 'success'
-            });
-            this.commentContent = '';
-            this.selectedImages = []; // 清空选中的图片
-            
-            // 重新加载评论
-            await this.loadComments();
-            // 更新文章评论数
-            this.currentArticle.commentCount += 1;
-          } else {
-            throw new Error(result.message || '上传失败');
+              });
+            }
           }
-        } else {
-          // 如果没有图片，使用原来的评论方法
-          const res = await this.addArticleComment({
-            articleId: this.articleId,
-            content: this.commentContent
-          });
           
-          if (res.code === 200) {
-            uni.$u.toast('评论成功');
-            this.commentContent = '';
-            this.selectedImages = []; // 清空选中的图片
-            
-            // 重新加载评论
-            await this.loadComments();
-            // 更新文章评论数
-            this.currentArticle.commentCount += 1;
-          } else {
-            throw new Error(res.msg || '提交失败');
-          }
+          uni.showToast({
+            title: '评论成功',
+            icon: 'success'
+          });
+          this.commentContent = '';
+          this.selectedImages = []; // 清空选中的图片
+          
+          // 重新加载评论
+          await this.loadComments();
+          // 更新文章评论数
+          this.currentArticle.commentCount += 1;
+        } else {
+          throw new Error(res.msg || '提交失败');
         }
       } catch (error) {
         console.error('提交评论失败:', error);
@@ -501,7 +517,7 @@ export default {
         uni.hideLoading();
       }
     },
-    
+
     // 切换评论点赞状态
     async toggleCommentLike(comment) {
       try {
@@ -513,14 +529,14 @@ export default {
         uni.$u.toast('操作失败');
       }
     },
-    
+
     // 预览图片
     previewImage(imgPath) {
       uni.previewImage({
         urls: [this.fullImageUrl(imgPath)]
       });
     },
-    
+
     // 聚焦评论输入框
     focusCommentInput() {
       this.isInputFocused = true;
@@ -528,13 +544,31 @@ export default {
         this.$refs.commentInput.focus();
       });
     },
-    
+
     // 监听键盘高度变化
     onKeyboardHeightChange(res) {
       this.keyboardHeight = res.height;
+    },
+
+    // 滚动事件处理
+    onScroll(e) {
+      // 获取滚动位置
+      const scrollTop = e.detail.scrollTop;
+      // 当滚动位置超过500px时显示返回顶部按钮
+      this.showBackTop = scrollTop > 500;
+    },
+
+    // 返回顶部
+    backToTop() {
+      // 设置滚动位置为0
+      this.scrollTop = 0;
+      // 强制更新以触发滚动
+      this.$nextTick(() => {
+        this.scrollTop = 0;
+      });
     }
   },
-  
+
   async onLoad(options) {
     // 获取传递的文章ID
     if (options.id) {
@@ -549,18 +583,18 @@ export default {
       uni.navigateBack();
     }
   },
-  
+
   // 页面显示时监听键盘高度变化
   onShow() {
     // 监听键盘高度变化
     uni.onKeyboardHeightChange(this.onKeyboardHeightChange);
   },
-  
+
   // 页面隐藏时取消监听
   onHide() {
     uni.offKeyboardHeightChange(this.onKeyboardHeightChange);
   },
-  
+
   // 页面卸载时取消监听
   onUnload() {
     uni.offKeyboardHeightChange(this.onKeyboardHeightChange);
@@ -573,8 +607,11 @@ export default {
   min-height: 100vh;
   background-color: #f5f5f5;
   position: relative;
-  padding-bottom: 70px; /* 为底部评论框留出空间 */
+  padding-bottom: 60px;
   color: #333;
+  box-sizing: border-box;
+  width: 100%;
+  overflow-x: hidden;
 }
 
 /* 顶部导航 */
@@ -622,12 +659,18 @@ export default {
   padding: 10px;
   padding-bottom: 20px;
   padding-top: calc(var(--status-bar-height, 0px) + 60px); /* 为固定头部留出空间 */
-  height: calc(100vh - 120px); /* 调整高度以适应顶部和底部 */
+  min-height: calc(100vh - 120px); /* 使用min-height避免溢出 */
   position: relative;
+  box-sizing: border-box;
 }
 
 .content-scroll {
   height: 100%;
+}
+
+/* 隐藏滚动条 */
+.content-scroll ::v-deep .uni-scroll-view::-webkit-scrollbar {
+  display: none;
 }
 
 .section {
@@ -769,6 +812,8 @@ export default {
   gap: 8px;
   padding: 10px;
   border-bottom: 1px solid #eee;
+  max-height: 100px; /* 限制预览区域高度 */
+  overflow-y: auto; /* 超出时滚动 */
 }
 
 .preview-image-container {
@@ -800,43 +845,55 @@ export default {
 /* 评论输入框 */
 .comment-input-area {
   display: flex;
-  gap: 10px;
+  gap: 8px;
   padding: 10px;
-  align-items: flex-end; /* 修改为flex-end以确保底部对齐 */
+  background-color: #fff;
+  align-items: center;
+  box-sizing: border-box; /* 确保padding包含在宽度内 */
+  width: 100%; /* 确保不超过容器宽度 */
 }
 
 .comment-input {
   flex: 1;
   background-color: #f5f5f5;
-  border-radius: 20px; /* 调整为圆角 */
-  padding: 8px 15px; /* 调整padding */
-  min-height: 40px; /* 设置最小高度 */
-  font-size: 14px; /* 设置字体大小 */
-}
-
-.comment-actions {
-  display: flex;
-  align-items: center;
-  gap: 10px;
+  border-radius: 8px;
+  padding: 5px 12px;
+  min-height: 30px;
+  font-size: 14px;
+  max-height: 100px;
+  overflow-y: auto;
+  box-sizing: border-box;
 }
 
 .image-upload-btn {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
   background-color: #f5f5f5;
   cursor: pointer;
+  flex-shrink: 0;
 }
 
 .submit-btn {
+  height: 30px;
+  padding: 0 12px;
+  font-size: 14px;
+  border-radius: 4px;
+  background-color: #4361ee;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   flex-shrink: 0;
-  height: 40px; /* 调整按钮高度 */
-  width: 60px; /* 设置按钮宽度 */
-  font-size: 14px; /* 调整字体大小 */
-  border-radius: 20px; /* 调整为圆角 */
+  min-width: 0;
+  white-space: nowrap;
+  width: auto;
+  line-height: 1; /* 确保行高不会影响按钮高度 */
+  border: none; /* 移除可能的边框 */
+  margin: 0; /* 移除可能的外边距 */
 }
 
 /* 评论列表 */
@@ -905,6 +962,7 @@ export default {
   color: #333;
   line-height: 1.5;
   margin-bottom: 10px;
+  word-wrap: break-word;
 }
 
 /* 评论图片 */
@@ -942,7 +1000,66 @@ export default {
   right: 0;
   background-color: #fff;
   box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
-  z-index: 999; /* 确保输入框在内容之上 */
-  transition: bottom 0.3s ease; /* 添加过渡动画 */
+  z-index: 999;
+  transition: bottom 0.3s ease;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100vw; /* 限制最大宽度为视口宽度 */
+  overflow-x: hidden; /* 防止水平溢出 */
+}
+
+/* 身份标识 */
+.user-identity {
+  display: inline-block;
+  font-size: 0.7rem;
+  padding: 2px 6px;
+  border-radius: 3px;
+  margin-left: 5px;
+  vertical-align: middle;
+}
+
+.identity-owner {
+  background-color: #4361ee;
+  color: white;
+}
+
+.identity-me {
+  background-color: #f0f0f0;
+  color: #666;
+}
+
+.identity-student {
+  background-color: #4cc9f0;
+  color: white;
+}
+
+.identity-teacher {
+  background-color: #f72585;
+  color: white;
+}
+
+.identity-enterprise {
+  background-color: #7209b7;
+  color: white;
+}
+
+/* 返回顶部按钮 */
+.back-to-top {
+  position: fixed;
+  right: 20px;
+  bottom: 80px;
+  width: 40px;
+  height: 40px;
+  background-color: #4361ee;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  z-index: 999;
+}
+::-webkit-scrollbar{
+      display: none;
 }
 </style>
