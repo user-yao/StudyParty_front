@@ -92,7 +92,8 @@ const actions = {
   },
   async niceArticleComment({ commit }, commentId) {
     try {
-      const res = await niceArticleComment({ commentId });
+      console.log(commentId)
+      const res = await niceArticleComment(commentId);
       // 可以根据需要更新状态，例如标记评论为精华等
       return res;
     } catch (error) {

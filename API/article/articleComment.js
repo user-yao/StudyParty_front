@@ -42,6 +42,7 @@ export const getArticleComment = (data) => {
 }
 
 export const niceArticleComment = (data) => {
+    console.log(data)
     return request({
         url: '/article/articleComment/niceArticleComment',
         method: 'POST',

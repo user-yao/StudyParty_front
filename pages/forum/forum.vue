@@ -8,12 +8,13 @@
           <span>学习社区</span>
         </div>
         <div class="header-actions">
+          <u-icon name="edit-pen" size="20" color="#fff" @click="goToAddArticle"></u-icon>
           <u-icon name="bell" size="20" color="#fff" @click="goToNotifications"></u-icon>
           <u-icon name="search" size="20" color="#fff" @click="goToSearch"></u-icon>
         </div>
       </div>
       
-      <div class="search-bar">
+      <div class="search-bar" @click="goToSearch">
         <u-icon name="search" size="16" color="#ccc"></u-icon>
         <input type="text" placeholder="搜索任务、帖子..." @focus="goToSearch">
       </div>
@@ -160,12 +161,19 @@
               </view>
             </view>
           </view>
+          
+          <!-- 无数据提示 -->
+          <view v-if="recommendedArticles.length === 0 && !loadingMore" class="no-data">
+            <u-icon name="file-text" size="40" color="#ccc"></u-icon>
+            <text>暂无推荐内容</text>
+          </view>
         </view>
         
         <!-- 加载更多提示 -->
-        <view class="load-more" @click="loadMore">
-          <text v-if="!loadingMore">点击加载更多</text>
-          <text v-else>加载中...</text>
+        <view class="load-more" @click="loadMore" v-if="recommendedArticles.length > 0">
+          <text v-if="!loadingMore && !noMoreData">点击加载更多</text>
+          <text v-else-if="loadingMore">加载中...</text>
+          <text v-else>无更多推荐内容</text>
         </view>
       </view>
     </view>
@@ -181,6 +189,7 @@ export default {
   data() {
     return {
       loadingMore: false,
+      noMoreData: false, // 添加无更多数据标志
       // 全部使用假数据
       tasks: [
         {
@@ -298,6 +307,7 @@ export default {
     async getRecommendArticles() {
       try {
         await this.recommend({ page: 1 });
+        this.noMoreData = false; // 重置无更多数据标志
       } catch (error) {
         console.error('获取推荐文章失败:', error);
         uni.showToast({
@@ -313,9 +323,8 @@ export default {
       });
     },
     goToSearch() {
-      uni.showToast({
-        title: '搜索功能',
-        icon: 'none'
+      uni.navigateTo({
+        url: '/pages/search/search'
       });
     },
     viewAllTasks() {
@@ -399,23 +408,53 @@ export default {
     },
     // 加载更多推荐内容
     async loadMore() {
-      if (this.loadingMore) return;
+      // 如果正在加载或没有更多数据，则不执行
+      if (this.loadingMore || this.noMoreData) return;
       
       this.loadingMore = true;
       
       try {
-        // 调用API获取更多数据，修复分页计算
-        const nextPage = Math.floor(this.recommendArticles.length / 10) + 1;
-        await this.recommend({ page: nextPage });
-        this.loadingMore = false;
+        // 计算下一页页码
+        const currentPage = Math.ceil(this.recommendArticles.length / 10) || 1;
+        const nextPage = currentPage + 1;
+        
+        // 调用API获取更多数据
+        const res = await this.recommend({ page: nextPage });
+        
+        // 检查返回的数据
+        if (res && res.code === 200) {
+          // 检查是否有更多数据
+          if (res.data && Array.isArray(res.data.records) && res.data.records.length > 0) {
+            // 有数据，正常处理
+            console.log('加载了更多数据:', res.data.records.length, '条');
+          } else {
+            // 没有更多数据
+            this.noMoreData = true;
+            uni.showToast({
+              title: '无更多推荐内容',
+              icon: 'none'
+            });
+          }
+        } else {
+          // API调用失败
+          throw new Error(res.msg || '加载失败');
+        }
       } catch (error) {
         console.error('加载更多推荐文章失败:', error);
         uni.showToast({
           title: '加载更多失败',
           icon: 'none'
         });
+      } finally {
         this.loadingMore = false;
       }
+    },
+    
+    // 跳转到写文章页面
+    goToAddArticle() {
+      uni.navigateTo({
+        url: '/pages/forum/addArticle'
+      });
     }
   },
   async mounted() {
@@ -778,5 +817,18 @@ export default {
   color: #4361ee;
   font-size: 0.9rem;
   cursor: pointer;
+}
+
+/* 无数据提示 */
+.no-data {
+  text-align: center;
+  padding: 30px 0;
+  color: #999;
+}
+
+.no-data i {
+  font-size: 2rem;
+  margin-bottom: 10px;
+  display: block;
 }
 </style>

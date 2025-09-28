@@ -389,3 +389,15 @@
   font-size: 0.9rem;
   cursor: pointer;
 }
+
+/* 无数据提示 */
+.no-data[data-v-aeadbf01] {
+  text-align: center;
+  padding: 30px 0;
+  color: #999;
+}
+.no-data i[data-v-aeadbf01] {
+  font-size: 2rem;
+  margin-bottom: 10px;
+  display: block;
+}

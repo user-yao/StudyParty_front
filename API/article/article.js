@@ -97,6 +97,17 @@ export const collectArticle = (data) => {
     });
 }
 
+export const uploadImages = (data) => {
+    return request({
+        url: '/article/uploadImages',
+        method: 'POST',
+        data: data,
+        header: {
+            'Content-Type': 'multipart/form-data'
+        }
+    });
+}
+
 
 
 

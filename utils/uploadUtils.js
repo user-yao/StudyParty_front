@@ -133,9 +133,19 @@ class UploadUtils {
     const totalFiles = filePaths.length;
     let completedFiles = 0;
 
-    // 创建 Promise 数组，每个 Promise 代表一个文件的上传
-    const promises = filePaths.map((filePath, index) => {
-      return new Promise((resolve, reject) => {
+    // 串行上传文件，等上一个上传完后再上传下一个
+    return new Promise((resolve, reject) => {
+      const results = [];
+      
+      const uploadNext = (index) => {
+        // 如果所有文件都已上传完成，resolve结果
+        if (index >= filePaths.length) {
+          resolve(results);
+          return;
+        }
+        
+        const filePath = filePaths[index];
+        
         uni.uploadFile({
           url: baseUrl + url,
           filePath,
@@ -147,41 +157,38 @@ class UploadUtils {
             if (onProgress) {
               onProgress(completedFiles, totalFiles, res); // 回调上传进度
             }
-            resolve({
+            
+            // 保存成功的上传结果
+            results.push({
               success: true,
               data: res.data,
               statusCode: res.statusCode
             });
+            
+            // 继续上传下一个文件
+            uploadNext(index + 1);
           },
           fail: (err) => {
             completedFiles++;
             if (onProgress) {
               onProgress(completedFiles, totalFiles, err); // 回调上传进度
             }
-            reject({
+            
+            // 保存失败的上传结果
+            results.push({
               success: false,
               message: err.errMsg || '上传失败',
               code: err.errCode || -1
             });
+            
+            // 继续上传下一个文件（即使当前文件上传失败）
+            uploadNext(index + 1);
           }
         });
-      });
-    });
-
-    // 返回所有上传结果的 Promise
-    return Promise.allSettled(promises).then(results => {
-      return results.map(result => {
-        if (result.value.statusCode === 200) {
-			console.log(result)
-          return result.value;
-        } else {
-          return {
-            success: false,
-            message: "提交失败",
-            code: result.value.statusCode
-          };
-        }
-      });
+      };
+      
+      // 开始上传第一个文件
+      uploadNext(0);
     });
   }
 }

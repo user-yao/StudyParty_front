@@ -1,4 +1,4 @@
-import { myArticle, articleById, searchArticle, createArticle, deleteArticle,recommend,niceArticle,collectArticle } from '../../API/article/article.js';
+import { myArticle, articleById, searchArticle, createArticle, deleteArticle,recommend,niceArticle,collectArticle,uploadImages } from '../../API/article/article.js';
 export default {
   namespaced: true,
   state: () => ({ 
@@ -22,11 +22,9 @@ export default {
     SET_RECOMMEND_ARTICLES(state, data) {
       // 根据API返回格式处理数据
       if (data && data.records) {
-        state.recommendArticles = data.records;
+        state.recommendArticles.push(...data.records);
       } else if (Array.isArray(data)) {
-        state.recommendArticles = data;
-      } else {
-        state.recommendArticles = [];
+        state.recommendArticles.push(...data);
       }
     },
     SET_NICE_ARTICLES(state, list) {
@@ -60,7 +58,13 @@ export default {
     async searchArticle({ commit }, params) {
       const res = await searchArticle(params); // 调用API/article/article.js的searchArticle接口
       if (res.code === 200) {
-        commit('SET_ARTICLE_LIST', res.data.list);
+        // 根据API返回格式处理数据
+        // API返回格式: { data: { records: [...] } }
+        if (res.data && Array.isArray(res.data.records)) {
+          commit('SET_ARTICLE_LIST', res.data.records);
+        } else {
+          commit('SET_ARTICLE_LIST', []);
+        }
       }
       return res;
     },
@@ -107,6 +111,12 @@ export default {
         const isCollect = res.data === "取消收藏" ? false : true;
         commit('UPDATE_ARTICLE_FAVORITE', { articleId, isCollect });
       }
+      return res;
+    },
+    
+    // 上传图片
+    async uploadImages({ commit }, data) {
+      const res = await uploadImages(data); // 调用上传图片接口
       return res;
     }
   }

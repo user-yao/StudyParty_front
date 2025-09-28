@@ -281,7 +281,7 @@ export default {
   },
   methods: {
     ...mapActions('article', ['articleById', 'niceArticle', 'collectArticle']),
-    ...mapActions('articleComment', ['getArticleComment', 'addArticleComment']),
+    ...mapActions('articleComment', ['getArticleComment', 'addArticleComment', 'niceArticleComment']),
 
     // 返回上一页
     goBack() {
@@ -521,9 +521,18 @@ export default {
     // 切换评论点赞状态
     async toggleCommentLike(comment) {
       try {
-        // 这里需要调用评论点赞接口，暂时用模拟方式
-        uni.$u.toast('评论点赞功能待实现');
-        // 实际项目中应该调用相应的API接口
+        console.log(comment)
+        const res = await this.niceArticleComment({ articleCommentId: comment.id });
+        if (res.code === 200) {
+          // 更新评论的点赞状态和数量
+          if (res.data === "取消点赞") {
+            comment.isNice = false;
+            comment.nice -= 1;
+          } else if (res.data === "点赞成功") {
+            comment.isNice = true;
+            comment.nice += 1;
+          }
+        }
       } catch (error) {
         console.error('评论点赞操作失败:', error);
         uni.$u.toast('操作失败');

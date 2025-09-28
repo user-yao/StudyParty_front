@@ -231,6 +231,7 @@
 			...mapState('groupTask', ['groupTasks']),
 			...mapState('user', ['userInfo']),
 			...mapState('groupUser', ['groupUsers']),
+			...mapState('group', ['groupMap']),
 
 			// 获取当前用户ID
 			currentUserId() {
@@ -239,6 +240,11 @@
 
 			// 判断用户是否有权限发布任务
 			canPublishTask() {
+				// 如果还没有群组ID，先返回false
+				if (!this.groupId) {
+					return false;
+				}
+				
 				// 如果还没有群组用户信息，先返回false
 				if (!this.groupUsers || !Array.isArray(this.groupUsers) || !this.currentUserId) {
 					return false;
@@ -253,8 +259,16 @@
 				}
 				
 				// 获取当前用户在群组中的角色
-				const userRole = currentUser.role || 'member';
-				return ['leader', 'deputy', 'teacher', 'enterprise'].includes(userRole);
+				if(currentUser.status != 1){
+					return true;
+				}
+				
+				// 确保groupMap存在且能获取到群组信息
+				const group = this.groupMap && this.groupMap.get ? this.groupMap.get(this.groupId) : null;
+				if(group && (group.leader == currentUser.id || group.deputy == currentUser.id)){
+					return true;
+				}
+				return false;
 			},
 
 			// 按状态分组的任务列表
@@ -530,27 +544,24 @@
 				}
 			}
 		},
-
-		// 页面加载时获取参数并加载数据
-		onLoad(options) {
-			// 监听从其他页面传来的参数
-			const eventChannel = this.getOpenerEventChannel();
-			if (eventChannel) {
-				eventChannel.on('chatData', (data) => {
-					if (data && data.groupId) {
-						this.groupId = data.groupId;
-						this.loadTasks();
-					}
-				});
-			}
-		},
-
 		// 页面显示时重新加载数据
 		onShow() {
-			if (this.groupId) {
+			// 如果groupId不存在，尝试重新获取参数
+			if (!this.groupId) {
+				const eventChannel = this.getOpenerEventChannel();
+				if (eventChannel) {
+					eventChannel.once('chatData', (data) => {
+						if (data && data.groupId) {
+							this.groupId = data.groupId;
+							this.loadTasks();
+						}
+					});
+				}
+			} else {
+				// 如果已经有groupId，直接加载任务
 				this.loadTasks();
 			}
-		}
+		},
 	}
 </script>
 
@@ -940,6 +951,32 @@
 		}
 	}
 </style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

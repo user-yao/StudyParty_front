@@ -194,6 +194,21 @@
 			{
 				"navigationBarTitleText" : "已完成任务"
 			}
+		},
+		{
+			"path" : "pages/search/search",
+			"style" : 
+			{
+				"navigationBarTitleText" : "搜索"
+			}
+		},
+		{
+			"path" : "pages/forum/addArticle",
+			"style" : 
+			{
+				"navigationBarTitleText" : "添加文章",
+				"softinputMode": "adjustResize"
+			}
 		}
 	],
 	"globalStyle": {
