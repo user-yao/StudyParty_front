@@ -33,7 +33,7 @@
 				</div>
 
 				<!-- 消息列表 -->
-				<div v-for="message in messages" class="message"
+				<div v-for="message in messages" :key="message.id" class="message"
 					:class="message.sender == uni.getStorageSync('id') ? 'sender' : 'receiver'">
 					<image :src=" imageUrl + uni.getStorageSync('user').head" 
 						v-if="message.sender == uni.getStorageSync('id')" class="avatar" mode=""></image>
@@ -112,8 +112,7 @@
 				</view>
 				<view class="Input" @click="scrollToBottom" v-show="!isKey">
 					<textarea :class="{input:true,have:InputValue != ''}" auto-height v-model="InputValue" auto-blur
-						cursor-spacing="20" :focus="keyword" :autosize="{minRows:1,maxRows:8}" autosize
-						:rows="1"> </textarea>
+						cursor-spacing="20" :focus="keyword" :autosize="{minRows:1,maxRows:8}" :rows="1"> </textarea>
 				</view>
 				<view class="Input" v-show="isKey">
 					<view :class="{talk:true,black:black}" @touchstart="startVoice" @touchend="endVoice">{{hint}}</view>

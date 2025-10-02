@@ -1,0 +1,40 @@
+{
+  "hash": "00301d8a",
+  "configHash": "d030030d",
+  "lockfileHash": "06f5835e",
+  "browserHash": "63591a85",
+  "optimized": {
+    "core-js/stable": {
+      "src": "../../../../../node_modules/core-js/stable/index.js",
+      "file": "core-js_stable.js",
+      "fileHash": "14672964",
+      "needsInterop": true
+    },
+    "regenerator-runtime/runtime": {
+      "src": "../../../../../node_modules/regenerator-runtime/runtime.js",
+      "file": "regenerator-runtime_runtime.js",
+      "fileHash": "3e08167d",
+      "needsInterop": true
+    },
+    "uview-plus": {
+      "src": "../../../../../node_modules/uview-plus/index.js",
+      "file": "uview-plus.js",
+      "fileHash": "4faabc40",
+      "needsInterop": false
+    },
+    "uview-plus/libs/function/test": {
+      "src": "../../../../../node_modules/uview-plus/libs/function/test.js",
+      "file": "uview-plus_libs_function_test.js",
+      "fileHash": "db7db0b2",
+      "needsInterop": false
+    }
+  },
+  "chunks": {
+    "chunk-ZAULTRJF": {
+      "file": "chunk-ZAULTRJF.js"
+    },
+    "chunk-Y2F7D3TJ": {
+      "file": "chunk-Y2F7D3TJ.js"
+    }
+  }
+}

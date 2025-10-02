@@ -1,707 +1,686 @@
 <template>
-  <div class="body">
-  <!-- 头部导航 -->
+  <view class="body">
+    <!-- 顶部导航 -->
     <header>
-        <div class="header-top">
-            <div class="logo">
-                <i class="fas fa-graduation-cap"></i>
-                <span>智学未来</span>
-            </div>
-            <div class="header-actions">
-                <i class="fas fa-bell"></i>
-                <i class="fas fa-comment-alt"></i>
-            </div>
+      <div class="header-top">
+        <div class="logo">
+          <span>智学未来</span>
         </div>
-        <div class="search-bar">
-            <i class="fas fa-search"></i>
-            <input type="text" placeholder="搜索课程、问题、技能...">
+        <div class="header-actions">
         </div>
+      </div>
+      <div class="search-bar" @click="goToSearch">
+        <u-icon name="search" size="16" color="#ccc"></u-icon>
+        <input type="text" placeholder="搜索课程、问题、技能..." readonly>
+      </div>
     </header>
-    
-    <!-- 用户概览 -->
+
+    <!-- 用户信息概览 -->
     <div class="user-overview">
-        <div class="user-info">
-            <image class="avatar" :src="imageUrl+userInfo.head"></image>
-            <div class="user-details">
-                <h2>{{userInfo.name.substring(0,1)}}同学</h2>
-                <p>{{userInfo.school}}</p>
-            </div>
+      <div class="user-header">
+        <image class="avatar" :src="getUserAvatar()" mode="aspectFill"></image>
+        <div class="user-basic-info">
+          <div class="user-name-row">
+            <h2 class="user-name">{{ userInfo.name || '未设置昵称' }}</h2>
+            <u-tag :text="getUserStatus()" :type="getUserStatusType()" size="mini" />
+          </div>
+          <p class="user-school">{{ userInfo.school || '未设置学校' }}</p>
+          <p class="user-major">{{ userInfo.major || '未设置专业' }}</p>
         </div>
-        <div class="user-stats">
-            <div class="stat-item">
-                <div class="stat-value">{{userInfo.finishTask}}</div>
-                <div class="stat-label">完成任务</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-value">{{userInfo.clockIn}}天</div>
-                <div class="stat-label">连续打卡</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-value">{{userInfo.starPrestige}}</div>
-                <div class="stat-label">学术声望</div>
-            </div>
+      </div>
+
+      <div class="user-stats">
+        <div class="stat-item">
+          <div class="stat-value">{{ userInfo.finishTask || 0 }}</div>
+          <div class="stat-label">完成任务</div>
         </div>
+        <div class="stat-item">
+          <div class="stat-value">{{ userInfo.clockIn || 0 }}天</div>
+          <div class="stat-label">连续打卡</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value">{{ userInfo.starPrestige || 0 }}</div>
+          <div class="stat-label">学术声望</div>
+        </div>
+      </div>
     </div>
-    
+
+    <!-- 励志卡片 -->
+    <div class="motivational-card">
+      <div class="card-header">
+        <div class="clock-in-days">{{ userInfo.clockIn || 0 }}天</div>
+        <div class="card-label">连续打卡</div>
+      </div>
+      <div class="motivational-content">
+        <div class="quote">{{ getRandomQuote() }}</div>
+      </div>
+    </div>
+
     <!-- 核心功能入口 -->
     <div class="quick-actions">
-        <div class="section-title">
-            <h3>核心功能</h3>
-            <a href="#">全部 <i class="fas fa-chevron-right"></i></a>
+      <div class="action-grid">
+        <div class="action-item" @click="goToPage('/pages/forum/forum')">
+          <div class="action-icon">
+            <u-icon name="chat" size="24" color="#ffffff"></u-icon>
+          </div>
+          <div class="action-name">学习社区</div>
         </div>
-        <div class="action-grid">
-            <div class="action-item">
-                <div class="action-icon">
-                    <i class="fas fa-sitemap"></i>
-                </div>
-                <div class="action-name">AI技能树</div>
-            </div>
-            <div class="action-item">
-                <div class="action-icon">
-                    <i class="fas fa-route"></i>
-                </div>
-                <div class="action-name">学习路径</div>
-            </div>
-            <div class="action-item">
-                <div class="action-icon">
-                    <i class="fas fa-robot"></i>
-                </div>
-                <div class="action-name">智能问答</div>
-            </div>
-            <div class="action-item">
-                <div class="action-icon">
-                    <i class="fas fa-file-alt"></i>
-                </div>
-                <div class="action-name">学力报告</div>
-            </div>
-            <div class="action-item">
-                <div class="action-icon">
-                    <i class="fas fa-tasks"></i>
-                </div>
-                <div class="action-name">任务所</div>
-            </div>
-            <div class="action-item">
-                <div class="action-icon">
-                    <i class="fas fa-user-friends"></i>
-                </div>
-                <div class="action-name">自习室</div>
-            </div>
-            <div class="action-item">
-                <div class="action-icon">
-                    <i class="fas fa-users"></i>
-                </div>
-                <div class="action-name">小组</div>
-            </div>
-            <div class="action-item">
-                <div class="action-icon">
-                    <i class="fas fa-comments"></i>
-                </div>
-                <div class="action-name">社区</div>
-            </div>
+        <div class="action-item" @click="goToPage('/pages/chatList/chatList')">
+          <div class="action-icon">
+            <u-icon name="account" size="24" color="#ffffff"></u-icon>
+          </div>
+          <div class="action-name">小组</div>
         </div>
+        <div class="action-item" @click="goToPage('/pages/completedTasks/completedTasks')">
+          <div class="action-icon">
+            <u-icon name="order" size="24" color="#ffffff"></u-icon>
+          </div>
+          <div class="action-name">我的任务</div>
+        </div>
+        <div class="action-item" @click="goToPage('/pages/profile/profile')">
+          <div class="action-icon">
+            <u-icon name="account" size="24" color="#ffffff"></u-icon>
+          </div>
+          <div class="action-name">个人中心</div>
+        </div>
+        <div class="action-item" @click="goToPage('/pages/chatList/groupTaskList')">
+          <div class="action-icon">
+            <u-icon name="file-text" size="24" color="#ffffff"></u-icon>
+          </div>
+          <div class="action-name">任务所</div>
+        </div>
+        <div class="action-item" @click="goToPage('/pages/chatList/friendList')">
+          <div class="action-icon">
+            <u-icon name="man-add" size="24" color="#ffffff"></u-icon>
+          </div>
+          <div class="action-name">好友</div>
+        </div>
+        <div class="action-item" @click="goToPage('/pages/chatList/groupList')">
+          <div class="action-icon">
+            <u-icon name="home" size="24" color="#ffffff"></u-icon>
+          </div>
+          <div class="action-name">我的小组</div>
+        </div>
+        <div class="action-item" @click="goToPage('/pages/search/search')">
+          <div class="action-icon">
+            <u-icon name="search" size="24" color="#ffffff"></u-icon>
+          </div>
+          <div class="action-name">搜索</div>
+        </div>
+        <div class="action-item" @click="goToPage('/pages/AI/skillTree')">
+          <div class="action-icon">
+            <u-icon name="order" size="24" color="#ffffff"></u-icon>
+          </div>
+          <div class="action-name">技能树</div>
+        </div>
+        <div class="action-item" @click="goToPage('/pages/AI/lessonPlan')">
+          <div class="action-icon">
+            <u-icon name="edit-pen" size="24" color="#ffffff"></u-icon>
+          </div>
+          <div class="action-name">教案修改</div>
+        </div>
+        <div class="action-item" @click="goToPage('/pages/AI/starAI')">
+          <div class="action-icon">
+            <u-icon name="star" size="24" color="#ffffff"></u-icon>
+          </div>
+          <div class="action-name">小星AI</div>
+        </div>
+      </div>
     </div>
-    
-    <!-- 待完成任务 -->
-    <div class="pending-tasks">
-        <div class="section-title">
-            <h3>待完成任务</h3>
-            <a href="#">查看全部 <i class="fas fa-chevron-right"></i></a>
-        </div>
-        <div class="task-list" >
-            <div class="task-item" v-for="item in userPlan">
-                <div class="task-icon">
-                    <i class="fas fa-book"></i>
-                </div>
-                <div class="task-details">
-                    <div class="task-title">{{item.planContext}}</div>
-                    <div class="task-meta">
-                        <div class="task-time">
-                            <i class="far fa-clock"></i> {{formatTimestamp(item.startTime)}}
-                        </div>
-                        <div class="task-status" v-if="item.isStart == 0">未开始</div>
-						<div class="task-status" v-if="item.isStart == 1 && item.isEnd == 0">进行中</div>
-						<div class="task-status" v-if="item.isEnd == 1">已结束</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <!-- 社区动态 -->
-    <div class="community-feed">
-        <div class="section-title">
-            <h3>社区动态</h3>
-            <a href="#">更多 <i class="fas fa-chevron-right"></i></a>
-        </div>
-        <div class="post-card">
-            <div class="post-header">
-                <div class="post-avatar">王</div>
-                <div class="post-user">
-                    <div class="post-user-name">王同学</div>
-                    <div class="post-time">2小时前</div>
-                </div>
-            </div>
-            <div class="post-content">
-                刚刚完成了React Hooks实战项目，分享我的学习笔记和代码仓库，欢迎交流讨论！
-            </div>
-            <div class="post-actions">
-                <div class="post-action">
-                    <i class="far fa-heart"></i> 42
-                </div>
-                <div class="post-action">
-                    <i class="far fa-comment"></i> 8
-                </div>
-                <div class="post-action">
-                    <i class="fas fa-share-alt"></i> 分享
-                </div>
-            </div>
-        </div>
-        <div class="post-card">
-            <div class="post-header">
-                <div class="post-avatar">李</div>
-                <div class="post-user">
-                    <div class="post-user-name">李老师</div>
-                    <div class="post-time">5小时前</div>
-                </div>
-            </div>
-            <div class="post-content">
-                最新前端面试指南已更新，包含2023年大厂高频面试题解析，助你备战金九银十！
-            </div>
-            <div class="post-actions">
-                <div class="post-action">
-                    <i class="far fa-heart"></i> 128
-                </div>
-                <div class="post-action">
-                    <i class="far fa-comment"></i> 24
-                </div>
-                <div class="post-action">
-                    <i class="fas fa-share-alt"></i> 分享
-                </div>
-            </div>
-        </div>
-    </div>
-  </div>
+  </view>
 </template>
 
 <script>
-	import {
-		mapState,
-		mapMutations,
-		mapActions
-	} from "vuex"; 
-	import {imageUrl} from "@/config/config.js"
-  export default {
-    data() {
-      return {
-		userPlan:[],
-		userInfo:{},
-        announcements: [
-          { title: '论坛新规则上线', time: '2024-06-15' },
-          { title: '夏季活动预告', time: '2024-06-14' },
-          { title: '积分兑换调整通知', time: '2024-06-13' }
-        ],
-        tasks: [
-          { title: '技术文章征集', desc: '征集优质前端技术分享', reward: '500积分' },
-          { title: '论坛美化建议', desc: '提供界面优化方案', reward: '300积分' },
-          { title: '用户调研参与', desc: '填写问卷反馈需求', reward: '100积分' }
-        ]
-      }
-    },
-    computed: {
-		imageUrl() {
-		      return imageUrl
-		},
-        ...mapState({
-            // userInfo: state => state.user.userInfo
-        })
-    },
-	methods:{
-		...mapActions({
-			getUserPlans: "userPlan/getUserPlans",
-		}),
-		formatTimestamp(timestamp) {
-		  const date = new Date(timestamp);
-		  return `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}:${date.getSeconds().toString().padStart(2, '0')}`;
-		}
-	},
-	onLoad() {
-		this.userInfo = uni.getStorageSync('user');
-	},
-	onShow() {
-		this.getUserPlans().then(res=>{
-			this.userPlan = res[0];
-			console.log(this.userPlan)
-		})
-	}
+import { mapState, mapActions } from "vuex";
+import { imageUrl } from "@/config/config.js";
 
-}
+export default {
+  data() {
+    return {
+      motivationalQuotes: [
+        "每一次坚持，都是成功的积累。",
+        "学习如逆水行舟，不进则退。",
+        "今天的努力，是明天的收获。",
+        "知识是通往自由的金钥匙。",
+        "持之以恒，方能成就非凡。",
+        "学而时习之，不亦说乎？",
+        "书山有路勤为径，学海无涯苦作舟。",
+        "不积跬步，无以至千里。",
+        "学习是成长的阶梯。",
+        "勤奋是成功之母。",
+        "学如逆水行舟，不进则退。",
+        "知识改变命运，学习成就未来。",
+        "每天进步一点点，就是成功的开始。",
+        "学习是点亮人生的明灯。",
+        "坚持就是胜利，努力必有回报。"
+      ]
+    };
+  },
+  computed: {
+    ...mapState({
+      userInfo: state => state.user.userInfo
+    }),
+    userPlan() {
+      // 从 Vuex store 中获取用户计划
+      return this.$store.state.userPlan || [];
+    }
+  },
+  methods: {
+    ...mapActions({
+      getUserPlans: "userPlan/getUserPlans"
+    }),
+    
+    // 格式化时间戳
+    formatTimestamp(timestamp) {
+      const date = new Date(timestamp);
+      return `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}:${date.getSeconds().toString().padStart(2, '0')}`;
+    },
+    
+    // 获取用户头像
+    getUserAvatar() {
+      if (this.userInfo.head) {
+        return imageUrl + this.userInfo.head;
+      }
+      // 默认头像
+      return "/static/default-avatar.png";
+    },
+    
+    // 获取用户状态
+    getUserStatus() {
+      const statusMap = {
+        1: '学生',
+        2: '老师',
+        3: '企业'
+      };
+      return statusMap[this.userInfo.status] || '未知';
+    },
+    
+    // 获取用户状态标签类型
+    getUserStatusType() {
+      const typeMap = {
+        1: 'success',  // 学生 - 绿色
+        2: 'primary',  // 老师 - 蓝色
+        3: 'warning'   // 企业 - 橙色
+      };
+      return typeMap[this.userInfo.status] || 'info';
+    },
+    
+    // 获取随机励志话语
+    getRandomQuote() {
+      const randomIndex = Math.floor(Math.random() * this.motivationalQuotes.length);
+      return this.motivationalQuotes[randomIndex];
+    },
+    
+    // 跳转到指定页面
+    goToPage(url) {
+      uni.navigateTo({
+        url: url
+      });
+    },
+    
+    // 跳转到搜索页面
+    goToSearch() {
+      uni.navigateTo({
+        url: '/pages/search/search'
+      });
+    },
+    
+    // 跳转到聊天页面
+    goToChat() {
+      uni.navigateTo({
+        url: '/pages/chatList/chatList'
+      });
+    }
+  },
+  onLoad() {
+    // 页面加载时获取用户计划
+    this.getUserPlans().then(res => {
+      console.log("用户计划加载成功", res);
+    }).catch(err => {
+      console.error("获取用户计划失败", err);
+    });
+  },
+  onShow() {
+    // 页面显示时重新获取用户信息
+    this.$store.dispatch('user/selectUser', { id: uni.getStorageSync('id') });
+  }
+};
 </script>
 
 <style scoped>
-   * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
-        }
-        
-        :global(:root) {
-            --primary: #4361ee;
-            --secondary: #3f37c9;
-            --accent: #4895ef;
-            --success: #4cc9f0;
-            --warning: #f72585;
-            --light: #f8f9fa;
-            --dark: #212529;
-            --gray: #6c757d;
-            --light-gray: #e9ecef;
-            --card-bg: #ffffff;
-            --section-bg: #f5f7fb;
-        }
-        
-        .body {
-            background-color: #f5f7fb;
-            color: var(--dark);
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        /* 顶部导航 */
-        header {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            padding: 15px 20px;
-            padding-top: 5vh;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-        
-        .header-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-        
-        .logo {
-            display: flex;
-            align-items: center;
-            font-weight: 700;
-            font-size: 1.4rem;
-        }
-        
-        .logo i {
-            margin-right: 8px;
-            font-size: 1.6rem;
-        }
-        
-        .header-actions {
-            display: flex;
-            gap: 20px;
-        }
-        
-        .header-actions i {
-            font-size: 1.3rem;
-        }
-        
-        .search-bar {
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 50px;
-            padding: 8px 15px;
-            display: flex;
-            align-items: center;
-        }
-        
-        .search-bar input {
-            background: transparent;
-            border: none;
-            color: white;
-            width: 100%;
-            padding: 0 10px;
-            outline: none;
-            font-size: 0.95rem;
-        }
-        
-        .search-bar input::placeholder {
-            color: rgba(255, 255, 255, 0.7);
-        }
-        
-        /* 用户概览 */
-        .user-overview {
-            background: white;
-            border-radius: 16px;
-            margin: 20px;
-            padding: 20px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-        }
-        
-        .user-info {
-            display: flex;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-        
-        .avatar {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background: linear-gradient(45deg, var(--accent), var(--success));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 1.8rem;
-            font-weight: bold;
-            margin-right: 15px;
-        }
-        
-        .user-details h2 {
-            font-size: 1.3rem;
-            margin-bottom: 5px;
-        }
-        
-        .user-stats {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
-            text-align: center;
-        }
-        
-        .stat-item {
-            background: var(--light);
-            border-radius: 12px;
-            padding: 12px;
-        }
-        
-        .stat-value {
-            font-size: 1.4rem;
-            font-weight: 700;
-            color: var(--primary);
-            margin-bottom: 5px;
-        }
-        
-        .stat-label {
-            font-size: 0.85rem;
-            color: var(--gray);
-        }
-        
-        /* 核心功能入口 */
-        .quick-actions {
-            margin: 0 20px;
-        }
-        
-        .section-title {
-            font-size: 1.2rem;
-            font-weight: 600;
-            margin: 25px 0 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .section-title a {
-            font-size: 0.9rem;
-            color: var(--primary);
-            font-weight: 500;
-            text-decoration: none;
-        }
-        
-        .action-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 15px;
-        }
-        
-        .action-item {
-            background: white;
-            border-radius: 12px;
-            padding: 15px 10px;
-            text-align: center;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-            transition: transform 0.2s;
-        }
-        
-        .action-item:hover {
-            transform: translateY(-3px);
-        }
-        
-        .action-icon {
-            width: 50px;
-            height: 50px;
-            background: linear-gradient(135deg, var(--primary), var(--accent));
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 10px;
-            color: white;
-            font-size: 1.4rem;
-        }
-        
-        .action-name {
-            font-size: 0.85rem;
-            font-weight: 500;
-        }
-        
-        /* 推荐学习 */
-        .recommended-learning {
-            margin: 25px 20px;
-        }
-        
-        .course-card {
-            background: white;
-            border-radius: 16px;
-            overflow: hidden;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-        }
-        
-        .course-header {
-            position: relative;
-            height: 120px;
-            background: linear-gradient(135deg, #6a11cb, #2575fc);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 1.1rem;
-            font-weight: 600;
-        }
-        
-        .course-content {
-            padding: 15px;
-        }
-        
-        .course-title {
-            font-size: 1.1rem;
-            margin-bottom: 10px;
-            font-weight: 600;
-        }
-        
-        .course-info {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 15px;
-            font-size: 0.9rem;
-            color: var(--gray);
-        }
-        
-        .progress-container {
-            margin-bottom: 15px;
-        }
-        
-        .progress-label {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 5px;
-            font-size: 0.85rem;
-            color: var(--gray);
-        }
-        
-        .progress-bar {
-            height: 8px;
-            background: var(--light-gray);
-            border-radius: 4px;
-            overflow: hidden;
-        }
-        
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--accent), var(--success));
-            width: 45%;
-            border-radius: 4px;
-        }
-        
-        .action-btn {
-            display: block;
-            width: 100%;
-            padding: 10px;
-            background: var(--primary);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-        
-        .action-btn:hover {
-            background: var(--secondary);
-        }
-        
-        /* 待完成任务 */
-        .pending-tasks {
-            margin: 25px 20px;
-        }
-        
-        .task-list {
-            background: white;
-            border-radius: 16px;
-            overflow: hidden;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-        }
-        
-        .task-item {
-            display: flex;
-            padding: 15px;
-            border-bottom: 1px solid var(--light-gray);
-        }
-        
-        .task-item:last-child {
-            border-bottom: none;
-        }
-        
-        .task-icon {
-            width: 40px;
-            height: 40px;
-            background: var(--light);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 15px;
-            color: var(--primary);
-            font-size: 1.1rem;
-        }
-        
-        .task-details {
-            flex: 1;
-        }
-        
-        .task-title {
-            font-weight: 500;
-            margin-bottom: 5px;
-        }
-        
-        .task-meta {
-            display: flex;
-            font-size: 0.85rem;
-            color: var(--gray);
-        }
-        
-        .task-time {
-            margin-right: 15px;
-        }
-        
-        .task-status {
-            color: var(--warning);
-            font-weight: 500;
-        }
-        
-        /* 社区动态 */
-        .community-feed {
-            margin: 25px 20px;
-        }
-        
-        .post-card {
-            background: white;
-            border-radius: 16px;
-            padding: 15px;
-            margin-bottom: 15px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-        }
-        
-        .post-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 12px;
-        }
-        
-        .post-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: linear-gradient(45deg, #ff9a9e, #fad0c4);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-            font-size: 1.2rem;
-            margin-right: 12px;
-        }
-        
-        .post-user {
-            flex: 1;
-        }
-        
-        .post-user-name {
-            font-weight: 500;
-            margin-bottom: 2px;
-        }
-        
-        .post-time {
-            font-size: 0.8rem;
-            color: var(--gray);
-        }
-        
-        .post-content {
-            margin-bottom: 15px;
-            line-height: 1.5;
-        }
-        
-        .post-actions {
-            display: flex;
-            gap: 20px;
-            font-size: 0.9rem;
-            color: var(--gray);
-        }
-        
-        .post-action {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-        
-        /* 底部导航 */
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: white;
-            display: flex;
-            justify-content: space-around;
-            padding: 12px 0;
-            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
-            z-index: 100;
-        }
-        
-        .nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            color: var(--gray);
-            text-decoration: none;
-            font-size: 0.75rem;
-        }
-        
-        .nav-item.active {
-            color: var(--primary);
-        }
-        
-        .nav-item i {
-            font-size: 1.3rem;
-            margin-bottom: 3px;
-        }
-        
-        /* 响应式调整 */
-        @media (max-width: 480px) {
-            .action-grid {
-                grid-template-columns: repeat(4, 1fr);
-                gap: 10px;
-            }
-            
-            .action-icon {
-                width: 40px;
-                height: 40px;
-                font-size: 1.2rem;
-            }
-            
-            .action-name {
-                font-size: 0.75rem;
-            }
-        }
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+}
+
+:global(:root) {
+  --primary: #4361ee;
+  --secondary: #3f37c9;
+  --accent: #4895ef;
+  --success: #4cc9f0;
+  --warning: #f72585;
+  --light: #f8f9fa;
+  --dark: #212529;
+  --gray: #6c757d;
+  --light-gray: #e9ecef;
+  --card-bg: #ffffff;
+  --section-bg: #f5f7fb;
+}
+
+.body {
+  background-color: #f5f7fb;
+  color: #333;
+  min-height: 100vh;
+  padding-bottom: 20px;
+}
+
+/* 顶部导航 */
+header {
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: white;
+  padding: 15px 20px;
+  padding-top: 5vh;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  font-weight: 700;
+  font-size: 1.4rem;
+}
+
+.logo i {
+  margin-right: 8px;
+  font-size: 1.6rem;
+}
+
+.header-actions {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.header-actions i {
+  font-size: 1.3rem;
+  cursor: pointer;
+}
+
+.search-bar {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50px;
+  padding: 8px 15px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.search-bar input {
+  background: transparent;
+  border: none;
+  color: white;
+  width: 100%;
+  padding: 0 10px;
+  outline: none;
+  font-size: 0.95rem;
+}
+
+.search-bar input::placeholder {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* 用户概览 */
+.user-overview {
+  background: white;
+  border-radius: 16px;
+  margin: 20px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.user-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: linear-gradient(45deg, var(--accent), var(--success));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin-right: 15px;
+  flex-shrink: 0;
+}
+
+.user-basic-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.user-name-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+  gap: 10px;
+}
+
+.user-name {
+  font-size: 1.3rem;
+  margin: 0;
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.user-school,
+.user-major {
+  font-size: 0.95rem;
+  color: #6c757d;
+  margin: 4px 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.user-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+  text-align: center;
+}
+
+.stat-item {
+  background: var(--light);
+  border-radius: 12px;
+  padding: 12px;
+}
+
+.stat-value {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 5px;
+}
+
+.stat-label {
+  font-size: 0.85rem;
+  color: var(--gray);
+}
+
+/* 励志卡片 */
+.motivational-card {
+  background: linear-gradient(135deg, #4361ee, #3f37c9);
+  border-radius: 16px;
+  margin: 0 20px 25px;
+  padding: 20px;
+  color: white;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(67, 97, 238, 0.3);
+  min-height: 140px;
+  display: flex;
+  flex-direction: column;
+}
+
+.motivational-card::before {
+  content: "";
+  position: absolute;
+  top: -50px;
+  right: -50px;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.motivational-card::after {
+  content: "";
+  position: absolute;
+  bottom: -30px;
+  right: -30px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  position: relative;
+  z-index: 2;
+}
+
+.clock-in-days {
+  font-size: 2rem;
+  font-weight: 700;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.card-label {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 5px 15px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.motivational-content {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 2;
+  padding: 10px 0;
+}
+
+.quote {
+  font-size: 1.1rem;
+  font-weight: 500;
+  line-height: 1.5;
+  text-align: center;
+  padding: 0 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 60px;
+}
+
+/* 核心功能入口 */
+.quick-actions {
+  margin: 0 20px 25px;
+}
+
+.section-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin: 25px 0 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.section-title a {
+  font-size: 0.9rem;
+  color: var(--primary);
+  font-weight: 500;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.action-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+.action-item {
+  background: white;
+  border-radius: 12px;
+  padding: 15px 10px;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 100px;
+}
+
+.action-item:hover {
+  transform: translateY(-3px);
+}
+
+.action-icon {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.action-name {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #333;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+/* 待完成任务 */
+.pending-tasks {
+  margin: 0 20px;
+}
+
+.task-list {
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.task-item {
+  display: flex;
+  padding: 15px;
+  border-bottom: 1px solid var(--light-gray);
+  align-items: center;
+}
+
+.task-item:last-child {
+  border-bottom: none;
+}
+
+.task-icon {
+  width: 40px;
+  height: 40px;
+  background: var(--light);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 15px;
+  color: var(--primary);
+  flex-shrink: 0;
+}
+
+.task-details {
+  flex: 1;
+  min-width: 0;
+}
+
+.task-title {
+  font-weight: 500;
+  margin-bottom: 5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.task-meta {
+  display: flex;
+  font-size: 0.85rem;
+  color: var(--gray);
+  align-items: center;
+}
+
+.task-time {
+  margin-right: 15px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+}
+
+.task-status {
+  color: var(--warning);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.no-task {
+  padding: 30px 20px;
+  text-align: center;
+}
+
+/* 响应式调整 */
+@media (max-width: 480px) {
+  .action-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+  }
+  
+  .action-icon {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .action-name {
+    font-size: 0.75rem;
+  }
+  
+  .quote {
+    font-size: 1rem;
+  }
+  
+  .clock-in-days {
+    font-size: 1.8rem;
+  }
+  
+  .user-name {
+    font-size: 1.2rem;
+  }
+}
 </style>
