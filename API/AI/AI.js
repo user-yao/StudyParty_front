@@ -1,28 +1,24 @@
 import { request } from '../../request/request.js';
-export const addTask = (data) => {
+
+export const getSkillTree = (data) => {
+    console.log(data.prompt)
     return request({
         url: '/AI/getSkillTree',
         method: 'POST',
-        data:{
-            prompt:data.prompt
-        },
+        data:JSON.stringify(data.prompt),
         headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
+            'Content-Type': 'application/json'
         }
     });
 }
-export const deleteTask = (data) => {
+
+export const getTeachingPlan = (data) => {
     return request({
         url: '/AI/teachingPlan',
         method: 'POST',
-        data:{
-            prompt:data.prompt
-        },
+        data:JSON.stringify(data.prompt),
         headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
+            'Content-Type': 'application/json'
         }
     });
 }
-
-
-

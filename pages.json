@@ -155,6 +155,20 @@
 			}
 		},
 		{
+			"path" : "pages/chatList/groupMemberAnswers",
+			"style" : 
+			{
+				"navigationBarTitleText" : "成员作业"
+			}
+		},
+		{
+			"path" : "pages/chatList/groupMemberAnswerDetail",
+			"style" : 
+			{
+				"navigationBarTitleText" : "作业详情"
+			}
+		},
+		{
 			"path" : "pages/AI/skillTree",
 			"style" : 
 			{

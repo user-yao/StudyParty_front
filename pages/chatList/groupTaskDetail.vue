@@ -35,6 +35,12 @@
 						<div v-show="activeTab === 'question'" class="tab-content">
 							<!-- 任务描述 -->
 							<div class="task-description-section" v-if="taskDetail">
+								<!-- 查看答案按钮 (仅任务发布者、老师、企业用户可见) -->
+								<div class="view-answers-section" v-if="isTaskOwnerOrTeacherOrEnterprise">
+									<u-button type="primary" size="medium" @click="viewMemberAnswers">
+										查看成员作答情况
+									</u-button>
+								</div>
 								<h3 class="section-title">任务描述</h3>
 								<hr class="section-divider" />
 								<div class="description-content">
@@ -42,6 +48,8 @@
 										:showLineNumber="false">
 									</u-markdown>
 								</div>
+								
+								
 							</div>
 						</div>
 
@@ -58,6 +66,15 @@
 									</div>
 								</div>
 								<hr class="section-divider" />
+								
+								<!-- 分数显示 -->
+								<div class="score-section" v-if="taskAnswer.score !== null && taskAnswer.score !== undefined && taskAnswer.score !== -1">
+									<div class="score-display">
+										<span class="score-label">得分：</span>
+										<span class="score-value">{{ taskAnswer.score }}分</span>
+									</div>
+								</div>
+								
 								<div class="submitted-content-display">
 									<u-markdown :content="taskAnswer.context" :previewImg="true" theme="light"
 										:showLineNumber="false">
@@ -204,7 +221,7 @@ export default {
 			taskDetail: null,
 			submissionContent: `# 作业标题`,
 			displayContent: `# 作业标题`,
-			currentUserId: uni.getStorageSync('id') || 3,
+			currentUserId: uni.getStorageSync('id'),
 			currentUserRole: 'member', // member, leader, deputy, teacher, enterprise
 			isSubmitted: false,
 			loading: false,
@@ -257,6 +274,21 @@ export default {
 			if (taskStatus === '未开始' || taskStatus === '已结束') return false;
 
 			return true;
+		},
+		
+		// 判断是否为任务发布者、老师或企业用户
+		isTaskOwnerOrTeacherOrEnterprise() {
+			var userStatus = uni.getStorageSync('user').status;
+			// 需要有任务详情和用户信息
+			if (!this.taskDetail || !userStatus) return false;
+			
+			// 检查是否为任务发布者（通过ID比较）
+			if (this.taskDetail.groupTaskUploaderId === this.currentUserId) return true;
+			
+			// 检查用户身份是否为老师或企业
+			if (userStatus == '2' || userStatus == '3') return true;
+			
+			return false;
 		},
 
 		// 权限提示信息
@@ -607,6 +639,13 @@ export default {
 		// 关闭任务详情模态框
 		closeTaskInfoModal() {
 			this.showTaskInfoModal = false;
+		},
+
+		// 查看成员作答情况
+		viewMemberAnswers() {
+			uni.navigateTo({
+				url: `/pages/chatList/groupMemberAnswers?taskId=${this.taskId}&groupId=${this.groupId}`
+			});
 		},
 
 		// 获取任务状态文本
@@ -1411,6 +1450,20 @@ export default {
 	min-height: 200px;
 }
 
+/* 查看答案按钮区域 */
+.view-answers-section {
+	margin-top: 20px;
+	text-align: center;
+	padding: 20px 0;
+	border-top: 1px solid #e9ecef;
+}
+
+::v-deep .view-answers-section .u-button {
+	width: 80%;
+	height: 40px;
+	font-size: 16px;
+}
+
 /* 模态框样式 */
 .modal-content {
 	width: calc(100vw - 40px);
@@ -1565,5 +1618,32 @@ export default {
 .modal-footer u-button {
 	width: 100px;
 	height: 36px;
+}
+
+/* 分数显示样式 */
+.score-section {
+	margin-bottom: 15px;
+	padding: 10px 15px;
+	background-color: #e8f4ff;
+	border-radius: 8px;
+	border-left: 4px solid #4361ee;
+}
+
+.score-display {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.score-label {
+	font-size: 0.9rem;
+	color: #4361ee;
+	font-weight: 500;
+}
+
+.score-value {
+	font-size: 1.1rem;
+	font-weight: 600;
+	color: #4361ee;
 }
 </style>

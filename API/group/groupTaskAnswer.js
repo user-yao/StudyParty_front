@@ -21,7 +21,10 @@ export const score = (data) => {
         data: {
             groupTaskAnswerId: data.groupTaskAnswerId,
             score: data.score
-        }
+        },
+		header: {
+			'Content-Type': 'application/x-www-form-urlencoded'
+		}
     });
 }
 
@@ -31,7 +34,10 @@ export const getGroupTaskAnswers = (data) => {
         method: 'POST',
         data: {
             groupTaskId: data.groupTaskId
-        }
+        },
+		header: {
+			'Content-Type': 'application/x-www-form-urlencoded'
+		}
     });
 }
 

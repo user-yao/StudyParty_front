@@ -698,11 +698,14 @@ export default {
 			// 根据成员ID判断角色
 			if (member.id === this.groupDetail.leader) return '组长';
 			if (member.id === this.groupDetail.deputy) return '代理组长';
-			
+			if (member.id === this.groupDetail.teacher) return '老师';
+			if (member.id === this.groupDetail.enterprise) return '企业';
 			// 如果有role字段，使用role字段
 			if (member.role) {
 				if (member.role === 'leader') return '组长';
 				if (member.role === 'deputy') return '代理组长';
+				if (member.role === 'teacher') return '老师';
+				if (member.role === 'enterprise') return '企业';
 			}
 			
 			return '成员';

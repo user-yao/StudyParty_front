@@ -12,6 +12,7 @@ import user from './user/user';
 import userPlan from "./user/userPlan";
 import userTask from "./user/userTask";
 import userFriend from "./user/userFriend";
+import AI from "./AI/AI";
 
 const store = createStore({
   modules: {
@@ -19,6 +20,7 @@ const store = createStore({
 	userPlan,
 	userTask,
 	userFriend,
+    AI,
     group,
     article,
     articleComment,

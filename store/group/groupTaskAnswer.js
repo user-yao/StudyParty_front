@@ -15,13 +15,19 @@ const mutations = {
       state.taskAnswers[index].status = status;
     }
   },
+  UPDATE_ANSWER_SCORE(state, { answerId, score }) {
+    const index = state.taskAnswers.findIndex(ans => ans.id === answerId);
+    if (index !== -1) {
+      state.taskAnswers[index].score = score;
+    }
+  },
   ADD_TASK_ANSWER(state, answer) {
     state.taskAnswers.push(answer);
   }
 };
 
 const actions = {
-  async getTaskAnswers({ commit }, data) {
+  async getTaskAnswersByTaskId({ commit }, data) {
     try {
       const res = await getGroupTaskAnswers(data);
       if (res.code === 200) {
@@ -50,7 +56,7 @@ const actions = {
     try {
       const res = await score(data);
       if (res.code === 200) {
-        commit('UPDATE_ANSWER_STATUS', { answerId: data.groupTaskAnswerId, status: data.score });
+        commit('UPDATE_ANSWER_SCORE', { answerId: data.groupTaskAnswerId, score: data.score });
       }
       return res;
     } catch (error) {

@@ -2,30 +2,36 @@
   "hash": "00301d8a",
   "configHash": "d030030d",
   "lockfileHash": "06f5835e",
-  "browserHash": "63591a85",
+  "browserHash": "d73a1be7",
   "optimized": {
     "core-js/stable": {
       "src": "../../../../../node_modules/core-js/stable/index.js",
       "file": "core-js_stable.js",
-      "fileHash": "14672964",
+      "fileHash": "2c77cf6a",
       "needsInterop": true
     },
     "regenerator-runtime/runtime": {
       "src": "../../../../../node_modules/regenerator-runtime/runtime.js",
       "file": "regenerator-runtime_runtime.js",
-      "fileHash": "3e08167d",
+      "fileHash": "5aebdb32",
       "needsInterop": true
     },
     "uview-plus": {
       "src": "../../../../../node_modules/uview-plus/index.js",
       "file": "uview-plus.js",
-      "fileHash": "4faabc40",
+      "fileHash": "afd73b87",
       "needsInterop": false
     },
     "uview-plus/libs/function/test": {
       "src": "../../../../../node_modules/uview-plus/libs/function/test.js",
       "file": "uview-plus_libs_function_test.js",
-      "fileHash": "db7db0b2",
+      "fileHash": "7772f114",
+      "needsInterop": false
+    },
+    "pinyin-pro": {
+      "src": "../../../../../node_modules/pinyin-pro/dist/index.mjs",
+      "file": "pinyin-pro.js",
+      "fileHash": "e91d2d12",
       "needsInterop": false
     }
   },
