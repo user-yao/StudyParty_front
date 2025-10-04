@@ -6,19 +6,11 @@
 				<div class="header-top">
 					<div class="logo">
 						<u-icon name="arrow-left" size="24" color="#ffffff" @click="goBack"></u-icon>
-						<span>小组任务</span>
+						<span>推荐任务</span>
 					</div>
 					<div class="header-actions">
+						<u-icon name="plus" size="24" color="#ffffff" @click="goToAddTask"></u-icon>
 						<u-icon name="search" size="24" color="#ffffff" @click="toggleSearch"></u-icon>
-						<!-- 新增任务按钮 -->
-						<u-icon 
-							v-if="canPublishTask" 
-							name="plus" 
-							size="24" 
-							color="#ffffff" 
-							@click="addNewTask"
-							class="add-task-icon"
-						></u-icon>
 					</div>
 				</div>
 				
@@ -45,160 +37,51 @@
 					<p>正在加载任务...</p>
 				</div>
 
-				<!-- 任务列表分组显示 -->
+				<!-- 任务列表 -->
 				<div v-else>
-					<!-- 进行中任务 -->
-					<div class="task-section" v-if="groupedTasks.active.length > 0">
-						<div class="section-header">
-							<h3 class="section-title">进行中 ({{ groupedTasks.active.length }})</h3>
-						</div>
-						<div class="task-list">
-							<div class="task-card" v-for="task in groupedTasks.active" :key="task.id">
-								<div class="task-header">
-									<div class="task-title">{{ task.groupTask }}</div>
-									<div class="task-status" :class="getStatusClass(task)">
-										{{ getStatusText(task) }}
-									</div>
+					<div class="task-list">
+						<div class="task-card" v-for="task in filteredTasks" :key="task.id">
+							<div class="task-header">
+								<div class="task-reward-badge" v-if="task.starPrestige > 0">+{{ task.starPrestige }}声望</div>
+								<div class="task-title">{{ task.title }}</div>
+							</div>
+							<div class="task-meta">
+								<div class="task-meta-item">
+									<u-icon name="clock" size="16" color="#6c757d"></u-icon>
+									<span :class="getStatusClass(task)">{{ getStatusText(task) }}</span>
 								</div>
-								<div class="task-meta">
-									<div class="task-meta-item">
-										<u-icon name="calendar" size="16" color="#6c757d"></u-icon>
-										<span>开始: {{ formatDate(task.groupTaskStartTime) }}</span>
+								<div class="task-meta-item">
+									<div class="task-user-avatar">
+										<image 
+											v-if="task.head" 
+											:src="fullImageUrl(task.head)" 
+											mode="aspectFill"
+										></image>
+										<div v-else class="avatar-placeholder">
+											{{ task.name ? task.name.substring(0, 1) : 'U' }}
+										</div>
 									</div>
-									<div class="task-meta-item">
-										<u-icon name="clock" size="16" color="#6c757d"></u-icon>
-										<span>截止: {{ formatDate(task.groupTaskLastTime) }}</span>
-									</div>
-								</div>
-								<div class="task-progress">
-									<div class="progress-info">
-										<span>完成进度</span>
-										<span>{{ task.groupTaskFinish }} /
-											{{task.groupTaskUnfinished }}</span>
-									</div>
-									<div class="progress-bar">
-										<div class="progress-fill" :style="{width: calculateProgress(task) + '%'}"></div>
-									</div>
-								</div>
-								<div class="task-footer">
-									<div class="task-author">
-										发布者: {{ task.groupTaskUploader }}
-									</div>
-									<div class="task-actions">
-										<u-button type="primary" size="small" shape="circle" :plain="false" :border="false" @click="viewTaskDetails(task)">
-											<u-icon name="eye" size="16" color="#ffffff"></u-icon> 查看
-										</u-button>
-										<u-button type="error" size="small" shape="circle" :plain="false" :border="false" v-if="canEditTask(task)" @click="deleteTask(task)">
-											<u-icon name="close-circle" size="16" color="#ffffff"></u-icon> 删除
-										</u-button>
-									</div>
+									<span>{{ task.name }}</span>
+									<u-tag :type="getPublisherTagType(task.status)" size="mini" :plain="true" :show="true">
+										{{ getIdentityText(task.status) }}
+									</u-tag>
 								</div>
 							</div>
-						</div>
-					</div>
-					
-					<!-- 未开始任务 -->
-					<div class="task-section" v-if="groupedTasks.pending.length > 0">
-						<div class="section-header">
-							<h3 class="section-title">未开始 ({{ groupedTasks.pending.length }})</h3>
-						</div>
-						<div class="task-list">
-							<div class="task-card" v-for="task in groupedTasks.pending" :key="task.id">
-								<div class="task-header">
-									<div class="task-title">{{ task.groupTask }}</div>
-									<div class="task-status" :class="getStatusClass(task)">
-										{{ getStatusText(task) }}
-									</div>
-								</div>
-								<div class="task-meta">
-									<div class="task-meta-item">
-										<u-icon name="calendar" size="16" color="#6c757d"></u-icon>
-										<span>开始: {{ formatDate(task.groupTaskStartTime) }}</span>
-									</div>
-									<div class="task-meta-item">
-										<u-icon name="clock" size="16" color="#6c757d"></u-icon>
-										<span>截止: {{ formatDate(task.groupTaskLastTime) }}</span>
-									</div>
-								</div>
-								<div class="task-progress">
-									<div class="progress-info">
-										<span>完成进度</span>
-										<span>{{ task.groupTaskFinish }} /
-											{{task.groupTaskUnfinished }}</span>
-									</div>
-									<div class="progress-bar">
-										<div class="progress-fill" :style="{width: calculateProgress(task) + '%'}"></div>
-									</div>
-								</div>
-								<div class="task-footer">
-									<div class="task-author">
-										发布者: {{ task.groupTaskUploader }}
-									</div>
-									<div class="task-actions">
-										<u-button type="primary" size="small" shape="circle" :plain="false" :border="false" @click="viewTaskDetails(task)">
-											<u-icon name="eye" size="16" color="#ffffff"></u-icon> 查看
-										</u-button>
-										<u-button type="error" size="small" shape="circle" :plain="false" :border="false" v-if="canEditTask(task)" @click="deleteTask(task)">
-											<u-icon name="close-circle" size="16" color="#ffffff"></u-icon> 删除
-										</u-button>
-									</div>
-								</div>
+							<div class="task-tags" v-if="task.school">
+								<span class="task-tag">{{ task.school }}</span>
 							</div>
-						</div>
-					</div>
-					
-					<!-- 已结束任务 -->
-					<div class="task-section" v-if="groupedTasks.completed.length > 0">
-						<div class="section-header">
-							<h3 class="section-title">已结束 ({{ groupedTasks.completed.length }})</h3>
-						</div>
-						<div class="task-list">
-							<div class="task-card" v-for="task in groupedTasks.completed" :key="task.id">
-								<div class="task-header">
-									<div class="task-title">{{ task.groupTask }}</div>
-									<div class="task-status" :class="getStatusClass(task)">
-										{{ getStatusText(task) }}
-									</div>
-								</div>
-								<div class="task-meta">
-									<div class="task-meta-item">
-										<u-icon name="calendar" size="16" color="#6c757d"></u-icon>
-										<span>开始: {{ formatDate(task.groupTaskStartTime) }}</span>
-									</div>
-									<div class="task-meta-item">
-										<u-icon name="clock" size="16" color="#6c757d"></u-icon>
-										<span>截止: {{ formatDate(task.groupTaskLastTime) }}</span>
-									</div>
-								</div>
-								<div class="task-progress">
-									<div class="progress-info">
-										<span>完成进度</span>
-										<span>{{ task.groupTaskFinish }} /
-											{{ task.groupTaskUnfinished }}</span>
-									</div>
-									<div class="progress-bar">
-										<div class="progress-fill" :style="{width: calculateProgress(task) + '%'}"></div>
-									</div>
-								</div>
-								<div class="task-footer">
-									<div class="task-author">
-										发布者: {{ task.groupTaskUploader }}
-									</div>
-									<div class="task-actions">
-										<u-button type="primary" size="small" shape="circle" :plain="false" :border="false" @click="viewTaskDetails(task)">
-											<u-icon name="eye" size="16" color="#ffffff"></u-icon> 查看
-										</u-button>
-										<u-button type="error" size="small" shape="circle" :plain="false" :border="false" v-if="canEditTask(task)" @click="deleteTask(task)">
-											<u-icon name="close-circle" size="16" color="#ffffff"></u-icon> 删除
-										</u-button>
-									</div>
+							<div class="task-footer">
+								<div class="task-actions">
+									<u-button type="primary" size="small" shape="circle" :plain="false" :border="false" @click="viewTaskDetails(task)">
+										<u-icon name="eye" size="16" color="#ffffff"></u-icon> 查看详情
+									</u-button>
 								</div>
 							</div>
 						</div>
 					</div>
 					
 					<!-- 空状态 -->
-					<div class="empty-state" v-if="groupedTasks.active.length === 0 && groupedTasks.pending.length === 0 && groupedTasks.completed.length === 0">
+					<div class="empty-state" v-if="filteredTasks.length === 0">
 						<u-icon name="file-text" size="48" color="#e9ecef"></u-icon>
 						<h3>暂无任务</h3>
 						<p v-if="searchKeyword">没有找到匹配的任务</p>
@@ -215,12 +98,12 @@
 		mapState,
 		mapActions
 	} from 'vuex';
-
+	import { imageUrl } from '../../config/config.js';
 	export default {
 		data() {
 			return {
 				searchKeyword: '',
-				groupId: null, // 从参数传入的群组ID
+				tasks: [], // 存储从API获取的任务数据
 				loading: false, // 加载状态
 				searchTimer: null, // 搜索防抖定时器
 				showSearch: false // 是否显示搜索框
@@ -228,118 +111,52 @@
 		},
 		computed: {
 			// 正确使用命名空间
-			...mapState('groupTask', ['groupTasks']),
 			...mapState('user', ['userInfo']),
-			...mapState('groupUser', ['groupUsers']),
-			...mapState('group', ['groupMap']),
-
+			
 			// 获取当前用户ID
 			currentUserId() {
 				return this.userInfo && this.userInfo.id ? this.userInfo.id : null;
 			},
-
-			// 判断用户是否有权限发布任务
-			canPublishTask() {
-				// 如果还没有群组ID，先返回false
-				if (!this.groupId) {
-					return false;
+			
+			// 根据搜索关键词过滤任务
+			filteredTasks() {
+				if (!this.searchKeyword) {
+					return this.tasks;
 				}
 				
-				// 如果还没有群组用户信息，先返回false
-				if (!this.groupUsers || !Array.isArray(this.groupUsers) || !this.currentUserId) {
-					return false;
-				}
-				
-				// 在群组用户中查找当前用户
-				const currentUser = this.groupUsers.find(user => user.id === this.currentUserId);
-				
-				// 如果没找到当前用户信息，默认没有权限
-				if (!currentUser) {
-					return false;
-				}
-				
-				// 获取当前用户在群组中的角色
-				if(currentUser.status != 1){
-					return true;
-				}
-				
-				// 确保groupMap存在且能获取到群组信息
-				const group = this.groupMap && this.groupMap.get ? this.groupMap.get(this.groupId) : null;
-				if(group && (group.leader == currentUser.id || group.deputy == currentUser.id)){
-					return true;
-				}
-				return false;
-			},
-
-			// 按状态分组的任务列表
-			groupedTasks() {
-				// 确保groupTasks存在且为数组
-				const tasks = this.groupTasks && Array.isArray(this.groupTasks) ? this.groupTasks : [];
-				
-				// 根据搜索关键词过滤
-				let filtered = tasks;
-				if (this.searchKeyword) {
-					const keyword = this.searchKeyword.toLowerCase();
-					filtered = filtered.filter(task =>
-						task.groupTask && task.groupTask.toLowerCase().includes(keyword)
-					);
-				}
-				
-				// 按状态分组
-				const active = [];   // 进行中
-				const pending = [];  // 未开始
-				const completed = []; // 已结束
-				
-				filtered.forEach(task => {
-					const status = this.getTaskStatus(task);
-					switch (status) {
-						case '进行中':
-							active.push(task);
-							break;
-						case '未开始':
-							pending.push(task);
-							break;
-						case '已结束':
-							completed.push(task);
-							break;
-						default:
-							// 默认放入进行中
-							active.push(task);
-					}
-				});
-				
-				// 按截止时间排序
-				const sortByEndTime = (a, b) => {
-					const timeA = new Date(a.groupTaskLastTime);
-					const timeB = new Date(b.groupTaskLastTime);
-					
-					// 确保日期有效
-					if (isNaN(timeA.getTime())) return 1;
-					if (isNaN(timeB.getTime())) return -1;
-					
-					return timeA - timeB;
-				};
-				
-				active.sort(sortByEndTime);
-				pending.sort(sortByEndTime);
-				completed.sort(sortByEndTime);
-				
-				return {
-					active,
-					pending,
-					completed
-				};
+				const keyword = this.searchKeyword.toLowerCase();
+				return this.tasks.filter(task =>
+					task.title && task.title.toLowerCase().includes(keyword)
+				);
 			}
 		},
 		methods: {
 			// 正确使用命名空间
-			...mapActions('groupTask', ['selectMyGroupTask']),
-			...mapActions('groupUser', ['fetchGroupUsers']), // 添加获取群组用户信息的action
+			...mapActions('task', ['recommend']), // 使用task模块的recommend方法
+			
+			// 完整图片URL
+			fullImageUrl(path) {
+				// 确保path是字符串类型
+				if (!path || typeof path !== 'string') return '';
+				// 如果已经是完整URL，直接返回
+				if (path.startsWith('http')) {
+					return path;
+				}
+				// 拼接基础URL
+				return imageUrl + path;
+			},
 			
 			// 返回上一页
 			goBack() {
 				uni.navigateBack({
 					delta: 1
+				});
+			},
+			
+			// 跳转到添加任务页面
+			goToAddTask() {
+				uni.navigateTo({
+					url: '/pages/chatList/addTask'
 				});
 			},
 
@@ -374,162 +191,71 @@
 				console.log("查看任务详情:", task);
 				// 跳转到任务详情页面
 				uni.navigateTo({
-					url: '/pages/chatList/groupTaskDetail',
-					success: (res) => {
-						res.eventChannel.emit("taskData", {
-							taskId: task.id,
-							groupId: this.groupId,
-							taskDetail: task
-						});
-					}
+					url: `/pages/chatList/taskDetail?id=${task.id}`
 				});
 			},
 
-			// 添加新任务
-			addNewTask() {
-				console.log("添加新任务");
-				// 跳转到添加任务页面
-				uni.navigateTo({
-					url: '/pages/chatList/addGroupTask',
-					success: (res) => {
-						res.eventChannel.emit("groupData", {
-							groupId: this.groupId
-						});
-					}
-				});
-			},
-
-			// 删除任务
-			deleteTask(task) {
-				uni.showModal({
-					title: '确认删除',
-					content: `确定要删除任务"${task.groupTask}"吗？此操作不可恢复！`,
-					success: (res) => {
-						if (res.confirm) {
-							// 实际应用中应该调用API删除任务
-							console.log("任务已删除:", task.groupTask);
-							uni.showToast({
-								title: '任务已删除',
-								icon: 'success'
-							});
-						}
-					}
-				});
-			},
-
-			// 检查用户是否有权限编辑任务
-			canEditTask(task) {
-				// 发布者可以删除自己的任务
-				if (task.groupTaskUploaderId === this.currentUserId) {
-					return true;
-				}
-
-				// 组长、代理组长、老师和企业可以删除所有任务
-				if (!this.groupUsers || !Array.isArray(this.groupUsers) || !this.currentUserId) {
-					return false;
-				}
-				
-				// 在群组用户中查找当前用户
-				const currentUser = this.groupUsers.find(user => user.id === this.currentUserId);
-				
-				// 如果没找到当前用户信息，默认没有权限
-				if (!currentUser) {
-					return false;
-				}
-				
-				// 获取当前用户在群组中的角色
-				const userRole = currentUser.role || 'member';
-				return ['leader', 'deputy', 'teacher', 'enterprise'].includes(userRole);
-			},
-
-			// 获取任务状态文本
+			// 获取状态文本
 			getStatusText(task) {
-				return this.getTaskStatus(task);
+				return task.isOver === 1 ? '已解决' : '未解决';
 			},
-
-			// 获取任务状态
-			getTaskStatus(task) {
-				// 添加容错处理
-				if (!task || !task.groupTaskStartTime || !task.groupTaskLastTime) {
-					return "未知";
-				}
-				
-				const now = new Date();
-				const startTime = new Date(task.groupTaskStartTime);
-				const endTime = new Date(task.groupTaskLastTime);
-
-				// 检查日期是否有效
-				if (isNaN(startTime.getTime()) || isNaN(endTime.getTime())) {
-					return "未知";
-				}
-
-				if (now < startTime) {
-					return "未开始";
-				} else if (now > endTime) {
-					return "已结束";
-				} else {
-					return "进行中";
-				}
-			},
-
-			// 获取任务状态类名
+			
+			// 获取状态类名
 			getStatusClass(task) {
-				const status = this.getTaskStatus(task);
-				if (status === "已结束") {
-					return "status-completed";
-				} else if (status === "进行中") {
-					return "status-in-progress";
-				} else if (status === "未开始") {
-					return "status-not-started";
-				} else {
-					return "status-expired"; // 未知状态
+				return task.isOver === 1 ? 'status-completed' : 'status-pending';
+			},
+			
+			// 获取身份标识图标
+			getIdentityIcon(status) {
+				switch(status) {
+					case 1: return 'account'; // 学生
+					case 2: return 'teacher'; // 老师
+					case 3: return 'building'; // 企业
+					default: return 'account';
 				}
 			},
 
-			// 计算任务进度百分比
-			calculateProgress(task) {
-				// 添加容错处理
-				if (!task) return 0;
-				
-				const finish = task.groupTaskFinish || 0;
-				const unfinished = task.groupTaskUnfinished || 0;
-				
-				if (unfinished === 0) return 0;
-				return (finish / unfinished) * 100;
+			// 获取发布者标签类型
+			getPublisherTagType(status) {
+				switch(status) {
+					case 1: return 'info'; // 学生 - 灰色
+					case 2: return 'primary'; // 老师 - 蓝色
+					case 3: return 'success'; // 企业 - 绿色
+					default: return 'info';
+				}
 			},
 
-			// 格式化日期显示
-			formatDate(dateStr) {
-				if (!dateStr) return '未知日期';
-				// 处理ISO格式的日期字符串
-				const date = new Date(dateStr);
-				
-				// 检查日期是否有效
-				if (isNaN(date.getTime())) return '无效日期';
-				
-				return date.getFullYear() + '-' +
-					String(date.getMonth() + 1).padStart(2, '0') + '-' +
-					String(date.getDate()).padStart(2, '0');
+			// 获取身份文本
+			getIdentityText(status) {
+				switch(status) {
+					case 1: return '学生';
+					case 2: return '老师';
+					case 3: return '企业';
+					default: return '用户';
+				}
+			},
+
+			// 获取发布者图标
+			getPublisherIcon(status) {
+				switch(status) {
+					case 2: return 'man'; // 老师
+					case 3: return 'home'; // 企业
+					case 1: return 'man'; // 学生
+					default: return 'man';
+				}
 			},
 
 			// 加载任务数据
 			async loadTasks() {
-				if (!this.groupId) {
-					console.error('缺少群组ID');
-					return;
-				}
-
 				try {
 					this.loading = true;
-					const res = await this.selectMyGroupTask({
-						groupId: this.groupId,
+					const res = await this.recommend({
 						currentPage: 1
 					});
 					
-					// 同时获取群组用户信息
-					await this.fetchGroupUsers({ groupId: this.groupId });
-					
-					if (res.code !== 200) {
+					if (res.code === 200 && res.data && Array.isArray(res.data.records)) {
+						this.tasks = res.data.records;
+					} else {
 						throw new Error(res.msg || '获取任务列表失败');
 					}
 				} catch (error) {
@@ -544,24 +270,13 @@
 				}
 			}
 		},
-		// 页面显示时重新加载数据
+		// 页面显示时加载数据
 		onShow() {
-			// 如果groupId不存在，尝试重新获取参数
-			if (!this.groupId) {
-				const eventChannel = this.getOpenerEventChannel();
-				if (eventChannel) {
-					eventChannel.once('chatData', (data) => {
-						if (data && data.groupId) {
-							this.groupId = data.groupId;
-							this.loadTasks();
-						}
-					});
-				}
-			} else {
-				// 如果已经有groupId，直接加载任务
-				this.loadTasks();
-			}
+			this.loadTasks();
 		},
+		mounted() {
+			this.loadTasks();
+		}
 	}
 </script>
 
@@ -642,18 +357,6 @@
 		cursor: pointer;
 	}
 
-	/* 新增任务图标样式 */
-	.add-task-icon {
-		background: rgba(255, 255, 255, 0.2);
-		border-radius: 50%;
-		padding: 5px;
-		transition: background 0.3s;
-	}
-
-	.add-task-icon:hover {
-		background: rgba(255, 255, 255, 0.3);
-	}
-
 	/* 搜索框样式 */
 	.search-container {
 		display: flex;
@@ -703,23 +406,6 @@
 		padding-bottom: 70px;
 	}
 
-	/* 任务分组区域 */
-	.task-section {
-		margin-bottom: 30px;
-	}
-
-	.section-header {
-		margin-bottom: 15px;
-	}
-
-	.section-title {
-		font-size: 1.2rem;
-		font-weight: 600;
-		color: var(--dark);
-		padding-bottom: 8px;
-		border-bottom: 2px solid var(--light-gray);
-	}
-
 	/* 加载状态 */
 	.loading-container {
 		text-align: center;
@@ -746,13 +432,19 @@
 		}
 	}
 
+	/* 任务列表 */
+	.task-list {
+		display: flex;
+		flex-direction: column;
+		gap: 15px;
+	}
+
 	/* 任务卡片样式 */
 	.task-card {
 		background: white;
 		border-radius: 16px;
 		padding: 15px;
 		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-		margin-bottom: 15px;
 		position: relative;
 		transition: transform 0.2s, box-shadow 0.2s;
 	}
@@ -763,47 +455,26 @@
 	}
 
 	.task-header {
-		display: flex;
-		justify-content: space-between;
-		align-items: flex-start;
 		margin-bottom: 12px;
+	}
+
+	.task-reward-badge {
+		background: #4361ee;
+		color: white;
+		padding: 4px 10px;
+		border-radius: 15px;
+		font-size: 0.8rem;
+		font-weight: 500;
+		display: inline-block;
+		margin-bottom: 10px;
 	}
 
 	.task-title {
 		font-weight: 600;
 		font-size: 1.1rem;
-		margin-right: 15px;
-		flex: 1;
 		line-height: 1.4;
 		color: var(--dark);
-	}
-
-	.task-status {
-		padding: 4px 8px;
-		border-radius: 12px;
-		font-size: 0.75rem;
-		font-weight: 500;
-		white-space: nowrap;
-	}
-
-	.status-not-started {
-		background: #ffe9c9;
-		color: #e67700;
-	}
-
-	.status-in-progress {
-		background: #d4edda;
-		color: #155724;
-	}
-
-	.status-completed {
-		background: #d1ecf1;
-		color: #0c5460;
-	}
-
-	.status-expired {
-		background: #f8d7da;
-		color: #721c24;
+		margin-bottom: 10px;
 	}
 
 	.task-meta {
@@ -821,52 +492,67 @@
 		gap: 5px;
 	}
 
-	.task-progress {
+	.task-user-avatar {
+		width: 24px;
+		height: 24px;
+		border-radius: 50%;
+		margin-right: 8px;
+		overflow: hidden;
+		background: #eee;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		flex-shrink: 0;
+	}
+
+	.task-user-avatar image {
+		width: 100%;
+		height: 100%;
+	}
+
+	.avatar-placeholder {
+		width: 100%;
+		height: 100%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		color: #666;
+		font-weight: bold;
+		font-size: 12px;
+	}
+
+	.task-tags {
 		margin-bottom: 15px;
 	}
 
-	.progress-info {
-		display: flex;
-		justify-content: space-between;
-		margin-bottom: 5px;
-		font-size: 0.85rem;
+	.task-tag {
+		background: #eef7ff;
+		color: #4361ee;
+		padding: 4px 10px;
+		border-radius: 12px;
+		font-size: 0.8rem;
+		display: inline-block;
 	}
-
-	.progress-bar {
-		height: 8px;
-		background: var(--light-gray);
-		border-radius: 4px;
-		overflow: hidden;
+	
+	/* 任务状态样式 */
+	.status-completed {
+		color: #28a745;
+		font-weight: 600;
 	}
-
-	.progress-fill {
-		height: 100%;
-		background: linear-gradient(90deg, var(--accent), var(--success));
-		border-radius: 4px;
-		transition: width 0.3s ease;
+	
+	.status-pending {
+		color: #dc3545;
+		font-weight: 600;
 	}
-
+	
 	.task-footer {
 		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		flex-wrap: wrap;
-		gap: 10px;
-	}
-
-	.task-author {
-		font-size: 0.85rem;
-		color: var(--gray);
-		flex: 1;
-		min-width: 120px;
+		justify-content: flex-end;
 	}
 
 	.task-actions {
 		display: flex;
 		gap: 10px;
-		flex: 1;
-		justify-content: space-between;
-		min-width: 120px;
 	}
 
 	/* 覆盖 uView-plus 按钮默认样式 */
@@ -879,7 +565,7 @@
 		outline: none !important;
 		box-shadow: none !important;
 		background-image: none !important;
-		border-radius: 20px; /* 保持圆角 */
+		border-radius: 20px;
 	}
 	
 	/* 特别处理按钮的hover状态 */
@@ -895,10 +581,6 @@
 	
 	/* 响应式按钮调整 */
 	@media (max-width: 480px) {
-		.task-actions {
-			min-width: 100px;
-		}
-		
 		.task-actions .u-button {
 			font-size: 0.8rem;
 			padding: 5px 10px;
@@ -936,58 +618,9 @@
 			flex-direction: column;
 			gap: 5px;
 		}
-
-		.task-footer {
-			flex-direction: column;
-			align-items: flex-start;
-		}
-
-		.task-actions {
-			align-self: flex-end;
-		}
 		
 		.section-title {
 			font-size: 1.1rem;
 		}
 	}
 </style>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

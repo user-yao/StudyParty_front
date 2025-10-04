@@ -105,6 +105,13 @@
 			}
 		},
 		{
+			"path" : "pages/chatList/taskDetail",
+			"style" : 
+			{
+				"navigationBarTitleText" : "任务详情"
+			}
+		},
+		{
 			"path" : "pages/chatList/searchGroup",
 			"style" : 
 			{
@@ -244,6 +251,22 @@
 			"style" : 
 			{
 				"navigationBarTitleText" : "添加文章",
+				"softinputMode": "adjustResize"
+			}
+		},
+		{
+			"path" : "pages/chatList/addTask",
+			"style" : 
+			{
+				"navigationBarTitleText" : "添加任务",
+				"softinputMode": "adjustResize"
+			}
+		},
+		{
+			"path" : "pages/chatList/addAnswer",
+			"style" : 
+			{
+				"navigationBarTitleText" : "添加回答",
 				"softinputMode": "adjustResize"
 			}
 		}

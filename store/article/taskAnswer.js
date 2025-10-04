@@ -7,8 +7,30 @@ const state = {
 };
 
 const mutations = {
-  SET_TASK_ANSWERS(state, answers) {
-    state.taskAnswers = answers;
+  SET_TASK_ANSWERS(state, data) {
+    console.log('SET_TASK_ANSWERS data:', data);
+    console.log('SET_TASK_ANSWERS data type:', typeof data);
+    console.log('Array.isArray(data):', Array.isArray(data));
+    
+    // 处理不同的数据结构
+    let answersData = [];
+    if (data) {
+      // 如果data是一个包含records字段的对象（常见分页结构）
+      if (data.records && Array.isArray(data.records)) {
+        answersData = data.records;
+      }
+      // 如果data直接就是数组
+      else if (Array.isArray(data)) {
+        answersData = data;
+      }
+      // 其他情况
+      else {
+        console.warn('SET_TASK_ANSWERS received unexpected data format:', data);
+        answersData = [];
+      }
+    }
+    
+    state.taskAnswers = answersData;
   },
   ADD_TASK_ANSWER(state, answer) {
     state.taskAnswers.push(answer);
@@ -35,9 +57,9 @@ const actions = {
       throw error;
     }
   },
-  async addTaskAnswer({ commit }, { taskId, content }) {
+  async addTaskAnswer({ commit }, taskAnswer) {
     try {
-      const res = await addTaskAnswer(taskId, content);
+      const res = await addTaskAnswer(taskAnswer);
       commit('ADD_TASK_ANSWER', res.data);
       return res;
     } catch (error) {
@@ -45,9 +67,9 @@ const actions = {
       throw error;
     }
   },
-  async trueTaskAnswer({ commit }, { answerId, status }) {
+  async trueTaskAnswer({ commit }, data) {
     try {
-      const res = await trueTaskAnswer(answerId, status);
+      const res = await trueTaskAnswer(data);
       commit('UPDATE_TASK_ANSWER', res.data);
       return res;
     } catch (error) {
@@ -68,6 +90,7 @@ const actions = {
   async TaskAnswerList({ commit }, data) {
     try {
       const res = await TaskAnswerList(data);
+      console.log('TaskAnswerList API response:', res);
       commit('SET_TASK_ANSWERS', res.data);
       return res;
     } catch (error) {

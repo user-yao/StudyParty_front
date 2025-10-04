@@ -1,7 +1,8 @@
-import { searchTask, addTask, deleteTask } from '../../API/article/task.js';
+import { searchTask, addTask, deleteTask, recommend, getTaskById } from '../../API/article/task.js';
 
 const state = {
-  tasks: []
+  tasks: [],
+  currentTask: null // 添加当前任务状态
 };
 
 const mutations = {
@@ -19,6 +20,9 @@ const mutations = {
   },
   REMOVE_TASK(state, taskId) {
     state.tasks = state.tasks.filter(t => t.id !== taskId);
+  },
+  SET_CURRENT_TASK(state, task) {
+    state.currentTask = task;
   }
 };
 
@@ -33,9 +37,9 @@ const actions = {
       throw error;
     }
   },
-  async addTask({ commit }, { articleId, taskInfo }) {
+  async addTask({ commit }, taskInfo) {
     try {
-      const res = await addTask(articleId, taskInfo);
+      const res = await addTask(taskInfo);
       commit('ADD_TASK', res.data);
       return res;
     } catch (error) {
@@ -50,6 +54,29 @@ const actions = {
       return res;
     } catch (error) {
       console.error('删除任务失败:', error);
+      throw error;
+    }
+  },
+  async recommend({ commit }, taskId) {
+    try {
+      const res = await recommend(taskId);
+      return res;
+    } catch (error) {
+      throw error;
+    }
+  },
+  // 根据任务ID获取任务详情
+  async getTaskById({ commit }, taskId) {
+    try {
+      const res = await getTaskById(taskId);
+      if (res && res.code === 200) {
+        commit('SET_CURRENT_TASK', res.data);
+        return res;
+      } else {
+        throw new Error(res.msg || '获取任务详情失败');
+      }
+    } catch (error) {
+      console.error('获取任务详情失败:', error);
       throw error;
     }
   }

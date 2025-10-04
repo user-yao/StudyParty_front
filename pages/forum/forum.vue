@@ -38,26 +38,43 @@
         <scroll-view scroll-x class="task-scroll">
           <view class="task-list-horizontal">
             <view 
-              v-for="task in tasks.slice(0, 5)" 
+              v-for="task in tasks" 
               :key="task.id"
               class="task-card-horizontal"
               @click="viewTaskDetail(task.id)"
             >
-              <view class="task-reward-badge">+{{ task.reward }}积分</view>
+              <view class="task-reward-badge" v-if="task.starPrestige > 0">+{{ task.starPrestige }}声望</view>
               <view class="task-title">{{ task.title }}</view>
               <view class="task-meta">
                 <view class="meta-item">
                   <u-icon name="clock" size="12" color="#999"></u-icon>
-                  <text>剩余{{ task.timeLeft }}</text>
+                  <text :class="getStatusClass(task)">{{ task.isOver === 1 ? '已解决' : '未解决' }}</text>
                 </view>
                 <view class="meta-item">
-                  <u-icon :name="task.publisherType === 'teacher' ? 'man' : 'home'" size="12" color="#999"></u-icon>
-                  <text>{{ task.publisher }}</text>
+                  <view class="task-user-avatar">
+                    <image 
+                      v-if="task.head" 
+                      :src="fullImageUrl(task.head)" 
+                      mode="aspectFill"
+                    ></image>
+                    <view v-else class="avatar-placeholder">
+                      {{ task.name ? task.name.substring(0, 1) : 'U' }}
+                    </view>
+                  </view>
+                  <text>{{ task.name }}</text>
+                  <u-tag 
+                    :type="getPublisherTagType(task.status)" 
+                    size="mini" 
+                    :plain="true" 
+                    :show="true"
+                  >
+                    {{ task.identity }}
+                  </u-tag>
                 </view>
               </view>
               <view class="task-tags">
                 <view 
-                  v-for="(tag, index) in task.tags.slice(0, 2)" 
+                  v-for="(tag, index) in task.tags" 
                   :key="index"
                   class="task-tag"
                 >
@@ -65,7 +82,7 @@
                 </view>
               </view>
               <view class="task-action">
-                <button class="join-btn">立即参与</button>
+                <button class="join-btn small">查看详情</button>
               </view>
             </view>
           </view>
@@ -190,86 +207,8 @@ export default {
     return {
       loadingMore: false,
       noMoreData: false, // 添加无更多数据标志
-      // 全部使用假数据
-      tasks: [
-        {
-          id: 1,
-          title: 'React组件开发挑战',
-          reward: 120,
-          timeLeft: '2天',
-          publisher: '李老师',
-          publisherType: 'teacher',
-          tags: ['前端开发', 'React', '组件化'],
-          participants: [
-            { name: '张同学' },
-            { name: '王同学' },
-            { name: '李同学' },
-            { name: '赵同学' },
-            { name: '孙同学' }
-          ]
-        },
-        {
-          id: 2,
-          title: '数据结构算法题解',
-          reward: 80,
-          timeLeft: '3天',
-          publisher: '字节跳动',
-          publisherType: 'company',
-          tags: ['算法', '数据结构', '面试题'],
-          participants: [
-            { name: '刘同学' },
-            { name: '陈同学' },
-            { name: '杨同学' },
-            { name: '黄同学' }
-          ]
-        },
-        // 新增假数据
-        {
-          id: 3,
-          title: 'Vue 3项目实战',
-          reward: 150,
-          timeLeft: '5天',
-          publisher: '王教授',
-          publisherType: 'teacher',
-          tags: ['Vue', '前端框架', '项目实战'],
-          participants: [
-            { name: '陈同学' },
-            { name: '林同学' },
-            { name: '郑同学' }
-          ]
-        },
-        {
-          id: 4,
-          title: '机器学习入门',
-          reward: 200,
-          timeLeft: '7天',
-          publisher: '阿里云',
-          publisherType: 'company',
-          tags: ['机器学习', 'Python', 'AI'],
-          participants: [
-            { name: '周同学' },
-            { name: '吴同学' },
-            { name: '徐同学' },
-            { name: '孙同学' },
-            { name: '马同学' }
-          ]
-        },
-        {
-          id: 5,
-          title: '移动端UI设计',
-          reward: 90,
-          timeLeft: '4天',
-          publisher: '设计学院',
-          publisherType: 'school',
-          tags: ['UI设计', '移动端', '用户体验'],
-          participants: [
-            { name: '何同学' },
-            { name: '邓同学' },
-            { name: '冯同学' },
-            { name: '韩同学' }
-          ]
-        }
-      ]
+      // 移除假数据，使用从API获取的数据
+      tasks: []
     }
   },
   computed: {
@@ -294,6 +233,45 @@ export default {
   },
   methods: {
     ...mapActions('article', ['recommend', 'niceArticle', 'collectArticle']),
+    ...mapActions('task', { recommendTask: 'recommend' }), // 正确映射task模块的recommend方法
+    
+    // 完整图片URL
+    fullImageUrl(path) {
+      // 确保path是字符串类型
+      if (!path || typeof path !== 'string') return '';
+      // 如果已经是完整URL，直接返回
+      if (path.startsWith('http')) {
+        return path;
+      }
+      // 拼接基础URL
+      return imageUrl + path;
+    },
+    
+    // 获取身份标识图标
+    getIdentityIcon(status) {
+      switch(status) {
+        case 1: return 'account'; // 学生
+        case 2: return 'teacher'; // 老师
+        case 3: return 'building'; // 企业
+        default: return 'account';
+      }
+    },
+    
+    // 获取发布者标签类型
+    getPublisherTagType(status) {
+      switch(status) {
+        case 1: return 'info'; // 学生 - 灰色
+        case 2: return 'primary'; // 老师 - 蓝色
+        case 3: return 'success'; // 企业 - 绿色
+        default: return 'info';
+      }
+    },
+    
+    // 获取状态类名
+    getStatusClass(task) {
+      return task.isOver === 1 ? 'status-completed' : 'status-pending';
+    },
+    
     // 获取身份文本
     getIdentityText(status) {
       switch(status) {
@@ -301,6 +279,24 @@ export default {
         case 2: return '老师';
         case 3: return '企业';
         default: return '用户';
+      }
+    },
+    // 获取发布者类型文本
+    getPublisherType(status) {
+      switch(status) {
+        case 1: return 'student';
+        case 2: return 'teacher';
+        case 3: return 'company';
+        default: return 'user';
+      }
+    },
+    // 获取发布者图标
+    getPublisherIcon(status) {
+      switch(status) {
+        case 2: return 'man'; // 老师
+        case 3: return 'home'; // 企业
+        case 1: return 'man'; // 学生
+        default: return 'man';
       }
     },
     // 获取推荐文章
@@ -312,6 +308,34 @@ export default {
         console.error('获取推荐文章失败:', error);
         uni.showToast({
           title: '获取推荐文章失败',
+          icon: 'none'
+        });
+      }
+    },
+    // 获取推荐任务
+    async getRecommendTasks() {
+      try {
+        const res = await this.recommendTask({ currentPage: 1 });
+        if (res && res.code === 200 && res.data && Array.isArray(res.data.records)) {
+          this.tasks = res.data.records.map(task => {
+            // 判断是否为当前用户发布的任务
+            const isCurrentUser = task.uploader === uni.getStorageSync('user').id;
+            
+            return {
+              ...task,
+              head: task.head ? imageUrl + task.head : null,
+              // 根据是否为当前用户确定身份标识
+              identity: isCurrentUser ? '我' : this.getIdentityText(task.status),
+              isAuthority: task.starPrestige > 100,
+              // 使用学校作为标签
+              tags: task.school ? [task.school] : []
+            };
+          });
+        }
+      } catch (error) {
+        console.error('获取推荐任务失败:', error);
+        uni.showToast({
+          title: '获取推荐任务失败',
           icon: 'none'
         });
       }
@@ -333,10 +357,11 @@ export default {
         url: '/pages/chatList/groupTaskList'
       });
     },
+    // 查看任务详情
     viewTaskDetail(taskId) {
-      uni.showToast({
-        title: `查看任务 ${taskId}`,
-        icon: 'none'
+      // 跳转到任务详情页面
+      uni.navigateTo({
+        url: `/pages/chatList/taskDetail?id=${taskId}`
       });
     },
     viewArticleDetail(articleId) {
@@ -458,8 +483,9 @@ export default {
     }
   },
   async mounted() {
-    // 页面加载时获取推荐文章
+    // 页面加载时获取推荐文章和推荐任务
     await this.getRecommendArticles();
+    await this.getRecommendTasks(); // 调用获取推荐任务的方法
   }
 }
 </script>
@@ -606,7 +632,7 @@ export default {
 }
 
 .task-reward-badge {
-  background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+  background: #4361ee;
   color: white;
   padding: 4px 10px;
   border-radius: 15px;
@@ -676,6 +702,11 @@ export default {
   width: 100%;
 }
 
+.join-btn.small {
+  padding: 4px 10px;
+  font-size: 0.8rem;
+}
+
 /* 推荐文章卡片 */
 .article-card {
   background: #fafafa;
@@ -702,8 +733,8 @@ export default {
 }
 
 .user-avatar {
-  width: 36px;
-  height: 36px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   margin-right: 8px;
   overflow: hidden;
@@ -810,6 +841,17 @@ export default {
   cursor: pointer;
 }
 
+/* 任务状态样式 */
+.status-completed {
+  color: #28a745;
+  font-weight: 600;
+}
+
+.status-pending {
+  color: #dc3545;
+  font-weight: 600;
+}
+
 /* 加载更多 */
 .load-more {
   text-align: center;
@@ -830,5 +872,34 @@ export default {
   font-size: 2rem;
   margin-bottom: 10px;
   display: block;
+}
+
+.task-user-avatar {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  margin-right: 5px;
+  overflow: hidden;
+  background: #eee;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.task-user-avatar image {
+  width: 100%;
+  height: 100%;
+}
+
+.avatar-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #666;
+  font-weight: bold;
+  font-size: 12px;
 }
 </style>
