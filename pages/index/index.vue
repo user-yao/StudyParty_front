@@ -83,7 +83,7 @@
           </div>
           <div class="action-name">个人中心</div>
         </div>
-        <div class="action-item" @click="goToPage('/pages/chatList/groupTaskList')">
+        <div class="action-item" @click="goToPage('/pages/chatList/taskList')">
           <div class="action-icon">
             <u-icon name="file-text" size="24" color="#ffffff"></u-icon>
           </div>

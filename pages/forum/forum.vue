@@ -232,8 +232,8 @@ export default {
     }
   },
   methods: {
-    ...mapActions('article', ['recommend', 'niceArticle', 'collectArticle']),
-    ...mapActions('task', { recommendTask: 'recommend' }), // 正确映射task模块的recommend方法
+    ...mapActions('article', ['recommend', 'niceArticle', 'collectArticle', 'clearRecommendArticles']),
+    ...mapActions('task', { recommendTask: 'recommend', clearRecommendTasks: 'clearRecommendTasks' }), // 正确映射task模块的recommend方法
     
     // 完整图片URL
     fullImageUrl(path) {
@@ -354,7 +354,7 @@ export default {
     viewAllTasks() {
       // 跳转到任务列表页面
       uni.navigateTo({
-        url: '/pages/chatList/groupTaskList'
+        url: '/pages/chatList/taskList'
       });
     },
     // 查看任务详情
@@ -486,6 +486,14 @@ export default {
     // 页面加载时获取推荐文章和推荐任务
     await this.getRecommendArticles();
     await this.getRecommendTasks(); // 调用获取推荐任务的方法
+  },
+  // 页面显示时检查数据，确保退出登录后重新登录不会重复添加数据
+  onShow() {
+    // 如果推荐文章为空，重新获取数据
+    if (this.recommendArticles.length === 0) {
+      this.getRecommendArticles();
+      this.getRecommendTasks();
+    }
   }
 }
 </script>

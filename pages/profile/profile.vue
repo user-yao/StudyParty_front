@@ -8,7 +8,7 @@
           <span>个人中心</span>
         </div>
         <div class="header-actions">
-          <u-icon name="setting" size="20" color="#ffffff" @click="toSettings"></u-icon>
+          <!-- 移除设置按钮 -->
         </div>
       </div>
     </header>
@@ -116,17 +116,30 @@
       </div>
     </div>
 
-    <!-- 其他信息占位 -->
-    <div class="placeholder-section">
-      <div class="section-title">
-        <h3>更多信息</h3>
+    <!-- 系统功能菜单 -->
+    <div class="system-menu">
+      <div class="menu-item" @click="toChangePassword">
+        <div class="menu-content">
+          <u-icon name="lock" size="18" color="#4361ee" class="menu-icon"></u-icon>
+          <span class="menu-text">修改密码</span>
+        </div>
+        <u-icon name="arrow-right" size="14" color="#999"></u-icon>
       </div>
-      <div class="placeholder-content">
-        <u-empty 
-          mode="list" 
-          text="更多功能正在开发中" 
-          icon="http://cdn.uviewui.com/uview/empty/data.png">
-        </u-empty>
+      
+      <div class="menu-item" @click="toAbout">
+        <div class="menu-content">
+          <u-icon name="info-circle" size="18" color="#4361ee" class="menu-icon"></u-icon>
+          <span class="menu-text">关于我们</span>
+        </div>
+        <u-icon name="arrow-right" size="14" color="#999"></u-icon>
+      </div>
+      
+      <div class="menu-item" @click="logout">
+        <div class="menu-content">
+          <u-icon name="close" size="18" color="#f72585" class="menu-icon"></u-icon>
+          <span class="menu-text logout-text">退出登录</span>
+        </div>
+        <u-icon name="arrow-right" size="14" color="#999"></u-icon>
       </div>
     </div>
   </view>
@@ -171,8 +184,12 @@ export default {
     // TODO: 从后端获取用户的发帖数量
     // this.fetchArticleCount();
   },
+  onShow() {
+    // 页面显示时获取最新用户信息
+    this.fetchUserInfo();
+  },
   methods: {
-    ...mapActions('user', ['selectUser']),
+    ...mapActions('user', ['selectUser', 'fetchUserInfo']),
     
     // 获取用户头像
     getUserAvatar() {
@@ -219,14 +236,7 @@ export default {
     // 编辑资料
     editProfile() {
       uni.navigateTo({
-        url: '/pages/userInfo/userInfo'
-      });
-    },
-    
-    // 跳转到设置页面
-    toSettings() {
-      uni.navigateTo({
-        url: '/pages/profile/settings'
+        url: '/pages/profile/editProfile'
       });
     },
     
@@ -254,6 +264,38 @@ export default {
     // 跳转到成就页面
     toAchievements() {
       this.$u.toast('成就功能正在开发中');
+    },
+    
+    // 跳转到修改密码页面
+    toChangePassword() {
+      uni.navigateTo({
+        url: '/pages/profile/changePassword'
+      });
+    },
+    
+    // 跳转到关于我们页面
+    toAbout() {
+      uni.navigateTo({
+        url: '/pages/profile/about'
+      });
+    },
+    
+    // 退出登录
+    logout() {
+      uni.showModal({
+        title: '提示',
+        content: '确定要退出登录吗？',
+        success: (res) => {
+          if (res.confirm) {
+            // 清除用户信息
+            this.$store.dispatch('user/logout');
+            // 跳转到登录页面
+            uni.reLaunch({
+              url: '/pages/login/login'
+            });
+          }
+        }
+      });
     }
   }
 };
@@ -264,11 +306,33 @@ export default {
   background-color: #f5f7fb;
   color: #333;
   min-height: 100vh;
+  padding-bottom: 20rpx;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+}
+
+:global(:root) {
+  --primary: #4361ee;
+  --secondary: #3f37c9;
+  --accent: #4895ef;
+  --success: #4cc9f0;
+  --warning: #f72585;
+  --light: #f8f9fa;
+  --dark: #212529;
+  --gray: #6c757d;
+  --light-gray: #e9ecef;
+  --card-bg: #ffffff;
+  --section-bg: #f5f7fb;
 }
 
 /* 顶部导航 */
 header {
-  background: linear-gradient(135deg, #4361ee, #3f37c9);
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
   color: white;
   padding: 15px 20px;
   padding-top: 5vh;
@@ -302,14 +366,9 @@ header {
   gap: 20px;
 }
 
-.header-actions i {
-  font-size: 1.3rem;
-  cursor: pointer;
-}
-
 /* 用户概览 */
 .user-overview {
-  background: white;
+  background: var(--card-bg);
   border-radius: 16px;
   margin: 20px;
   padding: 20px;
@@ -327,7 +386,7 @@ header {
   width: 70px;
   height: 70px;
   border-radius: 50%;
-  background: linear-gradient(45deg, #4895ef, #4cc9f0);
+  background: linear-gradient(45deg, var(--accent), var(--success));
   display: flex;
   align-items: center;
   justify-content: center;
@@ -356,12 +415,13 @@ header {
   overflow: hidden;
   text-overflow: ellipsis;
   flex: 1;
+  color: var(--dark);
 }
 
 .user-school,
 .user-major {
   font-size: 0.95rem;
-  color: #6c757d;
+  color: var(--gray);
   margin: 4px 0;
   white-space: nowrap;
   overflow: hidden;
@@ -389,7 +449,7 @@ header {
 }
 
 .stat-item {
-  background: #f8f9fa;
+  background: var(--light);
   border-radius: 12px;
   padding: 12px;
 }
@@ -397,13 +457,13 @@ header {
 .stat-value {
   font-size: 1.4rem;
   font-weight: 700;
-  color: #4361ee;
+  color: var(--primary);
   margin-bottom: 5px;
 }
 
 .stat-label {
   font-size: 0.85rem;
-  color: #6c757d;
+  color: var(--gray);
 }
 
 /* 学习统计 */
@@ -418,10 +478,11 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  color: var(--dark);
 }
 
 .study-progress {
-  background: white;
+  background: var(--card-bg);
   border-radius: 16px;
   padding: 20px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
@@ -429,7 +490,7 @@ header {
 
 /* 连续打卡卡片 */
 .clock-in-card {
-  background: linear-gradient(135deg, #4361ee, #3f37c9);
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
   border-radius: 16px;
   padding: 25px 20px;
   color: white;
@@ -499,7 +560,7 @@ header {
   justify-content: space-between;
   margin-top: 15px;
   font-size: 0.85rem;
-  color: #6c757d;
+  color: var(--gray);
 }
 
 /* 功能菜单 */
@@ -514,7 +575,7 @@ header {
 }
 
 .menu-item {
-  background: white;
+  background: var(--card-bg);
   border-radius: 12px;
   padding: 15px 10px;
   text-align: center;
@@ -530,7 +591,7 @@ header {
 .menu-icon {
   width: 50px;
   height: 50px;
-  background: #f8f9fa;
+  background: var(--light);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -541,19 +602,59 @@ header {
 .menu-name {
   font-size: 0.85rem;
   font-weight: 500;
+  color: var(--dark);
 }
 
-/* 占位区域 */
-.placeholder-section {
-  margin: 25px 20px;
+/* 系统功能菜单 */
+.system-menu {
+  margin: 0 20px 25px;
+  background: var(--card-bg);
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
 }
 
-.placeholder-content {
-  background: white;
-  border-radius: 16px;
-  padding: 30px 20px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  text-align: center;
+.system-menu .menu-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  background: transparent;
+  border-radius: 0;
+  box-shadow: none;
+  text-align: left;
+  margin: 0;
+}
+
+.system-menu .menu-item:not(:last-child) {
+  border-bottom: 1px solid var(--light-gray);
+}
+
+.system-menu .menu-item:hover {
+  background: var(--light);
+}
+
+.menu-content {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.menu-icon {
+  width: auto;
+  height: auto;
+  background: transparent;
+  border-radius: 0;
+  margin: 0 auto;
+}
+
+.menu-text {
+  font-size: 0.95rem;
+  color: var(--dark);
+}
+
+.logout-text {
+  color: var(--warning);
 }
 
 /* 响应式调整 */
@@ -588,6 +689,8 @@ header {
   
   .avatar {
     margin-right: 15px;
+    width: 60px;
+    height: 60px;
   }
   
   .user-basic-info {
@@ -605,6 +708,30 @@ header {
     margin-top: 15px;
     display: flex;
     justify-content: center;
+  }
+  
+  .system-menu .menu-item {
+    padding: 12px 15px;
+  }
+  
+  .menu-text {
+    font-size: 0.9rem;
+  }
+  
+  .user-stats {
+    gap: 10px;
+  }
+  
+  .stat-item {
+    padding: 10px;
+  }
+  
+  .stat-value {
+    font-size: 1.2rem;
+  }
+  
+  .stat-label {
+    font-size: 0.8rem;
   }
 }
 </style>

@@ -39,10 +39,16 @@
       <div v-else>
         <!-- 个人任务 -->
         <div class="task-section" v-if="filteredUserTasks.length > 0">
-          <div class="section-header">
+          <div class="section-header" @click="toggleUserTasks">
             <h3 class="section-title">个人任务 ({{ filteredUserTasks.length }})</h3>
+            <u-icon 
+              :name="userTasksCollapsed ? 'arrow-down' : 'arrow-up'" 
+              size="20" 
+              color="#6c757d"
+              class="collapse-icon"
+            ></u-icon>
           </div>
-          <div class="task-list">
+          <div class="task-list" v-show="!userTasksCollapsed">
             <div class="task-card" v-for="task in filteredUserTasks" :key="task.task.id">
               <div class="task-header">
                 <div class="task-title">{{ task.task.title }}</div>
@@ -88,10 +94,16 @@
         
         <!-- 小组任务 -->
         <div class="task-section" v-if="filteredGroupTasks.length > 0">
-          <div class="section-header">
+          <div class="section-header" @click="toggleGroupTasks">
             <h3 class="section-title">小组任务 ({{ filteredGroupTasks.length }})</h3>
+            <u-icon 
+              :name="groupTasksCollapsed ? 'arrow-down' : 'arrow-up'" 
+              size="20" 
+              color="#6c757d"
+              class="collapse-icon"
+            ></u-icon>
           </div>
-          <div class="task-list">
+          <div class="task-list" v-show="!groupTasksCollapsed">
             <div class="task-card" v-for="task in filteredGroupTasks" :key="task.groupTask.id">
               <div class="task-header">
                 <div class="task-title">{{ task.groupTask.groupTask }}</div>
@@ -154,7 +166,9 @@ export default {
       showSearch: false,
       groupNames: {}, // 小组名称缓存
       processedUserTasks: [], // 处理后的个人任务数据
-      processedGroupTasks: [] // 处理后的小组任务数据
+      processedGroupTasks: [], // 处理后的小组任务数据
+      userTasksCollapsed: false, // 个人任务折叠状态
+      groupTasksCollapsed: false // 小组任务折叠状态
     };
   },
   computed: {
@@ -229,7 +243,17 @@ export default {
       }
       
       uni.navigateTo({
-        url: `/pages/chatList/taskDetail?id=${task.task.id}`
+        url: '/pages/chatList/taskDetail',
+        success: (res) => {
+          res.eventChannel.emit("taskData", {
+            taskId: task.task.id,
+            taskDetail: task
+          });
+        },
+        fail: (err) => {
+          console.error('跳转失败:', err);
+          this.$u.toast('跳转失败，请重试');
+        }
       });
     },
 
@@ -390,6 +414,16 @@ export default {
       } finally {
         this.loading = false;
       }
+    },
+
+    // 切换个人任务折叠状态
+    toggleUserTasks() {
+      this.userTasksCollapsed = !this.userTasksCollapsed;
+    },
+
+    // 切换小组任务折叠状态
+    toggleGroupTasks() {
+      this.groupTasksCollapsed = !this.groupTasksCollapsed;
     }
   },
 
@@ -526,15 +560,26 @@ export default {
 }
 
 .section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 15px;
+  cursor: pointer;
+  padding: 10px 15px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 .section-title {
   font-size: 1.2rem;
   font-weight: 600;
   color: var(--dark);
-  padding-bottom: 8px;
-  border-bottom: 2px solid var(--light-gray);
+  flex: 1;
+}
+
+.collapse-icon {
+  transition: transform 0.3s ease;
 }
 
 /* 加载状态 */

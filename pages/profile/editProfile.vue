@@ -63,30 +63,30 @@
       </view>
       
       <view class="form-group">
-        <view class="form-label">学校</view>
+        <view class="form-label">{{ form.status === 3 ? '公司' : '学校' }}</view>
         <u-input 
           v-model="form.school" 
-          placeholder="请输入学校名称" 
+          :placeholder="'请输入' + (form.status === 3 ? '公司名称' : '学校名称')" 
           border="surround"
           clearable
         />
       </view>
       
       <view class="form-group">
-        <view class="form-label">专业</view>
+        <view class="form-label">{{ form.status === 3 ? '部门' : '专业' }}</view>
         <u-input 
           v-model="form.major" 
-          placeholder="请输入专业名称" 
+          :placeholder="'请输入' + (form.status === 3 ? '部门名称' : '专业名称')" 
           border="surround"
           clearable
         />
       </view>
       
       <view class="form-group">
-        <view class="form-label">年级</view>
+        <view class="form-label">{{ form.status === 3 ? '职位' : '年级' }}</view>
         <u-input 
           v-model="form.grade" 
-          placeholder="请输入年级" 
+          :placeholder="'请输入' + (form.status === 3 ? '职位' : '年级')" 
           border="surround"
           clearable
         />
@@ -134,8 +134,8 @@
 
 <script>
 import { mapState, mapActions } from 'vuex';
-import { updateUser, updateHead } from '@/API/user/user.js';
-import { imageUrl } from '@/config/config.js';
+import { imageUrl, baseUrl } from '@/config/config.js';
+import UploadUtils from '@/utils/uploadUtils.js'; // 引入UploadUtils
 
 export default {
   data() {
@@ -147,7 +147,8 @@ export default {
         major: '',
         grade: '',
         phone: '',
-        email: ''
+        email: '',
+        status: 1 // 默认为学生身份
       },
       imageUrl: imageUrl
     };
@@ -164,11 +165,12 @@ export default {
       major: this.userInfo.major || '',
       grade: this.userInfo.grade || '',
       phone: this.userInfo.phone || '',
-      email: this.userInfo.email || ''
+      email: this.userInfo.email || '',
+      status: this.userInfo.status || 1 // 获取用户身份状态
     };
   },
   methods: {
-    ...mapActions('user', ['selectUser']),
+    ...mapActions('user', ['selectUser', 'updateUser', 'updateHead']), // 映射store中的方法
     
     // 返回上一页
     goBack() {
@@ -202,20 +204,31 @@ export default {
       uni.showLoading({ title: '上传中...' });
       
       try {
-        // 这里应该调用实际的上传接口
-        // 模拟上传成功
-        setTimeout(() => {
-          uni.hideLoading();
+        // 使用 UploadUtils 上传文件，模仿groupInfo.vue的方式
+        const uploadResult = await UploadUtils.uploadFile({
+          url: '/user/updateHead',
+          filePath: filePath,
+          name: 'photo',
+          formData: {}
+        });
+        
+        if (uploadResult.success && uploadResult.data.code === 200) {
+          // 更新头像信息到store
+          await this.updateHead({ head: uploadResult.data.data });
           this.$u.toast('头像上传成功');
-        }, 1000);
+        } else {
+          throw new Error(uploadResult.data.msg || '上传失败');
+        }
       } catch (err) {
+        console.error('头像上传失败:', err);
+        this.$u.toast('头像上传失败: ' + (err.message || ''));
+      } finally {
         uni.hideLoading();
-        this.$u.toast('头像上传失败');
       }
     },
     
     // 保存个人信息
-    saveProfile() {
+    async saveProfile() {
       // 表单验证
       if (!this.form.name) {
         this.$u.toast('请输入昵称');
@@ -223,17 +236,18 @@ export default {
       }
       
       if (!this.form.school) {
-        this.$u.toast('请输入学校名称');
+        this.$u.toast(`请输入${this.form.status === 3 ? '公司名称' : '学校名称'}`);
         return;
       }
       
       if (!this.form.major) {
-        this.$u.toast('请输入专业名称');
+        this.$u.toast(`请输入${this.form.status === 3 ? '部门名称' : '专业名称'}`);
         return;
       }
       
-      // 调用API更新用户信息
+      // 准备用户数据
       const userData = {
+        id: this.userInfo.id,
         name: this.form.name,
         sex: this.form.sex,
         school: this.form.school,
@@ -243,18 +257,27 @@ export default {
         email: this.form.email
       };
       
-      updateUser(userData).then(res => {
+      try {
+        uni.showLoading({ title: '保存中...' });
+        
+        // 调用store中的updateUser方法更新用户信息
+        const res = await this.updateUser(userData);
+        
         if (res.code === 200) {
           this.$u.toast('信息保存成功');
-          // 更新store中的用户信息
-          this.selectUser({ id: this.userInfo.id });
+          // 延迟返回，让用户看到成功提示
+          setTimeout(() => {
+            uni.navigateBack();
+          }, 1000);
         } else {
           this.$u.toast(res.msg || '信息保存失败');
         }
-      }).catch(err => {
+      } catch (err) {
         console.error('保存信息失败:', err);
         this.$u.toast('信息保存失败');
-      });
+      } finally {
+        uni.hideLoading();
+      }
     }
   }
 };

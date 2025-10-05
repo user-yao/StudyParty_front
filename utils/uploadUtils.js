@@ -1,4 +1,46 @@
 import { baseUrl, timeout } from '../config/config.js';
+
+// 简化的文件上传函数
+export const uploadFile = (filePath, folder = 'file') => {
+  return new Promise((resolve, reject) => {
+    if (!filePath) {
+      reject(new Error('文件路径不能为空'));
+      return;
+    }
+
+    const url = baseUrl + '/file/upload';
+    const name = 'file';
+    const formData = { folder };
+    const header = {
+      'Authorization': `${uni.getStorageSync('token')}`
+    };
+
+    uni.uploadFile({
+      url,
+      filePath,
+      name,
+      formData,
+      header,
+      success: (res) => {
+        if (res.statusCode == 200) {
+          let data;
+          try {
+            data = typeof res.data === 'string' ? JSON.parse(res.data) : res.data;
+          } catch (e) {
+            data = res.data;
+          }
+          resolve(data);
+        } else {
+          reject(new Error(`HTTP ${res.statusCode}`));
+        }
+      },
+      fail: (err) => {
+        reject(new Error(err.errMsg || '上传失败'));
+      }
+    });
+  });
+};
+
 class UploadUtils {
   /**
    * 单文件上传
@@ -192,6 +234,5 @@ class UploadUtils {
     });
   }
 }
-
 
 export default UploadUtils;

@@ -12,6 +12,7 @@
     <!-- 修改密码表单 -->
     <view class="form-container">
       <view class="form-group">
+        <view class="form-label">原密码</view>
         <u-input 
           v-model="oldPassword" 
           placeholder="请输入原密码" 
@@ -21,6 +22,7 @@
         />
       </view>
       <view class="form-group">
+        <view class="form-label">新密码</view>
         <u-input 
           v-model="newPassword" 
           placeholder="请输入新密码" 
@@ -28,8 +30,10 @@
           border="surround"
           clearable
         />
+        <view class="password-hint">密码长度至少6位</view>
       </view>
       <view class="form-group">
+        <view class="form-label">确认新密码</view>
         <u-input 
           v-model="confirmPassword" 
           placeholder="请确认新密码" 
@@ -60,8 +64,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
-import { updatePassword } from '@/API/user/user.js';
+import { mapState, mapActions } from 'vuex';
 
 export default {
   data() {
@@ -75,13 +78,15 @@ export default {
     ...mapState('user', ['userInfo'])
   },
   methods: {
+    ...mapActions('user', ['changePassword']),
+    
     // 返回上一页
     goBack() {
       uni.navigateBack();
     },
     
     // 修改密码
-    changePassword() {
+    async changePassword() {
       // 表单验证
       if (!this.oldPassword) {
         this.$u.toast('请输入原密码');
@@ -109,12 +114,16 @@ export default {
         return;
       }
       
-      // 调用API修改密码
-      const passwordData = {
-        password: this.newPassword
-      };
-      
-      updatePassword(passwordData).then(res => {
+      try {
+        uni.showLoading({ title: '修改中...' });
+        
+        // 调用store中的changePassword方法修改密码
+        const res = await this.changePassword({
+          oldPassword: this.oldPassword,
+          newPassword: this.newPassword,
+          confirmPassword: this.confirmPassword
+        });
+        
         if (res.code === 200) {
           this.$u.toast('密码修改成功');
           // 清空表单
@@ -124,10 +133,12 @@ export default {
         } else {
           this.$u.toast(res.msg || '密码修改失败');
         }
-      }).catch(err => {
+      } catch (err) {
         console.error('修改密码失败:', err);
         this.$u.toast('密码修改失败');
-      });
+      } finally {
+        uni.hideLoading();
+      }
     }
   }
 };
@@ -137,7 +148,7 @@ export default {
 .container {
   background-color: #f5f7fb;
   min-height: 100vh;
-  padding-top: 5vh; /* 增加顶部间距 */
+  padding-top: 5vh;
 }
 
 .navbar {
@@ -173,6 +184,18 @@ export default {
 
 .form-group {
   margin-bottom: 20px;
+}
+
+.form-label {
+  font-size: 15px;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.password-hint {
+  font-size: 12px;
+  color: #999;
+  margin-top: 5px;
 }
 
 .form-actions {

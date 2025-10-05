@@ -2,7 +2,8 @@ import { searchTask, addTask, deleteTask, recommend, getTaskById } from '../../A
 
 const state = {
   tasks: [],
-  currentTask: null // 添加当前任务状态
+  currentTask: null,
+  recommendTasks: [] // 添加推荐任务状态
 };
 
 const mutations = {
@@ -23,6 +24,22 @@ const mutations = {
   },
   SET_CURRENT_TASK(state, task) {
     state.currentTask = task;
+  },
+  SET_RECOMMEND_TASKS(state, data) {
+    // 根据API返回格式处理数据
+    if (data && data.records) {
+      // 如果是第一页，替换数据；否则追加数据
+      if (data.current === 1) {
+        state.recommendTasks = data.records;
+      } else {
+        state.recommendTasks.push(...data.records);
+      }
+    } else if (Array.isArray(data)) {
+      state.recommendTasks = data;
+    }
+  },
+  CLEAR_RECOMMEND_TASKS(state) {
+    state.recommendTasks = [];
   }
 };
 
@@ -57,9 +74,12 @@ const actions = {
       throw error;
     }
   },
-  async recommend({ commit }, taskId) {
+  async recommend({ commit }, params) {
     try {
-      const res = await recommend(taskId);
+      const res = await recommend(params);
+      if (res && res.code === 200) {
+        commit('SET_RECOMMEND_TASKS', res.data);
+      }
       return res;
     } catch (error) {
       throw error;
@@ -79,6 +99,10 @@ const actions = {
       console.error('获取任务详情失败:', error);
       throw error;
     }
+  },
+  // 清除推荐任务
+  clearRecommendTasks({ commit }) {
+    commit('CLEAR_RECOMMEND_TASKS');
   }
 };
 

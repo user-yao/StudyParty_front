@@ -269,6 +269,13 @@
 				"navigationBarTitleText" : "添加回答",
 				"softinputMode": "adjustResize"
 			}
+		},
+		{
+			"path" : "pages/chatList/taskList",
+			"style" : 
+			{
+				"navigationBarTitleText" : "任务列表"
+			}
 		}
 	],
 	"globalStyle": {

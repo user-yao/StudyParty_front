@@ -22,10 +22,18 @@ export default {
     SET_RECOMMEND_ARTICLES(state, data) {
       // 根据API返回格式处理数据
       if (data && data.records) {
-        state.recommendArticles.push(...data.records);
+        // 如果是第一页，替换数据；否则追加数据
+        if (data.current === 1) {
+          state.recommendArticles = data.records;
+        } else {
+          state.recommendArticles.push(...data.records);
+        }
       } else if (Array.isArray(data)) {
-        state.recommendArticles.push(...data);
+        state.recommendArticles = data;
       }
+    },
+    CLEAR_RECOMMEND_ARTICLES(state) {
+      state.recommendArticles = [];
     },
     SET_NICE_ARTICLES(state, list) {
       state.niceArticles = list;
@@ -118,6 +126,11 @@ export default {
     async uploadImages({ commit }, data) {
       const res = await uploadImages(data); // 调用上传图片接口
       return res;
+    },
+    
+    // 清除推荐文章
+    clearRecommendArticles({ commit }) {
+      commit('CLEAR_RECOMMEND_ARTICLES');
     }
   }
 };
