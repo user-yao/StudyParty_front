@@ -43,9 +43,9 @@
             <h3 class="section-title">个人任务 ({{ filteredUserTasks.length }})</h3>
           </div>
           <div class="task-list">
-            <div class="task-card" v-for="task in filteredUserTasks" :key="task.id">
+            <div class="task-card" v-for="task in filteredUserTasks" :key="task.task.id">
               <div class="task-header">
-                <div class="task-title">{{ task.taskName }}</div>
+                <div class="task-title">{{ task.task.title }}</div>
                 <div class="task-status status-completed">
                   已完成
                 </div>
@@ -53,12 +53,21 @@
               <div class="task-meta">
                 <div class="task-meta-item">
                   <u-icon name="calendar" size="16" color="#6c757d"></u-icon>
-                  <span>完成时间: {{ formatDate(task.updateDate) }}</span>
+                  <span>完成时间: {{ formatDate(task.taskAnswer.createTime) }}</span>
+                </div>
+                <div class="task-meta-item" v-if="task.task.starCoin > 0 || task.task.starPrestige > 0">
+                  <u-icon name="gift" size="16" color="#6c757d"></u-icon>
+                  <span>
+                    奖励: 
+                    <span v-if="task.task.starCoin > 0">{{ task.task.starCoin }}金币</span>
+                    <span v-if="task.task.starCoin > 0 && task.task.starPrestige > 0"> + </span>
+                    <span v-if="task.task.starPrestige > 0">{{ task.task.starPrestige }}声望</span>
+                  </span>
                 </div>
               </div>
               <div class="task-footer">
-                <div class="task-score" v-if="task.score !== undefined && task.score >= 0">
-                  得分: <span class="score-value">{{ task.score }}</span>
+                <div class="task-score" v-if="task.taskAnswer.score !== undefined && task.taskAnswer.score >= 0">
+                  得分: <span class="score-value">{{ task.taskAnswer.score }}</span>
                 </div>
                 <div class="task-actions">
                   <u-button 
@@ -143,20 +152,21 @@ export default {
       loading: false,
       searchTimer: null,
       showSearch: false,
-      groupNames: {} // 小组名称缓存
+      groupNames: {}, // 小组名称缓存
+      processedUserTasks: [], // 处理后的个人任务数据
+      processedGroupTasks: [] // 处理后的小组任务数据
     };
   },
   computed: {
     ...mapState('user', ['userInfo']),
-    ...mapState('userTask', ['userTasks', 'groupTasks']),
     
     // 过滤后的个人任务列表
     filteredUserTasks() {
-      let filtered = this.userTasks || [];
+      let filtered = this.processedUserTasks || [];
       if (this.searchKeyword) {
         const keyword = this.searchKeyword.toLowerCase();
         filtered = filtered.filter(task =>
-          (task.taskName && task.taskName.toLowerCase().includes(keyword))
+          (task.task && task.task.title && task.task.title.toLowerCase().includes(keyword))
         );
       }
       return filtered;
@@ -164,7 +174,7 @@ export default {
     
     // 过滤后的小组任务列表
     filteredGroupTasks() {
-      let filtered = this.groupTasks || [];
+      let filtered = this.processedGroupTasks || [];
       if (this.searchKeyword) {
         const keyword = this.searchKeyword.toLowerCase();
         filtered = filtered.filter(task =>
@@ -213,7 +223,24 @@ export default {
     // 查看个人任务详情
     viewUserTaskDetails(task) {
       // 跳转到个人任务详情页面
-      this.$u.toast('个人任务详情功能正在开发中');
+      if (!task || !task.task || !task.task.id) {
+        this.$u.toast('任务信息不完整');
+        return;
+      }
+      
+      uni.navigateTo({
+        url: '/pages/chatList/taskDetail',
+        success: (res) => {
+          res.eventChannel.emit("taskData", {
+            taskId: task.task.id,
+            taskDetail: task
+          });
+        },
+        fail: (err) => {
+          console.error('跳转失败:', err);
+          this.$u.toast('跳转失败，请重试');
+        }
+      });
     },
 
     // 查看小组任务详情
@@ -262,6 +289,36 @@ export default {
         String(date.getMinutes()).padStart(2, '0');
     },
 
+    // 处理个人任务数据
+    processUserTasks(userTasksData) {
+      // 根据新的数据格式，第一个数组是个人任务
+      if (Array.isArray(userTasksData) && userTasksData.length > 0) {
+        return userTasksData.map(item => {
+          // item 是 { task: {...}, taskAnswer: {...} } 的结构
+          return {
+            task: item.task || {},
+            taskAnswer: item.taskAnswer || {}
+          };
+        });
+      }
+      return [];
+    },
+
+    // 处理小组任务数据
+    processGroupTasks(groupTasksData) {
+      // 根据新的数据格式，第二个数组是小组任务
+      if (Array.isArray(groupTasksData) && groupTasksData.length > 0) {
+        return groupTasksData.map(item => {
+          // item 是 { groupTask: {...}, groupTaskAnswer: {...} } 的结构
+          return {
+            groupTask: item.groupTask || {},
+            groupTaskAnswer: item.groupTaskAnswer || {}
+          };
+        });
+      }
+      return [];
+    },
+
     // 加载已完成任务数据
     async loadCompletedTasks() {
       try {
@@ -270,21 +327,44 @@ export default {
         // 调用API获取已完成任务
         const res = await this.selectMyUserTasks();
         
-        // 如果没有获取到数据，使用模拟数据进行测试
-        if (!res || res.code !== 200) {
+        if (res && res.code === 200 && Array.isArray(res.data)) {
+          // 处理个人任务数据（第一个数组）
+          this.processedUserTasks = this.processUserTasks(res.data[0] || []);
+          
+          // 处理小组任务数据（第二个数组）
+          this.processedGroupTasks = this.processGroupTasks(res.data[1] || []);
+        } else {
           console.warn('使用模拟数据进行测试');
           // 模拟数据
-          this.userTasks = [
+          this.processedUserTasks = [
             {
-              id: 1,
-              taskName: "个人学习计划",
-              description: "完成Java基础课程学习",
-              updateDate: "2025-09-15T14:30:00.000+00:00",
-              score: 95
+              task: {
+                id: 11,
+                uploader: 3,
+                title: "222",
+                context: "2222\n![图片1](blob:http://localhost:5173/65cf418e-5e82-4654-b157-e5ebd4fc6427)\n",
+                isOver: 1,
+                isTrueId: 2,
+                starCoin: 0,
+                starPrestige: 1,
+                createTime: "2025-10-04T15:12:28.000+00:00",
+                status: 2
+              },
+              taskAnswer: {
+                id: 2,
+                taskId: 11,
+                answerer: 3,
+                context: "111111",
+                nice: 0,
+                isTrue: 1,
+                createTime: "2025-10-04T15:29:53.000+00:00",
+                score: 95,
+                status: 2
+              }
             }
           ];
           
-          this.groupTasks = [
+          this.processedGroupTasks = [
             {
               groupTask: {
                 id: 8,
@@ -305,7 +385,7 @@ export default {
                 context: "# 作业标题",
                 time: "2025-09-13T13:43:53.000+00:00",
                 haveSource: 0,
-                score: -1
+                score: 100
               }
             }
           ];
