@@ -167,36 +167,7 @@
 				// 模拟好友请求数据
 				friendRequests: [],
 				// 模拟用户数据
-				allUsers: [{
-						id: 101,
-						name: "张明",
-						school: "清华大学",
-						phone: "13800138000"
-					},
-					{
-						id: 102,
-						name: "李华",
-						school: "北京大学",
-						phone: "13900139000"
-					},
-					{
-						id: 103,
-						name: "王芳",
-						school: "复旦大学",
-						phone: "13700137000"
-					},
-					{
-						id: 104,
-						name: "赵强",
-						school: "上海交通大学",
-						phone: "13600136000"
-					},
-					{
-						id: 105,
-						name: "陈晓",
-						school: "浙江大学",
-						phone: "13500135000"
-					}
+				allUsers: [
 				],
 				searchResults: [] // 搜索结果
 			}
@@ -237,7 +208,7 @@
 					this.searchResults = [];
 					return;
 				}
-				this.selectUser({name:newVal}).then(res =>{
+				this.selectUser({keyword:newVal}).then(res =>{
 					console.log(res)
 					this.searchResults = res;
 				});
@@ -250,7 +221,7 @@
 					this.searchResults = [];
 					return;
 				}
-				this.selectUser({name:this.searchKeyword}).then(res =>{
+				this.selectUser({keyword:this.searchKeyword}).then(res =>{
 					console.log(res)
 					this.searchResults = res;
 				});
@@ -343,9 +314,9 @@
 					})
 					return null;
 				}
-				this.selectUser({phone:this.searchKeyword}).then(res =>{
+				this.selectUser({keyword:this.searchKeyword}).then(res =>{
 					console.log(res)
-					this.allUsers = res;
+					this.allUsers = res.data;
 				})
 			},
 
@@ -763,6 +734,7 @@
 		color: white;
 		border: none;
 		border-radius: 8px;
+		width: 130rpx;
 		cursor: pointer;
 		font-weight: 500;
 		font-size: 30rpx;

@@ -1,8 +1,8 @@
 import { request } from '../../request/request.js';
 
-export const selectMyUserTasks = (data) => {
+export const selectMyUserArticle = (data) => {
   return request({
-    url: '/user/userTask/selectMyUserTasks',
+    url: '/user/userArticle/selectMyUserArticle',
     method: 'GET',
     data
   });

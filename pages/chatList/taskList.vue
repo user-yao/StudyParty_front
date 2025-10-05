@@ -51,7 +51,7 @@
 									<span :class="getStatusClass(task)">{{ getStatusText(task) }}</span>
 								</div>
 								<div class="task-meta-item">
-									<div class="task-user-avatar">
+									<div class="task-user-avatar" @click="goToUserProfile(task.uploader)">
 										<image 
 											v-if="task.head" 
 											:src="fullImageUrl(task.head)" 
@@ -268,6 +268,17 @@
 				} finally {
 					this.loading = false;
 				}
+			},
+			
+			// 跳转到用户信息页面
+			goToUserProfile(userId) {
+				// 跳转到其他用户的个人信息页面，使用eventChannel传递数据
+				uni.navigateTo({
+					url: '/pages/userInfo/userInfo',
+					success: (res) => {
+						res.eventChannel.emit('chatData', { id: userId });
+					}
+				});
 			}
 		},
 		// 页面显示时加载数据

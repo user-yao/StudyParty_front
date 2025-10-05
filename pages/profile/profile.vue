@@ -53,12 +53,12 @@
       </div>
       
       <div class="user-stats">
-        <div class="stat-item">
+        <div class="stat-item"  @click="toMyTasks">
           <div class="stat-value">{{ userInfo.finishTask || 0 }}</div>
           <div class="stat-label">完成任务</div>
         </div>
-        <div class="stat-item">
-          <div class="stat-value">{{ articleCount || 0 }}</div>
+        <div class="stat-item" @click="toMyArticles">
+          <div class="stat-value">{{ userInfo.articleNum || 0 }}</div>
           <div class="stat-label">发布帖子</div>
         </div>
         <div class="stat-item">
@@ -70,9 +70,6 @@
 
     <!-- 学习统计 -->
     <div class="study-progress-section">
-      <div class="section-title">
-        <h3>学习统计</h3>
-      </div>
       <div class="study-progress">
         <!-- 连续打卡卡片 -->
         <div class="clock-in-card">
@@ -95,23 +92,17 @@
           </div>
           <div class="menu-name">我的小组</div>
         </div>
-        <div class="menu-item" @click="toMyTasks">
-          <div class="menu-icon">
-            <u-icon name="order" size="24" color="#4361ee"></u-icon>
-          </div>
-          <div class="menu-name">我的任务</div>
-        </div>
         <div class="menu-item" @click="toMyFriends">
           <div class="menu-icon">
             <u-icon name="man-add" size="24" color="#4361ee"></u-icon>
           </div>
           <div class="menu-name">我的好友</div>
         </div>
-        <div class="menu-item" @click="toAchievements">
+        <div class="menu-item" @click="toMyCollectArticles">
           <div class="menu-icon">
-            <u-icon name="star" size="24" color="#4361ee"></u-icon>
+            <u-icon name="bookmark" size="24" color="#4361ee"></u-icon>
           </div>
-          <div class="menu-name">我的成就</div>
+          <div class="menu-name">我的收藏</div>
         </div>
       </div>
     </div>
@@ -148,6 +139,7 @@
 <script>
 import { mapState, mapActions } from "vuex";
 import { imageUrl } from "@/config/config.js";
+import { userInfo } from "../../API/user/user";
 
 export default {
   data() {
@@ -261,9 +253,30 @@ export default {
       });
     },
     
-    // 跳转到成就页面
-    toAchievements() {
-      this.$u.toast('成就功能正在开发中');
+    // 跳转到我的文章页面
+    toMyArticles() {
+      // 调用store中的userArticle模块的selectMyUserArticle方法
+      this.$store.dispatch('user/selectMyUserArticle').then(res => {
+        if (res.code === 200) {
+          // 跳转到文章列表页面，传递文章数据
+          uni.navigateTo({
+            url: '/pages/forum/myArticles?articles=' + encodeURIComponent(JSON.stringify(res.data))
+          });
+        }
+      });
+    },
+    
+    // 跳转到我收藏的文章页面
+    toMyCollectArticles() {
+      // 调用store中的articleUser模块的myCollectArticle方法
+      this.$store.dispatch('articleUser/myCollectArticle').then(res => {
+        if (res.code === 200) {
+          // 跳转到收藏文章列表页面，传递文章数据
+          uni.navigateTo({
+            url: '/pages/forum/myCollectArticles?articles=' + encodeURIComponent(JSON.stringify(res.data))
+          });
+        }
+      });
     },
     
     // 跳转到修改密码页面
@@ -523,7 +536,7 @@ header {
 }
 
 .clock-in-days {
-  font-size: 2.5rem;
+  font-size: 1.6rem;
   font-weight: 700;
   position: absolute;
   top: 15px;
@@ -570,7 +583,7 @@ header {
 
 .menu-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 15px;
 }
 
@@ -660,13 +673,13 @@ header {
 /* 响应式调整 */
 @media (max-width: 480px) {
   .menu-grid {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 10px;
   }
   
   .menu-icon {
-    width: 40px;
-    height: 40px;
+    width: 50px;
+    height: 50px;
   }
   
   .menu-name {
@@ -674,7 +687,7 @@ header {
   }
   
   .clock-in-days {
-    font-size: 2rem;
+    font-size: 1.5rem;
   }
   
   .motivational-quote {

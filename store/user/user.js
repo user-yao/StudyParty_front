@@ -207,6 +207,19 @@ export default {
         console.error('获取用户信息失败:', error);
         throw error;
       }
+    },
+    // 获取用户文章
+    async selectMyUserArticle({ commit, state }) {
+      try {
+        // 导入API方法
+        const { selectMyUserArticle } = await import('../../API/user/userArticle.js');
+        // 调用API获取用户文章
+        const res = await selectMyUserArticle({ userId: state.userInfo.id });
+        return res;
+      } catch (error) {
+        console.error('获取用户文章失败:', error);
+        throw error;
+      }
     }
   }
 };

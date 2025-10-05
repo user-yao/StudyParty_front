@@ -276,6 +276,19 @@
 			{
 				"navigationBarTitleText" : "任务列表"
 			}
+		},
+		{
+			"path" : "pages/forum/myArticles",
+			"style" : 
+			{
+				"navigationBarTitleText" : "我的文章"
+			}
+		},
+		{
+			"path": "pages/forum/myCollectArticles",
+			"style": {
+				"navigationBarTitleText": "我的收藏"
+			}
 		}
 	],
 	"globalStyle": {

@@ -41,7 +41,6 @@
               v-for="task in tasks" 
               :key="task.id"
               class="task-card-horizontal"
-              @click="viewTaskDetail(task.id)"
             >
               <view class="task-reward-badge" v-if="task.starPrestige > 0">+{{ task.starPrestige }}声望</view>
               <view class="task-title">{{ task.title }}</view>
@@ -53,6 +52,7 @@
                 <view class="meta-item">
                   <view class="task-user-avatar">
                     <image 
+                    @click="goToUserProfile(task.uploader)"
                       v-if="task.head" 
                       :src="fullImageUrl(task.head)" 
                       mode="aspectFill"
@@ -82,7 +82,9 @@
                 </view>
               </view>
               <view class="task-action">
-                <button class="join-btn small">查看详情</button>
+                <button class="join-btn small" 
+              @click="viewTaskDetail(task.id)"
+                >查看详情</button>
               </view>
             </view>
           </view>
@@ -107,9 +109,9 @@
           >
             <view class="article-header">
               <view class="article-user">
-                <view class="user-avatar">
+                <view class="user-avatar" @click.stop="goToUserProfile(article.uploader)">
                   <image 
-                  
+                    
                     v-if="article.head" 
                     :src="article.head" 
                     mode="aspectFill"
@@ -480,6 +482,18 @@ export default {
       uni.navigateTo({
         url: '/pages/forum/addArticle'
       });
+    },
+    
+    // 跳转到用户信息页面
+    goToUserProfile(userId) {
+      
+        // 跳转到其他用户的个人信息页面，使用eventChannel传递数据
+        uni.navigateTo({
+          url: '/pages/userInfo/userInfo',
+          success: (res) => {
+            res.eventChannel.emit('chatData', { id: userId });
+          }
+        });
     }
   },
   async mounted() {

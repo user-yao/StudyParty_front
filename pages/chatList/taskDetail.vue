@@ -30,6 +30,7 @@
                 <image 
                   v-if="task.head" 
                   :src="fullImageUrl(task.head)" 
+                  @click="goToUserProfile(task.uploader)"
                   mode="aspectFill"
                 ></image>
                 <view v-else class="avatar-placeholder">
@@ -113,6 +114,7 @@
                       v-if="answer.head" 
                       :src="fullImageUrl(answer.head)" 
                       mode="aspectFill"
+                      @click="goToUserProfile(answer.answerer)"
                     ></image>
                     <view v-else class="avatar-placeholder">
                       {{ answer.name ? answer.name.substring(0, 1) : 'U' }}
@@ -498,7 +500,16 @@ export default {
         this.loadingMore = false;
       }
     },
-    
+    // 跳转到用户信息页面
+			goToUserProfile(userId) {
+				// 跳转到其他用户的个人信息页面，使用eventChannel传递数据
+				uni.navigateTo({
+					url: '/pages/userInfo/userInfo',
+					success: (res) => {
+						res.eventChannel.emit('chatData', { id: userId });
+					}
+				});
+			},
     // 选择最佳答案
     async selectBestAnswer(answerId) {
       // 确认选择

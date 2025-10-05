@@ -102,22 +102,22 @@ export default {
       }
       return res;
     },
-    async niceArticle({ commit }, articleId) {
-      const res = await niceArticle({ articleId }); // 调用点赞文章接口
+    async niceArticle({ commit }, payload) {
+      const res = await niceArticle(payload); // 调用点赞文章接口
       if (res.code === 200) {
         // 根据返回的数据判断是点赞还是取消点赞
         const isNice = res.data === "取消点赞" ? false : true;
-        commit('UPDATE_ARTICLE_LIKE', { articleId, isNice });
+        commit('UPDATE_ARTICLE_LIKE', { articleId: payload.articleId, isNice });
       }
       return res;
     },
     // 收藏文章
-    async collectArticle({ commit }, articleId) {
-      const res = await collectArticle({ articleId }); // 调用收藏文章接口
+    async collectArticle({ commit }, payload) {
+      const res = await collectArticle(payload); // 调用收藏文章接口
       if (res.code === 200) {
         // 根据返回的数据判断是收藏还是取消收藏
         const isCollect = res.data === "取消收藏" ? false : true;
-        commit('UPDATE_ARTICLE_FAVORITE', { articleId, isCollect });
+        commit('UPDATE_ARTICLE_FAVORITE', { articleId: payload.articleId, isCollect });
       }
       return res;
     },

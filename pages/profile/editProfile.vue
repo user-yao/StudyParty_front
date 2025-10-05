@@ -287,7 +287,6 @@ export default {
 .container {
   background-color: #f5f7fb;
   min-height: 100vh;
-  padding-top: 5vh;
 }
 
 .navbar {
@@ -296,8 +295,10 @@ export default {
   align-items: center;
   padding: 15px 20px;
   background: white;
-  position: sticky;
+  position: fixed;
   top: 0;
+  left: 0;
+  right: 0;
   z-index: 100;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 }
@@ -319,6 +320,7 @@ export default {
 
 .form-container {
   padding: 20px;
+  margin-top: 70px; /* 为固定导航栏留出空间 */
 }
 
 .avatar-section {
