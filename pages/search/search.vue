@@ -7,17 +7,14 @@
           <u-icon name="arrow-left" size="20" color="#fff"></u-icon>
         </div>
         <div class="search-input-container">
-          <u--input
+          <!-- 替换为原生input元素 -->
+          <input
             ref="searchInput"
             v-model="searchKeyword"
             placeholder="搜索任务、帖子、用户..."
-            border="none"
-            shape="circle"
-            clearable
             @confirm="performSearch"
-            @clear="clearSearch"
-            class="search-input"
-          ></u--input>
+            class="custom-search-input"
+          />
         </div>
         <div class="header-actions">
           <text class="search-btn" @click="performSearch">搜索</text>
@@ -31,7 +28,6 @@
       <view class="section" v-if="recentSearches.length === 0">
         <view class="section-header">
           <view class="section-title">
-            <u-icon name="fire" size="18" color="#ff6b6b"></u-icon>
             <text>热门搜索</text>
           </view>
         </view>
@@ -97,21 +93,21 @@
     
     <!-- 搜索结果区域 -->
     <view class="content-container" v-else>
-      <!-- 搜索结果 -->
-      <view class="section">
+      <!-- 文章搜索结果 -->
+      <view class="section" v-if="articleResults.length > 0">
         <view class="section-header">
           <view class="section-title">
             <u-icon name="file-text" size="18" color="#333"></u-icon>
-            <text>搜索结果</text>
+            <text>文章</text>
           </view>
           <view class="section-action">
-            <text>找到 {{ searchResults.length }} 条结果</text>
+            <text>找到 {{ articleResults.length }} 条结果</text>
           </view>
         </view>
         
         <view class="article-list">
           <view 
-            v-for="result in searchResults" 
+            v-for="result in articleResults.slice(0, 4)" 
             :key="result.id"
             class="article-card"
             @click="viewResultDetail(result)"
@@ -147,7 +143,7 @@
                   </view>
                   <view class="user-school">{{ result.school }}</view>
                   <view class="user-prestige" v-if="result.starPrestige > 0">
-                    声望值: {{ result.starPrestige }}
+                    声望: {{ result.starPrestige }}
                   </view>
                 </view>
               </view>
@@ -189,23 +185,99 @@
             </view>
           </view>
           
-          <!-- 无结果提示 -->
-          <view v-if="searchResults.length === 0 && searchCompleted" class="no-results">
-            <u-icon name="file-text" size="40" color="#ccc"></u-icon>
-            <text>暂无搜索结果</text>
+          <!-- 查看更多文章 -->
+          <view 
+            v-if="articleResults.length > 4" 
+            class="view-more"
+            @click="viewMoreArticles"
+          >
+            <text>查看更多文章</text>
+            <u-icon name="arrow-right" size="14" color="#999"></u-icon>
+          </view>
+        </view>
+      </view>
+      
+      <!-- 任务搜索结果 -->
+      <view class="section" v-if="taskResults.length > 0">
+        <view class="section-header">
+          <view class="section-title">
+            <u-icon name="file-text" size="18" color="#333"></u-icon>
+            <text>任务</text>
+          </view>
+          <view class="section-action">
+            <text>找到 {{ taskResults.length }} 条结果</text>
           </view>
         </view>
         
-        <!-- 加载更多提示 -->
-        <view class="load-more" @click="loadMore" v-if="searchResults.length > 0 && !noMoreData">
-          <text v-if="!loadingMore">点击加载更多</text>
-          <text v-else>加载中...</text>
+        <view class="article-list">
+          <view 
+            v-for="result in taskResults.slice(0, 4)" 
+            :key="result.id"
+            class="article-card"
+            @click="viewResultDetail(result)"
+          >
+            <view class="article-header">
+              <view class="article-user">
+                <view class="user-avatar">
+                  <image 
+                    v-if="result.head" 
+                    :src="result.head" 
+                    mode="aspectFill"
+                  ></image>
+                  <view v-else class="avatar-placeholder">
+                    {{ result.name ? result.name.substring(0, 1) : 'U' }}
+                  </view>
+                </view>
+                <view class="user-info">
+                  <view class="user-name">
+                    {{ result.name }}
+                    <text 
+                      v-if="result.identity === '我'" 
+                      class="identity-tag me-tag"
+                    >
+                      {{ result.identity }}
+                    </text>
+                    <text 
+                      v-else
+                      class="identity-tag" 
+                      :class="result.isAuthority ? 'authority' : ''"
+                    >
+                      {{ result.identity || '用户' }}
+                    </text>
+                  </view>
+                  <view class="user-school">{{ result.school }}</view>
+                  <view class="user-prestige" v-if="result.starPrestige > 0">
+                    奖励声望值: {{ result.starPrestige }}
+                  </view>
+                </view>
+              </view>
+              <view class="article-time">
+                {{ formatTime(result.createTime) }}
+              </view>
+            </view>
+            
+            <view class="article-content">
+              <view class="article-title">{{ result.title }}</view>
+            </view>
+            
+          </view>
+          
+          <!-- 查看更多任务 -->
+          <view 
+            v-if="taskResults.length > 4" 
+            class="view-more"
+            @click="viewMoreTasks"
+          >
+            <text>查看更多任务</text>
+            <u-icon name="arrow-right" size="14" color="#999"></u-icon>
+          </view>
         </view>
-        
-        <!-- 无更多数据提示 -->
-        <view class="no-more-data" v-if="searchResults.length > 0 && noMoreData">
-          <text>没有更多数据了</text>
-        </view>
+      </view>
+      
+      <!-- 无结果提示 -->
+      <view v-if="articleResults.length === 0 && taskResults.length === 0 && searchCompleted" class="section no-results">
+        <u-icon name="file-text" size="40" color="#ccc"></u-icon>
+        <text>暂无搜索结果</text>
       </view>
     </view>
   </view>
@@ -226,7 +298,9 @@ export default {
       currentPage: 1, // 当前页码
       totalPages: 1, // 总页数
       recentSearches: [],
-      searchResults: [],
+      // 修改搜索结果结构，分为文章和任务两部分
+      articleResults: [],
+      taskResults: [],
       hotSearchTags: [
         'React开发',
         'Vue项目',
@@ -247,6 +321,7 @@ export default {
   },
   methods: {
     ...mapActions('article', ['searchArticle', 'niceArticle', 'collectArticle']),
+    ...mapActions('task', ['searchTask']), // 添加task的searchTask方法
     
     // 返回上一页
     goBack() {
@@ -269,51 +344,72 @@ export default {
       this.currentPage = 1; // 重置页码
       
       try {
-        // 调用store中的searchArticle方法进行搜索
-        // 根据API要求，参数应该是 { searchContext: keyword, currentPage: 1 }
-        const res = await this.searchArticle({ 
-          searchContext: this.searchKeyword,
-          currentPage: this.currentPage
-        });
+        // 同时调用文章和任务的搜索方法
+        const [articleRes, taskRes] = await Promise.all([
+          this.searchArticle({ 
+            searchContext: this.searchKeyword,
+            currentPage: this.currentPage
+          }),
+          this.searchTask({ 
+            searchContent: this.searchKeyword,
+            currentPage: this.currentPage
+          })
+        ]);
         
-        if (res.code === 200) {
-          // 添加到最近搜索
-          this.addRecentSearch(this.searchKeyword);
+        // 添加到最近搜索
+        this.addRecentSearch(this.searchKeyword);
+        
+        // 处理文章搜索结果
+        if (articleRes.code === 200) {
+          // 更新分页信息
+          this.totalPages = articleRes.data.pages || 1;
           
-          // 处理搜索结果
-          // 根据返回格式: { data: { records: [...], total, size, current, pages } }
-          if (res.data && Array.isArray(res.data.records)) {
-            // 更新分页信息
-            this.totalPages = res.data.pages || 1;
-            
-            // 处理搜索结果，添加头像路径拼接和其他字段
-            this.searchResults = res.data.records.map(item => ({
-              ...item,
-              type: 'article', // 默认为文章类型
-              // 拼接完整的头像URL
-              head: item.head ? imageUrl + item.head : null,
-              // 添加缺失的字段以匹配论坛推荐内容的显示
-              identity: this.getIdentityText(item.status),
-              isAuthority: item.starPrestige > 100,
-              isNice: item.isNice || false,
-              isCollect: item.isCollect || false,
-              viewCount: item.viewCount || 0,
-              commentCount: item.commentCount || 0,
-              nice: item.nice || 0,
-              collect: item.collect || 0,
-              starPrestige: item.starPrestige || 0
-            }));
-            
-            // 检查是否还有更多数据
-            if (this.currentPage >= this.totalPages) {
-              this.noMoreData = true;
-            }
-          } else {
-            this.searchResults = [];
-            this.noMoreData = true;
-          }
+          // 处理搜索结果，添加头像路径拼接和其他字段
+          this.articleResults = articleRes.data.records.map(item => ({
+            ...item,
+            type: 'article', // 标记为文章类型
+            // 拼接完整的头像URL
+            head: item.head ? imageUrl + item.head : null,
+            // 添加缺失的字段以匹配论坛推荐内容的显示
+            identity: this.getIdentityText(item.status),
+            isAuthority: item.starPrestige > 100,
+            isNice: item.isNice || false,
+            isCollect: item.isCollect || false,
+            viewCount: item.viewCount || 0,
+            commentCount: item.commentCount || 0,
+            nice: item.nice || 0,
+            collect: item.collect || 0,
+            starPrestige: item.starPrestige || 0
+          }));
         } else {
-          throw new Error(res.msg || '搜索失败');
+          this.articleResults = [];
+        }
+        
+        // 处理任务搜索结果
+        if (taskRes.code === 200) {
+          this.taskResults = taskRes.data.records.map(item => ({
+            ...item,
+            type: 'task', // 标记为任务类型
+            // 拼接完整的头像URL
+            head: item.head ? imageUrl + item.head : null,
+            // 添加缺失的字段
+            identity: this.getIdentityText(item.status),
+            isAuthority: item.starPrestige > 100,
+            isNice: item.isNice || false,
+            isCollect: item.isCollect || false,
+            viewCount: item.viewCount || 0,
+            commentCount: item.commentCount || 0,
+            nice: item.nice || 0,
+            collect: item.collect || 0,
+            starPrestige: item.starPrestige || 0
+          }));
+        } else {
+          this.taskResults = [];
+        }
+        
+        // 检查是否还有更多数据
+        if (this.currentPage >= this.totalPages) {
+          this.noMoreData = true;
         }
       } catch (error) {
         console.error('搜索失败:', error);
@@ -321,7 +417,8 @@ export default {
           title: error.message || '搜索失败',
           icon: 'none'
         });
-        this.searchResults = [];
+        this.articleResults = [];
+        this.taskResults = [];
         this.noMoreData = true;
       } finally {
         this.searchCompleted = true;
@@ -338,7 +435,8 @@ export default {
     clearSearch() {
       this.searchKeyword = '';
       this.searching = false;
-      this.searchResults = [];
+      this.articleResults = [];
+      this.taskResults = [];
       this.searchCompleted = false;
     },
     
@@ -415,7 +513,7 @@ export default {
           break;
         case 'task':
           uni.navigateTo({
-            url: `/pages/chatList/groupTaskDetail?taskId=${result.id}`
+            url: `/pages/chatList/taskDetail?id=${result.id}`
           });
           break;
         default:
@@ -485,6 +583,22 @@ export default {
       }
     },
     
+    // 查看更多文章
+    viewMoreArticles() {
+      // 跳转到文章搜索结果页面，并传递搜索关键词
+      uni.navigateTo({
+        url: `/pages/search/articleSearchResult?keyword=${encodeURIComponent(this.searchKeyword)}`
+      });
+    },
+    
+    // 查看更多任务
+    viewMoreTasks() {
+      // 跳转到任务搜索结果页面，并传递搜索关键词
+      uni.navigateTo({
+        url: `/pages/search/taskSearchResult?keyword=${encodeURIComponent(this.searchKeyword)}`
+      });
+    },
+    
     // 加载更多搜索结果
     async loadMore() {
       // 如果正在加载或没有更多数据，则不执行
@@ -496,24 +610,30 @@ export default {
         // 计算下一页页码
         const nextPage = this.currentPage + 1;
         
-        // 调用API获取更多数据
-        const res = await this.searchArticle({ 
-          searchContext: this.searchKeyword,
-          currentPage: nextPage
-        });
+        // 同时调用文章和任务的搜索方法获取更多数据
+        const [articleRes, taskRes] = await Promise.all([
+          this.searchArticle({ 
+            searchContext: this.searchKeyword,
+            currentPage: nextPage
+          }),
+          this.searchTask({ 
+            searchContent: this.searchKeyword,
+            currentPage: nextPage
+          })
+        ]);
         
         // 检查返回的数据
-        if (res && res.code === 200) {
+        if (articleRes && articleRes.code === 200) {
           // 更新分页信息
           this.currentPage = nextPage;
-          this.totalPages = res.data.pages || 1;
+          this.totalPages = articleRes.data.pages || 1;
           
-          // 检查是否有更多数据
-          if (res.data && Array.isArray(res.data.records) && res.data.records.length > 0) {
+          // 检查是否有更多文章数据
+          if (articleRes.data && Array.isArray(articleRes.data.records) && articleRes.data.records.length > 0) {
             // 处理更多搜索结果，添加头像路径拼接和其他字段
-            const moreResults = res.data.records.map(item => ({
+            const moreArticles = articleRes.data.records.map(item => ({
               ...item,
-              type: 'article', // 默认为文章类型
+              type: 'article', // 标记为文章类型
               // 拼接完整的头像URL
               head: item.head ? imageUrl + item.head : null,
               // 添加缺失的字段以匹配论坛推荐内容的显示
@@ -528,20 +648,40 @@ export default {
               starPrestige: item.starPrestige || 0
             }));
             
-            // 添加到现有结果中
-            this.searchResults = [...this.searchResults, ...moreResults];
-            
-            // 检查是否还有更多数据
-            if (this.currentPage >= this.totalPages) {
-              this.noMoreData = true;
-            }
-          } else {
-            // 没有更多数据
-            this.noMoreData = true;
+            // 添加到现有文章结果中
+            this.articleResults = [...this.articleResults, ...moreArticles];
           }
-        } else {
-          // API调用失败
-          throw new Error(res.msg || '加载失败');
+        }
+        
+        if (taskRes && taskRes.code === 200) {
+          // 检查是否有更多任务数据
+          if (taskRes.data && Array.isArray(taskRes.data.records) && taskRes.data.records.length > 0) {
+            // 处理更多搜索结果，添加头像路径拼接和其他字段
+            const moreTasks = taskRes.data.records.map(item => ({
+              ...item,
+              type: 'task', // 标记为任务类型
+              // 拼接完整的头像URL
+              head: item.head ? imageUrl + item.head : null,
+              // 添加缺失的字段
+              identity: this.getIdentityText(item.status),
+              isAuthority: item.starPrestige > 100,
+              isNice: item.isNice || false,
+              isCollect: item.isCollect || false,
+              viewCount: item.viewCount || 0,
+              commentCount: item.commentCount || 0,
+              nice: item.nice || 0,
+              collect: item.collect || 0,
+              starPrestige: item.starPrestige || 0
+            }));
+            
+            // 添加到现有任务结果中
+            this.taskResults = [...this.taskResults, ...moreTasks];
+          }
+        }
+        
+        // 检查是否还有更多数据
+        if (this.currentPage >= this.totalPages) {
+          this.noMoreData = true;
         }
       } catch (error) {
         console.error('加载更多搜索结果失败:', error);
@@ -619,17 +759,27 @@ export default {
   flex: 1;
 }
 
-.search-input {
+.custom-search-input {
   background: rgba(255, 255, 255, 0.2);
   border-radius: 20px;
-  padding: 10px 15px; /* 增加内边距 */
-  height: 36px; /* 设置固定高度 */
+  padding: 10px 15px 10px 20px;
+  height: 36px;
+  border: none;
+  outline: none;
+  color: white;
+  font-size: 14px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.custom-search-input::placeholder {
+  color: rgba(255, 255, 255, 0.7);
 }
 
 .search-btn {
   font-size: 0.9rem;
   color: #fff;
-  padding: 8px 12px; /* 增加内边距 */
+  padding: 8px 12px;
   cursor: pointer;
   border-radius: 4px;
 }
@@ -923,5 +1073,22 @@ export default {
   padding: 15px;
   color: #999;
   font-size: 0.9rem;
+}
+
+/* 查看更多按钮 */
+.view-more {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 15px;
+  color: #4361ee;
+  font-size: 0.9rem;
+  cursor: pointer;
+  border-top: 1px solid #eee;
+  margin-top: 10px;
+}
+
+.view-more i {
+  margin-left: 5px;
 }
 </style>

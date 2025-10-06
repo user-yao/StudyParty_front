@@ -42,6 +42,9 @@ export const searchTask = (data) => {
         data:{
             searchContent:data.searchContent,
             currentPage:data.currentPage
+        },
+        header: {
+            'Content-Type': 'application/x-www-form-urlencoded'
         }
     });
 }

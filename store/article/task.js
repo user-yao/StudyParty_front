@@ -44,9 +44,9 @@ const mutations = {
 };
 
 const actions = {
-  async searchTask({ commit }, articleId) {
+  async searchTask({ commit }, content) {
     try {
-      const res = await searchTask(articleId);
+      const res = await searchTask(content);
       commit('SET_TASKS', res.data);
       return res;
     } catch (error) {

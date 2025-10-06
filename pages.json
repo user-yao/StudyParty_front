@@ -289,6 +289,18 @@
 			"style": {
 				"navigationBarTitleText": "我的收藏"
 			}
+		},
+		{
+			"path": "pages/search/articleSearchResult",
+			"style": {
+				"navigationBarTitleText": "文章搜索结果"
+			}
+		},
+		{
+			"path": "pages/search/taskSearchResult",
+			"style": {
+				"navigationBarTitleText": "任务搜索结果"
+			}
 		}
 	],
 	"globalStyle": {
