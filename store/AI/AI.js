@@ -1,4 +1,4 @@
-import { getSkillTree, getTeachingPlan } from '../../API/AI/AI.js';
+import { getSkillTree, getTeachingPlan,getTaskAnalyst,getArticleAnalyst } from '../../API/AI/AI.js';
 
 const state = {
 };
@@ -24,6 +24,22 @@ const actions = {
       throw error;
     }
   },
+  async getTaskAnalyst({ commit }, prompt) {
+    try {
+      const res = await getTaskAnalyst(prompt);
+      return res;
+    } catch (error) {
+      throw error;
+    }
+  },
+  async getArticleAnalyst({ commit }, prompt) {
+    try {
+      const res = await getArticleAnalyst(prompt);
+      return res;
+    } catch (error) {
+      throw error;
+    }
+  }
 };
 
 export default {

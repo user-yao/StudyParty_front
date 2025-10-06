@@ -399,14 +399,12 @@ export default {
         if (res.code === 200) {
           console.log(res)
           
-          // 更新文章的点赞状态和数量
-          if (res.data === "取消点赞") {
-            article.isNice = false;
-            article.nice -= 1;
-          } else if (res.data === "点赞成功") {
-            article.isNice = true;
-            article.nice += 1;
-          }
+          // 通过Vuex更新文章的点赞状态和数量
+          const isNice = res.data === "取消点赞" ? false : true;
+          this.$store.commit('article/UPDATE_ARTICLE_LIKE', { 
+            articleId: article.id, 
+            isNice: isNice 
+          });
         }
       } catch (error) {
         console.error('点赞操作失败:', error);
@@ -419,14 +417,12 @@ export default {
         const res = await this.collectArticle(article.id);
         if (res.code === 200) {
           
-          // 更新文章的收藏状态和数量
-          if (res.data === "取消收藏") {
-            article.isCollect = false;
-            article.collect -= 1;
-          } else if (res.data === "收藏成功") {
-            article.isCollect = true;
-            article.collect += 1;
-          }
+          // 通过Vuex更新文章的收藏状态和数量
+          const isCollect = res.data === "取消收藏" ? false : true;
+          this.$store.commit('article/UPDATE_ARTICLE_FAVORITE', { 
+            articleId: article.id, 
+            isCollect: isCollect 
+          });
         }
       } catch (error) {
         console.error('收藏操作失败:', error);

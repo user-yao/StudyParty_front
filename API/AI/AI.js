@@ -22,3 +22,23 @@ export const getTeachingPlan = (data) => {
         }
     });
 }
+export const getTaskAnalyst = (data) => {
+    return request({
+        url: '/AI/taskAnalyst',
+        method: 'POST',
+        data:JSON.stringify(data.prompt),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+}
+export const getArticleAnalyst = (data) => {
+    return request({
+        url: '/AI/articleAnalyst',
+        method: 'POST',
+        data:JSON.stringify(data.prompt),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+}

@@ -60,9 +60,14 @@
                                     @scroll="onTextareaScroll" :style="textareaContainerStyle" enable-flex="true">
                                     <textarea ref="submissionTextarea" class="submission-text" v-model="displayContent"
                                         placeholder="请输入文章内容，支持Markdown语法..." :style="textareaStyle"
-                                        @focus="onTextareaFocus" @blur="onTextareaBlur">
+                                        @focus="onTextareaFocus" @blur="onTextareaBlur" maxlength="5000">
 									</textarea>
                                 </scroll-view>
+
+                                <!-- 字数统计 -->
+                                <view class="char-count">
+                                    <text :class="{ 'over-limit': contentLength > 5000 }">{{ contentLength }}/5000</text>
+                                </view>
 
                                 <!-- 图片功能栏 -->
                                 <view class="image-toolbar">
@@ -159,7 +164,10 @@ export default {
             }
         },
 
-
+        // 内容长度计算
+        contentLength() {
+            return this.displayContent.length;
+        }
     },
     watch: {
         // 监听显示内容变化
@@ -507,6 +515,15 @@ export default {
                 return;
             }
 
+            // 检查字数限制
+            if (this.contentLength > 5000) {
+                uni.showToast({
+                    title: '文章内容不能超过5000字',
+                    icon: 'none'
+                });
+                return;
+            }
+
             // 显示加载状态
             this.submitLoading = true;
             // 调用store中的createArticle方法
@@ -834,5 +851,17 @@ export default {
             background-color: #f0f0f0;
         }
     }
+}
+
+/* 字数统计样式 */
+.char-count {
+    text-align: right;
+    padding: 5px 10px;
+    font-size: 0.8rem;
+    color: #6c757d;
+}
+
+.char-count .over-limit {
+    color: #dc3545;
 }
 </style>

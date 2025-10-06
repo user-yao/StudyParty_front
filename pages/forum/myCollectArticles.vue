@@ -159,7 +159,7 @@ export default {
     // 切换点赞状态
     async toggleLike(article) {
       try {
-        const res = await this.niceArticle({ articleId: article.id });
+        const res = await this.niceArticle(article.id);
         if (res.code === 200) {
           // 更新文章的点赞状态和数量
           if (res.data === "取消点赞") {
@@ -179,7 +179,7 @@ export default {
     // 切换收藏状态
     async toggleCollect(article) {
       try {
-        const res = await this.collectArticle({ articleId: article.id });
+        const res = await this.collectArticle(article.id);
         if (res.code === 200) {
           // 更新文章的收藏状态和数量
           if (res.data === "取消收藏") {

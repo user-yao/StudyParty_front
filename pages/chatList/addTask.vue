@@ -51,7 +51,7 @@
                                     @scroll="onTextareaScroll" :style="textareaContainerStyle" enable-flex="true">
                                     <textarea ref="submissionTextarea" class="submission-text" v-model="displayContent"
                                         placeholder="请输入任务内容，支持Markdown语法..." :style="textareaStyle"
-                                        @focus="onTextareaFocus" @blur="onTextareaBlur">
+                                        @focus="onTextareaFocus" @blur="onTextareaBlur" :maxlength="5000">
 									</textarea>
                                 </scroll-view>
 
@@ -61,6 +61,11 @@
                                         <u-icon name="photo" size="24" color="#4361ee"></u-icon>
                                     </view>
                                     <text class="toolbar-text" @click="uploadImage">添加图片</text>
+                                </view>
+                                
+                                <!-- 字数统计 -->
+                                <view class="word-count">
+                                    <text class="count-text">{{ currentWordCount }}/5000</text>
                                 </view>
                             </view>
                         </view>
@@ -148,7 +153,11 @@ export default {
                 };
             }
         },
-
+        
+        // 当前字数统计
+        currentWordCount() {
+            return this.displayContent.length;
+        }
 
     },
     watch: {
@@ -497,6 +506,15 @@ export default {
                 return;
             }
 
+            // 检查字数限制
+            if (this.submissionContent.length > 5000) {
+                uni.showToast({
+                    title: '任务内容不能超过5000字',
+                    icon: 'none'
+                });
+                return;
+            }
+
             // 显示加载状态
             this.submitLoading = true;
 
@@ -795,5 +813,18 @@ export default {
             background-color: #f0f0f0;
         }
     }
+}
+
+/* 字数统计样式 */
+.word-count {
+    text-align: right;
+    padding: 5px 10px;
+    background-color: #f8f9fa;
+    border-top: 1px solid #e9ecef;
+}
+
+.count-text {
+    font-size: 0.8rem;
+    color: #6c757d;
 }
 </style>

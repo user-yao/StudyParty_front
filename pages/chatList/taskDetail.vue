@@ -8,7 +8,23 @@
         </div>
         <div class="header-title">任务详情</div>
         <div class="header-actions">
-          <!-- 占位元素，保持居中 -->
+          <u-icon 
+            v-if="!hasAnalyzed || showAIAnalysis" 
+            name="chat" 
+            size="20" 
+            @click="handleAIAnalysis" 
+            color="#fff"
+            class="ai-icon"
+          ></u-icon>
+          <u-icon 
+            v-else 
+            name="chat-fill" 
+            size="20" 
+            @click="handleAIAnalysis" 
+            color="#fff"
+            class="ai-icon"
+          ></u-icon>
+          <u-icon name="plus" size="20" @click="goToAddAnswer" color="#fff"></u-icon>
         </div>
       </div>
     </header>
@@ -83,6 +99,8 @@
           <view class="markdown-content">
             <u-markdown :content="task.context"></u-markdown>
           </view>
+          
+          <!-- AI解析按钮已移至顶部导航栏 -->
         </view>
         
         <!-- 回答区域 -->
@@ -153,9 +171,8 @@
                 <view 
                   class="select-best-answer" 
                   v-if="task && task.uploader === userInfo.id && task.isOver !== 1 && !answer.isBestAnswer"
-                  
-                >
-                  <u-button type="success" size="mini" plain @click="selectBestAnswer(answer.id)">最佳</u-button>
+                  >
+                  <u-button type="primary" size="mini" plain @click="selectBestAnswer(answer.id)">设为最佳</u-button>
                 </view>
                 
                 <!-- 最佳答案标识（如果此回答是最佳答案） -->
@@ -203,13 +220,110 @@
             </view>
           </view>
         </view>
-        
-        <!-- 添加回答按钮 -->
-        <view class="add-answer-section section">
-          <u-button type="primary" shape="circle" @click="goToAddAnswer">添加回答</u-button>
-        </view>
       </scroll-view>
     </view>
+    
+    <!-- AI解析弹出层 -->
+    <u-popup :show="showAIAnalysis" mode="center" border-radius="10" width="80%" height="500px" @close="showAIAnalysis = false">
+      <view class="ai-analysis-popup">
+        <view class="popup-header">
+          <text class="popup-title">小星提示</text>
+          <u-icon name="close" size="20" @click="showAIAnalysis = false"></u-icon>
+        </view>
+        <view class="popup-content">
+          <view class="analysis-content" v-if="aiAnalysisData">
+            <view class="analysis-item" v-show="currentAnalysisIndex === 0">
+              <view class="analysis-title">解析要点一</view>
+              <scroll-view class="analysis-scroll" scroll-y show-scrollbar="false">
+                <text class="analysis-text">{{ aiAnalysisData.first }}</text>
+              </scroll-view>
+            </view>
+            <view class="analysis-item" v-show="currentAnalysisIndex === 1">
+              <view class="analysis-title">解析要点二</view>
+              <scroll-view class="analysis-scroll" scroll-y show-scrollbar="false">
+                <text class="analysis-text">{{ aiAnalysisData.second }}</text>
+              </scroll-view>
+            </view>
+            <view class="analysis-item" v-show="currentAnalysisIndex === 2">
+              <view class="analysis-title">解析要点三</view>
+              <scroll-view class="analysis-scroll" scroll-y show-scrollbar="false">
+                <text class="analysis-text">{{ aiAnalysisData.third }}</text>
+              </scroll-view>
+            </view>
+          </view>
+          <view class="loading-container" v-else-if="aiAnalyzing">
+            <div class="loading-spinner"></div>
+            <p>小星正在思考中...</p>
+          </view>
+          <view class="no-data" v-else>
+            <text>暂无解析内容</text>
+          </view>
+        </view>
+        <view class="popup-footer" v-if="aiAnalysisData">
+          <u-button 
+            type="primary" 
+            size="normal" 
+            shape="circle" 
+            @click="prevAnalysis"
+            :disabled="currentAnalysisIndex === 0"
+            class="nav-button"
+          >
+            上一个提示
+          </u-button>
+          <u-button 
+            type="primary" 
+            size="normal" 
+            shape="circle" 
+            @click="nextAnalysis"
+            :disabled="currentAnalysisIndex === 2"
+            class="nav-button"
+          >
+            下一个提示
+          </u-button>
+        </view>
+        <!-- 鼓励性提示 -->
+        <view class="encouragement-tip" v-if="showAIAnalysis && aiAnalysisData">
+          <text class="tip-text">AI只是学习的辅助工具，真正掌握知识还需要你的努力和思考。继续加油！</text>
+        </view>
+      </view>
+    </u-popup>
+    
+    <!-- AI提示弹出层 -->
+    <u-popup :show="showAIPrompt" mode="center" border-radius="10" width="80%" height="200px" @close="showAIPrompt = false">
+      <view class="ai-prompt-popup">
+        <view class="popup-header">
+          <text class="popup-title">AI解析</text>
+          <u-icon name="close" size="20" @click="showAIPrompt = false"></u-icon>
+        </view>
+        <view class="popup-content">
+          <view class="prompt-message">
+            <text>AI将为您解析当前任务内容，解析过程可能需要一些时间，是否继续？</text>
+          </view>
+          <view class="prompt-options">
+            <u-button 
+              type="primary" 
+              size="normal" 
+              shape="circle" 
+              @click="handleAIPromptConfirm"
+              :loading="aiAnalyzing"
+            >
+              确定解析
+            </u-button>
+            <u-button 
+              type="default" 
+              size="normal" 
+              shape="circle" 
+              @click="showAIPrompt = false"
+            >
+              取消
+            </u-button>
+          </view>
+          <view class="background-loading-tip" v-if="aiAnalyzing">
+            <text>解析将在后台进行，您可以继续浏览其他内容</text>
+          </view>
+        </view>
+      </view>
+    </u-popup>
   </view>
 </template>
 
@@ -227,7 +341,14 @@ export default {
       loading: true, // 添加加载状态
       currentPage: 1, // 当前页码
       noMoreData: false, // 是否没有更多数据
-      loadingMore: false // 是否正在加载更多
+      loadingMore: false, // 是否正在加载更多
+      // AI解析相关数据
+      showAIAnalysis: false,
+      showAIPrompt: false, // 是否显示AI提示弹窗
+      aiAnalyzing: false,
+      aiAnalysisData: null,
+      currentAnalysisIndex: 0,
+      hasAnalyzed: false // 是否已经解析过
     }
   },
   computed: {
@@ -242,6 +363,7 @@ export default {
   methods: {
     ...mapActions('task', ['getTaskById']), // 映射task模块的获取任务详情action
     ...mapActions('taskAnswer', ['TaskAnswerList', 'trueTaskAnswer']), // 映射taskAnswer模块的action
+    ...mapActions('AI', ['getTaskAnalyst']), // 映射AI模块的action
     
     // 返回上一页
     goBack() {
@@ -501,15 +623,15 @@ export default {
       }
     },
     // 跳转到用户信息页面
-			goToUserProfile(userId) {
-				// 跳转到其他用户的个人信息页面，使用eventChannel传递数据
-				uni.navigateTo({
-					url: '/pages/userInfo/userInfo',
-					success: (res) => {
-						res.eventChannel.emit('chatData', { id: userId });
-					}
-				});
-			},
+    goToUserProfile(userId) {
+      // 跳转到其他用户的个人信息页面，使用eventChannel传递数据
+      uni.navigateTo({
+        url: '/pages/userInfo/userInfo',
+        success: (res) => {
+          res.eventChannel.emit('chatData', { id: userId });
+        }
+      });
+    },
     // 选择最佳答案
     async selectBestAnswer(answerId) {
       // 确认选择
@@ -554,6 +676,83 @@ export default {
           }
         }
       });
+    },
+    
+    // 获取AI按钮文字
+    getAIButtonText() {
+      if (this.aiAnalyzing) {
+        return '解析中...';
+      } else if (this.hasAnalyzed) {
+        return '查看提示';
+      } else {
+        return 'AI提示';
+      }
+    },
+    
+    // 处理AI分析（按钮点击事件）
+    handleAIAnalysis() {
+      if (this.hasAnalyzed && !this.aiAnalyzing) {
+        // 如果已经解析过且不在解析中，直接显示弹窗
+        this.showAIAnalysis = true;
+      } else {
+        // 显示AI提示弹窗
+        this.showAIPrompt = true;
+      }
+    },
+    
+    // AI解析任务
+    async analyzeTaskWithAI() {
+      if (!this.task) return;
+      
+      this.aiAnalyzing = true;
+      this.aiAnalysisData = null;
+      this.currentAnalysisIndex = 0;
+      
+      try {
+        // 调用AI解析接口
+        const res = await this.getTaskAnalyst({ prompt: this.task.context });
+        console.log('AI解析返回数据:', res);
+        
+        if (res && res.code === 200 && res.data) {
+          this.aiAnalysisData = res.data;
+          this.hasAnalyzed = true;
+          this.showAIAnalysis = true;
+          uni.showToast({
+            title: '解析完成',
+            icon: 'success'
+          });
+        } else {
+          throw new Error(res.msg || '解析失败');
+        }
+      } catch (error) {
+        console.error('AI解析失败:', error);
+        uni.showToast({
+          title: '解析失败: ' + (error.message || '未知错误'),
+          icon: 'none'
+        });
+      } finally {
+        this.aiAnalyzing = false;
+      }
+    },
+    
+    // 切换到下一条解析
+    nextAnalysis() {
+      if (this.currentAnalysisIndex < 2) {
+        this.currentAnalysisIndex++;
+      }
+    },
+    
+    // 切换到上一条解析
+    prevAnalysis() {
+      if (this.currentAnalysisIndex > 0) {
+        this.currentAnalysisIndex--;
+      }
+    },
+    
+    // 在提示弹窗中点击AI解析按钮
+    handleAIPromptConfirm() {
+      this.showAIPrompt = false;
+      this.analyzeTaskWithAI();
     }
   },
 
@@ -624,8 +823,8 @@ export default {
 
 .header-actions {
   display: flex;
-  gap: 15px;
-  width: 20px;
+  align-items: center;
+  gap: 1px;
 }
 
 /* 内容滚动区域 */
@@ -771,6 +970,14 @@ export default {
   right: 0;
   height: 30px;
   background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,1));
+}
+
+/* AI解析按钮区域 */
+.ai-analysis-section {
+  text-align: center;
+  padding: 10px 0;
+  border-top: 1px solid #eee;
+  margin-top: 10px;
 }
 
 /* 回答区域 */
@@ -954,20 +1161,152 @@ export default {
   100% { transform: rotate(360deg); }
 }
 
-/* 添加回答区域 */
-.add-answer-section {
-  background-color: #fff;
-  text-align: center;
-  padding: 20px;
+/* AI解析弹出层 */
+.ai-analysis-popup {
+  height: 90%;
+  width: 90vw;
+  display: flex;
+  flex-direction: column;
 }
 
-.add-answer-section .u-button {
-  width: 100%;
-  max-width: 300px;
-  margin: 0 auto;
+.popup-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  border-bottom: 1px solid #eee;
+}
+
+.popup-title {
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.popup-content {
+  flex: 1;
+  padding: 15px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.analysis-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.analysis-title {
+  font-weight: 600;
+  font-size: 1rem;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.analysis-scroll {
+  flex: 1;
+  max-height: 300px;
+  min-height: 300px;
+}
+
+.analysis-text {
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: #333;
+}
+
+.no-data {
+  text-align: center;
+  padding: 30px 0;
+  color: #999;
+}
+
+.popup-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  border-top: 1px solid #eee;
+}
+
+.page-indicator {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.nav-button {
+  min-width: 50px;
+  margin: 10rpx;
+  padding: 0 15px;
 }
 
 ::-webkit-scrollbar{
   display: none;
+}
+
+/* AI图标样式 */
+.ai-icon {
+  margin-right: 15px;
+}
+
+/* AI加载动画 */
+.ai-loading ::v-deep .u-button__text::after {
+  content: '';
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border: 2px solid #ffffff;
+  border-radius: 50%;
+  border-top-color: transparent;
+  animation: ai-loading-spinner 1s linear infinite;
+  margin-left: 8px;
+  vertical-align: middle;
+}
+
+/* 鼓励性提示 */
+.encouragement-tip {
+  padding: 10px 15px;
+  background-color: #f0f8ff;
+  border-top: 1px solid #eee;
+  text-align: center;
+}
+
+.tip-text {
+  font-size: 12px;
+  color: #666;
+  line-height: 1.4;
+}
+
+/* AI提示弹窗 */
+.ai-prompt-popup {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.prompt-message {
+  padding: 20px;
+  text-align: center;
+  font-size: 14px;
+  color: #333;
+}
+
+.prompt-options {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  padding: 0 20px 20px;
+}
+
+.background-loading-tip {
+  padding: 10px;
+  text-align: center;
+  font-size: 12px;
+  color: #666;
+}
+
+@keyframes ai-loading-spinner {
+  to { transform: rotate(360deg); }
 }
 </style>

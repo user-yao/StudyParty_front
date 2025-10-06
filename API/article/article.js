@@ -77,7 +77,7 @@ export const niceArticle = (data) => {
         url: '/article/niceArticle',
         method: 'POST',
         data: {
-            articleId: data.articleId
+            articleId: data
         },
         header: {
             'Content-Type': 'application/x-www-form-urlencoded'
@@ -89,7 +89,7 @@ export const collectArticle = (data) => {
         url: '/article/collectArticle',
         method: 'POST',
         data: {
-            articleId: data.articleId
+            articleId: data
         },
         header: {
             'Content-Type': 'application/x-www-form-urlencoded'

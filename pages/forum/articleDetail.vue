@@ -8,30 +8,35 @@
         </div>
         <div class="header-title">文章详情</div>
         <div class="header-actions">
-          <!-- 占位元素，保持居中 -->
+          <u-icon 
+            v-if="!hasAnalyzed || showAIAnalysis" 
+            name="chat" 
+            size="20" 
+            @click="handleAIAnalysis" 
+            color="#fff"
+            class="ai-icon"
+          ></u-icon>
+          <u-icon 
+            v-else 
+            name="chat-fill" 
+            size="20" 
+            @click="handleAIAnalysis" 
+            color="#fff"
+            class="ai-icon"
+          ></u-icon>
         </div>
       </div>
     </header>
-    
+
     <!-- 文章内容区域 -->
     <view class="content-container">
-      <scroll-view 
-        class="content-scroll" 
-        scroll-y
-        :scroll-top="scrollTop"
-        @scroll="onScroll"
-        show-scrollbar="false"
-      >
+      <scroll-view class="content-scroll" scroll-y :scroll-top="scrollTop" @scroll="onScroll" show-scrollbar="false">
         <!-- 文章详情 -->
         <view class="article-content section">
           <view class="article-header">
             <view class="article-user">
               <view class="user-avatar">
-                <image 
-                  v-if="article.head" 
-                  :src="fullImageUrl(article.head)" 
-                  mode="aspectFill"
-                ></image>
+                <image v-if="article.head" :src="fullImageUrl(article.head)" mode="aspectFill"></image>
                 <view v-else class="avatar-placeholder">
                   {{ article.name ? article.name.substring(0, 1) : 'U' }}
                 </view>
@@ -40,22 +45,10 @@
                 <view class="user-name">
                   {{ article.name }}
                   <!-- 文章作者身份标识 -->
-                  <text 
-                    v-if="userInfo && article.uploader === userInfo.id" 
-                    class="user-identity identity-me"
-                  >我</text>
-                  <text 
-                    v-else-if="article.status === 1" 
-                    class="user-identity identity-student"
-                  >学生</text>
-                  <text 
-                    v-else-if="article.status === 2" 
-                    class="user-identity identity-teacher"
-                  >老师</text>
-                  <text 
-                    v-else-if="article.status === 3" 
-                    class="user-identity identity-enterprise"
-                  >企业</text>
+                  <text v-if="userInfo && article.uploader === userInfo.id" class="user-identity identity-me">我</text>
+                  <text v-else-if="article.status === 1" class="user-identity identity-student">学生</text>
+                  <text v-else-if="article.status === 2" class="user-identity identity-teacher">老师</text>
+                  <text v-else-if="article.status === 3" class="user-identity identity-enterprise">企业</text>
                 </view>
                 <view class="user-school">{{ article.school }}</view>
               </view>
@@ -64,14 +57,14 @@
               {{ formatTime(article.createTime) }}
             </view>
           </view>
-          
+
           <view class="article-title">{{ article.title }}</view>
-          
+
           <!-- Markdown内容 -->
           <view class="markdown-content">
             <u-markdown :content="article.content"></u-markdown>
           </view>
-          
+
           <!-- 点赞收藏等操作 -->
           <view class="article-actions">
             <view class="article-meta">
@@ -84,25 +77,19 @@
                 <text>{{ article.commentCount }}</text>
               </view>
               <view class="meta-item" @click="toggleLike">
-                <u-icon 
-                  :name="article.isNice ? 'heart-fill' : 'heart'" 
-                  :color="article.isNice ? '#f00' : '#999'"
-                  size="14"
-                ></u-icon>
+                <u-icon :name="article.isNice ? 'heart-fill' : 'heart'" :color="article.isNice ? '#f00' : '#999'"
+                  size="14"></u-icon>
                 <text>{{ article.nice }}</text>
               </view>
               <view class="meta-item" @click="toggleCollect">
-                <u-icon 
-                  :name="article.isCollect ? 'bookmark-fill' : 'bookmark'" 
-                  :color="article.isCollect ? '#4361ee' : '#999'"
-                  size="14"
-                ></u-icon>
+                <u-icon :name="article.isCollect ? 'bookmark-fill' : 'bookmark'"
+                  :color="article.isCollect ? '#4361ee' : '#999'" size="14"></u-icon>
                 <text>{{ article.collect }}</text>
               </view>
             </view>
           </view>
         </view>
-        
+
         <!-- 评论区域 -->
         <view class="comments-section section">
           <view class="section-header">
@@ -111,22 +98,14 @@
               <text>评论 ({{ article.commentCount }})</text>
             </view>
           </view>
-          
+
           <!-- 评论列表 -->
           <view class="comments-list">
-            <view 
-              v-for="comment in comments" 
-              :key="comment.id"
-              class="comment-item"
-            >
+            <view v-for="comment in comments" :key="comment.id" class="comment-item">
               <view class="comment-header">
                 <view class="comment-author">
                   <view class="user-avatar">
-                    <image 
-                      v-if="comment.head" 
-                      :src="fullImageUrl(comment.head)" 
-                      mode="aspectFill"
-                    ></image>
+                    <image v-if="comment.head" :src="fullImageUrl(comment.head)" mode="aspectFill"></image>
                     <view v-else class="avatar-placeholder">
                       {{ comment.name ? comment.name.substring(0, 1) : 'U' }}
                     </view>
@@ -135,36 +114,20 @@
                     <view class="user-name">
                       {{ comment.name }}
                       <!-- 身份标识 -->
-                      <text 
-                        v-if="article && comment.userId === article.userId" 
-                        class="user-identity identity-owner"
-                      >楼主</text>
-                      <text 
-                        v-else-if="userInfo && comment.userId === userInfo.id" 
-                        class="user-identity identity-me"
-                      >我</text>
-                      <text 
-                        v-else-if="comment.status === 1" 
-                        class="user-identity identity-student"
-                      >学生</text>
-                      <text 
-                        v-else-if="comment.status === 2" 
-                        class="user-identity identity-teacher"
-                      >老师</text>
-                      <text 
-                        v-else-if="comment.status === 3" 
-                        class="user-identity identity-enterprise"
-                      >企业</text>
+                      <text v-if="article && comment.userId === article.userId"
+                        class="user-identity identity-owner">楼主</text>
+                      <text v-else-if="userInfo && comment.userId === userInfo.id"
+                        class="user-identity identity-me">我</text>
+                      <text v-else-if="comment.status === 1" class="user-identity identity-student">学生</text>
+                      <text v-else-if="comment.status === 2" class="user-identity identity-teacher">老师</text>
+                      <text v-else-if="comment.status === 3" class="user-identity identity-enterprise">企业</text>
                     </view>
                     <view class="comment-time">{{ formatCommentTime(comment.createTime) }}</view>
                   </view>
                 </view>
                 <view class="comment-like" @click="toggleCommentLike(comment)">
-                  <u-icon 
-                    :name="comment.isNice ? 'thumb-up-fill' : 'thumb-up'" 
-                    :color="comment.isNice ? '#4361ee' : '#999'"
-                    size="16"
-                  ></u-icon>
+                  <u-icon :name="comment.isNice ? 'thumb-up-fill' : 'thumb-up'"
+                    :color="comment.isNice ? '#4361ee' : '#999'" size="16"></u-icon>
                   <text :class="{ liked: comment.isNice }">{{ comment.nice }}</text>
                 </view>
               </view>
@@ -173,17 +136,13 @@
               </view>
               <!-- 评论图片 -->
               <view v-if="comment.sources && comment.sources.length > 0" class="comment-images">
-                <view 
-                  v-for="(img, index) in comment.sources" 
-                  :key="index"
-                  class="comment-image"
-                  @click="previewImage(img.url)"
-                >
+                <view v-for="(img, index) in comment.sources" :key="index" class="comment-image"
+                  @click="previewImage(img.url)">
                   <image :src="fullImageUrl(img.url)" mode="aspectFill"></image>
                 </view>
               </view>
             </view>
-            
+
             <!-- 无评论提示 -->
             <view v-if="comments.length === 0" class="no-comments">
               <text>暂无评论，快来抢沙发吧！</text>
@@ -192,57 +151,132 @@
         </view>
       </scroll-view>
     </view>
-    
+
     <!-- 评论输入框 - 固定在底部 -->
     <view class="comment-input-fixed" :style="{ bottom: commentInputBottom }">
       <!-- 预览图片区域 -->
       <view v-if="selectedImages.length > 0" class="image-preview-area">
-        <view 
-          v-for="(img, index) in selectedImages" 
-          :key="index"
-          class="preview-image-container"
-        >
+        <view v-for="(img, index) in selectedImages" :key="index" class="preview-image-container">
           <image :src="img" mode="aspectFill" class="preview-image"></image>
           <view class="remove-image" @click="removeImage(index)">
             <u-icon name="close" size="12" color="#fff"></u-icon>
           </view>
         </view>
       </view>
-      
+
       <view class="comment-input-area">
         <view class="image-upload-btn" @click="selectImages">
           <u-icon name="photo" size="20" color="#666"></u-icon>
         </view>
-        <u-input 
-          ref="commentInput"
-          v-model="commentContent" 
-          placeholder="请输入评论内容" 
-          type="textarea"
-          :auto-height="true"
-          class="comment-input"
-          :focus="isInputFocused"
-          :adjust-position="false"
-        ></u-input>
-        <u-button 
-          type="primary" 
-          size="mini" 
-          @click="submitComment"
-          :disabled="!commentContent.trim() && selectedImages.length === 0"
-          class="submit-btn"
-        >
+        <u-input ref="commentInput" v-model="commentContent" placeholder="请输入评论内容" type="textarea" :auto-height="true"
+          class="comment-input" :focus="isInputFocused" :adjust-position="false"></u-input>
+        <u-button type="primary" size="mini" @click="submitComment"
+          :disabled="!commentContent.trim() && selectedImages.length === 0" class="submit-btn">
           发送
         </u-button>
       </view>
     </view>
-    
+
     <!-- 返回顶部按钮 -->
-    <view 
-      v-if="showBackTop" 
-      class="back-to-top" 
-      @click="backToTop"
-    >
+    <view v-if="showBackTop" class="back-to-top" @click="backToTop">
       <u-icon name="arrow-upward" size="20" color="#fff"></u-icon>
     </view>
+    
+    <!-- AI解析弹出层 -->
+    <u-popup :show="showAIAnalysis" mode="center" border-radius="10" width="80%" height="500px" @close="showAIAnalysis = false">
+      <view class="ai-analysis-popup">
+        <view class="popup-header">
+          <text class="popup-title">小星提示</text>
+          <u-icon name="close" size="20" @click="showAIAnalysis = false"></u-icon>
+        </view>
+        <view class="popup-content">
+          <view class="analysis-content" v-if="aiAnalysisData">
+            <view class="analysis-item" v-show="currentAnalysisIndex === 0">
+              <view class="analysis-title">内容总结</view>
+              <scroll-view class="analysis-scroll" scroll-y show-scrollbar="false">
+                <text class="analysis-text">{{ aiAnalysisData.summary }}</text>
+              </scroll-view>
+            </view>
+            <view class="analysis-item" v-show="currentAnalysisIndex === 1">
+              <view class="analysis-title">知识点解析</view>
+              <scroll-view class="analysis-scroll" scroll-y show-scrollbar="false">
+                <text class="analysis-text">{{ aiAnalysisData.knowledge }}</text>
+              </scroll-view>
+            </view>
+          </view>
+          <view class="loading-container" v-else-if="aiAnalyzing">
+            <div class="loading-spinner"></div>
+            <p>小星正在思考中...</p>
+          </view>
+          <view class="no-data" v-else>
+            <text>暂无解析内容</text>
+          </view>
+        </view>
+        <view class="popup-footer" v-if="aiAnalysisData">
+          <u-button 
+            type="primary" 
+            size="normal" 
+            shape="circle" 
+            @click="prevAnalysis"
+            :disabled="currentAnalysisIndex === 0"
+            class="nav-button"
+          >
+            内容总结
+          </u-button>
+          <u-button 
+            type="primary" 
+            size="normal" 
+            shape="circle" 
+            @click="nextAnalysis"
+            :disabled="currentAnalysisIndex === 1"
+            class="nav-button"
+          >
+            知识点解析
+          </u-button>
+        </view>
+        <!-- 鼓励性提示 -->
+        <view class="encouragement-tip" v-if="showAIAnalysis && aiAnalysisData">
+          <text class="tip-text">内容由AI生成，仅供参考，希望可以帮助到您！</text>
+        </view>
+      </view>
+    </u-popup>
+    
+    <!-- AI提示弹出层 -->
+    <u-popup :show="showAIPrompt" mode="center" border-radius="10" width="80%" height="200px" @close="showAIPrompt = false">
+      <view class="ai-prompt-popup">
+        <view class="popup-header">
+          <text class="popup-title">AI解析</text>
+          <u-icon name="close" size="20" @click="showAIPrompt = false"></u-icon>
+        </view>
+        <view class="popup-content">
+          <view class="prompt-message">
+            <text>AI将为您解析当前文章内容，解析过程可能需要一些时间，是否继续？</text>
+          </view>
+          <view class="prompt-options">
+            <u-button 
+              type="primary" 
+              size="normal" 
+              shape="circle" 
+              @click="handleAIPromptConfirm"
+              :loading="aiAnalyzing"
+            >
+              确定解析
+            </u-button>
+            <u-button 
+              type="default" 
+              size="normal" 
+              shape="circle" 
+              @click="showAIPrompt = false"
+            >
+              取消
+            </u-button>
+          </view>
+          <view class="background-loading-tip" v-if="aiAnalyzing">
+            <text>解析将在后台进行，您可以继续浏览其他内容</text>
+          </view>
+        </view>
+      </view>
+    </u-popup>
   </view>
 </template>
 
@@ -259,10 +293,17 @@ export default {
       commentContent: '',
       comments: [],
       isInputFocused: false,
-      keyboardHeight: 0, // 新增键盘高度变量
-      selectedImages: [], // 新增图片选择数组
-      scrollTop: 0, // 滚动位置
-      showBackTop: false // 是否显示返回顶部按钮
+      keyboardHeight: 0,
+      selectedImages: [],
+      scrollTop: 0,
+      showBackTop: false,
+      // AI解析相关数据
+      showAIAnalysis: false,
+      showAIPrompt: false,
+      aiAnalyzing: false,
+      aiAnalysisData: null,
+      currentAnalysisIndex: 0,
+      hasAnalyzed: false
     }
   },
   computed: {
@@ -274,7 +315,6 @@ export default {
     currentUser() {
       return this.userInfo || {};
     },
-    // 计算评论输入框的底部位置
     commentInputBottom() {
       return this.keyboardHeight > 0 ? this.keyboardHeight + 'px' : '0px';
     }
@@ -282,6 +322,7 @@ export default {
   methods: {
     ...mapActions('article', ['articleById', 'niceArticle', 'collectArticle']),
     ...mapActions('articleComment', ['getArticleComment', 'addArticleComment', 'niceArticleComment']),
+    ...mapActions('AI', ['getArticleAnalyst']), // 添加AI模块的action
 
     // 返回上一页
     goBack() {
@@ -290,13 +331,10 @@ export default {
 
     // 完整图片URL
     fullImageUrl(path) {
-      // 确保path是字符串类型
       if (!path || typeof path !== 'string') return '';
-      // 如果已经是完整URL，直接返回
       if (path.startsWith('http')) {
         return path;
       }
-      // 拼接基础URL
       return imageUrl + path;
     },
 
@@ -331,15 +369,11 @@ export default {
     // 获取文章详情
     async getArticleDetail() {
       try {
-        // 显示加载提示
         uni.showLoading({
           title: '加载中...'
         });
 
-        // 获取文章详情
         await this.articleById({ articleId: this.articleId });
-
-        // 获取评论列表
         await this.loadComments();
       } catch (error) {
         console.error('获取文章详情失败:', error);
@@ -355,12 +389,11 @@ export default {
     // 加载评论
     async loadComments() {
       try {
-        const res = await this.getArticleComment({ 
+        const res = await this.getArticleComment({
           articleId: this.articleId,
           currentPage: 1
         });
         if (res.code === 200) {
-          // 处理评论数据，确保是数组格式
           if (res.data && res.data.records && Array.isArray(res.data.records)) {
             this.comments = res.data.records;
           } else {
@@ -381,8 +414,6 @@ export default {
       try {
         const res = await this.niceArticle(this.articleId);
         if (res.code === 200) {
-
-          // 更新文章的点赞状态和数量
           if (res.data === "取消点赞") {
             this.currentArticle.isNice = false;
             this.currentArticle.nice -= 1;
@@ -402,8 +433,6 @@ export default {
       try {
         const res = await this.collectArticle(this.articleId);
         if (res.code === 200) {
-
-          // 更新文章的收藏状态和数量
           if (res.data === "取消收藏") {
             this.currentArticle.isCollect = false;
             this.currentArticle.collect -= 1;
@@ -421,13 +450,11 @@ export default {
     // 选择图片
     selectImages() {
       uni.chooseImage({
-        count: 9, // 最多可以选择9张图片
-        sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图
-        sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机
+        count: 9,
+        sizeType: ['original', 'compressed'],
+        sourceType: ['album', 'camera'],
         success: (res) => {
-          // 将选择的图片路径添加到selectedImages数组中
           this.selectedImages = [...this.selectedImages, ...res.tempFilePaths];
-          // 限制最多9张图片
           if (this.selectedImages.length > 9) {
             this.selectedImages = this.selectedImages.slice(0, 9);
           }
@@ -444,33 +471,29 @@ export default {
       this.selectedImages.splice(index, 1);
     },
 
-    // 提交评论（使用uni.uploadFile的files参数）
+    // 提交评论
     async submitComment() {
       if (!this.commentContent.trim() && this.selectedImages.length === 0) {
         uni.$u.toast('请输入评论内容或选择图片');
         return;
       }
-      
+
       try {
         uni.showLoading({
           title: '提交评论中...'
         });
-        
-        // 先提交评论内容
+
         const res = await this.addArticleComment({
           articleId: this.articleId,
           content: this.commentContent
         });
-        
+
         if (res.code === 200) {
-          // 获取评论ID
           const commentId = res.data;
-          
-          // 如果有图片，上传图片
+
           if (this.selectedImages.length > 0) {
-            // 逐个上传图片
             for (let i = 0; i < this.selectedImages.length; i++) {
-				console.log(this.selectedImages[i])
+              console.log(this.selectedImages[i])
               await new Promise((resolve, reject) => {
                 uni.uploadFile({
                   url: baseUrl + '/article/articleComment/addArticleCommentImage',
@@ -492,17 +515,15 @@ export default {
               });
             }
           }
-          
+
           uni.showToast({
             title: '评论成功',
             icon: 'success'
           });
           this.commentContent = '';
-          this.selectedImages = []; // 清空选中的图片
-          
-          // 重新加载评论
+          this.selectedImages = [];
+
           await this.loadComments();
-          // 更新文章评论数
           this.currentArticle.commentCount += 1;
         } else {
           throw new Error(res.msg || '提交失败');
@@ -524,7 +545,6 @@ export default {
         console.log(comment)
         const res = await this.niceArticleComment({ articleCommentId: comment.id });
         if (res.code === 200) {
-          // 更新评论的点赞状态和数量
           if (res.data === "取消点赞") {
             comment.isNice = false;
             comment.nice -= 1;
@@ -561,28 +581,88 @@ export default {
 
     // 滚动事件处理
     onScroll(e) {
-      // 获取滚动位置
       const scrollTop = e.detail.scrollTop;
-      // 当滚动位置超过500px时显示返回顶部按钮
       this.showBackTop = scrollTop > 500;
     },
 
     // 返回顶部
     backToTop() {
-      // 设置滚动位置为0
       this.scrollTop = 0;
-      // 强制更新以触发滚动
       this.$nextTick(() => {
         this.scrollTop = 0;
       });
+    },
+    
+    // 处理AI分析（按钮点击事件）
+    handleAIAnalysis() {
+      if (this.hasAnalyzed && !this.aiAnalyzing) {
+        // 如果已经解析过且不在解析中，直接显示弹窗
+        this.showAIAnalysis = true;
+      } else {
+        // 显示AI提示弹窗
+        this.showAIPrompt = true;
+      }
+    },
+    
+    // AI解析文章
+    async analyzeArticleWithAI() {
+      if (!this.article) return;
+      
+      this.aiAnalyzing = true;
+      this.aiAnalysisData = null;
+      this.currentAnalysisIndex = 0;
+      
+      try {
+        // 调用AI解析接口，传递文章内容
+        const res = await this.getArticleAnalyst({ prompt: this.article.content });
+        console.log('AI解析返回数据:', res);
+        
+        if (res && res.code === 200 && res.data) {
+          this.aiAnalysisData = res.data;
+          this.hasAnalyzed = true;
+          this.showAIAnalysis = true;
+          uni.showToast({
+            title: '解析完成',
+            icon: 'success'
+          });
+        } else {
+          throw new Error(res.msg || '解析失败');
+        }
+      } catch (error) {
+        console.error('AI解析失败:', error);
+        uni.showToast({
+          title: '解析失败: ' + (error.message || '未知错误'),
+          icon: 'none'
+        });
+      } finally {
+        this.aiAnalyzing = false;
+      }
+    },
+    
+    // 切换到下一条解析
+    nextAnalysis() {
+      if (this.currentAnalysisIndex < 1) {
+        this.currentAnalysisIndex++;
+      }
+    },
+    
+    // 切换到上一条解析
+    prevAnalysis() {
+      if (this.currentAnalysisIndex > 0) {
+        this.currentAnalysisIndex--;
+      }
+    },
+    
+    // 在提示弹窗中点击AI解析按钮
+    handleAIPromptConfirm() {
+      this.showAIPrompt = false;
+      this.analyzeArticleWithAI();
     }
   },
 
   async onLoad(options) {
-    // 获取传递的文章ID
     if (options.id) {
       this.articleId = parseInt(options.id);
-      // 获取文章详情
       await this.getArticleDetail();
     } else {
       uni.showToast({
@@ -593,18 +673,14 @@ export default {
     }
   },
 
-  // 页面显示时监听键盘高度变化
   onShow() {
-    // 监听键盘高度变化
     uni.onKeyboardHeightChange(this.onKeyboardHeightChange);
   },
 
-  // 页面隐藏时取消监听
   onHide() {
     uni.offKeyboardHeightChange(this.onKeyboardHeightChange);
   },
 
-  // 页面卸载时取消监听
   onUnload() {
     uni.offKeyboardHeightChange(this.onKeyboardHeightChange);
   }
@@ -630,11 +706,11 @@ export default {
   padding: 10px 15px;
   padding-top: calc(var(--status-bar-height, 0px) + 10px);
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  position: fixed; /* 固定顶部标题 */
+  position: fixed;
   top: 0;
   left: 0;
   right: 0;
-  z-index: 1000; /* 提高z-index确保在最上层 */
+  z-index: 1000;
 }
 
 .header-top {
@@ -659,16 +735,16 @@ export default {
 
 .header-actions {
   display: flex;
-  gap: 15px;
-  width: 20px; /* 与返回按钮宽度一致，保持标题居中 */
+  align-items: center;
+  gap: 1px;
 }
 
 /* 内容滚动区域 */
 .content-container {
   padding: 10px;
   padding-bottom: 20px;
-  padding-top: calc(var(--status-bar-height, 0px) + 60px); /* 为固定头部留出空间 */
-  min-height: calc(100vh - 120px); /* 使用min-height避免溢出 */
+  padding-top: calc(var(--status-bar-height, 0px) + 60px);
+  min-height: calc(100vh - 120px);
   position: relative;
   box-sizing: border-box;
 }
@@ -821,8 +897,8 @@ export default {
   gap: 8px;
   padding: 10px;
   border-bottom: 1px solid #eee;
-  max-height: 100px; /* 限制预览区域高度 */
-  overflow-y: auto; /* 超出时滚动 */
+  max-height: 100px;
+  overflow-y: auto;
 }
 
 .preview-image-container {
@@ -858,8 +934,8 @@ export default {
   padding: 10px;
   background-color: #fff;
   align-items: center;
-  box-sizing: border-box; /* 确保padding包含在宽度内 */
-  width: 100%; /* 确保不超过容器宽度 */
+  box-sizing: border-box;
+  width: 100%;
 }
 
 .comment-input {
@@ -900,9 +976,9 @@ export default {
   min-width: 0;
   white-space: nowrap;
   width: auto;
-  line-height: 1; /* 确保行高不会影响按钮高度 */
-  border: none; /* 移除可能的边框 */
-  margin: 0; /* 移除可能的外边距 */
+  line-height: 1;
+  border: none;
+  margin: 0;
 }
 
 /* 评论列表 */
@@ -1013,8 +1089,8 @@ export default {
   transition: bottom 0.3s ease;
   box-sizing: border-box;
   width: 100%;
-  max-width: 100vw; /* 限制最大宽度为视口宽度 */
-  overflow-x: hidden; /* 防止水平溢出 */
+  max-width: 100vw;
+  overflow-x: hidden;
 }
 
 /* 身份标识 */
@@ -1068,7 +1144,163 @@ export default {
   cursor: pointer;
   z-index: 999;
 }
-::-webkit-scrollbar{
-      display: none;
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+/* AI图标样式 */
+.ai-icon {
+  margin-right: 15px;
+}
+
+/* 加载状态 */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 30px 0;
+}
+
+.loading-spinner {
+  width: 30px;
+  height: 30px;
+  border: 3px solid #f0f0f0;
+  border-top: 3px solid #4361ee;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 10px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* AI解析弹出层 */
+.ai-analysis-popup {
+  height: 90%;
+  width: 90vw;
+  display: flex;
+  flex-direction: column;
+}
+
+.popup-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  border-bottom: 1px solid #eee;
+}
+
+.popup-title {
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.popup-content {
+  flex: 1;
+  padding: 15px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.analysis-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.analysis-title {
+  font-weight: 600;
+  font-size: 1rem;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.analysis-scroll {
+  flex: 1;
+  max-height: 300px;
+  min-height: 300px;
+}
+
+.analysis-text {
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: #333;
+}
+
+.no-data {
+  text-align: center;
+  padding: 30px 0;
+  color: #999;
+}
+
+.popup-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  border-top: 1px solid #eee;
+}
+
+.page-indicator {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.nav-button {
+  min-width: 50px;
+  margin: 10rpx;
+  padding: 0 15px;
+}
+
+/* AI提示弹窗 */
+.ai-prompt-popup {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.prompt-message {
+  padding: 20px;
+  text-align: center;
+  font-size: 14px;
+  color: #333;
+}
+
+.prompt-options {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  padding: 0 20px 20px;
+}
+
+.background-loading-tip {
+  padding: 10px;
+  text-align: center;
+  font-size: 12px;
+  color: #666;
+}
+
+@keyframes ai-loading-spinner {
+  to { transform: rotate(360deg); }
+}
+
+/* 鼓励性提示 */
+.encouragement-tip {
+  padding: 10px 15px;
+  background-color: #f0f8ff;
+  border-top: 1px solid #eee;
+  text-align: center;
+}
+
+.tip-text {
+  font-size: 12px;
+  color: #666;
+  line-height: 1.4;
 }
 </style>
