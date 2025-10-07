@@ -768,3 +768,14 @@ to {
 .image-toolbar .toolbar-text[data-v-f6d4aec5]:hover {
   background-color: #f0f0f0;
 }
+
+/* 字数统计样式 */
+.char-count[data-v-f6d4aec5] {
+  text-align: right;
+  padding: 5px 10px;
+  font-size: 0.8rem;
+  color: #6c757d;
+}
+.char-count .over-limit[data-v-f6d4aec5] {
+  color: #dc3545;
+}

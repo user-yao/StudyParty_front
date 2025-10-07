@@ -14,14 +14,17 @@ export default {
 			webSocketService.connect();
 		}
 		if(uni.getStorageSync('password') != null){
-			this.login({phone:uni.getStorageSync('user').phone,password:uni.getStorageSync("password")}).then(res =>{
-				if(res.code == 200){
-					uni.switchTab({ url: '/pages/index/index' });
-				}else{
-					uni.switchTab({ url: '/pages/login/login' });
-				}
-				
-			})
+			// 修复：确保用户信息存在再访问其属性
+			const user = uni.getStorageSync('user');
+			if (user && user.phone) {
+				this.login({phone: user.phone, password: uni.getStorageSync("password")}).then(res =>{
+					if(res.code == 200){
+						uni.switchTab({ url: '/pages/index/index' });
+					}else{
+						uni.switchTab({ url: '/pages/login/login' });
+					}
+				})
+			}
 		}
 	},
 	onShow: function() {

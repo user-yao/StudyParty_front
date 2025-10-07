@@ -13,7 +13,10 @@ export default {
       state.groupTasks = tasks[1] || [];
     },
     SET_USER_INFO(state, info) {
-      uni.setStorageSync('token', info.token);
+      // 安全地访问info.token，确保info存在
+      if (info && info.token) {
+        uni.setStorageSync('token', info.token);
+      }
     },
     CLEAR_USER_INFO(state) {
       state.userInfo = null;

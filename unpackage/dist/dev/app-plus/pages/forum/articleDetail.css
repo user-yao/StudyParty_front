@@ -842,6 +842,325 @@ to {
 .u-button--hairline[data-v-461e713c] {
   border-width: 0.5px !important;
 }
+/**
+ * 这里是uni-app内置的常用样式变量
+ *
+ * uni-app 官方扩展插件及插件市场（https://ext.dcloud.net.cn）上很多三方插件均使用了这些样式变量
+ * 如果你是插件开发者，建议你使用scss预处理，并在插件代码中直接使用这些变量（无需 import 这个文件），方便用户通过搭积木的方式开发整体风格一致的App
+ *
+ */
+/**
+ * 如果你是App开发者（插件使用者），你可以通过修改这些变量来定制自己的插件主题，实现自定义主题功能
+ *
+ * 如果你的项目同样使用了scss预处理，你也可以直接在你的 scss 代码中使用如下变量，同时无需 import 这个文件
+ */
+/* 颜色变量 */
+/* 行为相关颜色 */
+/* 文字基本颜色 */
+/* 背景颜色 */
+/* 边框颜色 */
+/* 尺寸变量 */
+/* 文字尺寸 */
+/* 图片尺寸 */
+/* Border Radius */
+/* 水平间距 */
+/* 垂直间距 */
+/* 透明度 */
+/* 文章场景相关 */
+/**
+ * vue版本动画内置的动画模式有如下：
+ * fade：淡入
+ * zoom：缩放
+ * fade-zoom：缩放淡入
+ * fade-up：上滑淡入
+ * fade-down：下滑淡入
+ * fade-left：左滑淡入
+ * fade-right：右滑淡入
+ * slide-up：上滑进入
+ * slide-down：下滑进入
+ * slide-left：左滑进入
+ * slide-right：右滑进入
+ */
+.u-fade-enter-active[data-v-0573594d],
+.u-fade-leave-active[data-v-0573594d] {
+  transition-property: opacity;
+}
+.u-fade-enter[data-v-0573594d],
+.u-fade-leave-to[data-v-0573594d] {
+  opacity: 0;
+}
+.u-fade-zoom-enter[data-v-0573594d],
+.u-fade-zoom-leave-to[data-v-0573594d] {
+  transform: scale(0.95);
+  opacity: 0;
+}
+.u-fade-zoom-enter-active[data-v-0573594d],
+.u-fade-zoom-leave-active[data-v-0573594d] {
+  transition-property: transform, opacity;
+}
+.u-fade-down-enter-active[data-v-0573594d],
+.u-fade-down-leave-active[data-v-0573594d],
+.u-fade-left-enter-active[data-v-0573594d],
+.u-fade-left-leave-active[data-v-0573594d],
+.u-fade-right-enter-active[data-v-0573594d],
+.u-fade-right-leave-active[data-v-0573594d],
+.u-fade-up-enter-active[data-v-0573594d],
+.u-fade-up-leave-active[data-v-0573594d] {
+  transition-property: opacity, transform;
+}
+.u-fade-up-enter[data-v-0573594d],
+.u-fade-up-leave-to[data-v-0573594d] {
+  transform: translate3d(0, 100%, 0);
+  opacity: 0;
+}
+.u-fade-down-enter[data-v-0573594d],
+.u-fade-down-leave-to[data-v-0573594d] {
+  transform: translate3d(0, -100%, 0);
+  opacity: 0;
+}
+.u-fade-left-enter[data-v-0573594d],
+.u-fade-left-leave-to[data-v-0573594d] {
+  transform: translate3d(-100%, 0, 0);
+  opacity: 0;
+}
+.u-fade-right-enter[data-v-0573594d],
+.u-fade-right-leave-to[data-v-0573594d] {
+  transform: translate3d(100%, 0, 0);
+  opacity: 0;
+}
+.u-slide-down-enter-active[data-v-0573594d],
+.u-slide-down-leave-active[data-v-0573594d],
+.u-slide-left-enter-active[data-v-0573594d],
+.u-slide-left-leave-active[data-v-0573594d],
+.u-slide-right-enter-active[data-v-0573594d],
+.u-slide-right-leave-active[data-v-0573594d],
+.u-slide-up-enter-active[data-v-0573594d],
+.u-slide-up-leave-active[data-v-0573594d] {
+  transition-property: transform;
+}
+.u-slide-up-enter[data-v-0573594d],
+.u-slide-up-leave-to[data-v-0573594d] {
+  transform: translate3d(0, 100%, 0);
+}
+.u-slide-down-enter[data-v-0573594d],
+.u-slide-down-leave-to[data-v-0573594d] {
+  transform: translate3d(0, -100%, 0);
+}
+.u-slide-left-enter[data-v-0573594d],
+.u-slide-left-leave-to[data-v-0573594d] {
+  transform: translate3d(-100%, 0, 0);
+}
+.u-slide-right-enter[data-v-0573594d],
+.u-slide-right-leave-to[data-v-0573594d] {
+  transform: translate3d(100%, 0, 0);
+}
+.u-zoom-enter-active[data-v-0573594d],
+.u-zoom-leave-active[data-v-0573594d] {
+  transition-property: transform;
+}
+.u-zoom-enter[data-v-0573594d],
+.u-zoom-leave-to[data-v-0573594d] {
+  transform: scale(0.95);
+}
+/**
+ * 这里是uni-app内置的常用样式变量
+ *
+ * uni-app 官方扩展插件及插件市场（https://ext.dcloud.net.cn）上很多三方插件均使用了这些样式变量
+ * 如果你是插件开发者，建议你使用scss预处理，并在插件代码中直接使用这些变量（无需 import 这个文件），方便用户通过搭积木的方式开发整体风格一致的App
+ *
+ */
+/**
+ * 如果你是App开发者（插件使用者），你可以通过修改这些变量来定制自己的插件主题，实现自定义主题功能
+ *
+ * 如果你的项目同样使用了scss预处理，你也可以直接在你的 scss 代码中使用如下变量，同时无需 import 这个文件
+ */
+/* 颜色变量 */
+/* 行为相关颜色 */
+/* 文字基本颜色 */
+/* 背景颜色 */
+/* 边框颜色 */
+/* 尺寸变量 */
+/* 文字尺寸 */
+/* 图片尺寸 */
+/* Border Radius */
+/* 水平间距 */
+/* 垂直间距 */
+/* 透明度 */
+/* 文章场景相关 */
+.u-overlay[data-v-35f7c3e5] {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+}
+/**
+ * 这里是uni-app内置的常用样式变量
+ *
+ * uni-app 官方扩展插件及插件市场（https://ext.dcloud.net.cn）上很多三方插件均使用了这些样式变量
+ * 如果你是插件开发者，建议你使用scss预处理，并在插件代码中直接使用这些变量（无需 import 这个文件），方便用户通过搭积木的方式开发整体风格一致的App
+ *
+ */
+/**
+ * 如果你是App开发者（插件使用者），你可以通过修改这些变量来定制自己的插件主题，实现自定义主题功能
+ *
+ * 如果你的项目同样使用了scss预处理，你也可以直接在你的 scss 代码中使用如下变量，同时无需 import 这个文件
+ */
+/* 颜色变量 */
+/* 行为相关颜色 */
+/* 文字基本颜色 */
+/* 背景颜色 */
+/* 边框颜色 */
+/* 尺寸变量 */
+/* 文字尺寸 */
+/* 图片尺寸 */
+/* Border Radius */
+/* 水平间距 */
+/* 垂直间距 */
+/* 透明度 */
+/* 文章场景相关 */
+.u-status-bar[data-v-c0b45a48] {
+  width: 100%;
+}
+/**
+ * 这里是uni-app内置的常用样式变量
+ *
+ * uni-app 官方扩展插件及插件市场（https://ext.dcloud.net.cn）上很多三方插件均使用了这些样式变量
+ * 如果你是插件开发者，建议你使用scss预处理，并在插件代码中直接使用这些变量（无需 import 这个文件），方便用户通过搭积木的方式开发整体风格一致的App
+ *
+ */
+/**
+ * 如果你是App开发者（插件使用者），你可以通过修改这些变量来定制自己的插件主题，实现自定义主题功能
+ *
+ * 如果你的项目同样使用了scss预处理，你也可以直接在你的 scss 代码中使用如下变量，同时无需 import 这个文件
+ */
+/* 颜色变量 */
+/* 行为相关颜色 */
+/* 文字基本颜色 */
+/* 背景颜色 */
+/* 边框颜色 */
+/* 尺寸变量 */
+/* 文字尺寸 */
+/* 图片尺寸 */
+/* Border Radius */
+/* 水平间距 */
+/* 垂直间距 */
+/* 透明度 */
+/* 文章场景相关 */
+.u-safe-bottom[data-v-3ec581de] {
+  width: 100%;
+}
+/**
+ * 这里是uni-app内置的常用样式变量
+ *
+ * uni-app 官方扩展插件及插件市场（https://ext.dcloud.net.cn）上很多三方插件均使用了这些样式变量
+ * 如果你是插件开发者，建议你使用scss预处理，并在插件代码中直接使用这些变量（无需 import 这个文件），方便用户通过搭积木的方式开发整体风格一致的App
+ *
+ */
+/**
+ * 如果你是App开发者（插件使用者），你可以通过修改这些变量来定制自己的插件主题，实现自定义主题功能
+ *
+ * 如果你的项目同样使用了scss预处理，你也可以直接在你的 scss 代码中使用如下变量，同时无需 import 这个文件
+ */
+/* 颜色变量 */
+/* 行为相关颜色 */
+/* 文字基本颜色 */
+/* 背景颜色 */
+/* 边框颜色 */
+/* 尺寸变量 */
+/* 文字尺寸 */
+/* 图片尺寸 */
+/* Border Radius */
+/* 水平间距 */
+/* 垂直间距 */
+/* 透明度 */
+/* 文章场景相关 */
+.u-popup[data-v-74921bef] {
+  flex: 1;
+}
+.u-popup__trigger[data-v-74921bef] {
+  position: relative;
+}
+.u-popup__trigger__cover[data-v-74921bef] {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+.u-popup__content[data-v-74921bef] {
+  background-color: #fff;
+  position: relative;
+}
+.u-popup__content--round-top[data-v-74921bef] {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+.u-popup__content--round-left[data-v-74921bef] {
+  border-top-left-radius: 0;
+  border-top-right-radius: 10px;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 10px;
+}
+.u-popup__content--round-right[data-v-74921bef] {
+  border-top-left-radius: 10px;
+  border-top-right-radius: 0;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 0;
+}
+.u-popup__content--round-bottom[data-v-74921bef] {
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+.u-popup__content--round-center[data-v-74921bef] {
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+.u-popup__content__touch-area[data-v-74921bef] {
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1.3125rem;
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.u-popup__content__indicator[data-v-74921bef] {
+  width: 100px;
+  height: 5px;
+  border-radius: 100px;
+  background-color: #c0c4cc;
+}
+.u-popup__content__close[data-v-74921bef] {
+  position: absolute;
+}
+.u-popup__content__close--hover[data-v-74921bef] {
+  opacity: 0.4;
+}
+.u-popup__content__close--top-left[data-v-74921bef] {
+  top: 15px;
+  left: 15px;
+}
+.u-popup__content__close--top-right[data-v-74921bef] {
+  top: 15px;
+  right: 15px;
+}
+.u-popup__content__close--bottom-left[data-v-74921bef] {
+  bottom: 15px;
+  left: 15px;
+}
+.u-popup__content__close--bottom-right[data-v-74921bef] {
+  right: 15px;
+  bottom: 15px;
+}
 
 .article-detail-container[data-v-a5dd2988] {
   min-height: 100vh;
@@ -861,11 +1180,11 @@ to {
   padding: 10px 15px;
   padding-top: calc(var(--status-bar-height, 0px) + 10px);
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  position: fixed; /* 固定顶部标题 */
+  position: fixed;
   top: 0;
   left: 0;
   right: 0;
-  z-index: 1000; /* 提高z-index确保在最上层 */
+  z-index: 1000;
 }
 .header-top[data-v-a5dd2988] {
   display: flex;
@@ -886,16 +1205,16 @@ to {
 }
 .header-actions[data-v-a5dd2988] {
   display: flex;
-  gap: 15px;
-  width: 20px; /* 与返回按钮宽度一致，保持标题居中 */
+  align-items: center;
+  gap: 1px;
 }
 
 /* 内容滚动区域 */
 .content-container[data-v-a5dd2988] {
   padding: 10px;
   padding-bottom: 20px;
-  padding-top: calc(var(--status-bar-height, 0px) + 60px); /* 为固定头部留出空间 */
-  min-height: calc(100vh - 120px); /* 使用min-height避免溢出 */
+  padding-top: calc(var(--status-bar-height, 0px) + 60px);
+  min-height: calc(100vh - 120px);
   position: relative;
   box-sizing: border-box;
 }
@@ -1031,8 +1350,8 @@ to {
   gap: 8px;
   padding: 10px;
   border-bottom: 1px solid #eee;
-  max-height: 100px; /* 限制预览区域高度 */
-  overflow-y: auto; /* 超出时滚动 */
+  max-height: 100px;
+  overflow-y: auto;
 }
 .preview-image-container[data-v-a5dd2988] {
   position: relative;
@@ -1065,8 +1384,8 @@ to {
   padding: 10px;
   background-color: #fff;
   align-items: center;
-  box-sizing: border-box; /* 确保padding包含在宽度内 */
-  width: 100%; /* 确保不超过容器宽度 */
+  box-sizing: border-box;
+  width: 100%;
 }
 .comment-input[data-v-a5dd2988] {
   flex: 1;
@@ -1104,9 +1423,9 @@ to {
   min-width: 0;
   white-space: nowrap;
   width: auto;
-  line-height: 1; /* 确保行高不会影响按钮高度 */
-  border: none; /* 移除可能的边框 */
-  margin: 0; /* 移除可能的外边距 */
+  line-height: 1;
+  border: none;
+  margin: 0;
 }
 
 /* 评论列表 */
@@ -1204,8 +1523,8 @@ to {
   transition: bottom 0.3s ease;
   box-sizing: border-box;
   width: 100%;
-  max-width: 100vw; /* 限制最大宽度为视口宽度 */
-  overflow-x: hidden; /* 防止水平溢出 */
+  max-width: 100vw;
+  overflow-x: hidden;
 }
 
 /* 身份标识 */
@@ -1254,6 +1573,146 @@ to {
   cursor: pointer;
   z-index: 999;
 }
-[data-v-a5dd2988]::-webkit-scrollbar{
-      display: none;
+[data-v-a5dd2988]::-webkit-scrollbar {
+  display: none;
+}
+
+/* AI图标样式 */
+.ai-icon[data-v-a5dd2988] {
+  margin-right: 15px;
+}
+
+/* 加载状态 */
+.loading-container[data-v-a5dd2988] {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 30px 0;
+}
+.loading-spinner[data-v-a5dd2988] {
+  width: 30px;
+  height: 30px;
+  border: 3px solid #f0f0f0;
+  border-top: 3px solid #4361ee;
+  border-radius: 50%;
+  animation: spin-a5dd2988 1s linear infinite;
+  margin-bottom: 10px;
+}
+@keyframes spin-a5dd2988 {
+0% { transform: rotate(0deg);
+}
+100% { transform: rotate(360deg);
+}
+}
+
+/* AI解析弹出层 */
+.ai-analysis-popup[data-v-a5dd2988] {
+  height: 90%;
+  width: 90vw;
+  display: flex;
+  flex-direction: column;
+}
+.popup-header[data-v-a5dd2988] {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  border-bottom: 1px solid #eee;
+}
+.popup-title[data-v-a5dd2988] {
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+.popup-content[data-v-a5dd2988] {
+  flex: 1;
+  padding: 15px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.analysis-item[data-v-a5dd2988] {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+.analysis-title[data-v-a5dd2988] {
+  font-weight: 600;
+  font-size: 1rem;
+  margin-bottom: 10px;
+  text-align: center;
+}
+.analysis-scroll[data-v-a5dd2988] {
+  flex: 1;
+  max-height: 300px;
+  min-height: 300px;
+}
+.analysis-text[data-v-a5dd2988] {
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: #333;
+}
+.no-data[data-v-a5dd2988] {
+  text-align: center;
+  padding: 30px 0;
+  color: #999;
+}
+.popup-footer[data-v-a5dd2988] {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  border-top: 1px solid #eee;
+}
+.page-indicator[data-v-a5dd2988] {
+  font-size: 0.9rem;
+  color: #666;
+}
+.nav-button[data-v-a5dd2988] {
+  min-width: 50px;
+  margin: 0.3125rem;
+  padding: 0 15px;
+}
+
+/* AI提示弹窗 */
+.ai-prompt-popup[data-v-a5dd2988] {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.prompt-message[data-v-a5dd2988] {
+  padding: 20px;
+  text-align: center;
+  font-size: 14px;
+  color: #333;
+}
+.prompt-options[data-v-a5dd2988] {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  padding: 0 20px 20px;
+}
+.background-loading-tip[data-v-a5dd2988] {
+  padding: 10px;
+  text-align: center;
+  font-size: 12px;
+  color: #666;
+}
+@keyframes ai-loading-spinner-a5dd2988 {
+to { transform: rotate(360deg);
+}
+}
+
+/* 鼓励性提示 */
+.encouragement-tip[data-v-a5dd2988] {
+  padding: 10px 15px;
+  background-color: #f0f8ff;
+  border-top: 1px solid #eee;
+  text-align: center;
+}
+.tip-text[data-v-a5dd2988] {
+  font-size: 12px;
+  color: #666;
+  line-height: 1.4;
 }

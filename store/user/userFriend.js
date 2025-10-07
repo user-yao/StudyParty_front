@@ -11,8 +11,9 @@ export default {
 			console.log(res);
 		})
     },
-    SET_USER_INFO(state) {
-
+    SET_USER_INFO(state, info) {
+      // 这个mutation似乎没有实际用途，可以保持为空
+      // 如果需要实现功能，应该添加适当的实现
     }
   },
   actions: {

@@ -203,7 +203,7 @@
 }
 .login-wrapper[data-v-e4e4508d] {
   width: 100%;
-  margin-top: 10vh;
+  margin-bottom: 5vh;
   padding: 2.5rem 1.875rem;
   position: relative;
   z-index: 10;
@@ -323,7 +323,7 @@
 }
 .remember-forgot[data-v-e4e4508d] {
   display: flex;
-  justify-content: space-between;
+  justify-content: end;
   align-items: center;
   margin-bottom: 25px;
   font-size: 0.9rem;
@@ -350,7 +350,7 @@
 }
 .btn-login[data-v-e4e4508d] {
   width: 100%;
-  padding: 0.3125rem;
+  padding: 0.15625rem;
   border: none;
   background: linear-gradient(45deg, #4b8df8, #3a6dc7);
   color: white;

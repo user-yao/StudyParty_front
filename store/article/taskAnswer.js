@@ -70,7 +70,10 @@ const actions = {
   async trueTaskAnswer({ commit }, data) {
     try {
       const res = await trueTaskAnswer(data);
-      commit('UPDATE_TASK_ANSWER', res.data);
+      // 修复：检查res.data是否存在以及是否有id属性
+      if (res.data && res.data.id) {
+        commit('UPDATE_TASK_ANSWER', res.data);
+      }
       return res;
     } catch (error) {
       console.error('更新任务回答状态失败:', error);

@@ -212,7 +212,7 @@ export default {
                 console.log('添加AI消息到列表');
                 this.scrollToBottom();
 
-                // 使用 uni.request 建立 SSE 连接
+                // 使用 gao-ChatSSEClient 组件建立 SSE 连接
                 const token = uni.getStorageSync('token');
                 console.log('获取token:', token);
 
@@ -224,88 +224,63 @@ export default {
                     return;
                 }
 
-                const requestTask = uni.request({
+                // 准备请求参数
+                const requestData = {
                     url: baseUrl + '/AI/AI',
                     method: 'POST',
-                    data: 'prompt=' + encodeURIComponent(prompt),
-                    header: {
-                        'Authorization': token,
-                        'Content-Type': 'application/x-www-form-urlencoded'
+                    headers: {
+                        'Authorization': token
                     },
-                    responseType: 'text',
-                    enableChunked: true, // 启用分块传输
-                    success: (res) => {
-                        console.log('请求完成，响应:', res);
-                        this.isWaiting = false;
-                        resolve();
-                    },
-                    fail: (err) => {
-                        console.error('请求失败', err);
-                        this.isWaiting = false;
-                        // 只有在确实发生错误时才更新AI消息内容为错误信息
-                        if (!this.fullContent) {
-                            this.updateAiMessageContent(aiMessage.id, '抱歉，我在处理您的请求时遇到了问题，请稍后重试。');
-                        }
-                        reject(new Error('网络错误: ' + JSON.stringify(err)));
-                    }
-                });
+                    body: prompt
+                };
 
-                // 处理流式数据
-                requestTask.onHeadersReceived((header) => {
-                    console.log('收到响应头:', header);
-                });
+                // 设置当前的 resolve 和 reject 函数，以便在 SSE 事件处理函数中调用
+                this.currentResolve = resolve;
+                this.currentReject = reject;
 
-                requestTask.onChunkReceived((res) => {
-                    try {
-                        // 处理每个数据块
-                        let chunk = res.data;
-                        // 检查数据块是否为空
-                        if (!chunk) {
-                            console.log('收到空数据块');
-                            return;
-                        }
-
-                        // 如果chunk是Uint8Array，需要转换为字符串
-                        if (chunk instanceof Uint8Array) {
-                            // 使用TextDecoder将Uint8Array转换为字符串
-                            const decoder = new TextDecoder('utf-8');
-                            chunk = decoder.decode(chunk);
-                        }
-						console.log(chunk)
-
-                        // 解析SSE格式数据
-                        chunk = chunk.trim();
-                        if (chunk.startsWith('data:')) {
-                            const data = chunk.substring(5).trim(); // 去掉'data:'前缀
-                            if (data) {
-                                // 累积内容并更新AI消息，实现打字机效果
-                                // AI生成的文本中已经包含真实的换行符，不需要额外处理转义字符
-                                var text = JSON.parse(data)
-                                console.log('解析SSE数据:', text.output.text);
-                                this.fullContent += text.output.text;   
-                                this.updateAiMessageContent(this.currentAiMessageId, this.fullContent);
-                            }
-                        }
-                    } catch (error) {
-                        console.error('处理数据块时出错:', error);
-                        // 只有在确实发生错误且还没有内容时才更新AI消息内容为错误信息
-                        if (!this.fullContent) {
-                            this.updateAiMessageContent(this.currentAiMessageId, '抱歉，我在处理您的请求时遇到了问题，请稍后重试。');
-                        }
-                    }
-                });
+                // 启动 SSE 连接
+                this.$refs.chatSSEClientRef.startChat(requestData);
             });
         },
         // SSE事件处理函数
         onSSEOpen(response) {
             console.log("SSE连接已打开：", response);
+            // 检查响应状态
+            if (response && response.status >= 400) {
+                console.error("服务器返回错误状态：", response.status, response.statusText);
+                // 更新AI消息内容为错误信息
+                if (this.currentAiMessageId) {
+                    this.updateAiMessageContent(this.currentAiMessageId, '抱歉，服务器遇到了一些问题，请稍后重试。');
+                }
+                this.isWaiting = false;
+                if (this.currentReject) {
+                    this.currentReject(new Error(`服务器错误: ${response.status} ${response.statusText}`));
+                }
+            }
         },
         onSSEError(err) {
             console.error("SSE连接错误：", err);
             this.isWaiting = false;
             // 更新AI消息内容为错误信息
             if (this.currentAiMessageId) {
-                this.updateAiMessageContent(this.currentAiMessageId, '抱歉，我在处理您的请求时遇到了问题，请稍后重试。');
+                // 检查错误信息，提供更友好的错误提示
+                let errorMessage = '抱歉，我在处理您的请求时遇到了问题，请稍后重试。';
+                if (err && typeof err === 'string') {
+                    if (err.includes('500')) {
+                        errorMessage = '服务器遇到了一些问题，请稍后重试。';
+                    } else if (err.includes('401')) {
+                        errorMessage = '身份验证失败，请重新登录。';
+                    } else if (err.includes('timeout')) {
+                        errorMessage = '请求超时，请检查网络连接后重试。';
+                    }
+                } else if (err && typeof err === 'object') {
+                    if (err.status === 500) {
+                        errorMessage = '服务器遇到了一些问题，请稍后重试。';
+                    } else if (err.status === 401) {
+                        errorMessage = '身份验证失败，请重新登录。';
+                    }
+                }
+                this.updateAiMessageContent(this.currentAiMessageId, errorMessage);
             }
             if (this.currentReject) {
                 this.currentReject(new Error('SSE连接错误: ' + JSON.stringify(err)));
@@ -314,12 +289,20 @@ export default {
         onSSEMessage(msg) {
             console.log("收到SSE消息：", msg);
             try {
-                // 处理SSE消息，正确处理换行符
+                // 处理SSE消息
                 if (msg.data) {
-                    // 累积内容（保留原始内容，包括空行）
-                    // 直接累积数据，不需要额外处理换行符，因为AI返回的内容已经包含正确的换行符
-                    this.fullContent += msg.data;
-                    console.log('累积内容:', this.fullContent);
+                    // 解析SSE格式数据
+                    const data = msg.data;
+                    const jsonData = data; // 去掉'data:'前缀
+                    if (jsonData) {
+                        // 累积内容（保留原始内容，包括空行）
+                        const parsedData = JSON.parse(jsonData);
+                        // 检查是否有output.text字段
+                        console.log('检查是否有output.text字段:', parsedData.output == null);
+                        console.log('检查是否有output字段:', parsedData.output.text == null);
+                        console.log('解析SSE数据:', parsedData.output.text);
+                        this.fullContent += parsedData.output.text;
+                    }
                 } else {
                     // 空的 data: 表示换行，直接添加换行符
                     this.fullContent += '\n';

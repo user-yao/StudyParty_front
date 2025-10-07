@@ -55,7 +55,13 @@ export default{
 	},
 	insertOtherMessage(friend,content,statu,sender,type,isread,timestamp ){ //statu person:私聊   group：群聊
 		console.log("添加未读消息")
-		let userid = uni.getStorageSync('user').id;
+		// 修复：确保用户信息存在再访问其属性
+		const user = uni.getStorageSync('user');
+		if (!user || !user.id) {
+			console.error('用户未登录或用户信息不存在');
+			return Promise.reject('用户未登录');
+		}
+		let userid = user.id;
 		userid = String(userid);
 		friend = String(friend);
 		content = String(content);
@@ -80,7 +86,13 @@ export default{
 	},
 	selectMessage(friend,statu,limit,offset){ 
 		console.log("查询消息记录");
-		let userid = uni.getStorageSync('id');
+		// 修复：确保用户信息存在再访问其属性
+		const user = uni.getStorageSync('user');
+		if (!user || !user.id) {
+			console.error('用户未登录或用户信息不存在');
+			return Promise.reject('用户未登录');
+		}
+		let userid = user.id;
 		console.log("limit= "+limit+';offst= '+offset)
 		return new Promise((resolve,reject) =>{
 			plus.sqlite.selectSql({
@@ -104,7 +116,13 @@ export default{
 	},
 	updateMessageIsread(friend){
 		console.log("已读消息")
-		let userid = uni.getStorageSync('id');
+		// 修复：确保用户信息存在再访问其属性
+		const user = uni.getStorageSync('user');
+		if (!user || !user.id) {
+			console.error('用户未登录或用户信息不存在');
+			return Promise.reject('用户未登录');
+		}
+		let userid = user.id;
 		return new Promise((resolve,reject) =>{
 			plus.sqlite.executeSql({
 				name:dbName,
@@ -122,7 +140,13 @@ export default{
 	},
 	insertMyMessage(friend,content,statu,type){
 		console.log("添加我发送的消息")
-		let userid = uni.getStorageSync('user').id;
+		// 修复：确保用户信息存在再访问其属性
+		const user = uni.getStorageSync('user');
+		if (!user || !user.id) {
+			console.error('用户未登录或用户信息不存在');
+			return Promise.reject('用户未登录');
+		}
+		let userid = user.id;
 		let sender = userid;
 		return new Promise((resolve,reject) =>{
 			plus.sqlite.executeSql({
@@ -139,7 +163,13 @@ export default{
 	},
 	selectChatList(){
 		console.log("查询消息列表");
-		let userid = uni.getStorageSync('user').id;
+		// 修复：确保用户信息存在再访问其属性
+		const user = uni.getStorageSync('user');
+		if (!user || !user.id) {
+			console.error('用户未登录或用户信息不存在');
+			return Promise.reject('用户未登录');
+		}
+		let userid = user.id;
 		return new Promise((resolve,reject) =>{
 			plus.sqlite.selectSql({
 				name:dbName,
@@ -183,7 +213,13 @@ export default{
 	},
 	selectNewMessage(friend,statu){
 		console.log("最新一条")
-		let userid = uni.getStorageSync('id');
+		// 修复：确保用户信息存在再访问其属性
+		const user = uni.getStorageSync('user');
+		if (!user || !user.id) {
+			console.error('用户未登录或用户信息不存在');
+			return Promise.reject('用户未登录');
+		}
+		let userid = user.id;
 		return new Promise((resolve,reject) =>{
 			plus.sqlite.selectSql({
 				name:dbName,
@@ -205,7 +241,13 @@ export default{
 	},
 	clearMessage(friend,statu){
 		console.log("删除聊天")
-		let userid = uni.getStorageSync('id');
+		// 修复：确保用户信息存在再访问其属性
+		const user = uni.getStorageSync('user');
+		if (!user || !user.id) {
+			console.error('用户未登录或用户信息不存在');
+			return Promise.reject('用户未登录');
+		}
+		let userid = user.id;
 		return new Promise((resolve,reject) =>{
 			plus.sqlite.executeSql({
 				name:dbName,
@@ -223,7 +265,13 @@ export default{
 	// 搜索聊天记录内容
 	searchChatMessages(searchQuery) {
 		console.log("搜索聊天记录内容:", searchQuery);
-		let userid = uni.getStorageSync('id');
+		// 修复：确保用户信息存在再访问其属性
+		const user = uni.getStorageSync('user');
+		if (!user || !user.id) {
+			console.error('用户未登录或用户信息不存在');
+			return Promise.reject('用户未登录');
+		}
+		let userid = user.id;
 		return new Promise((resolve, reject) => {
 			plus.sqlite.selectSql({
 				name: dbName,

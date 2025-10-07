@@ -1,5 +1,5 @@
 import { login, register, updatePassword, updateUser, updateHead, selectUser} from '../../API/user/user.js';
-import store from '../index.js'; // 引入store实例
+import { selectMyUserArticle } from '../../API/user/userArticle.js'; // 静态导入
 
 export default {
   namespaced: true,
@@ -47,10 +47,16 @@ export default {
       state.userInfo.createDate = info.user.createDate;
 	  state.userInfo.finishTask = info.user.finishTask;
       state.userInfo.token = info.token;
-	  uni.setStorageSync('id',info.user.id);
-	  uni.setStorageSync('user',info.user);
-	  console.log(uni.getStorageSync('user'));
-      uni.setStorageSync('token', info.token);
+	  
+	  // 安全地设置本地存储，避免在初始化过程中访问未定义的变量
+	  try {
+		  uni.setStorageSync('id', info.user.id);
+		  uni.setStorageSync('user', info.user);
+		  console.log(uni.getStorageSync('user'));
+		  uni.setStorageSync('token', info.token);
+	  } catch (e) {
+		  console.error('设置本地存储时出错:', e);
+	  }
     },
     CLEAR_USER_INFO(state) {
       state.userInfo = {
@@ -115,11 +121,18 @@ export default {
     logout({ commit }) {
       return new Promise((resolve) => {
         commit('CLEAR_USER_INFO');
-        // 清除其他模块的数据
-        store.commit('article/CLEAR_RECOMMEND_ARTICLES');
-        store.commit('task/CLEAR_RECOMMEND_TASKS');
-        // 可以继续添加其他需要清除的模块数据
-        resolve();
+        // 延迟导入store实例，避免循环依赖
+        import('../index.js').then(storeModule => {
+          const store = storeModule.default;
+          // 清除其他模块的数据
+          store.commit('article/CLEAR_RECOMMEND_ARTICLES');
+          store.commit('task/CLEAR_RECOMMEND_TASKS');
+          // 可以继续添加其他需要清除的模块数据
+          resolve();
+        }).catch(error => {
+          console.error('导入store失败:', error);
+          resolve(); // 即使导入失败也resolve，确保logout流程完成
+        });
       });
     },
     // 更新用户信息
@@ -131,9 +144,11 @@ export default {
           commit('UPDATE_USER_INFO', userInfo);
           // 如果头像有更新，也更新userInfo中的head字段
           if (userInfo.head) {
+            // 确保state.userInfo存在再访问其属性
+            const currentState = this.state && this.state.user && this.state.user.userInfo ? this.state.user.userInfo : {};
             commit('SET_USER_INFO', {
-              user: { ...this.state.userInfo, head: userInfo.head },
-              token: this.state.userInfo.token
+              user: { ...currentState, head: userInfo.head },
+              token: currentState.token || ''
             });
           }
         }
@@ -151,9 +166,11 @@ export default {
           // 更新store中的用户头像信息
           commit('UPDATE_USER_INFO', { head: headData.head });
           // 同时更新userInfo中的head字段
+          // 确保state.userInfo存在再访问其属性
+          const currentState = this.state && this.state.user && this.state.user.userInfo ? this.state.user.userInfo : {};
           commit('SET_USER_INFO', {
-            user: { ...this.state.userInfo, head: headData.head },
-            token: this.state.userInfo.token
+            user: { ...currentState, head: headData.head },
+            token: currentState.token || ''
           });
         }
         return res;
@@ -176,9 +193,11 @@ export default {
           // 更新store中的用户密码
           commit('UPDATE_USER_INFO', { password: passwordData.newPassword });
           // 同时更新userInfo中的密码字段
+          // 确保state.userInfo存在再访问其属性
+          const currentState = this.state && this.state.user && this.state.user.userInfo ? this.state.user.userInfo : {};
           commit('SET_USER_INFO', {
-            user: { ...this.state.userInfo, password: passwordData.newPassword },
-            token: this.state.userInfo.token
+            user: { ...currentState, password: passwordData.newPassword },
+            token: currentState.token || ''
           });
         }
         return res;
@@ -197,9 +216,11 @@ export default {
           const userInfo = res.data;
           commit('UPDATE_USER_INFO', userInfo);
           // 同时更新userInfo中的用户信息（不包含token）
+          // 确保state.userInfo存在再访问其属性
+          const currentState = this.state && this.state.user && this.state.user.userInfo ? this.state.user.userInfo : {};
           commit('SET_USER_INFO', {
             user: userInfo,
-            token: state.userInfo.token // 保持原有的token
+            token: currentState.token || '' // 保持原有的token
           });
         }
         return res;
@@ -211,9 +232,7 @@ export default {
     // 获取用户文章
     async selectMyUserArticle({ commit, state }) {
       try {
-        // 导入API方法
-        const { selectMyUserArticle } = await import('../../API/user/userArticle.js');
-        // 调用API获取用户文章
+        // 直接调用API获取用户文章，避免动态导入
         const res = await selectMyUserArticle({ userId: state.userInfo.id });
         return res;
       } catch (error) {

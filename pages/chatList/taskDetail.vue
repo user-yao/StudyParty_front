@@ -644,6 +644,7 @@ export default {
               // 调用API选择最佳答案
               const result = await this.trueTaskAnswer({taskAnswerId:answerId});
               
+              // 修复：检查result是否存在以及是否有code属性
               if (result && result.code === 200) {
                 // 更新本地数据
                 this.answers.forEach(answer => {
@@ -663,13 +664,20 @@ export default {
                 
                 // 重新加载任务详情以确保状态同步
                 await this.fetchTaskDetail();
+                
+                // 通知其他页面任务状态已更新
+                uni.$emit('taskStatusUpdated', {
+                  taskId: this.taskId,
+                  isOver: 1,
+                  trueAnswerId: answerId
+                });
               } else {
-                throw new Error(result.msg || '操作失败');
+                throw new Error(result && result.msg || '操作失败');
               }
             } catch (error) {
               console.error('选择最佳答案失败:', error);
               uni.showToast({
-                title: '操作失败',
+                title: '操作失败: ' + (error.message || '未知错误'),
                 icon: 'none'
               });
             }

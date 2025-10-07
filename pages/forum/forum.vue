@@ -16,7 +16,7 @@
       
       <div class="search-bar" @click="goToSearch">
         <u-icon name="search" size="16" color="#ccc"></u-icon>
-        <input type="text" placeholder="搜索任务、帖子..." @focus="goToSearch">
+        <input type="text" placeholder="搜索任务、帖子...">
       </div>
     </header>
     
@@ -490,21 +490,74 @@ export default {
             res.eventChannel.emit('chatData', { id: userId });
           }
         });
-    }
+    },
+    
+    // 处理任务状态更新事件
+    handleTaskStatusUpdated(data) {
+      // 更新本地任务数据
+      this.tasks = this.tasks.map(task => {
+        if (task.id === data.taskId) {
+          return {
+            ...task,
+            isOver: data.isOver,
+            trueId: data.trueAnswerId
+          };
+        }
+        return task;
+      });
+    },
+    
+    // 获取推荐任务
+    async getRecommendTasks() {
+      try {
+        const res = await this.recommendTask({ currentPage: 1 });
+        if (res && res.code === 200 && res.data && Array.isArray(res.data.records)) {
+          this.tasks = res.data.records.map(task => {
+            // 判断是否为当前用户发布的任务
+            const isCurrentUser = task.uploader === uni.getStorageSync('user').id;
+            
+            return {
+              ...task,
+              head: task.head ? imageUrl + task.head : null,
+              // 根据是否为当前用户确定身份标识
+              identity: isCurrentUser ? '我' : this.getIdentityText(task.status),
+              isAuthority: task.starPrestige > 100,
+              // 使用学校作为标签
+              tags: task.school ? [task.school] : []
+            };
+          });
+        }
+      } catch (error) {
+        console.error('获取推荐任务失败:', error);
+        uni.showToast({
+          title: '获取推荐任务失败',
+          icon: 'none'
+        });
+      }
+    },
   },
   async mounted() {
     // 页面加载时获取推荐文章和推荐任务
     await this.getRecommendArticles();
     await this.getRecommendTasks(); // 调用获取推荐任务的方法
+    
+    // 监听任务状态更新事件
+    uni.$on('taskStatusUpdated', this.handleTaskStatusUpdated);
   },
   // 页面显示时检查数据，确保退出登录后重新登录不会重复添加数据
   onShow() {
+    // 每次页面显示时都重新获取任务数据，确保状态是最新的
+    this.getRecommendTasks();
+    
     // 如果推荐文章为空，重新获取数据
     if (this.recommendArticles.length === 0) {
       this.getRecommendArticles();
-      this.getRecommendTasks();
     }
-  }
+  },
+  // 页面销毁前移除事件监听
+  beforeDestroy() {
+    uni.$off('taskStatusUpdated', this.handleTaskStatusUpdated);
+  },
 }
 </script>
 

@@ -59,29 +59,11 @@
     <!-- 核心功能入口 -->
     <div class="quick-actions">
       <div class="action-grid">
-        <div class="action-item" @click="goToPage('/pages/forum/forum')">
-          <div class="action-icon">
-            <u-icon name="chat" size="24" color="#ffffff"></u-icon>
-          </div>
-          <div class="action-name">学习社区</div>
-        </div>
-        <div class="action-item" @click="goToPage('/pages/chatList/chatList')">
-          <div class="action-icon">
-            <u-icon name="account" size="24" color="#ffffff"></u-icon>
-          </div>
-          <div class="action-name">小组</div>
-        </div>
         <div class="action-item" @click="goToPage('/pages/completedTasks/completedTasks')">
           <div class="action-icon">
             <u-icon name="order" size="24" color="#ffffff"></u-icon>
           </div>
           <div class="action-name">我的任务</div>
-        </div>
-        <div class="action-item" @click="goToPage('/pages/profile/profile')">
-          <div class="action-icon">
-            <u-icon name="account" size="24" color="#ffffff"></u-icon>
-          </div>
-          <div class="action-name">个人中心</div>
         </div>
         <div class="action-item" @click="goToPage('/pages/chatList/taskList')">
           <div class="action-icon">

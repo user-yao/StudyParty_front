@@ -293,7 +293,7 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 15px 20px;
+  padding-top: 5vh;
   background: white;
   position: fixed;
   top: 0;

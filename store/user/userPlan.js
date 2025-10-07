@@ -6,6 +6,8 @@ export default {
   }),
   mutations: {
     SET_USER_INFO(state, info) {
+      // 这个mutation似乎没有实际用途，可以保持为空
+      // 如果需要实现功能，应该添加适当的实现
     },
     CLEAR_USER_INFO(state) {
       state.userInfo = null;

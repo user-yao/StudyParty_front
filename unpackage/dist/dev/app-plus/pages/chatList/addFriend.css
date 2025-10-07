@@ -1037,6 +1037,7 @@ to {
 		color: white;
 		border: none;
 		border-radius: 8px;
+		width: 4.0625rem;
 		cursor: pointer;
 		font-weight: 500;
 		font-size: 0.9375rem;
