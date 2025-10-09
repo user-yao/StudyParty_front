@@ -14,7 +14,7 @@
       <view class="app-logo">
         <u-icon name="star" size="60" color="#4361ee"></u-icon>
       </view>
-      <view class="app-name">学习派</view>
+      <view class="app-name">职引星聚</view>
       <view class="app-version">v1.0.0</view>
       <view class="app-description">
         学习派是一个专注于学习社交的应用，帮助用户更好地管理学习任务、加入学习小组、与好友交流学习心得。
@@ -42,11 +42,11 @@
       <view class="contact-info">
         <view class="contact-item">
           <u-icon name="email" size="18" color="#666"></u-icon>
-          <text class="contact-text">support@studyparty.com</text>
+          <text class="contact-text">test@studyparty.com</text>
         </view>
         <view class="contact-item">
           <u-icon name="phone" size="18" color="#666"></u-icon>
-          <text class="contact-text">400-123-4567</text>
+          <text class="contact-text">134-5398-1285</text>
         </view>
       </view>
     </view>

@@ -6832,7 +6832,7 @@ if (uni.restoreGlobal) {
       ]),
       vue.createElementVNode("div", { class: "login-wrapper" }, [
         vue.createElementVNode("div", { class: "logo" }, [
-          vue.createElementVNode("h1", null, "智学未来"),
+          vue.createElementVNode("h1", null, "职引星聚"),
           vue.createElementVNode("p", null, "开启你的个性化学习之旅")
         ]),
         vue.createElementVNode("div", { class: "form-container" }, [
@@ -9622,7 +9622,7 @@ if (uni.restoreGlobal) {
           vue.createElementVNode("div", { class: "logo-icon" }, [
             vue.createElementVNode("i", { class: "fas fa-brain" })
           ]),
-          vue.createElementVNode("h1", null, "智学未来"),
+          vue.createElementVNode("h1", null, "职引星聚"),
           vue.createElementVNode("p", null, "开启你的个性化学习之旅")
         ]),
         vue.createVNode(_component_u_form, {
@@ -10408,7 +10408,7 @@ if (uni.restoreGlobal) {
       vue.createElementVNode("header", null, [
         vue.createElementVNode("div", { class: "header-top" }, [
           vue.createElementVNode("div", { class: "logo" }, [
-            vue.createElementVNode("span", null, "智学未来")
+            vue.createElementVNode("span", null, "职引星聚")
           ]),
           vue.createElementVNode("div", { class: "header-actions" })
         ]),

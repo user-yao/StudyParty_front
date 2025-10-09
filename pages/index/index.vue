@@ -4,7 +4,7 @@
     <header>
       <div class="header-top">
         <div class="logo">
-          <span>智学未来</span>
+          <span>职引星聚</span>
         </div>
         <div class="header-actions">
         </div>

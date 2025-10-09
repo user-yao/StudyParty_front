@@ -507,6 +507,24 @@ export default {
       });
     },
     
+    // 处理文章点赞状态变化
+    handleArticleLikeChanged(data) {
+      // 更新推荐文章中的点赞状态
+      this.$store.commit('article/UPDATE_ARTICLE_LIKE', {
+        articleId: data.articleId,
+        isNice: data.isNice
+      });
+    },
+    
+    // 处理文章收藏状态变化
+    handleArticleCollectChanged(data) {
+      // 更新推荐文章中的收藏状态
+      this.$store.commit('article/UPDATE_ARTICLE_FAVORITE', {
+        articleId: data.articleId,
+        isCollect: data.isCollect
+      });
+    },
+    
     // 获取推荐任务
     async getRecommendTasks() {
       try {
@@ -543,6 +561,12 @@ export default {
     
     // 监听任务状态更新事件
     uni.$on('taskStatusUpdated', this.handleTaskStatusUpdated);
+    
+    // 监听文章点赞状态变化
+    uni.$on('articleLikeChanged', this.handleArticleLikeChanged);
+    
+    // 监听文章收藏状态变化
+    uni.$on('articleCollectChanged', this.handleArticleCollectChanged);
   },
   // 页面显示时检查数据，确保退出登录后重新登录不会重复添加数据
   onShow() {
@@ -557,6 +581,8 @@ export default {
   // 页面销毁前移除事件监听
   beforeDestroy() {
     uni.$off('taskStatusUpdated', this.handleTaskStatusUpdated);
+    uni.$off('articleLikeChanged', this.handleArticleLikeChanged);
+    uni.$off('articleCollectChanged', this.handleArticleCollectChanged);
   },
 }
 </script>

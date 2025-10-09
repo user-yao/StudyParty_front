@@ -107,7 +107,8 @@
 										placeholder="请输入任务描述内容，支持Markdown语法..."
 										:style="textareaStyle"
 										@focus="onTextareaFocus"
-										@blur="onTextareaBlur">
+										@blur="onTextareaBlur"
+										:maxlength="5000">
 									</textarea>
 								</scroll-view>
 								

@@ -421,6 +421,12 @@ export default {
             this.currentArticle.isNice = true;
             this.currentArticle.nice += 1;
           }
+          // 通知forum页面更新点赞状态
+          uni.$emit('articleLikeChanged', {
+            articleId: this.articleId,
+            isNice: this.currentArticle.isNice,
+            nice: this.currentArticle.nice
+          });
         }
       } catch (error) {
         console.error('点赞操作失败:', error);
@@ -440,6 +446,12 @@ export default {
             this.currentArticle.isCollect = true;
             this.currentArticle.collect += 1;
           }
+          // 通知forum页面更新收藏状态
+          uni.$emit('articleCollectChanged', {
+            articleId: this.articleId,
+            isCollect: this.currentArticle.isCollect,
+            collect: this.currentArticle.collect
+          });
         }
       } catch (error) {
         console.error('收藏操作失败:', error);

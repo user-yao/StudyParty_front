@@ -8,7 +8,7 @@
 
         <div class="login-wrapper">
             <div class="logo">
-                <h1>智学未来</h1>
+                <h1>职引星聚</h1>
                 <p>开启你的个性化学习之旅</p>
             </div>
 

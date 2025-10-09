@@ -42,23 +42,47 @@ export default {
       state.collectedArticles = list;
     },
     // 更新文章的点赞状态
-    UPDATE_ARTICLE_LIKE(state, { articleId, isNice }) {
+    UPDATE_ARTICLE_LIKE(state, { articleId, isNice, nice }) {
       // 更新推荐文章中的点赞状态
       const recommendArticle = state.recommendArticles.find(article => article.id === articleId);
       if (recommendArticle) {
+        const oldIsNice = recommendArticle.isNice || false;
         recommendArticle.isNice = isNice;
-        // 根据操作类型增减点赞数
-        recommendArticle.nice += isNice ? 1 : -1;
+        // 如果提供了具体的点赞数，直接使用；否则根据操作类型增减点赞数
+        if (nice !== undefined) {
+          recommendArticle.nice = nice;
+        } else {
+          // 只有状态真正改变时才调整计数
+          if (oldIsNice && !isNice) {
+            // 取消点赞
+            recommendArticle.nice = Math.max(0, recommendArticle.nice - 1);
+          } else if (!oldIsNice && isNice) {
+            // 点赞
+            recommendArticle.nice += 1;
+          }
+        }
       }
     },
     // 更新文章的收藏状态
-    UPDATE_ARTICLE_FAVORITE(state, { articleId, isCollect }) {
+    UPDATE_ARTICLE_FAVORITE(state, { articleId, isCollect, collect }) {
       // 更新推荐文章中的收藏状态
       const recommendArticle = state.recommendArticles.find(article => article.id === articleId);
       if (recommendArticle) {
+        const oldIsCollect = recommendArticle.isCollect || false;
         recommendArticle.isCollect = isCollect;
-        // 根据操作类型增减收藏数
-        recommendArticle.collect += isCollect ? 1 : -1;
+        // 如果提供了具体的收藏数，直接使用；否则根据操作类型增减收藏数
+        if (collect !== undefined) {
+          recommendArticle.collect = collect;
+        } else {
+          // 只有状态真正改变时才调整计数
+          if (oldIsCollect && !isCollect) {
+            // 取消收藏
+            recommendArticle.collect = Math.max(0, recommendArticle.collect - 1);
+          } else if (!oldIsCollect && isCollect) {
+            // 收藏
+            recommendArticle.collect += 1;
+          }
+        }
       }
     }
   },

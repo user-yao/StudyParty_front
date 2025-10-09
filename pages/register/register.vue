@@ -11,7 +11,7 @@
         <div class="logo-icon">
           <i class="fas fa-brain"></i>
         </div>
-        <h1>智学未来</h1>
+        <h1>职引星聚</h1>
         <p>开启你的个性化学习之旅</p>
       </view>
       

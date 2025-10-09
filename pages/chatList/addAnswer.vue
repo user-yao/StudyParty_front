@@ -42,7 +42,7 @@
                                     @scroll="onTextareaScroll" :style="textareaContainerStyle" enable-flex="true">
                                     <textarea ref="submissionTextarea" class="submission-text" v-model="displayContent"
                                         placeholder="请输入回答内容，支持Markdown语法..." :style="textareaStyle"
-                                        @focus="onTextareaFocus" @blur="onTextareaBlur">
+                                        @focus="onTextareaFocus" @blur="onTextareaBlur" :maxlength="5000">
 									</textarea>
                                 </scroll-view>
 
