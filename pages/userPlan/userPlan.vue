@@ -189,12 +189,12 @@
               />
             </u-form-item>
             <u-form-item label="开始时间" prop="startTime">
-              <u-input 
-                v-model="newPlan.displayStartTime" 
-                placeholder="请选择开始时间" 
-                type="select"
-                @click="showStartDatePicker = true"
-              />
+              <view 
+                class="time-display"
+                @click="openDatePicker"
+              >
+                {{ newPlan.displayStartTime || '请选择开始时间' }}
+              </view>
             </u-form-item>
           </u-form>
         </view>
@@ -387,6 +387,12 @@ export default {
     closeAddPlanModal() {
       console.log('关闭添加计划弹窗'); // 添加调试日志
       this.showAddModal = false;
+    },
+    
+    // 打开时间选择器
+    openDatePicker() {
+      // 确保时间选择器显示当前设置的时间
+      this.showStartDatePicker = true;
     },
     
     // 添加计划
@@ -807,6 +813,20 @@ export default {
   outline: none !important;
   box-shadow: none !important;
   background-image: none !important;
+}
+
+.time-display {
+  padding: 10px 15px;
+  border: 1px solid #dcdfe6;
+  border-radius: 4px;
+  font-size: 14px;
+  color: #606266;
+  background-color: #ffffff;
+  cursor: pointer;
+}
+
+.time-display:hover {
+  border-color: #4361ee;
 }
 
 /* 响应式调整 */

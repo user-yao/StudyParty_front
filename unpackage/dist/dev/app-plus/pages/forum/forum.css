@@ -526,6 +526,9 @@
   margin-bottom: 12px;
   line-height: 1.4;
   min-height: 40px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .task-meta[data-v-aeadbf01] {
   margin-bottom: 12px;

@@ -14,7 +14,69 @@
         <input placeholder-style="color:#fff" type="text" placeholder="搜索课程、问题、技能..." readonly>
       </div>
     </header>
-
+    <!-- 励志卡片 -->
+    <div class="motivational-card">
+      <div class="card-header">
+        <div class="clock-in-days">{{ userInfo.clockIn || 0 }}天</div>
+        <div class="card-label">连续打卡</div>
+      </div>
+      <div class="motivational-content">
+        <div class="quote">{{ getRandomQuote() }}</div>
+      </div>
+    </div>
+<!-- 核心功能入口 -->
+    <div class="quick-actions">
+      <div class="action-grid">
+        <div class="action-item" @click="goToPage('/pages/completedTasks/completedTasks')">
+          <div class="action-icon">
+            <u-icon name="order" size="24" color="#ffffff"></u-icon>
+          </div>
+          <div class="action-name">我的任务</div>
+        </div>
+        <div class="action-item" @click="goToPage('/pages/chatList/taskList')">
+          <div class="action-icon">
+            <u-icon name="file-text" size="24" color="#ffffff"></u-icon>
+          </div>
+          <div class="action-name">任务所</div>
+        </div>
+        <div class="action-item" @click="goToPage('/pages/chatList/friendList')">
+          <div class="action-icon">
+            <u-icon name="man-add" size="24" color="#ffffff"></u-icon>
+          </div>
+          <div class="action-name">好友</div>
+        </div>
+        <div class="action-item" @click="goToPage('/pages/chatList/groupList')">
+          <div class="action-icon">
+            <u-icon name="home" size="24" color="#ffffff"></u-icon>
+          </div>
+          <div class="action-name">我的小组</div>
+        </div>
+        <div class="action-item" @click="goToPage('/pages/search/search')">
+          <div class="action-icon">
+            <u-icon name="search" size="24" color="#ffffff"></u-icon>
+          </div>
+          <div class="action-name">搜索</div>
+        </div>
+        <div class="action-item" @click="goToPage('/pages/AI/skillTree')">
+          <div class="action-icon">
+            <u-icon name="order" size="24" color="#ffffff"></u-icon>
+          </div>
+          <div class="action-name">技能树</div>
+        </div>
+        <div class="action-item" @click="goToPage('/pages/AI/lessonPlan')">
+          <div class="action-icon">
+            <u-icon name="edit-pen" size="24" color="#ffffff"></u-icon>
+          </div>
+          <div class="action-name">教案修改</div>
+        </div>
+        <div class="action-item" @click="goToPage('/pages/AI/starAI')">
+          <div class="action-icon">
+            <u-icon name="star" size="24" color="#ffffff"></u-icon>
+          </div>
+          <div class="action-name">小星AI</div>
+        </div>
+      </div>
+    </div>
     <!-- 用户学习计划 -->
     <div class="user-overview">
       <div class="section-header">
@@ -68,70 +130,9 @@
       </div>
     </div>
 
-    <!-- 励志卡片 -->
-    <div class="motivational-card">
-      <div class="card-header">
-        <div class="clock-in-days">{{ userInfo.clockIn || 0 }}天</div>
-        <div class="card-label">连续打卡</div>
-      </div>
-      <div class="motivational-content">
-        <div class="quote">{{ getRandomQuote() }}</div>
-      </div>
-    </div>
+    
 
-    <!-- 核心功能入口 -->
-    <div class="quick-actions">
-      <div class="action-grid">
-        <div class="action-item" @click="goToPage('/pages/completedTasks/completedTasks')">
-          <div class="action-icon">
-            <u-icon name="order" size="24" color="#ffffff"></u-icon>
-          </div>
-          <div class="action-name">我的任务</div>
-        </div>
-        <div class="action-item" @click="goToPage('/pages/chatList/taskList')">
-          <div class="action-icon">
-            <u-icon name="file-text" size="24" color="#ffffff"></u-icon>
-          </div>
-          <div class="action-name">任务所</div>
-        </div>
-        <div class="action-item" @click="goToPage('/pages/chatList/friendList')">
-          <div class="action-icon">
-            <u-icon name="man-add" size="24" color="#ffffff"></u-icon>
-          </div>
-          <div class="action-name">好友</div>
-        </div>
-        <div class="action-item" @click="goToPage('/pages/chatList/groupList')">
-          <div class="action-icon">
-            <u-icon name="home" size="24" color="#ffffff"></u-icon>
-          </div>
-          <div class="action-name">我的小组</div>
-        </div>
-        <div class="action-item" @click="goToPage('/pages/search/search')">
-          <div class="action-icon">
-            <u-icon name="search" size="24" color="#ffffff"></u-icon>
-          </div>
-          <div class="action-name">搜索</div>
-        </div>
-        <div class="action-item" @click="goToPage('/pages/AI/skillTree')">
-          <div class="action-icon">
-            <u-icon name="order" size="24" color="#ffffff"></u-icon>
-          </div>
-          <div class="action-name">技能树</div>
-        </div>
-        <div class="action-item" @click="goToPage('/pages/AI/lessonPlan')">
-          <div class="action-icon">
-            <u-icon name="edit-pen" size="24" color="#ffffff"></u-icon>
-          </div>
-          <div class="action-name">教案修改</div>
-        </div>
-        <div class="action-item" @click="goToPage('/pages/AI/starAI')">
-          <div class="action-icon">
-            <u-icon name="star" size="24" color="#ffffff"></u-icon>
-          </div>
-          <div class="action-name">小星AI</div>
-        </div>
-      </div>
-    </div>
+    
   </view>
 </template>
 
@@ -413,7 +414,6 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
 }
 
 .section-title {
@@ -498,6 +498,7 @@ header {
   background: linear-gradient(135deg, #4361ee, #3f37c9);
   border-radius: 16px;
   margin: 0 20px 25px;
+  margin-top: 30rpx;
   padding: 20px;
   color: white;
   position: relative;

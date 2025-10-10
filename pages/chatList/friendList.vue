@@ -14,7 +14,7 @@
 					</div>
 				</div>
 				<div class="search-bar">
-					<input style="color: #fff;" type="text" v-model="searchQuery" placeholder="搜索联系人...">
+					<input style="color: #fff;" placeholder-style="color:#fff" type="text" v-model="searchQuery" placeholder="搜索联系人...">
 				</div>
 				<!-- 身份筛选（仅在邀请老师或企业时显示） -->
 				<div class="status-filter" v-if="selectMode && (inviteType === 'teacher' || inviteType === 'enterprise')">
