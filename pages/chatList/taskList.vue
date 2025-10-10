@@ -6,17 +6,18 @@
 				<div class="header-top">
 					<div class="logo">
 						<u-icon name="arrow-left" size="24" color="#ffffff" @click="goBack"></u-icon>
-						<span>推荐任务</span>
+						<span>任务所</span>
 					</div>
 					<div class="header-actions">
 						<u-icon name="plus" size="24" color="#ffffff" @click="goToAddTask"></u-icon>
-						<u-icon name="search" size="24" color="#ffffff" @click="toggleSearch"></u-icon>
+						<u-icon name="search" size="24" color="#ffffff" @click="goToSearch"></u-icon>
 					</div>
 				</div>
 				
 				<!-- 搜索框 -->
 				<div class="search-container" v-show="showSearch">
 					<input 
+					placeholder-style="color:#fff"
 						class="search-input" 
 						v-model="searchKeyword" 
 						placeholder="搜索任务标题..." 
@@ -102,11 +103,8 @@
 	export default {
 		data() {
 			return {
-				searchKeyword: '',
 				tasks: [], // 存储从API获取的任务数据
-				loading: false, // 加载状态
-				searchTimer: null, // 搜索防抖定时器
-				showSearch: false // 是否显示搜索框
+				loading: false // 加载状态
 			}
 		},
 		computed: {
@@ -118,16 +116,9 @@
 				return this.userInfo && this.userInfo.id ? this.userInfo.id : null;
 			},
 			
-			// 根据搜索关键词过滤任务
+			// 显示所有任务（移除搜索过滤逻辑）
 			filteredTasks() {
-				if (!this.searchKeyword) {
-					return this.tasks;
-				}
-				
-				const keyword = this.searchKeyword.toLowerCase();
-				return this.tasks.filter(task =>
-					task.title && task.title.toLowerCase().includes(keyword)
-				);
+				return this.tasks;
 			}
 		},
 		methods: {
@@ -160,30 +151,11 @@
 				});
 			},
 
-			// 切换搜索框显示
-			toggleSearch() {
-				this.showSearch = !this.showSearch;
-				if (this.showSearch) {
-					this.$nextTick(() => {
-						this.$refs.searchInput && this.$refs.searchInput.focus();
-					});
-				} else {
-					this.searchKeyword = '';
-				}
-			},
-
-			// 清除搜索
-			clearSearch() {
-				this.searchKeyword = '';
-				this.showSearch = false;
-			},
-
-			// 搜索输入处理（防抖）
-			onSearchInput() {
-				clearTimeout(this.searchTimer);
-				this.searchTimer = setTimeout(() => {
-					// 搜索会在computed中自动处理
-				}, 300);
+			// 跳转到搜索页面
+			goToSearch() {
+				uni.navigateTo({
+					url: '/pages/search/search'
+				});
 			},
 
 			// 查看任务详情
@@ -366,47 +338,6 @@
 	.header-actions i {
 		font-size: 1.3rem;
 		cursor: pointer;
-	}
-
-	/* 搜索框样式 */
-	.search-container {
-		display: flex;
-		gap: 10px;
-		margin-top: 10px;
-	}
-
-	.search-input {
-		flex: 1;
-		height: 40px;
-		padding: 0 15px;
-		border: 1px solid var(--light-gray);
-		border-radius: 8px;
-		font-size: 1rem;
-		transition: all 0.3s;
-	}
-
-	.search-input:focus {
-		border-color: var(--primary);
-		outline: none;
-		box-shadow: 0 0 0 2px rgba(67, 97, 238, 0.2);
-	}
-
-	.search-btn {
-		background: var(--primary);
-		color: white;
-		border: none;
-		border-radius: 8px;
-		padding: 0 15px;
-		cursor: pointer;
-		font-weight: 500;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		transition: background 0.3s;
-	}
-
-	.search-btn:hover {
-		background: var(--secondary);
 	}
 
 	/* 内容区域 */

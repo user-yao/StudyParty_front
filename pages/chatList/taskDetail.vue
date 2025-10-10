@@ -527,6 +527,11 @@ export default {
           }
         }
         
+        // 确保任务数据已加载
+        if (!this.task) {
+          await this.fetchTaskDetail();
+        }
+        
         // 更新本地answers数据
         this.answers = answersData.map(answer => ({
           ...answer,
@@ -599,6 +604,7 @@ export default {
             // 根据任务的isTrueId字段判断是否为最佳答案
             isBestAnswer: (this.task && this.task.isTrueId === answer.id) || false
           }));
+          
           this.answers = [...this.answers, ...newAnswers];
           
           // 更新当前页码

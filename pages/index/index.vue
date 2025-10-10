@@ -11,7 +11,7 @@
       </div>
       <div class="search-bar" @click="goToSearch">
         <u-icon name="search" size="16" color="#ccc"></u-icon>
-        <input type="text" placeholder="搜索课程、问题、技能..." readonly>
+        <input placeholder-style="color:#fff" type="text" placeholder="搜索课程、问题、技能..." readonly>
       </div>
     </header>
 

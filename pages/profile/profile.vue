@@ -104,6 +104,12 @@
           </div>
           <div class="menu-name">我的收藏</div>
         </div>
+        <div class="menu-item" @click="toMyPublishedTasks">
+          <div class="menu-icon">
+            <u-icon name="order" size="24" color="#4361ee"></u-icon>
+          </div>
+          <div class="menu-name">我发布的任务</div>
+        </div>
       </div>
     </div>
 
@@ -274,6 +280,19 @@ export default {
           // 跳转到收藏文章列表页面，传递文章数据
           uni.navigateTo({
             url: '/pages/forum/myCollectArticles?articles=' + encodeURIComponent(JSON.stringify(res.data))
+          });
+        }
+      });
+    },
+    
+    // 跳转到我发布的任务页面
+    toMyPublishedTasks() {
+      // 调用store中的userTask模块的selectMyUserTasks方法
+      this.$store.dispatch('userTask/selectMyUserTasks').then(res => {
+        if (res.code === 200) {
+          // 跳转到我发布的任务页面
+          uni.navigateTo({
+            url: '/pages/profile/myPublishedTasks'
           });
         }
       });
@@ -583,7 +602,7 @@ header {
 
 .menu-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 15px;
 }
 
@@ -673,7 +692,7 @@ header {
 /* 响应式调整 */
 @media (max-width: 480px) {
   .menu-grid {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: 10px;
   }
   

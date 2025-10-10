@@ -8,15 +8,14 @@
           <span>学习社区</span>
         </div>
         <div class="header-actions">
-          <u-icon name="edit-pen" size="20" color="#fff" @click="goToAddArticle"></u-icon>
-          <u-icon name="bell" size="20" color="#fff" @click="goToNotifications"></u-icon>
+          <u-icon name="plus" size="20" color="#fff" @click="goToAddArticle"></u-icon>
           <u-icon name="search" size="20" color="#fff" @click="goToSearch"></u-icon>
         </div>
       </div>
       
       <div class="search-bar" @click="goToSearch">
         <u-icon name="search" size="16" color="#ccc"></u-icon>
-        <input type="text" placeholder="搜索任务、帖子...">
+        <input type="text" placeholder-style="color:#fff" placeholder="搜索任务、帖子...">
       </div>
     </header>
     
@@ -746,6 +745,9 @@ export default {
   margin-bottom: 12px;
   line-height: 1.4;
   min-height: 40px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .task-meta {

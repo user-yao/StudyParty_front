@@ -16,7 +16,7 @@
 				</div>
 				<div class="search-bar">
 					<u-icon name="search" size="18" color="rgba(255,255,255,0.8)"></u-icon>
-					<input style="color: #fff;" type="text" v-model="searchQuery" placeholder="搜索小组...">
+					<input style="color: #ffffff;" placeholder-style="color:#fff"  type="text" v-model="searchQuery" placeholder="搜索我加入的小组...">
 				</div>
 			</header>
 
@@ -404,7 +404,7 @@ export default {
 		background: linear-gradient(135deg, var(--primary), var(--secondary));
 		color: white;
 		padding: 15px 20px;
-		padding-top: calc(var(--status-bar-height, 0px) + 15px);
+		padding-top: 5vh;
 		box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 		position: fixed;
 		top: 0;

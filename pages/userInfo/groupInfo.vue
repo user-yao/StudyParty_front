@@ -1664,7 +1664,7 @@ export default {
 		transition: all 0.2s ease;
 	}
 	
-	.action-button:hover {
+	.action-button:active {
 		background: var(--primary);
 		color: white;
 		transform: translateY(-1px);
@@ -1675,7 +1675,7 @@ export default {
 		border-color: rgba(247, 37, 133, 0.3);
 	}
 	
-	.action-button.danger:hover {
+	.action-button.danger:active {
 		background: var(--warning);
 		color: white;
 	}
@@ -1704,7 +1704,7 @@ export default {
 		transition: all 0.2s ease;
 	}
 	
-	.quick-action-btn:hover {
+	.quick-action-btn:active {
 		background: var(--secondary);
 		transform: translateY(-1px);
 	}
@@ -1754,7 +1754,7 @@ export default {
 		min-width: 0;
 	}
 	
-	.management-item:hover {
+	.management-item:active {
 		background: var(--primary);
 		color: white;
 		transform: translateY(-1px);
@@ -1772,7 +1772,7 @@ export default {
 		background: rgba(67, 97, 238, 0.05);
 	}
 	
-	.transfer-action:hover {
+	.transfer-action:active {
 		background: var(--primary);
 		color: white;
 		border-color: var(--primary);
@@ -1786,7 +1786,7 @@ export default {
 		justify-content: center;
 	}
 	
-	.dissolve-action:hover {
+	.dissolve-action:active {
 		background: var(--warning);
 		color: white;
 		border-color: var(--warning);
@@ -1801,7 +1801,7 @@ export default {
 		justify-content: center;
 	}
 	
-	.leave-action:hover {
+	.leave-action:active {
 		background: var(--warning);
 		color: white;
 		border-color: var(--warning);
@@ -2019,7 +2019,7 @@ export default {
 		transition: transform 0.2s, box-shadow 0.2s;
 	}
 	
-	.member-avatar:hover {
+	.member-avatar:active {
 		transform: scale(1.05);
 		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 	}
@@ -2163,7 +2163,7 @@ export default {
 		transition: all 0.2s;
 	}
 	
-	.retry-btn:hover {
+	.retry-btn:active {
 		background: #d9363e;
 		transform: translateY(-1px);
 	}
@@ -2176,7 +2176,7 @@ export default {
 		align-items: center;
 	}
 
-	.task-icon {
+	.task-icon{
 		width: 40px;
 		height: 40px;
 		border-radius: 10px;
@@ -2240,7 +2240,7 @@ export default {
 		border-bottom: none;
 	}
 
-	.option-item:hover {
+	.option-item:hactive{
 		background-color: #f8f9ff;
 	}
 
@@ -2308,7 +2308,7 @@ export default {
 		color: white;
 	}
 
-	.btn:hover {
+	.btn:hactive{
 		transform: translateY(-2px);
 		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 	}
@@ -2366,7 +2366,7 @@ export default {
 		transition: background-color 0.2s;
 	}
 	
-	.modal-close:hover {
+	.modal-close:hactive{
 		background: #e9ecef;
 	}
 
@@ -2430,7 +2430,7 @@ export default {
 		border: 2px solid transparent;
 	}
 	
-	.avatar-edit-container:hover {
+	.avatar-edit-container:hactive{
 		background: rgba(67, 97, 238, 0.05);
 		border-color: var(--primary);
 		transform: translateY(-2px);
@@ -2468,7 +2468,7 @@ export default {
 		font-weight: 500;
 	}
 	
-	.avatar-edit-btn:hover {
+	.avatar-edit-btn:hactive{
 		color: var(--secondary);
 	}
 
@@ -2530,7 +2530,7 @@ export default {
 		justify-content: center;
 	}
 	
-	.leave-action:hover {
+	.leave-action:hactive{
 		background: var(--warning);
 		color: white;
 		border-color: var(--warning);

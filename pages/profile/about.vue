@@ -17,7 +17,7 @@
       <view class="app-name">职引星聚</view>
       <view class="app-version">v1.0.0</view>
       <view class="app-description">
-        学习派是一个专注于学习社交的应用，帮助用户更好地管理学习任务、加入学习小组、与好友交流学习心得。
+        职引星聚是一个专注于学习社交的应用，帮助用户更好地管理学习任务、加入学习小组、与好友交流学习心得。
       </view>
       
       <view class="features">

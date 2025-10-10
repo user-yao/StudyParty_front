@@ -6298,11 +6298,11 @@ if (uni.restoreGlobal) {
     }
     return module;
   }
-  const baseUrl = "http://121.199.174.172:8080";
+  const baseUrl = "http://192.168.46.136:8080";
   const timeout = 3e5;
-  const webSocketUrl = "ws://121.199.174.172:8080/websocket/ws";
-  const imageUrl = "http://121.199.174.172:8080/";
-  const sourceUrl = "http://121.199.174.172:8080";
+  const webSocketUrl = "ws://192.168.46.136:8080/websocket/ws";
+  const imageUrl = "http://192.168.46.136:8080/";
+  const sourceUrl = "http://192.168.46.136:8080";
   const dbName = "studyParty";
   const dbpath = "_doc/studyParty.db";
   const db = {
@@ -10924,6 +10924,20 @@ if (uni.restoreGlobal) {
           return task2;
         });
       },
+      // 处理文章点赞状态变化
+      handleArticleLikeChanged(data2) {
+        this.$store.commit("article/UPDATE_ARTICLE_LIKE", {
+          articleId: data2.articleId,
+          isNice: data2.isNice
+        });
+      },
+      // 处理文章收藏状态变化
+      handleArticleCollectChanged(data2) {
+        this.$store.commit("article/UPDATE_ARTICLE_FAVORITE", {
+          articleId: data2.articleId,
+          isCollect: data2.isCollect
+        });
+      },
       // 获取推荐任务
       async getRecommendTasks() {
         try {
@@ -10943,7 +10957,7 @@ if (uni.restoreGlobal) {
             });
           }
         } catch (error2) {
-          formatAppLog("error", "at pages/forum/forum.vue:531", "获取推荐任务失败:", error2);
+          formatAppLog("error", "at pages/forum/forum.vue:549", "获取推荐任务失败:", error2);
           uni.showToast({
             title: "获取推荐任务失败",
             icon: "none"
@@ -10955,6 +10969,8 @@ if (uni.restoreGlobal) {
       await this.getRecommendArticles();
       await this.getRecommendTasks();
       uni.$on("taskStatusUpdated", this.handleTaskStatusUpdated);
+      uni.$on("articleLikeChanged", this.handleArticleLikeChanged);
+      uni.$on("articleCollectChanged", this.handleArticleCollectChanged);
     },
     // 页面显示时检查数据，确保退出登录后重新登录不会重复添加数据
     onShow() {
@@ -10966,6 +10982,8 @@ if (uni.restoreGlobal) {
     // 页面销毁前移除事件监听
     beforeDestroy() {
       uni.$off("taskStatusUpdated", this.handleTaskStatusUpdated);
+      uni.$off("articleLikeChanged", this.handleArticleLikeChanged);
+      uni.$off("articleCollectChanged", this.handleArticleCollectChanged);
     }
   };
   function _sfc_render$2E(_ctx, _cache, $props, $setup, $data, $options) {
@@ -14999,9 +15017,14 @@ ${e2}</tr>
               this.currentArticle.isNice = true;
               this.currentArticle.nice += 1;
             }
+            uni.$emit("articleLikeChanged", {
+              articleId: this.articleId,
+              isNice: this.currentArticle.isNice,
+              nice: this.currentArticle.nice
+            });
           }
         } catch (error2) {
-          formatAppLog("error", "at pages/forum/articleDetail.vue:426", "点赞操作失败:", error2);
+          formatAppLog("error", "at pages/forum/articleDetail.vue:432", "点赞操作失败:", error2);
           uni.$u.toast("操作失败");
         }
       },
@@ -15017,9 +15040,14 @@ ${e2}</tr>
               this.currentArticle.isCollect = true;
               this.currentArticle.collect += 1;
             }
+            uni.$emit("articleCollectChanged", {
+              articleId: this.articleId,
+              isCollect: this.currentArticle.isCollect,
+              collect: this.currentArticle.collect
+            });
           }
         } catch (error2) {
-          formatAppLog("error", "at pages/forum/articleDetail.vue:445", "收藏操作失败:", error2);
+          formatAppLog("error", "at pages/forum/articleDetail.vue:457", "收藏操作失败:", error2);
           uni.$u.toast("操作失败");
         }
       },
@@ -15036,7 +15064,7 @@ ${e2}</tr>
             }
           },
           fail: (err) => {
-            formatAppLog("error", "at pages/forum/articleDetail.vue:463", "选择图片失败:", err);
+            formatAppLog("error", "at pages/forum/articleDetail.vue:475", "选择图片失败:", err);
             uni.$u.toast("选择图片失败");
           }
         });
@@ -15063,7 +15091,7 @@ ${e2}</tr>
             const commentId = res2.data;
             if (this.selectedImages.length > 0) {
               for (let i2 = 0; i2 < this.selectedImages.length; i2++) {
-                formatAppLog("log", "at pages/forum/articleDetail.vue:496", this.selectedImages[i2]);
+                formatAppLog("log", "at pages/forum/articleDetail.vue:508", this.selectedImages[i2]);
                 await new Promise((resolve, reject) => {
                   uni.uploadFile({
                     url: baseUrl + "/article/articleComment/addArticleCommentImage",
@@ -15097,7 +15125,7 @@ ${e2}</tr>
             throw new Error(res2.msg || "提交失败");
           }
         } catch (error2) {
-          formatAppLog("error", "at pages/forum/articleDetail.vue:532", "提交评论失败:", error2);
+          formatAppLog("error", "at pages/forum/articleDetail.vue:544", "提交评论失败:", error2);
           uni.showToast({
             title: error2.message || "提交评论失败",
             icon: "none"
@@ -15109,7 +15137,7 @@ ${e2}</tr>
       // 切换评论点赞状态
       async toggleCommentLike(comment) {
         try {
-          formatAppLog("log", "at pages/forum/articleDetail.vue:545", comment);
+          formatAppLog("log", "at pages/forum/articleDetail.vue:557", comment);
           const res2 = await this.niceArticleComment({ articleCommentId: comment.id });
           if (res2.code === 200) {
             if (res2.data === "取消点赞") {
@@ -15121,7 +15149,7 @@ ${e2}</tr>
             }
           }
         } catch (error2) {
-          formatAppLog("error", "at pages/forum/articleDetail.vue:557", "评论点赞操作失败:", error2);
+          formatAppLog("error", "at pages/forum/articleDetail.vue:569", "评论点赞操作失败:", error2);
           uni.$u.toast("操作失败");
         }
       },
@@ -15171,7 +15199,7 @@ ${e2}</tr>
         this.currentAnalysisIndex = 0;
         try {
           const res2 = await this.getArticleAnalyst({ prompt: this.article.content });
-          formatAppLog("log", "at pages/forum/articleDetail.vue:618", "AI解析返回数据:", res2);
+          formatAppLog("log", "at pages/forum/articleDetail.vue:630", "AI解析返回数据:", res2);
           if (res2 && res2.code === 200 && res2.data) {
             this.aiAnalysisData = res2.data;
             this.hasAnalyzed = true;
@@ -15184,7 +15212,7 @@ ${e2}</tr>
             throw new Error(res2.msg || "解析失败");
           }
         } catch (error2) {
-          formatAppLog("error", "at pages/forum/articleDetail.vue:632", "AI解析失败:", error2);
+          formatAppLog("error", "at pages/forum/articleDetail.vue:644", "AI解析失败:", error2);
           uni.showToast({
             title: "解析失败: " + (error2.message || "未知错误"),
             icon: "none"
@@ -55505,7 +55533,7 @@ __f__('log','at pages/chatList/markdownGuide.vue:129','Hello, World!');
           }
           this.syncContentWithDisplay();
         } catch (error2) {
-          formatAppLog("error", "at pages/chatList/addGroupTask.vue:265", "Error in displayContent watcher:", error2);
+          formatAppLog("error", "at pages/chatList/addGroupTask.vue:266", "Error in displayContent watcher:", error2);
         }
       }
     },
@@ -55520,27 +55548,27 @@ __f__('log','at pages/chatList/markdownGuide.vue:129','Hello, World!');
       this.setDefaultTimes();
     },
     onShow() {
-      formatAppLog("log", "at pages/chatList/addGroupTask.vue:283", "添加任务页面显示");
+      formatAppLog("log", "at pages/chatList/addGroupTask.vue:284", "添加任务页面显示");
       try {
         if (this.onKeyboardHeightChange && typeof this.onKeyboardHeightChange === "function") {
           uni.onKeyboardHeightChange(this.onKeyboardHeightChange);
         } else {
-          formatAppLog("warn", "at pages/chatList/addGroupTask.vue:290", "onKeyboardHeightChange is not a valid function, cannot register keyboard listener");
+          formatAppLog("warn", "at pages/chatList/addGroupTask.vue:291", "onKeyboardHeightChange is not a valid function, cannot register keyboard listener");
         }
       } catch (error2) {
-        formatAppLog("error", "at pages/chatList/addGroupTask.vue:293", "Error registering keyboard height change listener in onShow:", error2);
+        formatAppLog("error", "at pages/chatList/addGroupTask.vue:294", "Error registering keyboard height change listener in onShow:", error2);
       }
     },
     onUnload() {
-      formatAppLog("log", "at pages/chatList/addGroupTask.vue:297", "添加任务页面卸载");
+      formatAppLog("log", "at pages/chatList/addGroupTask.vue:298", "添加任务页面卸载");
       try {
         if (this.onKeyboardHeightChange && typeof this.onKeyboardHeightChange === "function") {
           uni.offKeyboardHeightChange(this.onKeyboardHeightChange);
         } else {
-          formatAppLog("warn", "at pages/chatList/addGroupTask.vue:304", "onKeyboardHeightChange is not a valid function, cannot unregister keyboard listener");
+          formatAppLog("warn", "at pages/chatList/addGroupTask.vue:305", "onKeyboardHeightChange is not a valid function, cannot unregister keyboard listener");
         }
       } catch (error2) {
-        formatAppLog("error", "at pages/chatList/addGroupTask.vue:307", "Error unregistering keyboard height change listener in onUnload:", error2);
+        formatAppLog("error", "at pages/chatList/addGroupTask.vue:308", "Error unregistering keyboard height change listener in onUnload:", error2);
       }
     },
     methods: {
@@ -55565,7 +55593,7 @@ __f__('log','at pages/chatList/markdownGuide.vue:129','Hello, World!');
           this.submissionContent = content;
           this.taskForm.markdown = content;
         } catch (error2) {
-          formatAppLog("error", "at pages/chatList/addGroupTask.vue:342", "Error in syncContentWithDisplay:", error2);
+          formatAppLog("error", "at pages/chatList/addGroupTask.vue:343", "Error in syncContentWithDisplay:", error2);
         }
       },
       // 从提交内容生成显示内容
@@ -55598,7 +55626,7 @@ __f__('log','at pages/chatList/markdownGuide.vue:129','Hello, World!');
           });
           this.displayContent = content;
         } catch (error2) {
-          formatAppLog("error", "at pages/chatList/addGroupTask.vue:389", "Error in generateDisplayContent:", error2);
+          formatAppLog("error", "at pages/chatList/addGroupTask.vue:390", "Error in generateDisplayContent:", error2);
         }
       },
       // 滚动事件处理
@@ -55611,21 +55639,21 @@ __f__('log','at pages/chatList/markdownGuide.vue:129','Hello, World!');
       onTextareaFocus(e2) {
         try {
           this.isTextareaFocused = true;
-          formatAppLog("log", "at pages/chatList/addGroupTask.vue:407", "文本框获得焦点");
+          formatAppLog("log", "at pages/chatList/addGroupTask.vue:408", "文本框获得焦点");
           this.$nextTick(() => {
             this.scrollToTextareaBottom();
           });
         } catch (error2) {
-          formatAppLog("error", "at pages/chatList/addGroupTask.vue:414", "Error in onTextareaFocus:", error2);
+          formatAppLog("error", "at pages/chatList/addGroupTask.vue:415", "Error in onTextareaFocus:", error2);
         }
       },
       // 文本框失去焦点事件
       onTextareaBlur(e2) {
         try {
           this.isTextareaFocused = false;
-          formatAppLog("log", "at pages/chatList/addGroupTask.vue:422", "文本框失去焦点");
+          formatAppLog("log", "at pages/chatList/addGroupTask.vue:423", "文本框失去焦点");
         } catch (error2) {
-          formatAppLog("error", "at pages/chatList/addGroupTask.vue:424", "Error in onTextareaBlur:", error2);
+          formatAppLog("error", "at pages/chatList/addGroupTask.vue:425", "Error in onTextareaBlur:", error2);
         }
       },
       // 滚动到文本框底部
@@ -55646,9 +55674,9 @@ __f__('log','at pages/chatList/markdownGuide.vue:129','Hello, World!');
               }
             });
           }
-          formatAppLog("log", "at pages/chatList/addGroupTask.vue:451", "滚动到文本框底部");
+          formatAppLog("log", "at pages/chatList/addGroupTask.vue:452", "滚动到文本框底部");
         } catch (error2) {
-          formatAppLog("error", "at pages/chatList/addGroupTask.vue:453", "Error in scrollToTextareaBottom:", error2);
+          formatAppLog("error", "at pages/chatList/addGroupTask.vue:454", "Error in scrollToTextareaBottom:", error2);
         }
       },
       // 键盘高度变化处理
@@ -55656,18 +55684,18 @@ __f__('log','at pages/chatList/markdownGuide.vue:129','Hello, World!');
         try {
           this.keyboardHeight = res2.height || 0;
           if (res2.height > 0) {
-            formatAppLog("log", "at pages/chatList/addGroupTask.vue:464", "键盘弹起，高度:", res2.height);
+            formatAppLog("log", "at pages/chatList/addGroupTask.vue:465", "键盘弹起，高度:", res2.height);
             if (this.isTextareaFocused) {
               setTimeout(() => {
                 this.scrollToTextareaBottom();
               }, 100);
             }
           } else {
-            formatAppLog("log", "at pages/chatList/addGroupTask.vue:474", "键盘收起");
+            formatAppLog("log", "at pages/chatList/addGroupTask.vue:475", "键盘收起");
           }
           this.$forceUpdate();
         } catch (error2) {
-          formatAppLog("error", "at pages/chatList/addGroupTask.vue:480", "Error in onKeyboardHeightChange:", error2);
+          formatAppLog("error", "at pages/chatList/addGroupTask.vue:481", "Error in onKeyboardHeightChange:", error2);
         }
       },
       // 预览Markdown内容
@@ -55742,7 +55770,7 @@ ${placeholder}
             }
           },
           fail: (chooseErr) => {
-            formatAppLog("error", "at pages/chatList/addGroupTask.vue:576", "选择图片失败:", chooseErr);
+            formatAppLog("error", "at pages/chatList/addGroupTask.vue:577", "选择图片失败:", chooseErr);
             uni.showToast({
               title: "选择图片失败",
               icon: "none"
@@ -55836,12 +55864,12 @@ ${placeholder}
                 "Authorization": `${uni.getStorageSync("token")}`
               },
               onProgress: (completed, total, res2) => {
-                formatAppLog("log", "at pages/chatList/addGroupTask.vue:690", `上传进度: ${completed}/${total}`);
+                formatAppLog("log", "at pages/chatList/addGroupTask.vue:691", `上传进度: ${completed}/${total}`);
               }
             });
             if (uploadResult && Array.isArray(uploadResult) && uploadResult.length > 0) {
               const firstResult = uploadResult[0];
-              formatAppLog("log", "at pages/chatList/addGroupTask.vue:698", "上传结果:", firstResult);
+              formatAppLog("log", "at pages/chatList/addGroupTask.vue:699", "上传结果:", firstResult);
               if (firstResult.data && firstResult.data.code === 200) {
                 uni.showToast({
                   title: "任务创建成功",
@@ -55893,7 +55921,7 @@ ${placeholder}
             }
           }
         } catch (error2) {
-          formatAppLog("error", "at pages/chatList/addGroupTask.vue:759", "任务创建失败:", error2);
+          formatAppLog("error", "at pages/chatList/addGroupTask.vue:760", "任务创建失败:", error2);
           uni.showToast({
             title: error2.message || "任务创建失败",
             icon: "none"
@@ -56053,7 +56081,8 @@ ${placeholder}
                           placeholder: "请输入任务描述内容，支持Markdown语法...",
                           style: vue.normalizeStyle($options.textareaStyle),
                           onFocus: _cache[9] || (_cache[9] = (...args) => $options.onTextareaFocus && $options.onTextareaFocus(...args)),
-                          onBlur: _cache[10] || (_cache[10] = (...args) => $options.onTextareaBlur && $options.onTextareaBlur(...args))
+                          onBlur: _cache[10] || (_cache[10] = (...args) => $options.onTextareaBlur && $options.onTextareaBlur(...args)),
+                          maxlength: 5e3
                         },
                         null,
                         36
@@ -59162,9 +59191,9 @@ ${placeholder}
             color: "#4361ee"
           })
         ]),
-        vue.createElementVNode("view", { class: "app-name" }, "学习派"),
+        vue.createElementVNode("view", { class: "app-name" }, "职引星聚"),
         vue.createElementVNode("view", { class: "app-version" }, "v1.0.0"),
-        vue.createElementVNode("view", { class: "app-description" }, " 学习派是一个专注于学习社交的应用，帮助用户更好地管理学习任务、加入学习小组、与好友交流学习心得。 "),
+        vue.createElementVNode("view", { class: "app-description" }, " 职引星聚是一个专注于学习社交的应用，帮助用户更好地管理学习任务、加入学习小组、与好友交流学习心得。 "),
         vue.createElementVNode("view", { class: "features" }, [
           vue.createElementVNode("view", { class: "feature-item" }, [
             vue.createVNode(_component_u_icon, {
@@ -59206,7 +59235,7 @@ ${placeholder}
               size: "18",
               color: "#666"
             }),
-            vue.createElementVNode("text", { class: "contact-text" }, "support@studyparty.com")
+            vue.createElementVNode("text", { class: "contact-text" }, "test@studyparty.com")
           ]),
           vue.createElementVNode("view", { class: "contact-item" }, [
             vue.createVNode(_component_u_icon, {
@@ -59214,7 +59243,7 @@ ${placeholder}
               size: "18",
               color: "#666"
             }),
-            vue.createElementVNode("text", { class: "contact-text" }, "400-123-4567")
+            vue.createElementVNode("text", { class: "contact-text" }, "134-5398-1285")
           ])
         ])
       ])
@@ -62667,7 +62696,8 @@ ${placeholder}
                           placeholder: "请输入回答内容，支持Markdown语法...",
                           style: vue.normalizeStyle($options.textareaStyle),
                           onFocus: _cache[4] || (_cache[4] = (...args) => $options.onTextareaFocus && $options.onTextareaFocus(...args)),
-                          onBlur: _cache[5] || (_cache[5] = (...args) => $options.onTextareaBlur && $options.onTextareaBlur(...args))
+                          onBlur: _cache[5] || (_cache[5] = (...args) => $options.onTextareaBlur && $options.onTextareaBlur(...args)),
+                          maxlength: 5e3
                         },
                         null,
                         36
@@ -80183,19 +80213,37 @@ ${placeholder}
         state2.collectedArticles = list;
       },
       // 更新文章的点赞状态
-      UPDATE_ARTICLE_LIKE(state2, { articleId, isNice }) {
+      UPDATE_ARTICLE_LIKE(state2, { articleId, isNice, nice }) {
         const recommendArticle = state2.recommendArticles.find((article2) => article2.id === articleId);
         if (recommendArticle) {
+          const oldIsNice = recommendArticle.isNice || false;
           recommendArticle.isNice = isNice;
-          recommendArticle.nice += isNice ? 1 : -1;
+          if (nice !== void 0) {
+            recommendArticle.nice = nice;
+          } else {
+            if (oldIsNice && !isNice) {
+              recommendArticle.nice = Math.max(0, recommendArticle.nice - 1);
+            } else if (!oldIsNice && isNice) {
+              recommendArticle.nice += 1;
+            }
+          }
         }
       },
       // 更新文章的收藏状态
-      UPDATE_ARTICLE_FAVORITE(state2, { articleId, isCollect }) {
+      UPDATE_ARTICLE_FAVORITE(state2, { articleId, isCollect, collect }) {
         const recommendArticle = state2.recommendArticles.find((article2) => article2.id === articleId);
         if (recommendArticle) {
+          const oldIsCollect = recommendArticle.isCollect || false;
           recommendArticle.isCollect = isCollect;
-          recommendArticle.collect += isCollect ? 1 : -1;
+          if (collect !== void 0) {
+            recommendArticle.collect = collect;
+          } else {
+            if (oldIsCollect && !isCollect) {
+              recommendArticle.collect = Math.max(0, recommendArticle.collect - 1);
+            } else if (!oldIsCollect && isCollect) {
+              recommendArticle.collect += 1;
+            }
+          }
         }
       }
     },

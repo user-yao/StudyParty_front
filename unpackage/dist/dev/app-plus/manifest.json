@@ -126,13 +126,13 @@
         },
         {
           "pagePath": "pages/forum/forum",
-          "text": "论坛",
+          "text": "社区",
           "iconPath": "/static/BlackTableBar/luntan.png",
           "selectedIconPath": "/static/BlueTableBar/luntan.png"
         },
         {
           "pagePath": "pages/chatList/chatList",
-          "text": "小组",
+          "text": "消息",
           "iconPath": "/static/BlackTableBar/kehuqunzu.png",
           "selectedIconPath": "/static/BlueTableBar/kehuqunzu.png"
         },

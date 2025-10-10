@@ -147,12 +147,19 @@ export default {
     // 按字母分组联系人
     groupedContacts() {
       const groups = {};
-
       // 根据身份筛选过滤联系人
       const filteredContacts = this.statusFilter ? 
-        this.contacts.filter(contact => contact.status === this.statusFilter) : 
+        this.contacts.filter(contact => {
+          console.log('Contact object:', contact);
+          console.log(`Checking contact: ${contact.name || contact.remark}, status: ${contact.status} (type: ${typeof contact.status}), expected status: ${this.statusFilter} (type: ${typeof this.statusFilter})`);
+          // 使用宽松比较并确保两个值都是数字类型
+          const contactStatus = Number(contact.status);
+          const expectedStatus = Number(this.statusFilter);
+          const match = contactStatus === expectedStatus;
+          console.log(`After conversion - contactStatus: ${contactStatus}, expectedStatus: ${expectedStatus}, Match result: ${match}`);
+          return match;
+        }) : 
         this.contacts;
-
       filteredContacts.forEach(contact => {
         // 获取用于排序的名称：优先使用 remark，否则使用 name
         const displayName = contact.remark || contact.name;
@@ -292,7 +299,7 @@ export default {
 	  // 切换联系人选择状态
 	  toggleSelection(contact) {
 		  // 检查身份是否符合邀请要求
-		  if (this.statusFilter && contact.status !== this.statusFilter) {
+		  if (this.statusFilter && Number(contact.status) !== Number(this.statusFilter)) {
 			  uni.showToast({
 				  title: `请选择${this.statusFilter === 2 ? '老师' : '企业'}身份的用户`,
 				  icon: 'none'

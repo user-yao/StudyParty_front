@@ -175,7 +175,7 @@
 							</div>
 						</div>
 				</up-popup>
-				<up-modal :show="showDeleteModal" showCancelButton confirmColor="#f72585" title="删除好友" content='是否要删除该好友' @confirm="deleteUser(userInfo.id)"></up-modal>
+				<up-modal :show="showDeleteModal" showCancelButton confirmColor="#f72585" title="删除好友" content='是否要删除该好友' @confirm="deleteUser(userInfo.id)" @cancel="showDeleteModal = false"></up-modal>
 			</div>
 		</div>
 	</view>

@@ -9,9 +9,10 @@
         <div class="search-input-container">
           <!-- 替换为原生input元素 -->
           <input
+          placeholder-style="color:#fff"
             ref="searchInput"
             v-model="searchKeyword"
-            placeholder="搜索任务、帖子、用户..."
+            placeholder="搜索任务、帖子..."
             @confirm="performSearch"
             class="custom-search-input"
           />
