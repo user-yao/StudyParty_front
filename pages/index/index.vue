@@ -15,32 +15,55 @@
       </div>
     </header>
 
-    <!-- 用户信息概览 -->
+    <!-- 用户学习计划 -->
     <div class="user-overview">
-      <div class="user-header">
-        <image class="avatar" :src="getUserAvatar()" mode="aspectFill"></image>
-        <div class="user-basic-info">
-          <div class="user-name-row">
-            <h2 class="user-name">{{ userInfo.name || '未设置昵称' }}</h2>
-            <u-tag :text="getUserStatus()" :type="getUserStatusType()" size="mini" />
-          </div>
-          <p class="user-school">{{ userInfo.school || '未设置学校' }}</p>
-          <p class="user-major">{{ userInfo.major || '未设置专业' }}</p>
+      <div class="section-header">
+        <div class="section-title">我的学习计划</div>
+        <div class="section-action" @click="goToPage('/pages/userPlan/userPlan')">
+          <u-icon name="setting" size="16" color="#999"></u-icon>
         </div>
       </div>
-
-      <div class="user-stats">
-        <div class="stat-item">
-          <div class="stat-value">{{ userInfo.finishTask || 0 }}</div>
-          <div class="stat-label">完成任务</div>
+      
+      <div class="plans-container">
+        <!-- 如果有活动计划 -->
+        <div v-if="activePlans && activePlans.length > 0">
+          <div 
+            v-for="plan in activePlans.slice(0, 3)" 
+            :key="plan.id"
+            class="plan-item"
+          >
+            <div class="plan-header">
+              <div class="plan-status">
+                <u-tag 
+                  :text="getPlanStatusText(plan)" 
+                  :type="getPlanStatusType(plan)" 
+                  size="mini" 
+                />
+              </div>
+              <div class="plan-time">
+                {{ plan.startTime ? formatDate(plan.startTime) : '未设置开始时间' }}
+              </div>
+            </div>
+            <div class="plan-content">
+              {{ plan.planContext }}
+            </div>
+          </div>
+          
+          <!-- 如果还有更多计划 -->
+          <div 
+            v-if="activePlans.length > 3" 
+            class="view-more-plans"
+            @click="goToPage('/pages/userPlan/userPlan')"
+          >
+            查看更多计划
+          </div>
         </div>
-        <div class="stat-item">
-          <div class="stat-value">{{ userInfo.clockIn || 0 }}天</div>
-          <div class="stat-label">连续打卡</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-value">{{ userInfo.starPrestige || 0 }}</div>
-          <div class="stat-label">学术声望</div>
+        
+        <!-- 如果没有活动计划 -->
+        <div v-else class="no-plans">
+          <u-icon name="file-text" size="40" color="#ccc"></u-icon>
+          <div class="no-plans-text">暂无学习计划</div>
+          <div class="no-plans-subtext">点击设置按钮创建你的学习计划</div>
         </div>
       </div>
     </div>
@@ -135,16 +158,23 @@ export default {
         "每天进步一点点，就是成功的开始。",
         "学习是点亮人生的明灯。",
         "坚持就是胜利，努力必有回报。"
-      ]
+      ],
+      userPlans: [] // 添加用户计划数据
     };
   },
   computed: {
     ...mapState({
       userInfo: state => state.user.userInfo
     }),
-    userPlan() {
-      // 从 Vuex store 中获取用户计划
-      return this.$store.state.userPlan || [];
+    // 获取用户学习计划
+    activePlans() {
+      // 筛选出未开始和进行中的计划（isEnd为0的计划）
+      if (!this.userPlans || this.userPlans.length === 0) return [];
+      
+      // userPlans是一个包含两个数组的数组，第一个数组是有效的计划
+      const plans = Array.isArray(this.userPlans[0]) ? this.userPlans[0] : [];
+      
+      return plans.filter(plan => plan.isEnd === 0);
     }
   },
   methods: {
@@ -156,6 +186,13 @@ export default {
     formatTimestamp(timestamp) {
       const date = new Date(timestamp);
       return `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}:${date.getSeconds().toString().padStart(2, '0')}`;
+    },
+    
+    // 格式化日期（只显示年月日）
+    formatDate(dateString) {
+      if (!dateString) return '未设置';
+      const date = new Date(dateString);
+      return `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`;
     },
     
     // 获取用户头像
@@ -212,19 +249,50 @@ export default {
       uni.navigateTo({
         url: '/pages/chatList/chatList'
       });
+    },
+    
+    // 获取计划状态文本
+    getPlanStatusText(plan) {
+      if (plan.isEnd === 1) {
+        return '已完成';
+      } else if (plan.isStart === 1) {
+        return '进行中';
+      } else {
+        return '未开始';
+      }
+    },
+    
+    // 获取计划状态类型
+    getPlanStatusType(plan) {
+      if (plan.isEnd === 1) {
+        return 'success';  // 已完成 - 绿色
+      } else if (plan.isStart === 1) {
+        return 'primary';  // 进行中 - 蓝色
+      } else {
+        return 'warning';  // 未开始 - 橙色
+      }
     }
   },
   onLoad() {
     // 页面加载时获取用户计划
     this.getUserPlans().then(res => {
       console.log("用户计划加载成功", res);
+      this.userPlans = res;
     }).catch(err => {
       console.error("获取用户计划失败", err);
     });
   },
   onShow() {
-    // 页面显示时重新获取用户信息
+    // 页面显示时重新获取用户信息和用户计划
     this.$store.dispatch('user/selectUser', { id: uni.getStorageSync('id') });
+    
+    // 重新获取用户计划
+    this.getUserPlans().then(res => {
+      console.log("用户计划加载成功", res);
+      this.userPlans = res;
+    }).catch(err => {
+      console.error("获取用户计划失败", err);
+    });
   }
 };
 </script>
@@ -332,81 +400,97 @@ header {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
-.user-header {
+/* 用户学习计划 */
+.user-overview {
+  background: white;
+  border-radius: 16px;
+  margin: 20px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.section-header {
   display: flex;
+  justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
 }
 
-.avatar {
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  background: linear-gradient(45deg, var(--accent), var(--success));
+.section-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.section-action {
+  cursor: pointer;
+}
+
+.plans-container {
+  min-height: 120px;
+}
+
+.plan-item {
+  background: #f8f9fa;
+  border-radius: 12px;
+  padding: 15px;
+  margin-bottom: 15px;
+}
+
+.plan-item:last-child {
+  margin-bottom: 0;
+}
+
+.plan-header {
   display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.plan-time {
+  font-size: 0.85rem;
+  color: #6c757d;
+}
+
+.plan-content {
+  font-size: 0.95rem;
+  color: #333;
+  line-height: 1.5;
+}
+
+.view-more-plans {
+  text-align: center;
+  padding: 15px 0;
+  color: var(--primary);
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.no-plans {
+  text-align: center;
+  padding: 30px 0;
+  color: #999;
+  display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  color: white;
-  font-size: 1.8rem;
-  font-weight: bold;
-  margin-right: 15px;
-  flex-shrink: 0;
 }
 
-.user-basic-info {
-  flex: 1;
-  min-width: 0;
+.no-plans i {
+  font-size: 3rem;
+  margin-bottom: 15px;
+  color: #ccc;
+  align-self: center;
 }
 
-.user-name-row {
-  display: flex;
-  align-items: center;
-  margin-bottom: 8px;
-  gap: 10px;
+.no-plans-text {
+  font-size: 1rem;
+  margin: 10px 0 5px;
 }
 
-.user-name {
-  font-size: 1.3rem;
-  margin: 0;
-  flex: 1;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.user-school,
-.user-major {
-  font-size: 0.95rem;
-  color: #6c757d;
-  margin: 4px 0;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.user-stats {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 15px;
-  text-align: center;
-}
-
-.stat-item {
-  background: var(--light);
-  border-radius: 12px;
-  padding: 12px;
-}
-
-.stat-value {
-  font-size: 1.4rem;
-  font-weight: 700;
-  color: var(--primary);
-  margin-bottom: 5px;
-}
-
-.stat-label {
+.no-plans-subtext {
   font-size: 0.85rem;
-  color: var(--gray);
 }
 
 /* 励志卡片 */

@@ -7,7 +7,10 @@ export const addUserPlan = (data) => {
     data:{
       planContext:data.planContext,
       startTime:data.startTime
-    }
+    },
+        header: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        }
   });
 };
 export const deleteUserPlan = (data) => {
@@ -16,7 +19,10 @@ export const deleteUserPlan = (data) => {
     method: 'POST',
     data:{
       planId:data.planId
-    }
+    },
+        header: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        }
   });
 };
 export const startUserPlan = (data) => {
@@ -25,7 +31,10 @@ export const startUserPlan = (data) => {
     method: 'POST',
     data:{
       planId:data.planId
-    }
+    },
+        header: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        }
   });
 };
 export const endUserPlan = (data) => {
@@ -34,13 +43,19 @@ export const endUserPlan = (data) => {
     method: 'POST',
     data:{
       planId:data.planId
-    }
+    },
+        header: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        }
   });
 };
 export const getUserPlans = (data) => {
   return request({
     url: '/user/userPlan/getUserPlans',
     method: 'POST',
-    data
+    data,
+        header: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        }
   });
 };

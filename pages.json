@@ -307,7 +307,13 @@
 			"style": {
 				"navigationBarTitleText": "我发布的任务"
 			}
-		}
+		},
+				{
+					"path": "pages/userPlan/userPlan",
+					"style": {
+						"navigationBarTitleText": "学习计划"
+					}
+				}
 	],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
