@@ -731,6 +731,7 @@ export default {
           this.aiAnalysisData = res.data;
           this.hasAnalyzed = true;
           this.showAIAnalysis = true;
+          this.showAIPrompt = false;
           uni.showToast({
             title: '解析完成',
             icon: 'success'
@@ -1295,6 +1296,7 @@ export default {
 /* AI提示弹窗 */
 .ai-prompt-popup {
   height: 100%;
+  width: 90vw;
   display: flex;
   flex-direction: column;
 }

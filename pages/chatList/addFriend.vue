@@ -27,7 +27,7 @@
 				<!-- 搜索框 -->
 				<div class="search-container" v-if="activeTab === 'search'">
 					<up-input
-						style="width: 70rpx;"
+						style="width: 70rpx;background-color: #fff;"
 						class="search-input"
 					    placeholder="输入用户名或完整的手机号搜索"
 					    border="surround"
@@ -672,7 +672,7 @@
 
 	.modal-btn {
 		flex: 1;
-		padding: 10px;
+		padding: 10rpx;
 		border-radius: 8px;
 		text-align: center;
 		font-weight: 500;

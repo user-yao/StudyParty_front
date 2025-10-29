@@ -4,7 +4,6 @@
     <header class="app-header">
       <div class="header-top">
         <div class="logo">
-          <u-icon name="chat" size="24" color="#fff"></u-icon>
           <span>学习社区</span>
         </div>
         <div class="header-actions">
@@ -599,8 +598,8 @@ export default {
 .app-header {
   background: linear-gradient(135deg, #4361ee, #3f37c9);
   color: white;
-  padding: 10px 15px;
-  padding-top: calc(var(--status-bar-height, 0px) + 10px);
+  padding: 10px 20px;
+  padding-top: 5vh;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   position: sticky;
   top: 0;
@@ -617,8 +616,8 @@ export default {
 .logo {
   display: flex;
   align-items: center;
-  font-weight: 600;
-  font-size: 1.2rem;
+  font-weight: 700;
+  font-size: 1.4rem;
 }
 
 .logo i {

@@ -146,7 +146,7 @@
 						<u-pull-refresh v-model="refreshing" @refresh="onRefresh">
 							<scroll-view 
 								scroll-y="true" 
-								style="height: calc(100vh - 200px);" 
+								style="height: calc(100vh );" 
 								@scrolltolower="onLoadMore"
 								lower-threshold="50">
 								

@@ -154,7 +154,7 @@
 						<button class="btn btn-error" v-if="friendList.get(userInfo.id)" @click="showDeleteModal = true">
 							<u-icon name="person-delete-fill" color="#fff" size="50rpx" style="margin-right: 20rpx;"></u-icon> 删除好友
 						</button>
-						<button class="btn btn-primary" v-if="!friendList.get(userInfo.id)">
+						<button class="btn btn-primary" v-if="!friendList.get(userInfo.id)" @click="showAddFriendModal">
 							<u-icon name="plus-people-fill" color="#fff" size="50rpx" style="margin-right: 20rpx;"></u-icon> 添加好友
 						</button>
 					</div>
@@ -176,6 +176,26 @@
 						</div>
 				</up-popup>
 				<up-modal :show="showDeleteModal" showCancelButton confirmColor="#f72585" title="删除好友" content='是否要删除该好友' @confirm="deleteUser(userInfo.id)" @cancel="showDeleteModal = false"></up-modal>
+				
+				<!-- 添加好友模态框 -->
+			<div class="modal-mask" v-if="showAddFriendModalFlag">
+				<div class="modal-container">
+					<div class="modal-header">
+						<div class="modal-title">添加好友</div>
+						<div class="modal-close" @click="showAddFriendModalFlag = false">×</div>
+					</div>
+					<div class="modal-body">
+						<div class="form-group">
+							<label class="form-label">验证信息</label>
+							<textarea class="form-textarea" v-model="applyContent" placeholder="请填写验证信息..."></textarea>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button class="modal-btn modal-btn-cancel" @click="showAddFriendModalFlag = false">取消</button>
+						<button class="modal-btn modal-btn-submit" @click="sendFriendRequest">发送</button>
+					</div>
+				</div>
+			</div>
 			</div>
 		</div>
 	</view>
@@ -197,6 +217,8 @@ import {
 			return {
 				showAliasModal: false,
 				showDeleteModal:false,
+				showAddFriendModalFlag: false, // 添加好友模态框显示标志
+				applyContent: '', // 好友申请内容
 				isLoading: true,
 				remarkInput:'',
 				userInfo: {}
@@ -277,10 +299,56 @@ import {
 					}
 				})
 			},
+			// 显示添加好友模态框
+			showAddFriendModal() {
+				// 设置默认验证信息
+				this.applyContent = `你好，我是${this.getCurrentUser()?.name || ''}，想添加你为好友`;
+				this.showAddFriendModalFlag = true;
+			},
+			// 发送好友请求
+			sendFriendRequest() {
+				if (!this.applyContent.trim()) {
+					uni.showToast({
+						title: '请输入验证信息',
+						icon: 'none'
+					});
+					return;
+				}
+				
+				this.requestFriend({
+					friendId: this.userInfo.id,
+					context: this.applyContent
+				}).then(res => {
+					if (res.code === 200) {
+						uni.showToast({
+							title: '好友请求已发送',
+							icon: 'success'
+						});
+						this.showAddFriendModalFlag = false;
+						this.applyContent = '';
+					} else {
+						uni.showToast({
+							title: res.msg || '发送失败',
+							icon: 'none'
+						});
+					}
+				}).catch(err => {
+					uni.showToast({
+						title: '发送失败',
+						icon: 'none'
+					});
+					console.error('发送好友请求失败:', err);
+				});
+			},
+			// 获取当前用户信息
+			getCurrentUser() {
+				return uni.getStorageSync('user');
+			},
 			...mapActions({
 				selectUser: "user/selectUser",
 				saveRemark:"userFriend/saveRemark",
-				deleteFriend:'userFriend/deleteFriend'
+				deleteFriend:'userFriend/deleteFriend',
+				requestFriend: "userFriend/requestFriend" // 添加好友请求方法
 			}),
 			
 			showPhoto(item) {
@@ -655,80 +723,100 @@ import {
 	    max-width: 400px;
 	    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
 	}
-	
+	/* 添加好友模态框 */
+	.modal-mask {
+		position: fixed;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		background: rgba(0, 0, 0, 0.5);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		z-index: 1000;
+	}
+
+	.modal-container {
+		background: white;
+		border-radius: 16px;
+		width: 85%;
+		max-width: 400px;
+		padding: 20px;
+		box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+	}
+
 	.modal-header {
-	    display: flex;
-	    justify-content: space-between;
-	    align-items: center;
-	    margin-bottom: 20px;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin-bottom: 15px;
+		padding-bottom: 10px;
+		border-bottom: 1px solid var(--light-gray);
 	}
-	
+
 	.modal-title {
-	    font-size: 1.3rem;
-	    font-weight: 600;
-	    color: var(--dark);
+		font-size: 1.2rem;
+		font-weight: 600;
 	}
-	
+
 	.modal-close {
-	    background: none;
-	    border: none;
-	    font-size: 1.5rem;
-	    cursor: pointer;
-	    color: var(--gray);
+		font-size: 1.5rem;
+		cursor: pointer;
+		color: var(--gray);
 	}
-	
+
+	.modal-body {
+		margin-bottom: 20px;
+	}
+
 	.form-group {
-	    margin-bottom: 20px;
+		margin-bottom: 15px;
 	}
-	
+
 	.form-label {
-	    display: block;
-	    margin-bottom: 8px;
-	    font-weight: 500;
-	    color: var(--dark);
+		display: block;
+		margin-bottom: 5px;
+		font-weight: 500;
 	}
-	
-	.form-input {
-	    width: 80%;
-	    padding: 12px 15px;
-	    border: 1px solid var(--light-gray);
-	    border-radius: 10px;
-	    font-size: 1rem;
-	    transition: border-color 0.2s;
+
+	.form-input,
+	.form-textarea {
+		width: 100%;
+		padding: 10px;
+		border: 1px solid var(--light-gray);
+		border-radius: 8px;
+		font-size: 1rem;
 	}
-	
-	.form-input:focus {
-	    outline: none;
-	    border-color: var(--primary);
+
+	.form-textarea {
+		min-height: 100px;
+		resize: vertical;
 	}
-	
-	.modal-actions {
-	    display: flex;
-	    gap: 15px;
+
+	.modal-footer {
+		display: flex;
+		gap: 10px;
 	}
-	
+
 	.modal-btn {
-	    padding: 0 30rpx;
-	    border-radius: 12px;
-	    font-weight: 500;
-	    text-align: center;
-	    cursor: pointer;
-	    transition: all 0.2s;
-	    border: none;
-	    font-size: 1rem;
-	    display: flex;
-	    align-items: center;
-	    justify-content: center;
+		flex: 1;
+		padding: 10rpx;
+		border-radius: 8px;
+		text-align: center;
+		font-weight: 500;
+		cursor: pointer;
+		border: none;
 	}
-	
+
 	.modal-btn-cancel {
-	    background: var(--light);
-	    color: var(--dark);
+		background: var(--light);
+		color: var(--gray);
 	}
-	
-	.modal-btn-save {
-	    background: var(--primary);
-	    color: white;
+
+	.modal-btn-submit {
+		background: var(--primary);
+		color: white;
 	}
 	
 	/* 响应式调整 */

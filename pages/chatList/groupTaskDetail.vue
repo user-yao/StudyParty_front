@@ -1928,6 +1928,7 @@ export default {
 .ai-prompt-popup {
 	height: 100%;
 	display: flex;
+	width: 90vw;
 	flex-direction: column;
 }
 

@@ -223,7 +223,7 @@ export default {
 /* 内容区域 */
 .content-container {
   padding: 10px;
-  padding-top: calc(var(--status-bar-height, 0px) + 60px);
+  padding-top: calc(var(--status-bar-height, 0px) + 60rpx);
   min-height: calc(100vh - 60px);
 }
 

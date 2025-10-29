@@ -5,7 +5,7 @@
     "iPad"
   ],
   "id": "__UNI__36D59A3",
-  "name": "studyParty",
+  "name": "职引星聚",
   "version": {
     "name": "1.0.0",
     "code": "100"
@@ -45,6 +45,46 @@
     "nvueStyleCompiler": "uni-app",
     "compilerVersion": 3,
     "distribute": {
+      "icons": {
+        "android": {
+          "hdpi": "unpackage/res/icons/72x72.png",
+          "xhdpi": "unpackage/res/icons/96x96.png",
+          "xxhdpi": "unpackage/res/icons/144x144.png",
+          "xxxhdpi": "unpackage/res/icons/192x192.png"
+        },
+        "ios": {
+          "appstore": "unpackage/res/icons/1024x1024.png",
+          "ipad": {
+            "app": "unpackage/res/icons/76x76.png",
+            "app@2x": "unpackage/res/icons/152x152.png",
+            "notification": "unpackage/res/icons/20x20.png",
+            "notification@2x": "unpackage/res/icons/40x40.png",
+            "proapp@2x": "unpackage/res/icons/167x167.png",
+            "settings": "unpackage/res/icons/29x29.png",
+            "settings@2x": "unpackage/res/icons/58x58.png",
+            "spotlight": "unpackage/res/icons/40x40.png",
+            "spotlight@2x": "unpackage/res/icons/80x80.png"
+          },
+          "iphone": {
+            "app@2x": "unpackage/res/icons/120x120.png",
+            "app@3x": "unpackage/res/icons/180x180.png",
+            "notification@2x": "unpackage/res/icons/40x40.png",
+            "notification@3x": "unpackage/res/icons/60x60.png",
+            "settings@2x": "unpackage/res/icons/58x58.png",
+            "settings@3x": "unpackage/res/icons/87x87.png",
+            "spotlight@2x": "unpackage/res/icons/80x80.png",
+            "spotlight@3x": "unpackage/res/icons/120x120.png"
+          }
+        }
+      },
+      "splashscreen": {
+        "androidStyle": "default",
+        "android": {
+          "xxhdpi": "C:/Users/yztzy/Desktop/1080_1882.png",
+          "xhdpi": "C:/Users/yztzy/Desktop/720-1242.png",
+          "hdpi": "C:/Users/yztzy/Desktop/480-762.png"
+        }
+      },
       "google": {
         "permissions": [
           "<uses-permission android:name=\"android.permission.CHANGE_NETWORK_STATE\"/>",
@@ -126,13 +166,13 @@
         },
         {
           "pagePath": "pages/forum/forum",
-          "text": "论坛",
+          "text": "社区",
           "iconPath": "/static/BlackTableBar/luntan.png",
           "selectedIconPath": "/static/BlueTableBar/luntan.png"
         },
         {
           "pagePath": "pages/chatList/chatList",
-          "text": "小组",
+          "text": "消息",
           "iconPath": "/static/BlackTableBar/kehuqunzu.png",
           "selectedIconPath": "/static/BlueTableBar/kehuqunzu.png"
         },
