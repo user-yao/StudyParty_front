@@ -21,7 +21,8 @@
             "SQLite" : {
                 "version" : "latest", // 指定模块版本
                 "provider" : "dcloud" // 指定模块提供者（默认为 dcloud）
-            }
+            },
+            "Record" : {}
         },
         /* 应用发布信息 */
         "distribute" : {

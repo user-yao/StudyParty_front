@@ -21,6 +21,7 @@
       "version": "latest",
       "provider": "dcloud"
     },
+    "Record": {},
     "UniNView": {
       "description": "UniNView原生渲染"
     }

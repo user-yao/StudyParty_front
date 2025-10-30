@@ -966,10 +966,14 @@ export default {
   color: #999;
 }
 
-.no-data i {
+.no-data u-icon {
   font-size: 2rem;
   margin-bottom: 10px;
   display: block;
+  display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
 }
 
 .task-user-avatar {

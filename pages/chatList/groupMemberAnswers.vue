@@ -45,7 +45,7 @@
 							
 							<!-- 空状态 -->
 							<div class="empty-state" v-else-if="memberAnswers.length === 0">
-								<u-icon name="file-text" size="40" color="#adb5bd"></u-icon>
+								<u-icon name="file-text"  size="40" color="#adb5bd"></u-icon>
 								<p>暂无成员提交作业</p>
 							</div>
 							
@@ -86,19 +86,26 @@ export default {
 		return {
 			taskId: null,
 			groupId: null,
-			taskDetail: null,
+			localTaskDetail: null, // 添加本地任务详情变量
 			memberAnswers: [],
 			loading: false
 		};
 	},
 	computed: {
 		...mapState('user', ['userInfo']),
+		...mapState('groupTask', ['currentTask']), // 映射groupTask模块的currentTask state
+		...mapState('group', ['currentGroup']), // 映射group模块的currentGroup state
         imageUrl(){
             return imageUrl;
-        }
+        },
+		// 使用Vuex中的当前任务，如果没有则使用本地任务详情
+		taskDetail() {
+			return this.currentTask || this.localTaskDetail;
+		}
 	},
 	methods: {
 		...mapActions('groupTaskAnswer', ['getTaskAnswersByTaskId']),
+		...mapActions('group', ['selectGroupById']), // 添加设置当前群组的action
 
 		// 返回上一页
 		goBack() {
@@ -222,6 +229,9 @@ export default {
 		
 		if (options.groupId) {
 			this.groupId = options.groupId;
+			
+			// 设置当前群组
+			this.selectGroupById({ groupId: this.groupId });
 		}
 		
 		// 加载数据
@@ -358,6 +368,10 @@ export default {
 	text-align: center;
 	padding: 40px 20px;
 	color: #6c757d;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
 }
 
 .empty-state u-icon {

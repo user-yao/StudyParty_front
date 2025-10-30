@@ -376,11 +376,11 @@ export default {
 			if (!this.taskDetail || !userStatus) return false;
 
 			// 检查是否为任务发布者（通过ID比较）
-			if (this.taskDetail.groupTaskUploaderId === this.currentUserId) return true;
+			if (this.taskDetail.groupTaskUploader == this.currentUserId) return true;
 
 			// 检查用户身份是否为老师或企业
 			if (userStatus == '2' || userStatus == '3') return true;
-
+			
 			return false;
 		},
 
@@ -471,6 +471,7 @@ export default {
 	methods: {
 		...mapActions('groupTaskAnswer', ['submitTaskAnswer', 'getMyTaskAnswers']),
 		...mapActions('AI', ['getTaskAnalyst']), // 映射AI模块的action
+		...mapActions('groupTask', ['setCurrentTask']), // 映射groupTask模块的action
 
 		// 同步显示内容和实际提交内容
 		syncContentWithDisplay() {
@@ -737,6 +738,9 @@ export default {
 
 		// 查看成员作答情况
 		viewMemberAnswers() {
+			// 将当前任务临时存储到Vuex中备用
+			this.setCurrentTask(this.taskDetail);
+			
 			uni.navigateTo({
 				url: `/pages/chatList/groupMemberAnswers?taskId=${this.taskId}&groupId=${this.groupId}`
 			});

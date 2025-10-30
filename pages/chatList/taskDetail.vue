@@ -178,7 +178,7 @@
                 <!-- 最佳答案标识（如果此回答是最佳答案） -->
                 <view 
                   class="best-answer-badge" 
-                  v-if="answer.isBestAnswer"
+                  v-if="answer.isTrue"
                 >
                   <u-tag type="success" size="mini" plain>最佳答案</u-tag>
                 </view>

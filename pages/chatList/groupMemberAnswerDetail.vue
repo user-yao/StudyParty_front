@@ -88,11 +88,29 @@ export default {
 	},
 	computed: {
 		...mapState('user', ['userInfo']),
-		// 判断是否可以评分（老师或企业用户）
+		...mapState('groupTask', ['currentTask']), // 映射groupTask模块的currentTask state
+		...mapState('group', ['currentGroup']), // 映射group模块的currentGroup state
+		// 判断是否可以评分（老师或企业用户，或者任务发布者/组长/代理组长）
 		canScore() {
-			if (!this.userInfo) return false;
+			if (!this.userInfo || !this.currentAnswer) return false;
+			
 			// status字段值含义：1表示学生，2表示老师，3表示企业
-			return this.userInfo.status === 2 || this.userInfo.status === 3;
+			// 如果是老师或企业用户，可以直接评分
+			if (this.userInfo.status === 2 || this.userInfo.status === 3) return true;
+			
+			// 如果是学生，需要判断是否为任务发布者或组长/代理组长
+			if (this.userInfo.status === 1 && this.currentTask) {
+				// 检查是否为任务发布者
+				if (this.currentTask.groupTaskUploader == this.userInfo.id) return true;
+				
+				// 检查是否为组长或代理组长
+				if (this.currentGroup) {
+					if (this.currentGroup.leader == this.userInfo.id) return true; // 组长
+					if (this.currentGroup.deputy == this.userInfo.id) return true; // 代理组长
+				}
+			}
+			
+			return false;
 		},
         imageUrl() { 
             return imageUrl;

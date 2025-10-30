@@ -3,7 +3,8 @@ import { selectMyGroupTask, uploadMarkdown, deleteGroupTask, createGroupTask } f
 export default {
   namespaced: true, // 添加命名空间配置
   state: {
-    groupTasks: []
+    groupTasks: [],
+    currentTask: null // 添加用于存储当前任务的state
   },
   mutations: {
     SET_GROUP_TASKS(state, tasks) {
@@ -21,6 +22,10 @@ export default {
       if (index !== -1) {
         state.groupTasks[index].status = status;
       }
+    },
+    // 添加设置当前任务的mutation
+    SET_CURRENT_TASK(state, task) {
+      state.currentTask = task;
     }
   },
   actions: {
@@ -39,6 +44,10 @@ export default {
       const res = await deleteGroupTask(data);
       commit('UPDATE_TASK_STATUS', data);
       return res;
+    },
+    // 添加设置当前任务的action
+    setCurrentTask({ commit }, task) {
+      commit('SET_CURRENT_TASK', task);
     }
   }
 }
